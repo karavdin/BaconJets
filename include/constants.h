@@ -7,11 +7,13 @@
 // static std::vector<double>   alpha_range= {0., 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25};
 
 
-static std::vector<double>   eta_range  = {0, 0.25, 0.5, 0.75, 1.0, 1.3, 1.6, 1.9, 2.2, 2.5, 2.7, 3.0, 3.2, 5.0};//{0, 1.3, 2.5, 3.0, 5.0};
+//static std::vector<double>   eta_range  = {0.000, 0.250, 0.500, 0.750, 1.000, 1.300, 1.600, 1.900, 2.200, 2.500, 2.700, 2.850, 3.000, 3.200, 5.000};/*{0, 0.261, 0.522, 0.783, 1.044, 1.305, 1.653, 1.93, 2.172, 2.5, 2.964, 3.139, 5.191};*///{0, 1.3, 2.5, 3.0, 5.0};
+//static std::vector<double>   eta_range  = {0, 1.3, 1.9, 2.5, 3.0, 3.2, 5.0};
+static std::vector<double>   eta_range  = {0, 0.261, 0.522, 0.783, 1.044, 1.305, 1.653, 1.93, 2.172, 2.322, 2.5, 2.65, 2.853, 2.964, 3.139, 5.191};///{0, 1.3, 2.5, 3.0, 5.0};
 static std::vector<double>   eta_range_mikko_barrel = {0, 0.8, 1.3};
 //static std::vector<double>   pt_range   = {55, 76, 93, 172, 232, 300, 366, 453, 558};
-static std::vector<double>   pt_range   = {43, 80, 88, 135, 223, 290, 365, 448, 561};
-// static std::vector<double>   pt_range   = {57, 80, 100, 166, 231, 290, 365, 478, 556};
+//static std::vector<double>   pt_range   = {43, 80, 88, 135, 223, 290, 365, 448, 561};
+static std::vector<double>   pt_range   = {55, 76, 93, 172, 232, 300, 366, 452, 558};
 
 static std::vector<double>   alpha_range= {0., 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25};
 
@@ -44,6 +46,7 @@ static float s_n_Pv_z = 24.0;
 // static float s_Pt_Ave320_cut  = 379;//Hennings: 379
 // static float s_Pt_Ave400_cut  = 468;//Hennings: 467
 /// Used for the 2015 data
+/*
 static float s_Pt_Ave40_cut   = 43; //Hennings: 62
 static float s_Pt_Ave60_cut   = 80; //Hennings: 62
 static float s_Pt_Ave80_cut   = 88;//Hennings: 107
@@ -53,6 +56,18 @@ static float s_Pt_Ave260_cut  = 290;//Hennings: 310
 static float s_Pt_Ave320_cut  = 365;//Hennings: 379
 static float s_Pt_Ave400_cut  = 448;//Hennings: 467
 static float s_Pt_Ave500_cut  = 561;//Hennings: 467
+*/
+
+static float s_Pt_Ave40_cut   = 55; 
+static float s_Pt_Ave60_cut   = 76; 
+static float s_Pt_Ave80_cut   = 93;
+static float s_Pt_Ave140_cut  = 172;
+static float s_Pt_Ave200_cut  = 232;
+static float s_Pt_Ave260_cut  = 300;
+static float s_Pt_Ave320_cut  = 366;
+static float s_Pt_Ave400_cut  = 452;
+static float s_Pt_Ave500_cut  = 558;
+
 
 /** \brief Jet Resolution Smearering **/
 // doing the matching from GEN to RECO

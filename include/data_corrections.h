@@ -43,9 +43,16 @@ class DataCorr {
     float j3L1corr;
 
     void        SetEvent(uhh2::Event& evt);
+    /*
      float       jet12getL1correction(float Eta1, float Eta2, float & j2L1corr);
      float       jet2getL1correction(float Eta);
      float       jet3getL1correction(float Eta);
+    */
+
+     float       jet12getL1correction(float Eta1, float Eta2, float & j2L1corr);
+     float       jet1getL1correction(float Eta);
+     float       jet2getL1correction(float Eta);
+     float       jet3getL1correction(float Eta); 
 //     float  getL1correction(float j1Eta, float j2Eta, float j3Eta, float & j2L1corr, float & j3L1corr);
 
 };

@@ -62,6 +62,7 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     book<TH1F>("asym","asymmetrie jet 1 and jet 2 in loop; Asymmetry",100,-1,1);
     book<TH1F>("generic_asym","generic asymmetrie jet 1 and jet 2; Asymmetry",100,-1,1);
     book<TH1F>("mpf","MPF response; MPF response",100,0.5,1.5);
+    book<TH1F>("mpf2","MPF response 2 ; MPF response 2",100,0.,2.0);
     book<TH1F>("generic_mpf","generic MPF response; MPF response",100,0.5,1.5);
     book<TH1F>("r_rel","R_{rel}; R_{rel}; Relative response",100,0.5,1.5);
     book<TH1F>("generic_r_rel","generic R_{rel}; Relative response",100,0.5,1.5);
@@ -156,6 +157,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
     hist("eta_barrel")  ->Fill(ev.barreljet_eta, weight);
     hist("eta_probe")   ->Fill(ev.probejet_eta , weight);
     hist("mpf")         ->Fill(ev.mpf_r, weight);
+    hist("mpf2")         ->Fill(ev.mpf_2, weight);
     hist("asym")        ->Fill(ev.asymmetry, weight);
     hist("r_rel")       ->Fill(ev.rel_r, weight);
 

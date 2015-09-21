@@ -40,7 +40,7 @@ bool Selection::Trigger(uhh2::Event& evt)
     assert(eventInfo);
 
 
-
+    
     bool trigger40fired = false;
     bool trigger60fired = false;
     bool trigger80fired = false;
@@ -50,18 +50,23 @@ bool Selection::Trigger(uhh2::Event& evt)
     bool trigger320fired = false;
     bool trigger400fired = false;
     bool trigger500fired = false;
+
+    //bool triggerHFJEC60fired = false;
+
     ///triggerNames  briggerBits
-//     HLT_DiPFJetAve140 = triggerBits[1]
-//     HLT_DiPFJetAve200 = triggerBits[3]
-//     HLT_DiPFJetAve260 = triggerBits[5]
-//     HLT_DiPFJetAve320 = triggerBits[7]
-//     HLT_DiPFJetAve40  = triggerBits[8]
-//     HLT_DiPFJetAve400 = triggerBits[9]
-//     HLT_DiPFJetAve500 = triggerBits[10]
-//     HLT_DiPFJetAve60  = triggerBits[11]
-//     HLT_DiPFJetAve80  = triggerBits[13]
+    //     HLT_DiPFJetAve140 = triggerBits[1]
+    //     HLT_DiPFJetAve200 = triggerBits[3]
+    //     HLT_DiPFJetAve260 = triggerBits[5]
+    //     HLT_DiPFJetAve320 = triggerBits[7]
+    //     HLT_DiPFJetAve40  = triggerBits[8]
+    //     HLT_DiPFJetAve400 = triggerBits[9]
+    //     HLT_DiPFJetAve500 = triggerBits[10]
+    //     HLT_DiPFJetAve60  = triggerBits[11]
+    //     HLT_DiPFJetAve80  = triggerBits[13]
 
 
+// trigger order before 30th of august
+/*
     if(eventInfo->triggerBits[8]==1)  trigger40fired = true;
     if(eventInfo->triggerBits[11]==1) trigger60fired = true;
     if(eventInfo->triggerBits[13]==1) trigger80fired = true;
@@ -71,13 +76,28 @@ bool Selection::Trigger(uhh2::Event& evt)
     if(eventInfo->triggerBits[7]==1)  trigger320fired = true;
     if(eventInfo->triggerBits[9]==1)  trigger400fired = true;
     if(eventInfo->triggerBits[10]==1) trigger500fired = true;
+*/
+// new order (02.09.15)
+
+    if(eventInfo->triggerBits[9]==1)  trigger40fired = true;
+    if(eventInfo->triggerBits[12]==1) trigger60fired = true;
+    if(eventInfo->triggerBits[14]==1) trigger80fired = true;
+    if(eventInfo->triggerBits[1]==1)  trigger140fired = true;
+    if(eventInfo->triggerBits[3]==1)  trigger200fired = true;
+    if(eventInfo->triggerBits[5]==1)  trigger260fired = true;
+    if(eventInfo->triggerBits[7]==1)  trigger320fired = true;
+    if(eventInfo->triggerBits[8]==1)  trigger400fired = true;
+    if(eventInfo->triggerBits[10]==1) trigger500fired = true; 
+
+    //if(eventInfo->triggerBits[11]==1)  triggerHFJEC60fired = true;
+
 
 
     if (evt.pt_ave < s_Pt_Ave40_cut) return false;
     if (evt.pt_ave >= s_Pt_Ave40_cut  && evt.pt_ave < s_Pt_Ave60_cut  && trigger40fired) return true;
-    if (evt.pt_ave >= s_Pt_Ave60_cut  && evt.pt_ave < s_Pt_Ave80_cut  && trigger60fired) return true;
-    if (evt.pt_ave >= s_Pt_Ave80_cut  && evt.pt_ave < s_Pt_Ave140_cut && trigger80fired) return true;
-    if (evt.pt_ave >= s_Pt_Ave140_cut && evt.pt_ave < s_Pt_Ave200_cut /*&& trigger140fired*/) return true;
+    if (evt.pt_ave >= s_Pt_Ave60_cut  && evt.pt_ave < s_Pt_Ave80_cut  && trigger60fired/* || triggerHFJEC60fired*/) return true;
+    if (evt.pt_ave >= s_Pt_Ave80_cut  && evt.pt_ave < s_Pt_Ave140_cut && trigger60fired/* || triggerHFJEC60fired*/) return true;
+    if (evt.pt_ave >= s_Pt_Ave140_cut && evt.pt_ave < s_Pt_Ave200_cut && trigger60fired/* || triggerHFJEC60fired*/) return true;
     if (evt.pt_ave >= s_Pt_Ave200_cut && evt.pt_ave < s_Pt_Ave260_cut && trigger200fired) return true;
     if (evt.pt_ave >= s_Pt_Ave260_cut && evt.pt_ave < s_Pt_Ave320_cut && trigger260fired) return true;
     if (evt.pt_ave >= s_Pt_Ave320_cut && evt.pt_ave < s_Pt_Ave400_cut && trigger320fired) return true;

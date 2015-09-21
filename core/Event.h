@@ -37,6 +37,7 @@ public:
   float alpha;
   float rel_r;
   float mpf_r;
+  float mpf_2;
   float asymmetry;
 
   int run;

@@ -83,6 +83,7 @@ void DataCorr::SetEvent(uhh2::Event& evt)
     assert(event);
 
 }
+  /*
 float  DataCorr::jet12getL1correction(float Eta1, float Eta2, float & j2L1corr) {
     assert(event);
 
@@ -96,6 +97,32 @@ float  DataCorr::jet12getL1correction(float Eta1, float Eta2, float & j2L1corr) 
     }
 
 }
+  */
+
+float  DataCorr::jet1getL1correction(float Eta) {
+    assert(event);
+
+    for (int i=0; i<NPOINTS; ++i){
+
+        if ((Eta > eta1_jet[i]) && (Eta < eta2_jet[i])) {
+//             cout << "JET1: eta from ev: "<<Eta<<" eta from txt: "<<eta1_jet[i] <<" l1 corr = "<< L1corr[i]<<" = "<< m_corr_l1[eta1_jet[i]][eta2_jet[i]]<< endl;
+//           cout <<" JET3: CORR : "<<m_corr_l1[eta_jet[i]]<<endl;
+         return m_corr_l1[eta1_jet[i]][eta2_jet[i]];        }
+    }
+
+}
+float  DataCorr::jet2getL1correction(float Eta) {
+    assert(event);
+
+    for (int i=0; i<NPOINTS; ++i){
+
+        if ((Eta > eta1_jet[i]) && (Eta < eta2_jet[i])) {
+//            cout << "JET1: eta from ev: "<<Eta<<" eta from txt: "<<eta1_jet[i] <<" l1 corr = "<< L1corr[i]<<" = "<< m_corr_l1[eta1_jet[i]][eta2_jet[i]]<< endl;
+//           cout <<" JET3: CORR : "<<m_corr_l1[eta_jet[i]]<<endl;
+         return m_corr_l1[eta1_jet[i]][eta2_jet[i]];        }
+    }
+
+} 
 
 float  DataCorr::jet3getL1correction(float Eta) {
     assert(event);

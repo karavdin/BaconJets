@@ -179,30 +179,41 @@ namespace uhh2bacon {
       const baconhep::TGenEventInfo & geninfo = event.get(h_genInfo);
       baconhep::TGenEventInfo* genInfo= new baconhep::TGenEventInfo(geninfo);
       // event.weight = event.weight * genInfo->weight * mcweight.getPuReweighting() * mcweight.getEvReweighting();
-      event.weight = event.weight * genInfo->weight * mcweight.getPuReweighting();
+      //event.weight = event.weight * genInfo->weight * mcweight.getPuReweighting();
 
       //! matching from GEN to RECO
       if(!jetcorr.JetMatching()) return false;
 
       //! JER smearing
-      if(!jetcorr.JetResolutionSmearer()) return false;
+      //if(!jetcorr.JetResolutionSmearer()) return false;
     }
     float j3L1corr =1.;
     float j1L1corr =1.;
     float j2L1corr =0;
 
-
-    
+    /*
     if(!is_mc){/// apply for DATA only
       double nPu = pileupData.getDataPU(eventInfo->runNum,eventInfo->lumiSec);
       event.nPU = nPu;
+      j1L1corr = datacorr.jet1getL1correction(jet1->eta);
+      j2L1corr = datacorr.jet2getL1correction(jet2->eta);
+      //j1L1corr = datacorr.jet12getL1correction(jet1->eta, jet2->eta, j2L1corr);
 
-      j1L1corr = datacorr.jet12getL1correction(jet1->eta, jet2->eta, j2L1corr);
+      event.jet1_pt = jet1->pt * j1L1corr;
+      event.jet2_pt = jet2->pt * j2L1corr;
+      event.jet1_ptRaw = jet1->ptRaw * j1L1corr;
+      event.jet2_ptRaw = jet2->ptRaw * j2L1corr; 
+
+
+      baconhep::TJet* jet3 ;
       if (njets > 2) {
-	j3L1corr = datacorr.jet3getL1correction(jet3->eta);
+        jet3 = (baconhep::TJet*)js[2];
+        j3L1corr = datacorr.jet3getL1correction(jet3->eta);
+        event.jet3_pt = jet3->pt * j3L1corr;
+        event.jet3_ptRaw = jet3->ptRaw * j3L1corr; 
       }
     }
-    
+    */
 
     float probejet_eta = -99.;
     float probejet_pt = 0;
@@ -216,6 +227,7 @@ namespace uhh2bacon {
 
     float rel_r = -99.;
     float mpf_r = -99.;
+    float mpf_2 = -99.;
     float asymmetry = -99.;
     
     
@@ -227,12 +239,14 @@ namespace uhh2bacon {
       event.jet3_pt = jet3->pt;
       event.jet3_ptRaw = jet3->ptRaw;
     }
-
+    
+    /*
     float pt_ave = (event.jet1_pt + event.jet2_pt)/2;
     event.pt_ave = pt_ave;
-
+    */
+    
+    //if(!sel.Trigger(event)) return false;  
     /*
-    if(!sel.Trigger(event)) return false;  
     event.jet1_pt = jet1->pt*j1L1corr;
     event.jet2_pt = jet2->pt*j2L1corr;
     event.jet1_ptRaw = jet1->ptRaw*j1L1corr;
@@ -266,6 +280,8 @@ namespace uhh2bacon {
         asymmetry = (event.jet2_pt - event.jet1_pt)/(event.jet2_pt + event.jet1_pt);
         rel_r = event.jet2_pt / event.jet1_pt;
 
+        //met.Set(eventInfo->pfMET*j1L1corr * cos(eventInfo->pfMETphi),eventInfo->pfMET*j1L1corr * sin(eventInfo->pfMETphi)); 
+
         pt.Set(event.jet1_pt * cos(jet1->phi),event.jet1_pt * sin(jet1->phi));
         mpf_r = 1 + (met.Px()*pt.Px() + met.Py()*pt.Py())/(pt.Px()*pt.Px() + pt.Py()*pt.Py());
 
@@ -284,6 +300,8 @@ namespace uhh2bacon {
 
         asymmetry = (event.jet1_pt - event.jet2_pt)/(event.jet1_pt + event.jet2_pt);
         rel_r = event.jet1_pt / event.jet2_pt;
+
+        //met.Set(eventInfo->pfMET*j2L1corr * cos(eventInfo->pfMETphi),eventInfo->pfMET*j2L1corr * sin(eventInfo->pfMETphi)); 
 
         pt.Set(event.jet2_pt * cos(jet2->phi),event.jet2_pt * sin(jet2->phi));
         mpf_r = 1 + (met.Px()*pt.Px() + met.Py()*pt.Py())/(pt.Px()*pt.Px() + pt.Py()*pt.Py());
@@ -304,6 +322,8 @@ namespace uhh2bacon {
         asymmetry = (event.jet2_pt - event.jet1_pt)/(event.jet2_pt + event.jet1_pt);
         rel_r = event.jet2_pt / event.jet1_pt;
 
+        //met.Set(eventInfo->pfMET*j1L1corr * cos(eventInfo->pfMETphi),eventInfo->pfMET*j1L1corr * sin(eventInfo->pfMETphi)); 
+
         pt.Set(event.jet1_pt * cos(jet1->phi),event.jet1_pt * sin(jet1->phi));
         mpf_r = 1 + (met.Px()*pt.Px() + met.Py()*pt.Py())/(pt.Px()*pt.Px() + pt.Py()*pt.Py());
 
@@ -323,14 +343,22 @@ namespace uhh2bacon {
         asymmetry = (event.jet1_pt - event.jet2_pt)/(event.jet1_pt + event.jet2_pt);
         rel_r = event.jet1_pt / event.jet2_pt;
 
+        //met.Set(eventInfo->pfMET*j2L1corr * cos(eventInfo->pfMETphi),eventInfo->pfMET*j2L1corr * sin(eventInfo->pfMETphi)); 
+
         pt.Set(event.jet2_pt * cos(jet2->phi),event.jet2_pt * sin(jet2->phi));
         mpf_r = 1 + (met.Px()*pt.Px() + met.Py()*pt.Py())/(pt.Px()*pt.Px() + pt.Py()*pt.Py());
+
       }
 
     }
 
+
+    LorentzVector ETmiss(0,0,0,0);
+    ETmiss.SetPt(eventInfo->pfMET);
+    ETmiss.SetPhi(eventInfo->pfMETphi);
+    mpf_2 = (1+( (cos(ETmiss.phi()-barrel_phi)* ETmiss.pt()) /barrel_pt ));
     
-    //float pt_ave = (event.jet1_pt + event.jet2_pt)/2;
+    float pt_ave = (event.jet1_pt + event.jet2_pt)/2;
     event.pt_ave = pt_ave;
     
     event.probejet_eta    = probejet_eta;
@@ -346,15 +374,25 @@ namespace uhh2bacon {
     event.asymmetry = asymmetry;
     event.rel_r = rel_r;
     event.mpf_r = mpf_r;
+    event.mpf_2 = mpf_2;
     //   if(!is_mc){
     //   double nPu = pileupData.getDataPU(eventInfo->runNum,eventInfo->lumiSec);
     //   event.nPU = nPu;
     //   }
+
+    
     float alpha = 0.;
     if (njets > 2) {
       alpha = (2*(event.jet3_pt))/(event.jet1_pt + event.jet2_pt);
     }
     event.alpha = alpha;
+
+    // compare between 25ns and 50ns run 254833
+    //if(eventInfo->runNum==254833) return false;
+    //if(eventInfo->runNum==254833) cout << "bla" << endl;
+
+    //if(/*eventInfo->runNum==251244 || eventInfo->runNum==251251 || */eventInfo->runNum==251252 || eventInfo->runNum==251561 || eventInfo->runNum==251562 || eventInfo->runNum==251643 || eventInfo->runNum==251721 || eventInfo->runNum==251883) return false;
+
 
     if(!sel.DiJet()) return false;
 
@@ -367,9 +405,11 @@ namespace uhh2bacon {
 
 
     h_match->fill(event);
+    
+
+    //if(!sel.Trigger(event)) return false;
 
 
-    if(!sel.Trigger(event)) return false;
     
     if (event.alpha < 0.2) {
       h_sel->fill(event);
@@ -381,7 +421,10 @@ namespace uhh2bacon {
 
     //   if(!sel.goodPVertex()) return false;
 
+
+
     if (event.alpha < 0.4) {
+      //cout << eventInfo->runNum << endl;
       for( unsigned int i=0; i < eta_range.size()-1; ++i ){
 	if ((fabs(event.probejet_eta)>=eta_range[i])&&(fabs(event.probejet_eta)<eta_range[i+1])) h_eta_bins_a04[i].fill(event, ran);
       }
@@ -398,8 +441,11 @@ namespace uhh2bacon {
 	if ((fabs(event.probejet_eta)>=eta_range[i])&&(fabs(event.probejet_eta)<eta_range[i+1])) h_eta_bins[i].fill(event, ran);
       }
     }
-
-    if (event.alpha < 0.2) {
+    //+++++++++++++++++++++++++++++++++++++++++++++
+    // change here the alpha cut for the mikko file
+    // be careful with the alpha cut..
+    //+++++++++++++++++++++++++++++++++++++++++++++
+    if (event.alpha < 0.20) {
       for( unsigned int j=0; j < eta_range.size()-1; ++j ){
 	if ((fabs(event.probejet_eta)>=eta_range[j])&&(fabs(event.probejet_eta)<eta_range[j+1])) {
 	  for( unsigned int i=0; i < pt_range.size()-1; ++i ){
@@ -425,7 +471,7 @@ namespace uhh2bacon {
 
     //! for alpha < 0.1
 
-    if (event.alpha < 0.1) {
+    if (event.alpha < 0.10) {
       for( unsigned int i=0; i < pt_range.size()-1; ++i ){
 	if ((event.pt_ave >= pt_range[i])&&(event.pt_ave < pt_range[i+1])) h_pt_bins_a01[i].fill(event, ran);//j*pt_range.size()+i
       }
