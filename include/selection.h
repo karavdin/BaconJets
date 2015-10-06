@@ -6,8 +6,8 @@
 #include "UHH2/core/include/Event.h"
 
 
-#include "UHH2/bacondataformats/interface/TEventInfo.hh"
-//#include "UHH2/bacondataformats/interface/BaconAnaDefs.hh"
+#include "UHH2/BaconTrans/baconheaders/TEventInfo.hh"
+//#include "UHH2/BaconTrans/baconheaders/BaconAnaDefs.hh"
 
 namespace uhh2bacon {
 
@@ -26,18 +26,11 @@ class Selection {
     ~Selection();
 
     void SetEvent(uhh2::Event& evt);
-    bool Trigger();
+    bool Trigger(uhh2::Event& evt);
     bool DiJet();
-    bool DiJetAdvanced();
-    bool AlphaCut();
+    bool DiJetAdvanced(uhh2::Event& evt);
     bool goodPVertex();
     bool triggerFired(float bin1, float bin2);
-
-//     TString WP_LOOSE;
-//     TString WP_MEDIUM;
-//     TString WP_TIGHT;
-//     explicit jetIds(wp working_point);
-    bool jetIds(float csv_threshold);
 
     bool FullSelection();
 

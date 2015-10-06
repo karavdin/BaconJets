@@ -25,7 +25,7 @@ using namespace std;
 
 namespace uhh2bacon {
 
-class McWeight {
+class PileupData {
 
     private:
     uhh2::Context& context;
@@ -37,24 +37,13 @@ class McWeight {
     bool        fPuReweighting;
 
     public:
-    McWeight(uhh2::Context & ctx);
-    ~McWeight();
-    // histogram name and pointer to it for Pu reweighting
-    TH1F *              fPuReweighting_histo;
-    std::vector<TH1F*>  fPuReweighting_histoname;
-    TH1F *              hPuReweighting_histo40; 
-    TH1F *              hPuReweighting_histo80;
-    TH1F *              hPuReweighting_histo140;
-    TH1F *              hPuReweighting_histo200;
-    TH1F *              hPuReweighting_histo260;
-    TH1F *              hPuReweighting_histo320;
-    TH1F *              hPuReweighting_histo400;
-    TFile *             file;
+    PileupData(uhh2::Context & ctx);
+    ~PileupData();
+
 
 
     void        SetEvent(uhh2::Event& evt);
-    float       getPuReweighting();
-    float       getEvReweighting();
+    float       getDataPU(int Run, int Ls);
 
 };
 

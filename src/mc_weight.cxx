@@ -14,9 +14,9 @@
 
 #include "UHH2/BaconJets/include/mc_weight.h"
 #include "UHH2/BaconJets/include/constants.h"
-#include "UHH2/bacondataformats/interface/TJet.hh"
+#include "UHH2/BaconTrans/baconheaders/TJet.hh"
 using namespace std;
-
+using namespace BaconConsts;
 namespace uhh2bacon {
 
 
@@ -25,7 +25,7 @@ McWeight::McWeight(uhh2::Context & ctx) :
     event(0),
     fPuReweighting_histo(NULL)
 {
-    h_jets = context.declare_event_input<TClonesArray>("Jet05");
+    h_jets = context.declare_event_input<TClonesArray>("AK4PFCHS");
     h_eventInfo = context.declare_event_input<baconhep::TEventInfo>("Info");
 
     fPuReweighting_histoname.push_back(hPuReweighting_histo40);
@@ -39,7 +39,7 @@ McWeight::McWeight(uhh2::Context & ctx) :
     TString DATABASE_PATH = "/nfs/dust/cms/user/kovalch/DataPileup/PuWeights";
     TString fPuReweighting_filename[] = {"nPu_reweighting_40.root", "nPu_reweighting_80.root", "nPu_reweighting_140.root", "nPu_reweighting_200.root", "nPu_reweighting_260.root", "nPu_reweighting_320.root", "nPu_reweighting_400.root"};
 
-    for (int j = 0; j < fPuReweighting_histoname.size(); j++) {
+    for (unsigned int j = 0; j < fPuReweighting_histoname.size(); j++) {
         file = new TFile (DATABASE_PATH+"/"+fPuReweighting_filename[j]);
         fPuReweighting_histoname[j] = (TH1F*) file -> Get("histo_substr");
 
@@ -79,7 +79,7 @@ float  McWeight::getPuReweighting() {
     unsigned    bin = 0;
 
     // sanity check: a pointer to the histogram should be valid
-    for (int i = 0; i < fPuReweighting_histoname.size(); i++) {
+    for (unsigned int i = 0; i < fPuReweighting_histoname.size(); i++) {
         if (fPuReweighting_histoname[i] == NULL) {
             cout << "was not possible to retrieve a histogram " << endl;
             abort();
@@ -135,7 +135,7 @@ float  McWeight::getEvReweighting() {
 
     int njets = js.GetEntries();
     Double_t    ev_weighting_factor = 1;
-    unsigned    ev_bin = 0;
+    //    unsigned    ev_bin = 0;
     // njets >= 2
     if (njets>=2) {
     double pt_ave = (jet1->pt + jet2->pt)/2;

@@ -1,11 +1,17 @@
 #pragma once
 
+#include "TClonesArray.h"
 #include "UHH2/core/include/Hists.h"
 #include "UHH2/core/include/Event.h"
-#include "TClonesArray.h"
-#include "UHH2/bacondataformats/interface/TEventInfo.hh"
-#include "UHH2/bacondataformats/interface/BaconAnaDefs.hh"
-using namespace baconhep;
+/* #include "UHH2/BaconTrans/baconheaders/TEventInfo.hh" */
+/* #include "UHH2/BaconTrans/baconheaders/BaconAnaDefs.hh" */
+
+#include "UHH2/BaconTrans/baconheaders/TEventInfo.hh"
+//#include "UHH2/BaconTrans/baconheaders/TGenEventInfo.hh"
+#include "UHH2/BaconTrans/baconheaders/BaconAnaDefs.hh"
+
+
+//using namespace baconhep;
 /**  \brief Example class for booking and filling histograms
  * 
  * NOTE: This class uses the 'hist' method to retrieve histograms.

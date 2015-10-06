@@ -25,36 +25,35 @@ using namespace std;
 
 namespace uhh2bacon {
 
-class McWeight {
+class DataCorr {
 
     private:
     uhh2::Context& context;
     uhh2::Event* event;
 
-    uhh2::Event::Handle<TClonesArray> h_jets;
-    uhh2::Event::Handle<baconhep::TEventInfo> h_eventInfo;
 
-    bool        fPuReweighting;
 
     public:
-    McWeight(uhh2::Context & ctx);
-    ~McWeight();
+    DataCorr(uhh2::Context & ctx);
+    ~DataCorr();
     // histogram name and pointer to it for Pu reweighting
-    TH1F *              fPuReweighting_histo;
-    std::vector<TH1F*>  fPuReweighting_histoname;
-    TH1F *              hPuReweighting_histo40; 
-    TH1F *              hPuReweighting_histo80;
-    TH1F *              hPuReweighting_histo140;
-    TH1F *              hPuReweighting_histo200;
-    TH1F *              hPuReweighting_histo260;
-    TH1F *              hPuReweighting_histo320;
-    TH1F *              hPuReweighting_histo400;
-    TFile *             file;
 
+    TFile *             file;
+    float j2L1corr;
+    float j3L1corr;
 
     void        SetEvent(uhh2::Event& evt);
-    float       getPuReweighting();
-    float       getEvReweighting();
+    /*
+     float       jet12getL1correction(float Eta1, float Eta2, float & j2L1corr);
+     float       jet2getL1correction(float Eta);
+     float       jet3getL1correction(float Eta);
+    */
+
+     float       jet12getL1correction(float Eta1, float Eta2, float & j2L1corr);
+     float       jet1getL1correction(float Eta);
+     float       jet2getL1correction(float Eta);
+     float       jet3getL1correction(float Eta); 
+//     float  getL1correction(float j1Eta, float j2Eta, float j3Eta, float & j2L1corr, float & j3L1corr);
 
 };
 
