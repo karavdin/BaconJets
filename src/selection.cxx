@@ -34,7 +34,7 @@ bool Selection::Trigger(uhh2::Event& evt)
 {
     assert(event);
 
-    const TClonesArray & js = event->get(h_jets);
+    //    const TClonesArray & js = event->get(h_jets);
     const baconhep::TEventInfo & info = event->get(h_eventInfo);
 //   const baconhep::TJet * jet = dynamic_cast<const baconhep::TJet*>(js[0]);
 //   assert(jet);

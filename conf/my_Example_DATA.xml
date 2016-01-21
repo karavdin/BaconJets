@@ -11,7 +11,7 @@
     <Library Name="libSUHH2BaconJets"/>
     <Package Name="SUHH2BaconJets.par" />
 
-    <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/karavdia/JEC/" PostFix="_new" TargetLumi="1" > 
+    <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/karavdia/JEC_76X/Results" PostFix="_new" TargetLumi="1" > 
  <!--   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/mstoev/PROOF/" ProofNodes="2" OutputDirectory="/nfs/dust/cms/user/mstoev/sFrame_new/JEC/output/" PostFix="_new" TargetLumi="1" >  -->
 
         <!--     to run on all samples -->
@@ -50,7 +50,7 @@
         <!--  example how to run one root file -->
 
 	<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="" Cacheable="True">
-          <In FileName="/nfs/dust/cms/user/karavdia/JEC/Bacon_output_data.root" Lumi="0.0"/>
+          <In FileName="/nfs/dust/cms/user/karavdia/JEC_76X/Bacon/DATA/Bacon_output_data.root" Lumi="0.0"/>
           <InputTree Name="Events" />
         </InputData>
 

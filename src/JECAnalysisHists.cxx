@@ -100,6 +100,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev){
     fill(ev, 0);
 }
 void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
+  if(rand<0) return;
     // fill the histograms. Please note the comments in the header file:
     // 'hist' is used here a lot for simplicity, but it will be rather
     // slow when you have many histograms; therefore, better

@@ -50,7 +50,7 @@
         <!--  example how to run one root file -->
 
         <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="" Cacheable="True">
-            <In FileName="/nfs/dust/cms/user/karavdia/JEC/Bacon_output_mc.root" Lumi="0.0"/>
+            <In FileName="/nfs/dust/cms/user/karavdia/JEC_76X/Bacon/MC/Bacon_output_mc.root" Lumi="0.0"/>
             <InputTree Name="Events" />
         </InputData>
 
