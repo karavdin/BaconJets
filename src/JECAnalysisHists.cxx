@@ -26,15 +26,17 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     // jets
     TH1::SetDefaultSumw2();
 
-    book<TH1F>("N_jets", "N_{jets}", 50, -0.5, 49.5);
+    book<TH1F>("N_Jets", "N_{jets}", 50, -0.5, 49.5);
     book<TH1F>("pt","p_{T} all jets; p_{T} (GeV)",100,0,1500);
     book<TH1F>("eta","#eta all jets; #eta",100,-5,5);
     book<TH1F>("phi","#phi all jets; #phi",50,-M_PI,M_PI);
     book<TH1F>("MET","MET all jets; MET",400,0,400);
 
-    book<TH1F>("nPu","Number of PU events",60,0,60);
-    book<TH1F>("N_PV","Number of PVtx",60,0,60);
-    book<TH1F>("N_PV_sel","Number of PVtx after cuts on z, y, x",60,0,60);
+    book<TH1F>("nPu","Number of PU events",50,0,50);
+    book<TH1F>("N_PV","Number of PVtx",50,0,50);
+    //    book<TH1F>("N_PV_sel","Number of PVtx after cuts on z, y, x",60,0,60);
+    book<TH1F>("N_PVgood","Number of PVtx after quality",50,0,50);
+    book<TH1F>("Rho","#rho",50,0,50);
 
     book<TH1F>("weight_histo","weight_histo ",20,0,2);
 
@@ -164,6 +166,7 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     tt_jet2_ptRaw = ctx.get_handle<float>("jet2_ptRaw");
     tt_jet3_ptRaw = ctx.get_handle<float>("jet3_ptRaw");
     tt_nvertices = ctx.get_handle<int>("nvertices");
+    tt_nGoodvertices = ctx.get_handle<int>("nGoodvertices");
     tt_probejet_eta = ctx.get_handle<float>("probejet_eta");
     tt_probejet_phi = ctx.get_handle<float>("probejet_phi");
     tt_probejet_pt = ctx.get_handle<float>("probejet_pt");
@@ -178,6 +181,7 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     tt_rel_r = ctx.get_handle<float>("rel_r");
     tt_mpf_r = ctx.get_handle<float>("mpf_r");
     tt_asymmetry = ctx.get_handle<float>("asymmetry");
+    tt_rho = ctx.get_handle<float>("rho");
     tt_nPU = ctx.get_handle<int>("nPU");
 
 }
@@ -202,7 +206,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
     double weight = ev.weight;
 //    //cout << "weight_histo = " <<weight<<endl;
     Int_t njets = js.GetEntries();
-    hist("N_jets")->Fill(njets, weight);
+    hist("N_Jets")->Fill(njets, weight);
 
     for (int i=0; i<njets; i++){
         baconhep::TJet* jets = (baconhep::TJet*)js[i];
@@ -219,23 +223,25 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
     }
 //         hist("nPu")->Fill(ev.nPU, weight);//for data only
 
-    float nPrVer = 0;
+//    float nPrVer = 0;
     Int_t nvertices = pvs.GetEntries();
     //hist("N_PV")->Fill(ev.nvertices, weight);
     hist("N_PV")->Fill(ev.get(tt_nvertices), weight);
 
-    // require in the event that there is at least one reconstructed vertex
-    if(nvertices>0) {
-        // pick the first (i.e. highest sum pt) verte
-        for (int i=0; i<nvertices; i++){
-            baconhep::TVertex* vertices = (baconhep::TVertex*)pvs[i];
-            // require that the vertex meets certain criteria
-            if((fabs(vertices->z) < s_n_Pv_z) && (fabs(vertices->y) < s_n_Pv_xy) && (fabs(vertices->x) < s_n_Pv_xy) ){
-                nPrVer++;
-            }
-        }
-    }
-    hist("N_PV_sel")->Fill(nPrVer, weight);
+    // // require in the event that there is at least one reconstructed vertex
+    // if(nvertices>0) {
+    //     // pick the first (i.e. highest sum pt) verte
+    //     for (int i=0; i<nvertices; i++){
+    //         baconhep::TVertex* vertices = (baconhep::TVertex*)pvs[i];
+    //         // require that the vertex meets certain criteria
+    //         if((fabs(vertices->z) < s_n_Pv_z) && (fabs(vertices->y) < s_n_Pv_xy) && (fabs(vertices->x) < s_n_Pv_xy) ){
+    //             nPrVer++;
+    //         }
+    //     }
+    // }
+    // hist("N_PV_sel")->Fill(nPrVer, weight);
+    hist("N_PVgood")->Fill(ev.get(tt_nGoodvertices), weight);
+    hist("Rho")->Fill(ev.get(tt_rho), weight);
 
     baconhep::TJet* jet1 = (baconhep::TJet*)js[0];
     // hist("pt_1")->Fill(ev.jet1_pt, weight);

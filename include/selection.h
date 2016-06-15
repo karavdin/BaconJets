@@ -25,6 +25,7 @@ class Selection {
     uhh2::Event::Handle<float> tt_jet1_pt;     uhh2::Event::Handle<float> tt_jet2_pt;     uhh2::Event::Handle<float> tt_jet3_pt;
     uhh2::Event::Handle<float> tt_jet1_ptRaw;  uhh2::Event::Handle<float> tt_jet2_ptRaw;  uhh2::Event::Handle<float> tt_jet3_ptRaw;
     uhh2::Event::Handle<int> tt_nvertices;
+    //    uhh2::Event::Handle<int> tt_nGoodvertices;
     uhh2::Event::Handle<float> tt_probejet_eta;  uhh2::Event::Handle<float> tt_probejet_phi; uhh2::Event::Handle<float> tt_probejet_pt; uhh2::Event::Handle<float> tt_probejet_ptRaw;
     uhh2::Event::Handle<float> tt_barreljet_eta;  uhh2::Event::Handle<float> tt_barreljet_phi; uhh2::Event::Handle<float> tt_barreljet_pt; uhh2::Event::Handle<float> tt_barreljet_ptRaw;
     uhh2::Event::Handle<float> tt_pt_ave;
@@ -40,7 +41,8 @@ class Selection {
     bool PtMC(uhh2::Event& evt); //apply lowest Pt cut on MC
     bool DiJet();
     bool DiJetAdvanced(uhh2::Event& evt);
-    bool goodPVertex();
+    //    bool goodPVertex(int);
+    int goodPVertex();
     bool triggerFired(float bin1, float bin2);
 
     bool FullSelection();

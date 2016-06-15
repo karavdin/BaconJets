@@ -5,7 +5,7 @@
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
 //#include "UHH2/core/include/EventHelper.h"
-#include "../include/JECAnalysisHists.h"
+#include "UHH2/BaconJets/include/JECAnalysisHists.h"
 
 #include "UHH2/BaconJets/include/selection.h"
 #include "UHH2/BaconJets/include/jet_corrections.h"
@@ -45,7 +45,7 @@ namespace uhh2bacon {
 
   private:
     //    std::unique_ptr<EventHelper> eh;
-    Event::Handle<TClonesArray> h_jets  ;
+    Event::Handle<TClonesArray> h_jets;
     //    Event::Handle<std::vector<uhh2bacon::TJet>> h_jets;
     Event::Handle<baconhep::TEventInfo> h_eventInfo;
     Event::Handle<baconhep::TGenEventInfo> h_genInfo;
@@ -66,7 +66,7 @@ namespace uhh2bacon {
     Event::Handle<float> tt_gen_pthat; Event::Handle<float> tt_gen_weight;
     Event::Handle<float> tt_jet1_pt;     Event::Handle<float> tt_jet2_pt;     Event::Handle<float> tt_jet3_pt;
     Event::Handle<float> tt_jet1_ptRaw;  Event::Handle<float> tt_jet2_ptRaw;  Event::Handle<float> tt_jet3_ptRaw;
-    Event::Handle<int> tt_nvertices;
+    Event::Handle<int> tt_nvertices;     Event::Handle<int> tt_nGoodvertices;
     Event::Handle<float> tt_probejet_eta;  Event::Handle<float> tt_probejet_phi; Event::Handle<float> tt_probejet_pt; Event::Handle<float> tt_probejet_ptRaw;
     Event::Handle<float> tt_barreljet_eta;  Event::Handle<float> tt_barreljet_phi; Event::Handle<float> tt_barreljet_pt; Event::Handle<float> tt_barreljet_ptRaw;
     Event::Handle<float> tt_pt_ave;
@@ -75,6 +75,7 @@ namespace uhh2bacon {
     Event::Handle<float> tt_ev_weight;
     Event::Handle<float> tt_jets_pt;//sum of jets pT
     Event::Handle<float> tt_alpha_sum;//alpha defined as (sum of jets pT)/pt_ave
+    Event::Handle<float> tt_rho;//event energy density
 
     std::unique_ptr<MCLumiWeight> fMCLumiWeight;
   };
@@ -114,82 +115,6 @@ namespace uhh2bacon {
     h_sel.reset(new JECAnalysisHists(ctx,"Selection"));
     fMCLumiWeight.reset(new MCLumiWeight(ctx));
 
-
-
-    // // int size = sizeof(eta_range)/sizeof(double); // to get size of string object
-    // // eta_range.size() // to get size of vector
-
-    // std::vector<std::string> pt_range_name;
-    // for( unsigned int i=0; i < pt_range.size(); ++i ){
-    //   char pt_buffer [50];
-    //   sprintf (pt_buffer, "%5.3f", pt_range[i]);
-    //   pt_range_name.push_back(pt_buffer);
-    // }
-    // std::vector<std::string> eta_range_name;
-    // for( unsigned int j=0; j < eta_range.size(); ++j ){
-    //   char eta_buffer [50];
-    //   sprintf (eta_buffer, "%5.3f", eta_range[j]);
-    //   eta_range_name.push_back(eta_buffer);
-    // }
-    // // for Mikkos combination root file
-    // std::vector<std::string> eta_range_mikko_name;
-    // for( unsigned int j=0; j < eta_range_mikko.size(); ++j ){
-    //   char eta_buffer_mikko [50];
-    //   sprintf (eta_buffer_mikko, "%5.3f", eta_range_mikko[j]);
-    //   eta_range_mikko_name.push_back(eta_buffer_mikko);
-    // }
-
-    // // for( unsigned int k=0; k < alpha_range.size()-1; ++k ){
-    // //     for( unsigned int j=0; j < eta_range.size()-1; ++j ){
-    // for( unsigned int i=0; i < pt_range.size()-1; ++i ){
-    //   h_pt_bins.push_back(JECAnalysisHists(ctx,(std::string)("/a020/pt_"+pt_range_name[i]+"_"+pt_range_name[i+1])));
-    //   h_pt_bins_a01.push_back(JECAnalysisHists(ctx,(std::string)("/a010/pt_"+pt_range_name[i]+"_"+pt_range_name[i+1])));
-
-    // }
-    // //     }
-    // //   }
-    // for( unsigned int i=0; i < eta_range.size()-1; ++i ){
-    //   h_eta_bins.push_back(JECAnalysisHists(ctx,(std::string)("/a020/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   h_eta_bins_a01.push_back(JECAnalysisHists(ctx,(std::string)("/a010/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   h_eta_bins_a005.push_back(JECAnalysisHists(ctx,(std::string)("/a005/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   // h_eta_bins_a0075.push_back(JECAnalysisHists(ctx,(std::string)("a0075/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   // h_eta_bins_a0125.push_back(JECAnalysisHists(ctx,(std::string)("a0125/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   h_eta_bins_a015.push_back(JECAnalysisHists(ctx,(std::string)("/a015/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   h_eta_bins_a025.push_back(JECAnalysisHists(ctx,(std::string)("/a025/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   h_eta_bins_a03.push_back(JECAnalysisHists(ctx,(std::string)("/a030/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   h_eta_bins_a035.push_back(JECAnalysisHists(ctx,(std::string)("/a035/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   h_eta_bins_a04.push_back(JECAnalysisHists(ctx,(std::string)("/a040/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   h_eta_bins_a045.push_back(JECAnalysisHists(ctx,(std::string)("/a045/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1])));
-    //   for( unsigned int j=0; j < pt_range.size()-1; ++j ){
-    // 	h_eta_bins_pt_bins_a005.push_back(JECAnalysisHists(ctx,(std::string)("/a005/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1]+"/pt_"+pt_range_name[j]+"_"+pt_range_name[j+1])));
-    // 	h_eta_bins_pt_bins_a01.push_back(JECAnalysisHists(ctx,(std::string)("/a010/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1]+"/pt_"+pt_range_name[j]+"_"+pt_range_name[j+1])));
-    // 	h_eta_bins_pt_bins_a015.push_back(JECAnalysisHists(ctx,(std::string)("/a015/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1]+"/pt_"+pt_range_name[j]+"_"+pt_range_name[j+1])));
-    // 	h_eta_bins_pt_bins_a02.push_back(JECAnalysisHists(ctx,(std::string)("/a020/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1]+"/pt_"+pt_range_name[j]+"_"+pt_range_name[j+1])));
-    // 	h_eta_bins_pt_bins_a025.push_back(JECAnalysisHists(ctx,(std::string)("/a025/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1]+"/pt_"+pt_range_name[j]+"_"+pt_range_name[j+1])));
-    // 	h_eta_bins_pt_bins_a03.push_back(JECAnalysisHists(ctx,(std::string)("/a030/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1]+"/pt_"+pt_range_name[j]+"_"+pt_range_name[j+1])));
-    // 	h_eta_bins_pt_bins_a035.push_back(JECAnalysisHists(ctx,(std::string)("/a035/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1]+"/pt_"+pt_range_name[j]+"_"+pt_range_name[j+1])));
-    // 	h_eta_bins_pt_bins_a04.push_back(JECAnalysisHists(ctx,(std::string)("/a040/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1]+"/pt_"+pt_range_name[j]+"_"+pt_range_name[j+1])));
-    // 	h_eta_bins_pt_bins_a045.push_back(JECAnalysisHists(ctx,(std::string)("/a045/eta_"+eta_range_name[i]+"_"+eta_range_name[i+1]+"/pt_"+pt_range_name[j]+"_"+pt_range_name[j+1])));
-    //   }
-    // }
-
-    // for( unsigned int j=0; j < eta_range_mikko.size()-1; ++j ){
-    //   for( unsigned int i=0; i < pt_range.size()-1; ++i ){
-    //     h_eta_bins_mikko_a10.push_back(JECAnalysisHists(ctx,(std::string)("/a010/eta_"+eta_range_mikko_name[j]+"_"+eta_range_mikko_name[j+1]+"/pt_"+pt_range_name[i]+"_"+pt_range_name[i+1])));
-    //     h_eta_bins_mikko_a15.push_back(JECAnalysisHists(ctx,(std::string)("/a015/eta_"+eta_range_mikko_name[j]+"_"+eta_range_mikko_name[j+1]+"/pt_"+pt_range_name[i]+"_"+pt_range_name[i+1])));
-    //     h_eta_bins_mikko_a20.push_back(JECAnalysisHists(ctx,(std::string)("/a020/eta_"+eta_range_mikko_name[j]+"_"+eta_range_mikko_name[j+1]+"/pt_"+pt_range_name[i]+"_"+pt_range_name[i+1])));
-    //     h_eta_bins_mikko_a30.push_back(JECAnalysisHists(ctx,(std::string)("/a030/eta_"+eta_range_mikko_name[j]+"_"+eta_range_mikko_name[j+1]+"/pt_"+pt_range_name[i]+"_"+pt_range_name[i+1])));
-    //   }
-    // }
-
-
-    // // histos for the pT extrapolations
-    // for( unsigned int j=0; j < eta_range.size()-1; ++j ){
-    //   for( unsigned int i=0; i < pt_range.size()-1; ++i ){
-    //     h_noalpha_bins.push_back(JECAnalysisHists(ctx,(std::string)("/eta_"+eta_range_name[j]+"_"+eta_range_name[j+1]+"/pt_"+pt_range_name[i]+"_"+pt_range_name[i+1])));
-    //   }
-    // }
-
     //Additional vars in event
     //    ctx.undeclare_event_output("");
     tt_gen_pthat = ctx.declare_event_output<float>("gen_pthat");
@@ -201,6 +126,7 @@ namespace uhh2bacon {
     tt_jet2_ptRaw = ctx.declare_event_output<float>("jet2_ptRaw");
     tt_jet3_ptRaw = ctx.declare_event_output<float>("jet3_ptRaw");
     tt_nvertices = ctx.declare_event_output<int>("nvertices");
+    tt_nGoodvertices = ctx.declare_event_output<int>("nGoodvertices");
     tt_probejet_eta = ctx.declare_event_output<float>("probejet_eta");
     tt_probejet_phi = ctx.declare_event_output<float>("probejet_phi");
     tt_probejet_pt = ctx.declare_event_output<float>("probejet_pt");
@@ -218,6 +144,7 @@ namespace uhh2bacon {
     tt_nPU = ctx.declare_event_output<int>("nPU");
     tt_ev_weight = ctx.declare_event_output<float>("weight");
     tt_jets_pt= ctx.declare_event_output<float>("sum_jets_pt");
+    tt_rho = ctx.declare_event_output<float>("rho");
 
   }
 
@@ -245,6 +172,7 @@ namespace uhh2bacon {
     int nPU_tt = eventInfo.nPU;
     //    cout<<"nPU = "<<nPU_tt<<endl;
     event.set(tt_nPU,nPU_tt);
+    event.set(tt_rho,eventInfo.rhoJet);
 
     //    std::vector<baconhep::TJet> js = event.get(h_jets);
     // //! JER smearing
@@ -264,7 +192,7 @@ namespace uhh2bacon {
     baconhep::TJet* jet1 = (baconhep::TJet*)js[0];
     baconhep::TJet* jet2 = (baconhep::TJet*)js[1];
     Int_t njets = js.GetEntries();
-    //   std::cout<<"Number of jets = "<<js.GetEntries()<<std::endl;
+    //    std::cout<<"Number of jets = "<<js.GetEntries()<<std::endl;
     //    std::cout<<"evtNum = "<<eventInfo->evtNum<<std::endl;
     // std::cout<<"evtNum = "<<eventInfo.evtNum<<std::endl;
     baconhep::TJet* jet3;
@@ -323,11 +251,11 @@ namespace uhh2bacon {
          //MC option:  Asympt; or Flat
          //minBiasXsec for PU:  69; or 80 mb
         //11 = set 1; 12 = set2 ...
-	//	cout<<"Before: "<<event.weight<<endl;
-	//	event.weight = event.weight * mcweight.getPuReweighting("Flat", 58); //TEST
-	event.weight = event.weight * mcweight.getPuReweighting("Flat", 69); //TEST
+	  //	  	  cout<<"Before: "<<event.weight<<endl;
+	  //	  event.weight = event.weight * mcweight.getPuReweighting("Flat", 58); //TEST
+	  event.weight = event.weight * mcweight.getPuReweighting("Flat", 69); //TEST
 	//	event.weight = event.weight * mcweight.getEvReweighting(99, "Flat", 69) * mcweight.getPuReweighting("Flat", 69);
-	//	event.weight = event.weight * mcweight.getPuReweighting("Flat", 80); //TEST
+	  //	  event.weight = event.weight * mcweight.getPuReweighting("Flat", 80); //TEST
 
 	//	event.weight = event.weight * event.get(tt_gen_weight) * mcweight.getPuReweighting("Flat", 58); //ToDo: run it 1st!
 	//	event.weight = event.weight * event.get(tt_gen_weight) * mcweight.getPuReweighting("Flat", 69); //ToDo: run it 1st!
@@ -467,9 +395,16 @@ namespace uhh2bacon {
     event.set(tt_alpha,alpha);
     event.set(tt_alpha_sum,alpha_sum);
 
-    if(!sel.DiJet()) return false;
+    //good primary vertex
+    int nGoodVts = sel.goodPVertex();
+    //    std::cout<<"nGoodVts = "<<nGoodVts<<std::endl;
+    if(nGoodVts<=0) return false;
+    //    if(!sel.goodPVertex(nGoodVts)) return false;
+    event.set(tt_nGoodvertices, nGoodVts);
 
+    if(!sel.DiJet()) return false;
     h_nocuts->fill(event);
+
     //  if(js.GetEntries()>25) return false; //TEST cut events with too high jet multiplicity
 
     if(!sel.DiJetAdvanced(event)) return false;

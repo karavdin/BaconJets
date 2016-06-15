@@ -28,6 +28,7 @@ Selection::Selection(uhh2::Context & ctx) :
   tt_jet2_ptRaw = ctx.declare_event_output<float>("jet2_ptRaw");
   tt_jet3_ptRaw = ctx.declare_event_output<float>("jet3_ptRaw");
   tt_nvertices = ctx.declare_event_output<int>("nvertices");
+  //  tt_nGoodvertices = ctx.declare_event_output<int>("nGoodvertices");
   tt_probejet_eta = ctx.declare_event_output<float>("probejet_eta");
   tt_probejet_phi = ctx.declare_event_output<float>("probejet_phi");
   tt_probejet_pt = ctx.declare_event_output<float>("probejet_pt");
@@ -200,37 +201,37 @@ bool Selection::Trigger(uhh2::Event& evt)
     if (evt.get(tt_pt_ave) >= s_Pt_Ave400_cut && evt.get(tt_pt_ave) < s_Pt_Ave500_cut && trigger400fired) return true;
     if (evt.get(tt_pt_ave) >= s_Pt_Ave500_cut && trigger500fired) return true;
 
-    // // //HF triggers -------------------------------------------------------------------------------------------
-    // bool trigger60HFfired = false;
-    // bool trigger80HFfired = false;
-    // bool trigger100HFfired = false;
-    // bool trigger160HFfired = false;
-    // bool trigger220HFfired = false;
-    // bool trigger300HFfired = false;
-    // //     Triggers Bits:
-    // //     HLT_DiPFJetAve100_HFJEC = triggerBits[0]
-    // //     HLT_DiPFJetAve160_HFJEC = triggerBits[2]
-    // //     HLT_DiPFJetAve220_HFJEC = triggerBits[4]
-    // //     HLT_DiPFJetAve300_HFJEC = triggerBits[6]
-    // //     HLT_DiPFJetAve60_HFJEC = triggerBits[11]
-    // //     HLT_DiPFJetAve80_HFJEC = triggerBits[13]
+    // //HF triggers -------------------------------------------------------------------------------------------
+    bool trigger60HFfired = false;
+    bool trigger80HFfired = false;
+    bool trigger100HFfired = false;
+    bool trigger160HFfired = false;
+    bool trigger220HFfired = false;
+    bool trigger300HFfired = false;
+    //     Triggers Bits:
+    //     HLT_DiPFJetAve100_HFJEC = triggerBits[0]
+    //     HLT_DiPFJetAve160_HFJEC = triggerBits[2]
+    //     HLT_DiPFJetAve220_HFJEC = triggerBits[4]
+    //     HLT_DiPFJetAve300_HFJEC = triggerBits[6]
+    //     HLT_DiPFJetAve60_HFJEC = triggerBits[11]
+    //     HLT_DiPFJetAve80_HFJEC = triggerBits[13]
     
-    // if(eventInfo->triggerBits[11]==1) trigger60HFfired = true;
-    // if(eventInfo->triggerBits[13]==1) trigger80HFfired = true;
-    // if(eventInfo->triggerBits[0]==1)  trigger100HFfired = true;
-    // if(eventInfo->triggerBits[2]==1)  trigger160HFfired = true;
-    // if(eventInfo->triggerBits[4]==1)  trigger220HFfired = true;
-    // if(eventInfo->triggerBits[6]==1)  trigger300HFfired = true;
+    if(eventInfo->triggerBits[11]==1) trigger60HFfired = true;
+    if(eventInfo->triggerBits[13]==1) trigger80HFfired = true;
+    if(eventInfo->triggerBits[0]==1)  trigger100HFfired = true;
+    if(eventInfo->triggerBits[2]==1)  trigger160HFfired = true;
+    if(eventInfo->triggerBits[4]==1)  trigger220HFfired = true;
+    if(eventInfo->triggerBits[6]==1)  trigger300HFfired = true;
 
 
-    // if (evt.get(tt_pt_ave) < s_Pt_Ave60HF_cut) return false;
-    // if (evt.get(tt_pt_ave) >= s_Pt_Ave60HF_cut  && evt.get(tt_pt_ave) < s_Pt_Ave80HF_cut  && trigger60HFfired) return true;
-    // if (evt.get(tt_pt_ave) >= s_Pt_Ave80HF_cut  && evt.get(tt_pt_ave) < s_Pt_Ave100HF_cut && trigger80HFfired) return true;
-    // if (evt.get(tt_pt_ave) >= s_Pt_Ave100HF_cut && evt.get(tt_pt_ave) < s_Pt_Ave160HF_cut && trigger100HFfired) return true;
-    // if (evt.get(tt_pt_ave) >= s_Pt_Ave160HF_cut && evt.get(tt_pt_ave) < s_Pt_Ave220HF_cut && trigger160HFfired) return true;
-    // if (evt.get(tt_pt_ave) >= s_Pt_Ave220HF_cut && evt.get(tt_pt_ave) < s_Pt_Ave300HF_cut && trigger220HFfired) return true;
-    // if (evt.get(tt_pt_ave) >= s_Pt_Ave300HF_cut && trigger300HFfired) return true;
-    // //---------------------------------------------------------------------------------------------------
+    if (evt.get(tt_pt_ave) < s_Pt_Ave60HF_cut) return false;
+    if (evt.get(tt_pt_ave) >= s_Pt_Ave60HF_cut  && evt.get(tt_pt_ave) < s_Pt_Ave80HF_cut  && trigger60HFfired) return true;
+    if (evt.get(tt_pt_ave) >= s_Pt_Ave80HF_cut  && evt.get(tt_pt_ave) < s_Pt_Ave100HF_cut && trigger80HFfired) return true;
+    if (evt.get(tt_pt_ave) >= s_Pt_Ave100HF_cut && evt.get(tt_pt_ave) < s_Pt_Ave160HF_cut && trigger100HFfired) return true;
+    if (evt.get(tt_pt_ave) >= s_Pt_Ave160HF_cut && evt.get(tt_pt_ave) < s_Pt_Ave220HF_cut && trigger160HFfired) return true;
+    if (evt.get(tt_pt_ave) >= s_Pt_Ave220HF_cut && evt.get(tt_pt_ave) < s_Pt_Ave300HF_cut && trigger220HFfired) return true;
+    if (evt.get(tt_pt_ave) >= s_Pt_Ave300HF_cut && trigger300HFfired) return true;
+    //---------------------------------------------------------------------------------------------------
 
 
 
@@ -296,27 +297,38 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     return true;
 }
 
-bool Selection::goodPVertex()
+  ///  bool Selection::goodPVertex(int goodVtx = 0)
+  int Selection::goodPVertex()
 {
     assert(event);
-
+    //    event->set(tt_nGoodvertices,0); //set default value  
     const TClonesArray & pvs = event->get(h_pv);
 
     Int_t nvertices = pvs.GetEntries();
     // require in the event that there is at least one reconstructed vertex
-    if(nvertices<=0) return false;
+    if(nvertices<=0) return 0;//false;
     float nPrVer = 0;
     // pick the first (i.e. highest sum pt) verte
     for (int i=0; i<nvertices; i++){
         baconhep::TVertex* vertices = (baconhep::TVertex*)pvs[i];
         // require that the vertex meets certain criteria
-
-        if((vertices->nTracksFit > s_n_PvTracks) && (fabs(vertices->z) < s_n_Pv_z) && (fabs(vertices->y) < s_n_Pv_xy) && (fabs(vertices->x) < s_n_Pv_xy)){
+	//	if(vertices->nTracksFit)
+	//	std::cout<<" vertices->nTracksFit = "<<vertices->nTracksFit<<" "<<fabs(vertices->z)<<" cut at "<<s_n_PvTracks<<std::endl;
+	//        if((vertices->nTracksFit > s_n_PvTracks) && (fabs(vertices->z) < s_n_Pv_z) && (fabs(vertices->y) < s_n_Pv_xy) && (fabs(vertices->x) < s_n_Pv_xy)){
+	//SHOULD BE LIKE
+	//cms.string("isValid & ndof >= 4 & chi2 > 0 & tracksSize > 0 & abs(z) < 24 & abs(position.Rho) < 2.")
+        if((fabs(vertices->z) < 24.) && (fabs(vertices->rho) < 2.) && (vertices->ndof >= 4) 
+	   && (vertices->chi2) > 0 && (vertices->isValid)){
             nPrVer++;
         }
     }
-
- return true;
+    return nPrVer;
+    //    std::cout<<" nPrVer = "<<nPrVer<<" all vtxs = "<<nvertices<<std::endl;
+    //    event->set(tt_nGoodvertices,nPrVer); 
+    // goodVtx = nPrVer; 
+    // if(nPrVer<=0) return false;
+    // else
+    //   return true;
 }
 
 
@@ -325,7 +337,10 @@ bool Selection::goodPVertex()
 
 bool Selection::FullSelection()
 {
-    return DiJet()&&goodPVertex();
+  bool goodVtx = false;
+  if(goodPVertex()>0) goodVtx = true; 
+  //  return DiJet()&&goodPVertex();
+  return DiJet()&& goodVtx;
 
 }
 

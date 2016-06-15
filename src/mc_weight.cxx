@@ -47,16 +47,22 @@ McWeight::McWeight(uhh2::Context & ctx) :
 
  // TString fPuReweighting_filename[] = {"Pileup_V6_minBiasXsec58000_pileupJSON_160207.root","Pileup_V6_minBiasXsec69000_pileupJSON_160207.root", "Pileup_V6_minBiasXsec80000_pileupJSON_160207.root"};
 
-  TString DATABASE_PATH = "/afs/desy.de/user/k/karavdia/CMSSW_7_6_3/src/UHH2/BaconJets/reweighting/pileup_76Xcampaign/output/";
+    /*  TString DATABASE_PATH = "/afs/desy.de/user/k/karavdia/CMSSW_7_6_3/src/UHH2/BaconJets/reweighting/pileup_76Xcampaign/output/";
     // TString fPuReweighting_filename[] = {"PUweight_V6_minBiasXsec69000_pileupJSON_151102_newAsymptMCSel.root","PUweight_V6_minBiasXsec80000_pileupJSON_151102_newAsymptMCSel.root", "PUweight_V6_minBiasXsec69000_pileupJSON_151102_newFlatMCSel.root", "PUweight_V6_minBiasXsec80000_pileupJSON_151102_newFlatMCSel.root"};
 
  TString fPuReweighting_filename[] = {"PUweight_RunII_76X_V1_minBiasXsec58000_pileupJSON_FlatMCSel_pythia8_.root","PUweight_RunII_76X_V1_minBiasXsec69000_pileupJSON_FlatMCSel_pythia8_.root", "PUweight_RunII_76X_V1_minBiasXsec80000_pileupJSON_FlatMCSel_pythia8_.root"};
+    */
+
+ TString DATABASE_PATH = "/afs/desy.de/user/k/karavdia/CMSSW_7_6_3/src/UHH2/BaconJets/reweighting/80X_2016RunB/804pb/";                   
+ // TString fPuReweighting_filename[] = {"nPU_minBiasXsec58000.root","nPU_minBiasXsec71300.root", "nPU_minBiasXsec80000.root"}; 
+ TString fPuReweighting_filename[] = {"nPU_minBiasXsec58000.root","nPU_minBiasXsec69000.root", "nPU_minBiasXsec80000.root"}; 
 
 
    for (unsigned int j = 0; j < fPuReweighting_histoname.size(); j++) {
  // for (unsigned int j = 0; j < fPuReweighting_filename.size(); j++) {
         file = new TFile (DATABASE_PATH+"/"+fPuReweighting_filename[j]);
-        fPuReweighting_histoname[j] = (TH1F*) file -> Get("histo_substr");
+	//        fPuReweighting_histoname[j] = (TH1F*) file -> Get("histo_substr");
+        fPuReweighting_histoname[j] = (TH1F*) file -> Get("pileup");
 
         if (fPuReweighting_histoname[j] == NULL) {
             cout << "was not possible to retrieve a histogram from "<< fPuReweighting_filename[j]<< endl;
