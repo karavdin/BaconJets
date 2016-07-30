@@ -2,17 +2,16 @@
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
 
 <!ENTITY PROOFdir "/nfs/dust/cms/user/karavdia/PROOF">      
-<!ENTITY NEVT "-1">
-<!-- <!ENTITY NEVT "10000"> -->
+<!--<!ENTITY NEVT "-1">-->
+ <!ENTITY NEVT "10"> 
 
 
 <!ENTITY Test_sample SYSTEM "../datasets/JEC_80X_standalone/TEST_80X_JEC.xml">
 <!-- <!ENTITY Test_sample_DATA SYSTEM "../datasets/JEC_80X_standalone/DATA_JetHT_Run2016B_test.xml"> -->
 
-<!ENTITY QCDPt15to7000_pythia8_AK4CHS SYSTEM "../datasets/JEC_80X_standalone/MC_QCD_Pt-15to7000_Flat_pythia8_PUFlat.xml">
-<!ENTITY DATA_RunB_AK4CHS SYSTEM "../datasets/JEC_80X_standalone/DATA_JetHT_Run2016B_test.xml">
-<!--<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X/Spring16_25nsV1/">-->
-<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/TEST_2/">
+<!ENTITY QCDPt15to7000_pythia8_AK4CHS SYSTEM "../../common/datasets/RunII_80X_v1/MC_QCD_Pt-15to7000_Flat_pythia8_PUFlat.xml">
+<!ENTITY DATA_RunB_AK4CHS SYSTEM "../datasets/JEC_80X_standalone/TEST_UHH2MET.xml">
+<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/TEST_MET/">
 
 <!-- <!ENTITY QCDPt15to7000_pythia8_AK4CHS SYSTEM "../datasets/JEC_76X/Fall15_25nsV2_L2L3Res_MC_pythia8_AK4PFCHS.xml">
 <!ENTITY DATA_RunD_AK4CHS SYSTEM "../datasets/JEC_76X/Fall15_25nsV2_L2L3Res_DATA_AK4PFCHS.xml">
@@ -21,7 +20,7 @@
 
 <!--
    <ConfigParse NEventsBreak="0" LastBreak="0" FileSplit="10" AutoResubmit="10"/>
-   <ConfigSGE RAM ="3" DISK ="2" Mail="XXXX@desy.de" Notification="as" Workdir="workdir"/>
+   <ConfigSGE RAM ="3" DISK ="2" Mail="XXXX@desy.de" Notification="as" Workdir="workdir_standalone"/>
 -->
 
 
@@ -30,21 +29,21 @@
     <Library Name="libSUHH2BaconJets"/>
     <Package Name="SUHH2BaconJets.par" />
 
-   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="2600" >
+   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="3990" >
  
 
-	 <InputData Lumi="2500" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_pythia8_AK4CHS" Cacheable="False">
+	<!-- <InputData Lumi="39834100000" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_pythia8_AK4CHS" Cacheable="False">
           &QCDPt15to7000_pythia8_AK4CHS;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
-     </InputData> 
+     </InputData> -->
 
  
-<!--	<InputData Lumi="2600" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_AK4CHS" Cacheable="False">
+	<InputData Lumi="3990" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_AK4CHS" Cacheable="False">
           &DATA_RunB_AK4CHS;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
-     </InputData> --> 
+     </InputData> 
 
 
 <!--	 <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Test_sample" Cacheable="False">
@@ -68,20 +67,26 @@
           <Item Name="MuonCollection"          Value="slimmedMuonsUSER"/>
           <Item Name="TauCollection"           Value="slimmedTaus"/>
 <!-- AK4CHS -->
-          <Item Name="JetCollection"           Value="slimmedJets"/>
-	  <Item Name="JetLabel"                Value="AK4CHS"/> 
+ <Item Name="JetCollection"           Value="slimmedJets"/>
+ <Item Name="JetLabel"                Value="AK4CHS"/> 
+ <Item Name="METName"                 Value="slimmedMETsPuppi"/>
+<!-- <Item Name="METName"                 Value="slimmedMETs"/>
+-->
 <!-- AK8CHS --> 
 <!--         <Item Name="JetCollection"           Value="patJetsAK8PFCHS"/>
   <Item Name="JetLabel"                Value="AK8CHS"/> --> 
 <!-- AK4PUPPI -->
-<!--         <Item Name="JetCollection"           Value="slimmedJetsPuppi"/>
-  <Item Name="JetLabel"                Value="AK4PUPPI"/> -->
+   <!--   <Item Name="JetCollection"           Value="slimmedJetsPuppi"/>
+      <Item Name="JetLabel"                Value="AK4PUPPI"/> 
+      <Item Name="METName"                 Value="slimmedMETsPuppi"/> -->
 <!-- AK8PUPPI -->
 <!--         <Item Name="JetCollection"           Value="patJetsAK8PFPUPPI"/>
 	 <Item Name="JetLabel"                Value="AK8PUPPI"/> -->
+
           <Item Name="GenJetCollection"        Value="slimmedGenJets"/>
-          <Item Name="METName"                 Value="slimmedMETs"/>
-          <Item Name="lumi_file" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8_patch1/src/UHH2/common/data/Cert_271036-274421_13TeV_PromptReco_Collisions16_JSON.root"/>
+
+     
+          <Item Name="lumi_file" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8_patch1/src/UHH2/common/data/Cert_271036-276811_13TeV_PromptReco_Collisions16_JSON.root"/>
 <!--	  <Item Name="pileup_directory"           Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/PileUP_MC_pythia8_PUFlat.root"/>
 	  <Item Name="pileup_directory_data" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/PileUP_MC_pythia8_PUFlat.root"/>
 	  <Item Name="pileup_directory_data_up"   Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/PileUP_MC_pythia8_PUFlat.root"/>

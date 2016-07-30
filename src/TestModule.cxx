@@ -205,10 +205,10 @@ using namespace uhh2;
       if(jetLabel == "AK8PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFPuppi_MC;
     }
     else {
-      if(jetLabel == "AK4CHS") JEC_corr = JERFiles::Spring16_25ns_L123_noRes_AK4PFchs_DATA;
-      if(jetLabel == "AK8CHS") JEC_corr = JERFiles::Spring16_25ns_L123_noRes_AK4PFchs_DATA;//ToDo: change for different jet collections!!!
-      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_noRes_AK4PFchs_DATA;
-      if(jetLabel == "AK8PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_noRes_AK4PFchs_DATA;
+      if(jetLabel == "AK4CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFchs_DATA;
+      if(jetLabel == "AK8CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFchs_DATA;
+      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFPuppi_DATA;
+      if(jetLabel == "AK8PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFPuppi_DATA;
     }
     jet_corrector.reset(new JetCorrector(ctx, JEC_corr));
 
@@ -307,7 +307,7 @@ using namespace uhh2;
   }
 
   bool TestModule::process(Event & event) {
-    //    cout<<"NEW EVENT"<<endl;
+    cout<<"NEW EVENT"<<endl;
 
     /* CMS-certified luminosity sections */
     if(event.isRealData){
@@ -510,6 +510,24 @@ using namespace uhh2;
     if (event.get(tt_alpha) < 0.3) {
       h_sel->fill(event);
     }
+
+    std::cout<<"-- Event -- "<<std::endl;
+    std::cout<<" Evt# "<<event.event<<" Run: "<<event.run<<" "<<std::endl;
+    std::cout<<" Npv = "<<event.get(tt_nvertices)<<" jet_pt_ave = "
+	     <<event.get(tt_pt_ave)<<" #muons = "<<event.muons->size()<<std::endl;
+    std::cout<<" RAW MET.pT = "<<event.met->uncorr_pt()<<" RAW MET.phi = "<<event.met->uncorr_phi()<<std::endl;
+    //    std::cout<<" RAW PUPPI MET.pT = "<<eventInfo.pfMETpuppi_uncorr<<" RAW PUPPI MET.phi = "<<eventInfo.pfMETpuppiphi_uncorr<<std::endl;
+    std::cout<<" MET.pT = "<<event.met->pt()<<" MET.phi = "<<event.met->phi()<<std::endl;
+    std::cout<<"Probe: "<<event.get(tt_probejet_eta)<<" "<<event.get(tt_probejet_phi)
+    	     <<" "<<event.get(tt_probejet_pt)<<" "<<event.get(tt_probejet_ptRaw)<<std::endl;
+    std::cout<<" Barrel: "<<event.get(tt_barreljet_eta)<<" "<<event.get(tt_barreljet_phi)
+    	     <<" "<<event.get(tt_barreljet_pt)<<" "<<event.get(tt_barreljet_ptRaw)<<std::endl;
+    std::cout<<" "<<event.get(tt_asymmetry)<<" "<<event.get(tt_rel_r)<<" "<<event.get(tt_mpf_r)<<""<<endl;
+    for(int i=0;i<jet_n;i++){
+      Jet* jet_cur = &event.jets->at(i);
+      if(jet_cur->pt()>15.) std::cout<<"jet #"<<i<<" pt = "<<jet_cur->pt()<<" phi = "<<jet_cur->phi()<<" eta = "<<jet_cur->eta()<<std::endl;
+    }
+    std::cout<<" "<<std::endl;
 
 //     // cout<<"Yff! "<<event.weight<<endl;
 //     event.set(tt_ev_weight,event.weight);

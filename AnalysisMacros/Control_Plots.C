@@ -560,15 +560,7 @@ for(int i=0;i<n_pt;i++)
 
   g->Print(path+"plots/Control_Plots_"+dirName+"_"+GenName+"_Pt_aveVsEtaProbe.pdf");
 
- // TCanvas* h1 = new TCanvas();
- // TH2F *Rrel_vs_assym_DATA = (TH2F*)datafile->Get(dirName+"/Rrel_vs_assym");
- // TH2F *Rrel_vs_assym_MC = (TH2F*)MCfile->Get(dirName+"/Rrel_vs_assym");
-
- // h1->Divide(2,1);
- // h1->cd(1);
- // Rrel_vs_assym_DATA->SetTitle(DATAtitle);
- // Rrel_vs_assym_DATA->Draw("colz");
-
+ 
  // h1->cd(2);
  // Rrel_vs_assym_MC->SetTitle(MCtitle);
  // Rrel_vs_assym_MC->Draw("colz");
