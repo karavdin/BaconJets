@@ -4,7 +4,6 @@
 
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
-//#include "UHH2/core/include/EventHelper.h"
 #include "../include/JECAnalysisHists.h"
 
 #include <UHH2/common/include/MCWeight.h>
@@ -13,33 +12,19 @@
 #include <UHH2/common/include/TriggerSelection.h>
 
 #include "UHH2/BaconJets/include/selection.h"
-#include "UHH2/BaconJets/include/jet_corrections.h"
-#include "UHH2/BaconJets/include/mc_weight.h"
 #include "UHH2/BaconJets/include/constants.h"
-#include "UHH2/BaconJets/include/TSetTree.h"
-//#include "UHH2/BaconJets/include/dijet_event.h"
 #include "UHH2/core/include/Jet.h"
 
-// #include "UHH2/BaconTrans/baconheaders/TGenEventInfo.hh"
-// #include "UHH2/BaconTrans/baconheaders/TJet.hh"
-// #include "UHH2/BaconTrans/baconheaders/TEventInfo.hh"
-// #include "UHH2/BaconTrans/baconheaders/BaconAnaDefs.hh"
-
-//#include "UHH2/BaconJets/include/pileup_data.h"
-//#include "UHH2/BaconJets/include/data_corrections.h"
 #include "TClonesArray.h"
 #include "TString.h"
 
 //#include "UHH2/common/include/MCWeight.h"
 
-//TTree   *fCurrentTree;
 Int_t   Runnr;
 Int_t   Eventnr;
-//TFile   *fCurrentTreeFile;
 using namespace std;
 using namespace uhh2;
-//using namespace baconhep;
-//using uhh2::detail::EventHelper;
+
 
 
   class TestModule: public uhh2::AnalysisModule {
@@ -207,7 +192,8 @@ using namespace uhh2;
     else {
       if(jetLabel == "AK4CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFchs_DATA;
       if(jetLabel == "AK8CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFchs_DATA;
-      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFPuppi_DATA;
+      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFPuppi_DATA;
+      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFchs_DATA; //FIXME: used PUPPI when available
       if(jetLabel == "AK8PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFPuppi_DATA;
     }
     jet_corrector.reset(new JetCorrector(ctx, JEC_corr));
@@ -271,43 +257,11 @@ using namespace uhh2;
     h_trgHF300.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve300_HFJEC"));
 
   };
- //  TestModule::TestModule(Context & ctx) :
-//     sel(ctx),
-//     mcweight(ctx),
-//     pileupData(ctx)
-//   {
 
-
-
-//     h_eventInfo = ctx.declare_event_input<baconhep::TEventInfo>("Info");
-//     if(is_mc){ /// apply for MC only
-//       h_genInfo = ctx.declare_event_input<baconhep::TGenEventInfo>("GenEvtInfo");
-//     }
-// //     h_pv = ctx.get_handle<TClonesArray>("PV");
-//     h_pv = ctx.declare_event_input<TClonesArray>("PV");
-
-//     //    eh.reset(new EventHelper(ctx));
-//     h_nocuts.reset(new JECAnalysisHists(ctx,"noCuts"));
-//     h_dijet.reset(new JECAnalysisHists(ctx,"diJet"));
-//     h_match.reset(new JECAnalysisHists(ctx,"JetMatching"));
-//     h_sel.reset(new JECAnalysisHists(ctx,"Selection"));
-//     fMCLumiWeight.reset(new MCLumiWeight(ctx));
-
-
-
-
-
-
-//   }
-
-  TestModule::~TestModule() {
-    //  cSetTree.general();
-    //      cPuData.general();
-
-  }
+  TestModule::~TestModule() {  }
 
   bool TestModule::process(Event & event) {
-    cout<<"NEW EVENT"<<endl;
+    //    cout<<"NEW EVENT"<<endl;
 
     /* CMS-certified luminosity sections */
     if(event.isRealData){
