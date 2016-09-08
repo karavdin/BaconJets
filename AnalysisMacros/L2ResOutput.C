@@ -83,7 +83,12 @@ void L2ResOutput(TString path, TString txttag, TString jettag, TString tag, doub
   h->GetXaxis()->SetTitleSize(0.05);
   h->GetYaxis()->SetTitleSize(0.05);
   //  lumi_13TeV = "Run2015  2.1 fb^{-1}";
-  lumi_13TeV = "Run2016  0.8 fb^{-1}";
+  //  lumi_13TeV = "Run2016  0.8 fb^{-1}";
+  //lumi_13TeV = "RunBCD2016 12.9 fb^{-1}";
+  //  lumi_13TeV = "RunEF2016 X.X fb^{-1}";
+  //  lumi_13TeV = "RunG2016 X.X fb^{-1}";
+  //  lumi_13TeV = "RunG2016 X.X fb^{-1}";
+  lumi_13TeV = "MC X.X fb^{-1}";
   //lumi_13TeV = "589.3 pb^{-1}";
   bool kSquare = true;
 

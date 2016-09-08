@@ -164,7 +164,7 @@ void PTextrapolation_TTree_kFSRfit(bool mpfMethod, TString path, TFile* datafile
 
      for(int j=0; j<n_eta-1; j++){
       for(int k=0; k<n_pt-1; k++){
-	std::cout<<"Ratio: For eta range = "<<eta_bins[j]<<", "<<eta_bins[j+1]<<" and pT range = "<<pt_bins[k]<<", "<<pt_bins[k+1]<<std::endl;
+	//	std::cout<<"Ratio: For eta range = "<<eta_bins[j]<<", "<<eta_bins[j+1]<<" and pT range = "<<pt_bins[k]<<", "<<pt_bins[k+1]<<std::endl;
 	pair<double,double> res_mc_rel_r,res_data_rel_r;
 	pair<double,double> res_mc_mpf_r,res_data_mpf_r;
 	res_mc_rel_r = GetValueAndError(hmc_rel_r[k][j]);
@@ -216,6 +216,9 @@ void PTextrapolation_TTree_kFSRfit(bool mpfMethod, TString path, TFile* datafile
   for(int i=0;i<n_pt-1;i++){
     xbin_tgraph[i]=(pt_bins[i]+pt_bins[i+1])/2;
     zero[i]=(pt_bins[i+1]-pt_bins[i])/2 ;
+    //    xbin_tgraph[i]=log((pt_bins[i]+pt_bins[i+1])/2); //TEST
+    //    cout<<"xbin_tgraph["<<i<<"]="<<xbin_tgraph[i]<<endl;
+    //    zero[i]=log((pt_bins[i+1]-pt_bins[i])/2);//TEST
   }
   TGraphErrors *graph1_mpf[n_eta-1];
   TGraphErrors *graph1_dijet[n_eta-1];
@@ -223,6 +226,7 @@ void PTextrapolation_TTree_kFSRfit(bool mpfMethod, TString path, TFile* datafile
  
   for(int j=0; j<n_eta-1; j++){
     graph1_mpf[j] = new TGraphErrors(n_pt-1, xbin_tgraph, ratio_mpf[j], zero, err_ratio_mpf[j]);
+    //    cout<<"For eta_range["<<j<<"] = "<<eta_range[j]<<endl;
     graph1_mpf[j] = (TGraphErrors*)CleanEmptyPoints(graph1_mpf[j]);
   }
 
@@ -265,6 +269,7 @@ void PTextrapolation_TTree_kFSRfit(bool mpfMethod, TString path, TFile* datafile
   double Vcov[3][n_eta-1];//covarance matrix for log lin fit results
 
   for (int j=0; j<n_eta-1; j++){
+    cout<<"Fit for eta_range["<<j<<"] = "<<eta_range[j]<<endl;
     if(mpfMethod){
       plotname[j]="mpf_ptextra_eta_"+eta_range[j]+"_"+eta_range[j+1];
     }
@@ -280,10 +285,14 @@ void PTextrapolation_TTree_kFSRfit(bool mpfMethod, TString path, TFile* datafile
    
  
     f1[j] = new TF1(plotname[j]+"f1","[0]+[1]*TMath::Log(x)", 50 , pt_bins[n_pt-1]+10);
+    //    f1[j] = new TF1(plotname[j]+"f1","pol1", log(50) , log(pt_bins[n_pt-1]+10));//TEST
     //f1[j] = new TF1(plotname[j]+"f1","[0]+[1]*TMath::Log(x)", 70 , pt_bins[n_pt-1]+10);
     //    f1[j] = new TF1(plotname[j]+"f1","[0]+[1]*TMath::Log(x)", 70 , 570);
-    f1[j]->SetParameters(1,0);
+    //f1[j]->SetParameters(1,0);
+    //    f1[j]->SetParameters(1,-0.01);
+    f1[j]->SetParameters(1.1,-0.01);
     f2[j] = new TF1(plotname[j]+"f2","pol0", 50 , pt_bins[n_pt-1]+10);
+    //    f2[j] = new TF1(plotname[j]+"f2","pol0", log(50) , log(pt_bins[n_pt-1]+10));//TEST
     //    f2[j]->SetParameters(1);
     //    f2[j] = new TF1(plotname[j]+"f2","pol0", 70 , pt_bins[n_pt-1]+10);
     f2[j]->SetLineColor(kBlue);
@@ -358,7 +367,8 @@ void PTextrapolation_TTree_kFSRfit(bool mpfMethod, TString path, TFile* datafile
     tex->SetNDC();
     tex->SetTextSize(0.045); 
     //    tex->DrawLatex(0.64,0.91,"2.11fb^{-1} (13TeV)");
-    tex->DrawLatex(0.64,0.91,"0.804fb^{-1} (13TeV)");
+    //    tex->DrawLatex(0.64,0.91,"0.804fb^{-1} (13TeV)");
+    tex->DrawLatex(0.64,0.91,"12.9fb^{-1} (13TeV)");
     //    tex->DrawLatex(0.64,0.91,"0.804fb^{-1} (13TeV)");
 
     TString chi2_loglin = "loglinear fit #chi^{2}/n.d.f = ";
@@ -637,11 +647,12 @@ void PTextrapolation_TTree_kFSRfit(bool mpfMethod, TString path, TFile* datafile
     TFile* kfsr_dijet = new TFile(path+"Histo_KFSR_DiJet_L1.root","READ");
     TH1D* hist_kfsr_dijet = (TH1D*)kfsr_dijet->Get("kfsr_dijet");
     //suda fit kFSR
-    TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.); 
-    kfsr_fit_dijet->SetParameters(0,0,200.); //Almost everything, but not AK4PUPPI herwigpp
-    //    kfsr_fit_dijet->SetParameters(1.,1.,100.); //AK4CHS, AK4PUPPI herwigpp
-    //    kfsr_fit_dijet->SetParameters(1.,-200.,100.); //AK4CHS, AK8PUPPI pythia8 
-    //    kfsr_fit_dijet->SetParameters(0,0,100.); //AK4PUPPI
+    //TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.); 
+    TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0.7,5.); //TEST
+    //    kfsr_fit_dijet->SetParameters(0,0,200.); //Almost everything, but not AK4PUPPI herwigpp
+    //kfsr_fit_dijet->SetParameters(1.,1.,100.); //AK4CHS, AK4PUPPI herwigpp
+    kfsr_fit_dijet->SetParameters(1.,-200.,100.); //AK4CHS, AK8PUPPI pythia8 
+    //    kfsr_fit_dijet->SetParameters(0,0,-100.); //AK4PUPPI
 
     //    kfsr_fit_dijet->SetParameters(10.,-1000.,200.); //AK8CHS herwigpp, AK8PUPPI herwigpp 
     kfsr_fit_dijet->SetLineColor(kBlue+1);

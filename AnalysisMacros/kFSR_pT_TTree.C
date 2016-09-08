@@ -143,8 +143,8 @@ void kFSR_pT_TTree(bool mpfMethod, TString path, TFile* datafile, TFile* MCfile,
       for(int k=0; k<n_pt-1; k++){
 	if(fabs(alpha_bins[i]-al_cut)<1e-4){
 	  if(k==0) cout<<eta_bins[j]<<" ";
-	  //cout<<"& "<<hmc_rel_r[k][j][i]->GetEntries();//MC
-	  cout<<"& "<<hdata_rel_r[k][j][i]->GetEntries();//DATA
+	  cout<<"& "<<hmc_rel_r[k][j][i]->GetEntries();//MC
+	  //	  cout<<"& "<<hdata_rel_r[k][j][i]->GetEntries();//DATA
 	}
 	pair<double,double> res_mc_rel_r,res_data_rel_r;
 	pair<double,double> res_mc_mpf_r,res_data_mpf_r;

@@ -214,6 +214,7 @@ TGraphErrors* CleanEmptyPoints(TGraphErrors* input){
       Ynew.push_back(Yval[i]);
       Xerrornew.push_back(XvalError[i]);       
       Yerrornew.push_back(YvalError[i]);
+      //      cout<<"Xval["<<i<<"] = "<<Xval[i]<<" Yval["<<i<<"] = "<<Yval[i]<<endl;
     }
   }
 
@@ -281,9 +282,9 @@ pair<double,double> Response(TFile *rootfile,double alpha, double eta_low, doubl
 pair<double,double> GetValueAndError(TH1D *hin){
   pair<double,double> res;
   res.first = 0; res.second = 0;
-  //if(hin->GetEntries()>50){
+  //  if(hin->GetEntries()>50){
   if(hin->GetEntries()>100){
-  //  if(hin->GetEntries()>200){
+  //  if(hin->GetEntries()>1000){
   //if(hin->GetEntries()>400){
     res.first = hin->GetMean();
     res.second = hin->GetMeanError();
