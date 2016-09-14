@@ -87,8 +87,8 @@ void L2ResOutput(TString path, TString txttag, TString jettag, TString tag, doub
   //lumi_13TeV = "RunBCD2016 12.9 fb^{-1}";
   //  lumi_13TeV = "RunEF2016 X.X fb^{-1}";
   //  lumi_13TeV = "RunG2016 X.X fb^{-1}";
-  //  lumi_13TeV = "RunG2016 X.X fb^{-1}";
-  lumi_13TeV = "MC X.X fb^{-1}";
+  lumi_13TeV = "RunB2016 5.8 fb^{-1}";
+  //  lumi_13TeV = "MC X.X fb^{-1}";
   //lumi_13TeV = "589.3 pb^{-1}";
   bool kSquare = true;
 

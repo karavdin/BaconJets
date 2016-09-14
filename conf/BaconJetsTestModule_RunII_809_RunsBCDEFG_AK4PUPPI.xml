@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
+
+<!ENTITY PROOFdir "/nfs/dust/cms/user/karavdia/PROOF">      
+<!ENTITY NEVT "-1">
+<!-- <!ENTITY NEVT "10"> --> 
+
+
+
+<!ENTITY QCDPt15to7000_pythia8_AK4PUPPI SYSTEM "/nfs/dust/cms/user/reimersa/CMSSW_8_0_8/src/UHH2/common/datasets/RunII_80X_v1/MC_QCD_Pt-15to7000_Flat_pythia8_PUFlat_NewMETCollection.xml">
+<!ENTITY DATA_RunB_AK4PUPPI SYSTEM "/nfs/dust/cms/user/reimersa/CMSSW_8_0_8/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016B_NewMETCollection.xml">
+<!-- <!ENTITY DATA_RunB_AK4PUPPI SYSTEM "/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_RunB_test.xml"> -->
+
+<!ENTITY DATA_RunC_AK4PUPPI SYSTEM "/nfs/dust/cms/user/reimersa/CMSSW_8_0_8/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016C_NewMETCollection.xml">
+<!ENTITY DATA_RunD_AK4PUPPI SYSTEM "/nfs/dust/cms/user/reimersa/CMSSW_8_0_8/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016D_NewMETCollection.xml">
+
+<!ENTITY DATA_RunE_AK4PUPPI SYSTEM "/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016E.xml">
+<!ENTITY DATA_RunE_29Jul_AK4PUPPI SYSTEM "/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016E_29Jul.xml">
+<!ENTITY DATA_RunF_AK4PUPPI SYSTEM "/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016F.xml">
+<!ENTITY DATA_RunG_AK4PUPPI SYSTEM "/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016G.xml">
+
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Closure/"> -->
+<!--<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMET/"> -->
+<!--<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Res_TrTh2015/">-->
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Res_AK4PUPPI/"> -->
+
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMETPUPPI/"> -->
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMET/"> -->
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_PUPPI/"> -->
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_PUPPI_noJER_JECAK4CHS/"> -->
+ <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_PUPPI_noJER_JECAK4PUPPI_L23MC_L23DATA/">
+
+<!-- <!ENTITY QCDPt15to7000_pythia8_AK4PUPPI SYSTEM "../datasets/JEC_76X/Fall15_25nsV2_L2L3Res_MC_pythia8_AK4PFCHS.xml">
+<!ENTITY DATA_RunD_AK4PUPPI SYSTEM "../datasets/JEC_76X/Fall15_25nsV2_L2L3Res_DATA_AK4PFCHS.xml">
+<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_76X/Fall15_25nsV2_L2L3Res_noReweight/"> -->
+]>
+
+<!--
+   <ConfigParse NEventsBreak="0" LastBreak="0" FileSplit="5" AutoResubmit="10"/>
+   <ConfigSGE RAM ="3" DISK ="2" Mail="XXXX@desy.de" Notification="as" Workdir="workdir_standalone"/>
+-->
+
+
+<!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
+<JobConfiguration JobName="ExampleCycleJob" OutputLevel="INFO">
+    <Library Name="libSUHH2BaconJets"/>
+    <Package Name="SUHH2BaconJets.par" />
+
+    <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="12891.097839213" >
+
+<!--  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="12891.097839213" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="16" > -->
+ 
+
+ <!-- <InputData Lumi="1.0" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_pythia8_AK4PUPPI" Cacheable="False">
+          &QCDPt15to7000_pythia8_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> -->
+
+<!--	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunBCD_AK4PUPPI" Cacheable="False">
+          &DATA_RunB_AK4PUPPI;&DATA_RunC_AK4PUPPI;&DATA_RunD_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> -->
+
+<!--	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_AK4PUPPI" Cacheable="False">
+          &DATA_RunB_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> -->
+
+<!--	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_AK4PUPPI" Cacheable="False">
+          &DATA_RunC_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> -->
+
+	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_AK4PUPPI" Cacheable="False">
+          &DATA_RunD_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> 
+
+	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_AK4PUPPI" Cacheable="False">
+          &DATA_RunE_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> 
+
+	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_AK4PUPPI" Cacheable="False">
+          &DATA_RunF_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> 
+
+
+	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunG_AK4PUPPI" Cacheable="False">
+          &DATA_RunG_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+
+<!--	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_29Jul_AK4PUPPI" Cacheable="False">
+          &DATA_RunE_29Jul_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> 
+-->
+
+<!--	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunG_AK4PUPPI" Cacheable="False">
+          &DATA_RunG_AK4PUPPI;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> -->
+
+
+<!--	 <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Test_sample" Cacheable="False">
+          &Test_sample;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>  
+
+ 
+	<InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="Test_sample" Cacheable="False">
+          &Test_sample_DATA;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData> 
+-->
+
+        <UserConfig>
+	  <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
+          <Item Name="GenParticleCollection"   Value="GenParticles"/>
+          <Item Name="ElectronCollection"      Value="slimmedElectronsUSER"/>
+          <Item Name="MuonCollection"          Value="slimmedMuonsUSER"/>
+          <Item Name="TauCollection"           Value="slimmedTaus"/>
+<!-- AK4PUPPI -->
+<Item Name="JetCollection"           Value="slimmedJetsPuppi"/>
+ <Item Name="JetLabel"                Value="AK4PUPPI"/> 
+<!--  <Item Name="METName"                 Value="slMETsCHS"/>  -->
+<!--      <Item Name="METName"                 Value="slimmedMETs"/> -->
+  <Item Name="METName"                 Value="slimmedMETsPuppi"/>
+
+<!-- AK8CHS --> 
+<!--         <Item Name="JetCollection"           Value="patJetsAK8PFCHS"/>
+  <Item Name="JetLabel"                Value="AK8CHS"/> --> 
+<!-- AK4PUPPI -->
+ <!--    <Item Name="JetCollection"           Value="slimmedJetsPuppi"/>
+      <Item Name="JetLabel"                Value="AK4PUPPI"/> 
+      <Item Name="METName"                 Value="slimmedMETsPuppi"/> -->
+<!-- AK8PUPPI -->
+<!--         <Item Name="JetCollection"           Value="patJetsAK8PFPUPPI"/>
+	 <Item Name="JetLabel"                Value="AK8PUPPI"/> -->
+
+          <Item Name="GenJetCollection"        Value="slimmedGenJets"/>
+
+<!--          <Item Name="lumi_file" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/data/Cert_271036-276811_13TeV_PromptReco_Collisions16_JSON.root"/> --> <!-- 12.9 -->    
+         <Item Name="lumi_file" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/data/Cert_271036-279116_13TeV_PromptReco_Collisions16_JSON_NoL1T.root"/> <!-- 21.8 -->
+<!--	  <Item Name="pileup_directory"           Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/PileUP_MC_pythia8_PUFlat.root"/>
+	  <Item Name="pileup_directory_data" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/PileUP_MC_pythia8_PUFlat.root"/>
+	  <Item Name="pileup_directory_data_up"   Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/PileUP_MC_pythia8_PUFlat.root"/>
+	  <Item Name="pileup_directory_data_down" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/PileUP_MC_pythia8_PUFlat.root"/> -->
+	  <!-- <Item Name="pileup_directory_data"      Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/800pb/nPU_minBiasXsec71300.root"/>
+	  <Item Name="pileup_directory_data_up"   Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/800pb/nPU_minBiasXsec80000.root"/>
+	  <Item Name="pileup_directory_data_down" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_8/src/UHH2/BaconJets/data/PileUp/80X/800pb/nPU_minBiasXsec58000.root"/> -->
+
+    <Item Name="use_sframe_weight" Value="true"/>
+    <!-- <Item Name="use_sframe_weight" Value="false"/>-->
+
+	<Item Name="trigger40" Value="HLT_DiPFJetAve40_v*"/>
+	<Item Name="trigger60" Value="HLT_DiPFJetAve60_v*"/>
+	<Item Name="trigger80" Value="HLT_DiPFJetAve80_v*"/>
+	<Item Name="trigger140" Value="HLT_DiPFJetAve140_v*"/>
+	<Item Name="trigger200" Value="HLT_DiPFJetAve200_v*"/>
+	<Item Name="trigger260" Value="HLT_DiPFJetAve260_v*"/>
+	<Item Name="trigger320" Value="HLT_DiPFJetAve320_v*"/>
+	<Item Name="trigger400" Value="HLT_DiPFJetAve400_v*"/>
+	<Item Name="trigger500" Value="HLT_DiPFJetAve500_v*"/>
+	<Item Name="trigger60_HFJEC" Value="HLT_DiPFJetAve60_HFJEC_v*"/>
+	<Item Name="trigger80_HFJEC" Value="HLT_DiPFJetAve80_HFJEC_v*"/>
+	<Item Name="trigger100_HFJEC" Value="HLT_DiPFJetAve100_HFJEC_v*"/>
+	<Item Name="trigger160_HFJEC" Value="HLT_DiPFJetAve160_HFJEC_v*"/>
+	<Item Name="trigger220_HFJEC" Value="HLT_DiPFJetAve220_HFJEC_v*"/>
+	<Item Name="trigger300_HFJEC" Value="HLT_DiPFJetAve300_HFJEC_v*"/>
+
+
+            <!-- tell AnalysisModuleRunner that we use a completely user-defined event format -->
+       <!--     <Item Name="userEventFormat" Value="true" /> -->
+	  <!-- <Item Name="userEventFormat" Value="false" /> -->
+            <!-- the class name of the AnalysisModule subclasses to run: -->
+            <Item Name="AnalysisModule" Value="TestModule" /> 
+	<!--    <Item Name="MCreweight" Value="false" /> -->  
+
+        </UserConfig>
+    </Cycle>
+</JobConfiguration>

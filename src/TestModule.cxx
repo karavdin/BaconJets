@@ -1,7 +1,6 @@
 #include <iostream>
 #include <memory>
 #include <stdlib.h>
-
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
 //#include "UHH2/core/include/EventHelper.h"
@@ -187,18 +186,31 @@ using namespace uhh2;
     if(isMC){
       if(jetLabel == "AK4CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFchs_MC;
       if(jetLabel == "AK8CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFchs_MC;
-      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFPuppi_MC;
+      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFPuppi_MC;
+      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_AK4PFPuppi_MC;
+      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_AK4PFchs_MC; //TEST
+      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_AK4PFPuppi_MC; //TEST
       if(jetLabel == "AK8PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFPuppi_MC;
     }
     else { 
       if(jetLabel == "AK4CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFchs_DATA;//Closure
       //      if(jetLabel == "AK4CHS") JEC_corr = JERFiles::Spring16_25ns_L123_noRes_AK4PFchs_DATA;//L2Res determination
       if(jetLabel == "AK8CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFchs_DATA; //care, not in noRes mode yet, todo!
-      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFPuppi_DATA;
-      if(jetLabel == "AK8PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFPuppi_DATA;
+      //if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFPuppi_DATA;//Closure
+      //if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_noRes_AK4PFchs_DATA;//TEST
+      // if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_AK4PFchs_DATA;//TEST
+      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_AK4PFPuppi_DATA;//TEST
+      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_noRes_AK4PFchs_DATA;//TEST
+      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFchs_DATA;//TEST
+      
+      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_noRes_AK4PFPuppi_DATA;//TEST
+    
+      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_noRes_AK4PFPuppi_DATA;//L2Res determination
+      //if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_noRes_AK4PFchs_DATA;//L2Res determination
+      //      if(jetLabel == "AK8PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFPuppi_DATA;
     }
     jet_corrector.reset(new JetCorrector(ctx, JEC_corr));
-    if(isMC) jetER_smearer.reset(new GenericJetResolutionSmearer(ctx)); 
+    //    if(isMC) jetER_smearer.reset(new GenericJetResolutionSmearer(ctx)); //TEST: do not apply for PUPPI
     jetleptoncleaner.reset(new JetLeptonCleaner(ctx, JEC_corr));
 
     //output
@@ -296,6 +308,7 @@ using namespace uhh2;
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
 
     debug = false;
+    //    debug = true;
     
     // string lumifile = ctx.get("lumi_file");
     // std::unique_ptr<TFile> file(TFile::Open(lumifile.c_str(), "read"));

@@ -389,7 +389,8 @@ fpf->cd(2);
  Njets_vs_pt_ave_mtoff_Profile[0]->GetYaxis()->SetRangeUser(0,20);
  Njets_vs_pt_ave_mtoff_Profile[0]->GetYaxis()->SetTitle("N_{jets}");
  for(int i=0;i<num_points;i++){
-  Njets_vs_pt_ave_mtoff_Profile[i]->Draw("same");
+   // Njets_vs_pt_ave_mtoff_Profile[i]->Draw("same");
+   Njets_vs_pt_ave_mtoff[i]->Draw("colz");//TEST
  }
 
 

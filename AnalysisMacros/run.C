@@ -9,8 +9,20 @@ void run(){
   //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_RunG_Res/\";");
   //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_RunG_Res/\";");
   //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC/\";");
-  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMET/\";");
+  //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMET/\";");
   //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Closure/\";");
+  //    gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_PUPPI_RunBCD/\";");
+  //    gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_PUPPI_RunBCD_noJER/\";");
+  //    gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_PUPPI_noJER_JECAK4CHS/\";");
+  //    gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_PUPPI_noJER_JECAK4PUPPI/\";");
+    gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_PUPPI_noJER_JECAK4PUPPI_L23MC_L23DATA_RunB/\";");
+
+  //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMETPUPPI_PFMET/\";");
+  //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMETCHS/\";");
+
+
+  //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Closure_PUPPI/\";");
+
 
   //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Res_TrTh2015/\";");
   //  gROOT->ProcessLine("TString path = \"/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Res/\";");
@@ -47,11 +59,13 @@ void run(){
   // gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunEF_AK4CHS.root\";");//TEST
   //  gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunG_AK4CHS.root\";");//TEST
   //  gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunG_AK4CHS.root\";");//TEST
-  //    gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.DATA.RunB_AK4PUPPI.root\";");
+    //    gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunBCD_AK4PUPPI.root\";");
+    gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunB_AK4PUPPI.root\";");
   // gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.DATA.RunB_AK8CHS.root\";");
   //  gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.DATA.RunB_AK8PUPPI.root\";");
 
-  gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_pythia8_AK4CHS_misscorr.root\";");
+  //  gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_pythia8_AK4CHS_misscorr.root\";");
+    //  gROOT->ProcessLine("TString realdatfile = \"uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_pythia8_AK4PUPPI_misscorr.root\";");
 
   //gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.RunD_AK4CHS.root\";");
   //gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.RunD_AK4PUPPI.root\";");
@@ -60,11 +74,12 @@ void run(){
  //gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunEF_AK4CHS.root\";");
   //  gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunG_AK4CHS.root\";");
   //  gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunG_AK4CHS.root\";");
-  //gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.RunB_AK4PUPPI.root\";");
+    //    gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunBCD_AK4PUPPI.root\";");
+    gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.DATA_RunB_AK4PUPPI.root\";");
   //gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.RunB_AK8CHS.root\";");
  //  gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.RunB_AK8PUPPI.root\";");
 
-  gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_pythia8_AK4CHS_misscorr.root\";");
+  //  gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_pythia8_AK4PUPPI_misscorr.root\";");
 
   //gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.MC.QCD_Pt15to7000_pythia8_AK4CHS.root\";"); 
   //  gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.MC.QCD_Pt15to7000_pythia8_AK4PUPPI.root\";");
@@ -82,9 +97,9 @@ void run(){
 
 //  gROOT->ProcessLine("TString mcfile = \"uhh2.AnalysisModuleRunner.MC.QCD_Pt15to7000_pythia8_AK8PUPPI.root\";");
   //gROOT->ProcessLine("TString mcfile = \"uhh2.AnalysisModuleRunner.MC.QCD_Pt15to7000_pythia8_AK8CHS.root\";");
-  // gROOT->ProcessLine("TString mcfile = \"uhh2.AnalysisModuleRunner.MC.QCD_Pt15to7000_pythia8_AK4PUPPI.root\";");
+   gROOT->ProcessLine("TString mcfile = \"uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_pythia8_AK4PUPPI.root\";");
 //   gROOT->ProcessLine("TString mcfile = \"uhh2.AnalysisModuleRunner.MC.QCD_Pt15to7000_pythia8_AK4CHS.root\";");
- gROOT->ProcessLine("TString mcfile = \"uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_pythia8_AK4CHS.root\";");
+// gROOT->ProcessLine("TString mcfile = \"uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_pythia8_AK4CHS.root\";");
 
 //  
   // gROOT->ProcessLine("TString datfile = \"uhh2.AnalysisModuleRunner.DATA.RunD_AK8CHS.root\";");
@@ -99,8 +114,8 @@ gROOT->ProcessLine("TString txttag = \"pythia8_v7\";");
   //gROOT->ProcessLine("TString txttag = \"herwigpp_v3\";");
   //gROOT->ProcessLine("TString txttag = \"herwigpp_v4\";");
   // tag for the jet cone size
-  gROOT->ProcessLine("TString jettag = \"AK4PFchs\";");
-  //  gROOT->ProcessLine("TString jettag = \"AK4PFpuppi\";");
+// gROOT->ProcessLine("TString jettag = \"AK4PFchs\";");
+ gROOT->ProcessLine("TString jettag = \"AK4PFpuppi\";");
   // gROOT->ProcessLine("TString jettag = \"AK8PFchs\";");
   //gROOT->ProcessLine("TString jettag = \"AK8PFpuppi\";");
   // choose a systematic uncertainty in pt average ("central" (pt=120GeV), "up" (pt=240GeV), "down" (pt=60GeV), "doubleup" (pt=480GeV) or "nominal" (pt -> mean value of pt ave))
@@ -142,31 +157,30 @@ gROOT->ProcessLine("TString txttag = \"pythia8_v7\";");
    gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
   
          
-   gROOT->ProcessLine("variation= \"central\";");
-  gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
-   gROOT->ProcessLine("variation= \"up\";");
-  gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
+  //  gROOT->ProcessLine("variation= \"central\";");
+  // gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
+  //  gROOT->ProcessLine("variation= \"up\";");
+  // gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
   
-  gROOT->ProcessLine("variation= \"doubleup\";");
-  gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
+  // gROOT->ProcessLine("variation= \"doubleup\";");
+  // gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
   
-  gROOT->ProcessLine("variation= \"down\";"); 
-  gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
+  // gROOT->ProcessLine("variation= \"down\";"); 
+  // gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
 
-  gROOT->ProcessLine("TString variation= \"nominal\";");
-  gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
-  gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
+  // gROOT->ProcessLine("TString variation= \"nominal\";");
+  // gROOT->ProcessLine(".L PTextrapolation_TTree_kFSRfit.C+");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(true,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");
+  // gROOT->ProcessLine("PTextrapolation_TTree_kFSRfit(false,path,datafile,MCfile,txttag,jettag,variation,tag,al_cut,nResponseBins);");//WATCH OUT for kFSR fit results here!!!
   
-
   gROOT->ProcessLine(".L L2ResOutput.C");                                          
   gROOT->ProcessLine("L2ResOutput(path,txttag,jettag,tag,al_cut)");
 
