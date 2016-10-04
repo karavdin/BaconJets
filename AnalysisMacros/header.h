@@ -190,7 +190,8 @@ pair<double,double> Rmc_to_Rdata(pair<double,double> mc, pair<double,double> dat
   out.first =0;   out.second =0;
   if(abs(data.first)>1e-3){ 
     double ratio = mc.first/data.first;
-    double ratioError = sqrt(pow(mc.second,2)+pow(data.second,2));
+    double ratioError = sqrt(pow(mc.second/data.first,2) + pow(mc.first*data.second/data.first/data.first,2));
+    //    double ratioError = sqrt(pow(mc.second,2)+pow(data.second,2));
     /* double ratio = mc.first;//TEST */
     /* double ratioError = sqrt(pow(mc.second,2)); //TEST */
   out.first =ratio;   out.second =ratioError;

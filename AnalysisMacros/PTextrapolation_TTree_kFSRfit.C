@@ -650,10 +650,10 @@ void PTextrapolation_TTree_kFSRfit(bool mpfMethod, TString path, TFile* datafile
     TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.); 
     //    TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,3.0); 
     //    TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0.7,5.); //TEST
-    //    kfsr_fit_dijet->SetParameters(0,0,200.); //Almost everything, but not AK4PUPPI herwigpp
+    kfsr_fit_dijet->SetParameters(0,0,200.); //Almost everything, but not AK4PUPPI herwigpp
     //kfsr_fit_dijet->SetParameters(1.,1.,100.); //AK4CHS, AK4PUPPI herwigpp
     //    kfsr_fit_dijet->SetParameters(1.,-200.,100.); //AK4CHS, AK8PUPPI pythia8 
-    kfsr_fit_dijet->SetParameters(1.,-10.,100.); //AK4CHS, AK8PUPPI pythia8 
+    //    kfsr_fit_dijet->SetParameters(1.,-10.,-100.); //AK4CHS, AK8PUPPI pythia8 
     //    kfsr_fit_dijet->SetParameters(0,0,-10.); //AK4PUPPI
 
     //    kfsr_fit_dijet->SetParameters(10.,-1000.,200.); //AK8CHS herwigpp, AK8PUPPI herwigpp 
