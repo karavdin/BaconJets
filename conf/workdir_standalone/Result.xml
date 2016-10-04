@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
+
+<!ENTITY PROOFdir "/nfs/dust/cms/user/karavdia/PROOF">      
+<!ENTITY NEVT "-1">
+<!-- <!ENTITY NEVT "100"> -->
+
+
+
+<!ENTITY QCDPt15to7000_pythia8_AK4PUPPI SYSTEM "/nfs/dust/cms/user/reimersa/CMSSW_8_0_8/src/UHH2/common/datasets/RunII_80X_v1/MC_QCD_Pt-15to7000_Flat_pythia8_PUFlat_NewMETCollection.xml">
+<!ENTITY DATA_RunB_AK4PUPPI SYSTEM "/nfs/dust/cms/user/reimersa/CMSSW_8_0_8/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016B_NewMETCollection.xml">
+<!ENTITY DATA_RunC_AK4PUPPI SYSTEM "/nfs/dust/cms/user/reimersa/CMSSW_8_0_8/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016C_NewMETCollection.xml">
+<!ENTITY DATA_RunD_AK4PUPPI SYSTEM "/nfs/dust/cms/user/reimersa/CMSSW_8_0_8/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016D_NewMETCollection.xml">
+
+<!ENTITY DATA_RunE_AK4PUPPI SYSTEM "/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016E.xml">
+<!ENTITY DATA_RunE_29Jul_AK4PUPPI SYSTEM "/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016E_29Jul.xml">
+<!ENTITY DATA_RunF_AK4PUPPI SYSTEM "/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016F.xml">
+<!ENTITY DATA_RunG_AK4PUPPI SYSTEM "/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/datasets/RunII_80X_v1/DATA_JetHT_Run2016G.xml">
+
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Closure/"> -->
+<!--<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMET/"> -->
+<!--<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Res_TrTh2015/">-->
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Res_AK4PUPPI/"> -->
+
+<!--<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMETPUPPI/">-->
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMETPUPPI_PFMET/"> -->
+
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/TEST/"> -->
+
+<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_ConstRes/">
+
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMETCHS/"> -->
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMETCHS_PFMET/"> -->
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_PFMET/"> -->
+<!-- <!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_80X_standalone/JEC_Aug2016_ICHEPdata_Closure_PUPPI/"> -->
+
+<!-- <!ENTITY QCDPt15to7000_pythia8_AK4PUPPI SYSTEM "../datasets/JEC_76X/Fall15_25nsV2_L2L3Res_MC_pythia8_AK4PFCHS.xml">
+<!ENTITY DATA_RunD_AK4PUPPI SYSTEM "../datasets/JEC_76X/Fall15_25nsV2_L2L3Res_DATA_AK4PFCHS.xml">
+<!ENTITY OUTdir   "/nfs/dust/cms/user/karavdia/JEC_76X/Fall15_25nsV2_L2L3Res_noReweight/"> -->
+]>
+
+<!--
+   <ConfigParse NEventsBreak="0" LastBreak="0" FileSplit="1" AutoResubmit="10"/>
+   <ConfigSGE RAM ="3" DISK ="2" Mail="XXXX@desy.de" Notification="as" Workdir="workdir_standalone"/>
+-->
+
+
+<!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
+<JobConfiguration JobName="ExampleCycleJob" OutputLevel="INFO">
+	<Library Name="libSUHH2BaconJets"/>
+	<Package Name="libSUHH2BaconJets"/>
+	<Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="__NOTSET__//" TargetLumi="12891.097839213">
+		<InputData Cacheable="False" Lumi="1.0" Type="MC" Version="QCDPt15to7000_pythia8_AK4PUPPI_METPUPPI_misscorr">
+			<In FileName="/nfs/dust/cms/user/karavdia/JEC_80X_standalone/Misscorrect_MC_ConstRes///workdir_standalone/uhh2.AnalysisModuleRunner.*.QCDPt15to7000_pythia8_AK4PUPPI_METPUPPI_misscorr_*.root" Lumi="0.0"/>
+			<InputTree Name="AnalysisTree"/>
+		</InputData>
+		<UserConfig>
+			<Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
+			<Item Name="GenParticleCollection" Value="GenParticles"/>
+			<Item Name="ElectronCollection" Value="slimmedElectronsUSER"/>
+			<Item Name="MuonCollection" Value="slimmedMuonsUSER"/>
+			<Item Name="TauCollection" Value="slimmedTaus"/>
+			<Item Name="JetCollection" Value="slimmedJetsPuppi"/>
+			<Item Name="JetLabel" Value="AK4PUPPI"/>
+			<Item Name="METName" Value="slimmedMETsPuppi"/>
+			<Item Name="GenJetCollection" Value="slimmedGenJets"/>
+			<Item Name="lumi_file" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_9/src/UHH2/common/data/Cert_271036-279116_13TeV_PromptReco_Collisions16_JSON_NoL1T.root"/>
+			<Item Name="use_sframe_weight" Value="true"/>
+			<Item Name="trigger40" Value="HLT_DiPFJetAve40_v*"/>
+			<Item Name="trigger60" Value="HLT_DiPFJetAve60_v*"/>
+			<Item Name="trigger80" Value="HLT_DiPFJetAve80_v*"/>
+			<Item Name="trigger140" Value="HLT_DiPFJetAve140_v*"/>
+			<Item Name="trigger200" Value="HLT_DiPFJetAve200_v*"/>
+			<Item Name="trigger260" Value="HLT_DiPFJetAve260_v*"/>
+			<Item Name="trigger320" Value="HLT_DiPFJetAve320_v*"/>
+			<Item Name="trigger400" Value="HLT_DiPFJetAve400_v*"/>
+			<Item Name="trigger500" Value="HLT_DiPFJetAve500_v*"/>
+			<Item Name="trigger60_HFJEC" Value="HLT_DiPFJetAve60_HFJEC_v*"/>
+			<Item Name="trigger80_HFJEC" Value="HLT_DiPFJetAve80_HFJEC_v*"/>
+			<Item Name="trigger100_HFJEC" Value="HLT_DiPFJetAve100_HFJEC_v*"/>
+			<Item Name="trigger160_HFJEC" Value="HLT_DiPFJetAve160_HFJEC_v*"/>
+			<Item Name="trigger220_HFJEC" Value="HLT_DiPFJetAve220_HFJEC_v*"/>
+			<Item Name="trigger300_HFJEC" Value="HLT_DiPFJetAve300_HFJEC_v*"/>
+			<Item Name="AnalysisModule" Value="__NOTSET__"/>
+		</UserConfig>
+	</Cycle>
+</JobConfiguration>

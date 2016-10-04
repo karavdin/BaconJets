@@ -186,8 +186,8 @@ using namespace uhh2;
     if(isMC){
       if(jetLabel == "AK4CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFchs_MC;
       if(jetLabel == "AK8CHS") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFchs_MC;
-      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFPuppi_MC;
-      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_AK4PFPuppi_MC;
+      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK4PFPuppi_MC;
+      //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_AK4PFPuppi_MC;
       //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_AK4PFchs_MC; //TEST
       //      if(jetLabel == "AK4PUPPI") JEC_corr = JERFiles::Spring16_25ns_L23_AK4PFPuppi_MC; //TEST
       if(jetLabel == "AK8PUPPI") JEC_corr = JERFiles::Spring16_25ns_L123_AK8PFPuppi_MC;
