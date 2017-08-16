@@ -82,15 +82,15 @@ int main(){
     // // // //       //for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Pt_Extrapolation_Alternative_CorrectFormulae_eta(true); //extended eta range to negative Values 
 // // // //       //for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Pt_Extrapolation_Alternative_CorrectFormulae_eta(false); //extended eta range to negative Values
       
-  std::cout<<"\nStarting L2ResOutput()\n"<<std::endl;
-      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L2ResOutput();
+  // std::cout<<"\nStarting L2ResOutput()\n"<<std::endl;
+      // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L2ResOutput();
 
 // //       // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L2ResOutput_eta();
 // //    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit(); //Mikkos Macro 
 // //    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit_eta_0_13(); //Mikkos Macro
 
-  // std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;
-  //     for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
+  std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;
+      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
       
 //      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].MatchingPlots();
 
