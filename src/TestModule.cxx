@@ -21,35 +21,22 @@
 #include <UHH2/common/include/ElectronIds.h>
 #include "UHH2/common/include/PrintingModules.h"
 
-
 #include "UHH2/BaconJets/include/selection.h"
-// #include "UHH2/BaconJets/include/jet_corrections.h"
-// #include "UHH2/BaconJets/include/mc_weight.h"
 #include "UHH2/BaconJets/include/constants.h"
-//#include "UHH2/BaconJets/include/TSetTree.h"
-//#include "UHH2/BaconJets/include/dijet_event.h"
 
-
-//#include "UHH2/BaconJets/include/pileup_data.h"
-//#include "UHH2/BaconJets/include/data_corrections.h"
 #include "TClonesArray.h"
 #include "TString.h"
 #include "Riostream.h"
 #include "TFile.h"
 #include "TTree.h"
-// #include "TBranch.h"
 
-//TTree   *fCurrentTree;
 Int_t   Runnr;
 Int_t   Eventnr;
-//TFile   *fCurrentTreeFile;
+
 using namespace std;
 using namespace uhh2;
-//using namespace baconhep;
-//using uhh2::detail::EventHelper;
 
-
-  class TestModule: public uhh2::AnalysisModule {
+class TestModule: public uhh2::AnalysisModule {
 
   public:
     explicit TestModule(uhh2::Context&);
@@ -187,7 +174,7 @@ using namespace uhh2;
     sel(ctx)
   {
 
-
+    
     for(auto & kv : ctx.get_all()){
       cout << " " << kv.first << " = " << kv.second << endl;
     }
@@ -645,7 +632,6 @@ using namespace uhh2;
 	else throw runtime_error("In TestModule.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified.");
       }
      
-
     //output
     ctx.undeclare_all_event_output();   
     // //pileup (define it after undeclaring all other variables to keep the weights in the output)
@@ -819,9 +805,9 @@ using namespace uhh2;
     
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
-
-   debug =false;
-   //     debug =true;
+    
+    debug =false;
+    // debug =true;
     n_evt = 0;
     TString name_weights = ctx.get("MC_Weights_Path");
     apply_weights = (ctx.get("Apply_Weights") == "true" && isMC);
@@ -888,8 +874,6 @@ using namespace uhh2;
     blumiblock = tree->GetBranch("luminosityBlock");
     bilumi = tree->GetBranch("intgRecLumi");
 
-
-
     run_lumi rl;
     double ilumi;
     double intlumi_pb = 0;
@@ -908,8 +892,7 @@ using namespace uhh2;
       rl2lumi.insert(make_pair(rl, ilumi_pb));
       rl2intlumi.insert(make_pair(rl, intlumi_pb));
     }
-   
-
+    
     double ilumi_current_bin = 0.0;
     run_lumi last_entry;
     for(const auto & rl : rl2lumi){
@@ -923,9 +906,6 @@ using namespace uhh2;
     }
     upper_binborders_runnrs.push_back(last_entry); //this is not exactly an UPPER limit because it is equal to the highest possible entry, not greater than it...created exception for this case.
     lumi_in_bins.push_back(ilumi_current_bin);
-    
-
-
   };
 
 
@@ -1796,7 +1776,6 @@ if(debug){
       }
       /////////////////////
 
-
       for(Particle & genj : *event.genjets){
 	double dr_min = 99999;
 	double dr_cut = 0;
@@ -1929,10 +1908,6 @@ if(debug){
     return true;
   }
 
-
-
   // as we want to run the ExampleCycleNew directly with AnalysisModuleRunner,
   // make sure the ExampleModule is found by class name. This is ensured by this macro:
   UHH2_REGISTER_ANALYSIS_MODULE(TestModule)
-
-
