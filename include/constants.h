@@ -124,7 +124,7 @@ constexpr static float s_lumi_HF_300 = 35672.846;
 
 // 2017 RunB PromptReco, not completly filled, not used if apply lumi weights is false
 //Lumi recorded by different triggers in pb-1
-constexpr static float sp_lumi_cent_40 = 0.09;
+constexpr static float s_lumi_cent_40 = 0.09;
 constexpr static float s_lumi_cent_60 = 0.024;
 constexpr static float s_lumi_cent_80 = 0.;
 constexpr static float s_lumi_cent_140 = 27.769;
