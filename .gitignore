@@ -11,7 +11,7 @@ core/python/__init__.py
 VLQToHiggsPairProd/*
 ZprimeSemiLeptonic/*
 .sframe.*.root
-*.sh
+#*.sh
 workdir*
 *.d
 *.dtd
@@ -25,6 +25,8 @@ workdir*
 *.out
 *.snm
 *.toc
+*.pdf
+AnalysisMacros/src/auto
 \#*#
 #as long this is not used it does not have to be included
 include/helper_fkt.h

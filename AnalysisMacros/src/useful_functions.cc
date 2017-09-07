@@ -1,4 +1,5 @@
 #include "../include/useful_functions.h"
+#include <TMath.h>
 
 using namespace std;
 
@@ -100,4 +101,14 @@ TH1D* GetHist(TFile *rootfile, TString selection, TString varName, int nbins, do
   TTree *tree = (TTree*)rootfile->Get("AnalysisTree");
   int Nev = tree->Project("hist",varName,selection);
   return hist;
+}
+
+Double_t SmoothFit(Double_t *v, Double_t *par){
+  Double_t fitval  = 0.;
+  if(par[2] != 0.){
+    fitval = 0.5 * par[2] * (1. + TMath::Erf((v[0]-par[0]) / (TMath::Power(2, 0.5) * par[1] ) ) );
+  }
+
+  return fitval;
+  
 }
