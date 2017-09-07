@@ -99,7 +99,7 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
       else if(_runnr == "B") _lumitag      = "RunB  TODO fb^{-1}";
       else if(_runnr == "BC") _lumitag      = "RunBC 8.3 fb^{-1}";   //2017! 
       //FIXME differentiate between 2016 (5.8 fb^{-1}) and 2017
-      else if(_runnr == "C") _lumitag      = "RunC  2.6 fb^{-1}";
+      else if(_runnr == "C") _lumitag      = "RunC  TODO fb^{-1}";
       else if(_runnr == "D") _lumitag      = "RunD  4.3 fb^{-1}";
       else if(_runnr == "E") _lumitag      = "RunE  4.1 fb^{-1}";
       else if(_runnr == "F") _lumitag      = "RunF  3.2 fb^{-1}";

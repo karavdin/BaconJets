@@ -34,7 +34,7 @@ int main(){
   TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds/Run17B_Data.root"; //_noEtaPhiClean.root"; 
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
   TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
-  TString outpath_postfix = "_eta";//"_noEtaPhiClean";
+  TString outpath_postfix = "_newPtBinning";//"_noEtaPhiClean";
   
   //eine Klasse: enthaelt Info ueber runnr, Generator, collection, Strings zu MC/DATA-files, memberfunctions: controlPlots, kFSR etc.
     vector<CorrectionObject> Objects;
@@ -73,7 +73,7 @@ int main(){
 
      
 // // //Run all macros to calculate L2Res corrections 
-   // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
+   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
       // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();  //For Closure Test
  
 // // // //Macros to compare different Runs 
@@ -84,7 +84,7 @@ int main(){
 // // // //Compare up/nominal/down Variations of JER
 // // //    // Objects[0].L2Res_JEC();
 
-    for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
+    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
 
   cout << endl <<"Closing MC and DATA files." << endl;
   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CloseFiles();
