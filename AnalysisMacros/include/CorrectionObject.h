@@ -21,13 +21,14 @@ using namespace std;
   public:
 
     // Constructors, destructor
-    CorrectionObject(const TString & runnr, const TString & generator, const TString & collection,const TString & input_path, const TString & input_path_MC, const TString & weight_path, const bool & closuretest = false,const bool & trigger_fwd = false,const bool & trigger_central = false);
+    CorrectionObject(const TString & runnr, const TString & generator, const TString & collection,const TString & input_path, const TString & input_path_MC, const TString & weight_path, const bool & closuretest = false,const bool & trigger_fwd = false,const bool & trigger_central = false, const TString & outpath_postfix = "" );
     CorrectionObject(const CorrectionObject &) = default;
     CorrectionObject & operator = (const CorrectionObject &) = default;
     ~CorrectionObject() = default;
     inline void CloseFiles(){_MCFile->Close(); _DATAFile->Close();};
     
     // Setter and getter functions
+    inline TString outpath_postfix(){ return _outpath_postfix;}
     inline TString runnr(){ return _runnr;}
     inline TString collection(){ return _collection;}
     inline TString input_path(){return _input_path;}
@@ -57,6 +58,7 @@ using namespace std;
     inline const TString OutPath() const {return _outpath;}
     inline const TString lumitag() const {return _lumitag;}
     inline void set_runnr(TString x){_runnr = x;}
+    inline void set_outpath_postfix(TString x){_outpath_postfix = x;}    
     inline void set_collection(TString x){_collection = x;}
     inline void set_input_path(TString x){_input_path = x;}
     inline void set_weight_path(TString x){_weight_path = x;}
@@ -72,6 +74,7 @@ using namespace std;
 
     //Main functions for calculating L2 residuals, defined in CorrectionObject.cc
     void ControlPlots();
+    void Derive_Thresholds();
     void kFSR();
     void kFSR_CorrectFormulae();
     void kFSR_CorrectFormulae_eta();
@@ -122,6 +125,7 @@ static bool make_path(TString path_name){
 
   private:
     TString _runnr;
+    TString _outpath_postfix;
     TString _collection;
     TString _generator, _generator_tag;
     TString _input_path;

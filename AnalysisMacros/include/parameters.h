@@ -18,9 +18,16 @@ const TString alpha_range[n_alpha] = {"a005", "a010", "a015", "a020", "a025", "a
 const double alpha_bins[n_alpha] = {0.050, 0.100, 0.150, 0.200, 0.250, 0.300, 0.350,  0.400, 0.450};
 
 //Pt bins:
+
+const int n_trigger = 10;
+const int triggerVal[n_trigger] = {40, 60, 80, 140, 200, 260, 320, 400, 450, 500};
+
 const int n_pt = 12;
-const TString pt_range[n_pt]= {"51", "73", "95", "129", "163", "230", "299", "365", "453", "566", "1000", "2000"};
-const double pt_bins[n_pt]       = {51, 73, 95, 129, 163, 230, 299, 365, 453, 566, 1000, 2000};
+const TString pt_range[n_pt]= {"43", "71", "99", "161", "235", "304", "368", "458", "484", "536", "1000", "2000"};
+const double pt_bins[n_pt]       = {43, 71, 99, 161, 235, 304, 368, 458, 484, 536, 1000, 2000};
+
+// const TString pt_range[n_pt]= {"51", "73", "95", "129", "163", "230", "299", "365", "453", "566", "1000", "2000"};
+// const double pt_bins[n_pt]       = {51, 73, 95, 129, 163, 230, 299, 365, 453, 566, 1000, 2000};
 
 //Eta bins:
 

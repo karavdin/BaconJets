@@ -30,44 +30,19 @@ int main(){
   bool    trigger_central = true;     //Use for Weight Calc
   TString collection    = "AK4CHS";
 
-//   TString input_path   = "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup/";
-  //   TString weight_path  = "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup_ForWeights/";
 
-  // TString input_path   = "/nfs/dust/cms/user/karavdia/L2Res_fromJens/AK4CHS/MC_Reweighted_chsMET_NewSF/"; //copy of Jen's files
-  // TString weight_path  = "/nfs/dust/cms/user/karavdia/L2Res_fromJens/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup_ForWeights/"; //copy of Jen's files
-
-  //  TString input_path   = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ReWeighted/";
-  //  TString input_path   = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ReWeighted_MC/";
-  // TString input_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/";
-  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewSF/DATA_RunB_promptReco_2017.root"; 
+  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds/Run17B_Data.root"; //_noEtaPhiClean.root"; 
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
-  TString input_path_MC = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_AK4CHS.root";
-
+  TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
+  TString outpath_postfix = "_newPtBinning";//"_noEtaPhiClean";
+  
   //eine Klasse: enthaelt Info ueber runnr, Generator, collection, Strings zu MC/DATA-files, memberfunctions: controlPlots, kFSR etc.
     vector<CorrectionObject> Objects;
   
-    // Objects.emplace_back(CorrectionObject("BCDEFGH", generator,collection, input_path, weight_path, closure_test, trigger_fwd, trigger_central));
-    //    Objects.emplace_back(CorrectionObject("BCD", generator,collection, input_path, weight_path, closure_test, trigger_fwd, trigger_central));
-    //    Objects.emplace_back(CorrectionObject("EFearly", generator,collection, input_path, weight_path, closure_test, trigger_fwd, trigger_central));
-    //      Objects.emplace_back(CorrectionObject("FlateG", generator,collection, input_path, weight_path, closure_test, trigger_fwd, trigger_central));
-    //    Objects.emplace_back(CorrectionObject("H", generator,collection, input_path, weight_path, closure_test, trigger_fwd, trigger_central));
-    Objects.emplace_back(CorrectionObject("B", generator,collection, input_path, input_path_MC, weight_path, closure_test, trigger_fwd, trigger_central));
+
+    Objects.emplace_back(CorrectionObject("B", generator,collection, input_path, input_path_MC, weight_path, closure_test, trigger_fwd, trigger_central, outpath_postfix));
  
     cout << "testobject is " << Objects[0] << endl;
-
-    //Weight Calcualtion for QCD pT binned and no trigger splitting 
-    //    for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CalculateMCWeights();
-
-
-      // if(trigger_central && !trigger_fwd){
-      // 	for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CalculateMCWeights_TriggerThresholds(true);  //Central Triggers
-      // }
-      // else if(!trigger_central && trigger_fwd){
-      // 	for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CalculateMCWeights_TriggerThresholds(false);  //FWD Triggers 
-      // }
-      // else {
-      // 	  cout<<"No Weight Calculation??"<<endl;
-      // }
 
 
 //       for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots();
@@ -89,17 +64,17 @@ int main(){
 // //    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit(); //Mikkos Macro 
 // //    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit_eta_0_13(); //Mikkos Macro
 
-  std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;
-      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
+  // std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;
+  //     for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
       
 //      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].MatchingPlots();
 
-// //    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae_eta(); //extended eta range to negative Values
+   // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae_eta(); //extended eta range to negative Values
 
      
-// // // //Run all macros to calculate L2Res corrections 
-   // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
-// // //       // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();  //For Closure Test
+// // //Run all macros to calculate L2Res corrections 
+   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
+      // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();  //For Closure Test
  
 // // // //Macros to compare different Runs 
 // // //    // Objects[0].L2ResAllRuns();
@@ -109,7 +84,9 @@ int main(){
 // // // //Compare up/nominal/down Variations of JER
 // // //    // Objects[0].L2Res_JEC();
 
-  cout << endl << "Closing MC and DATA files." << endl;
+    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
+
+  cout << endl <<"Closing MC and DATA files." << endl;
   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CloseFiles();
   cout << "Going to return 0 now, cya." << endl << endl;
   return 0;

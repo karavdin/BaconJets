@@ -101,7 +101,7 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae_eta(bool mpf
     name = name4 + eta_name;
     hmc_B[j] = new TH2D(name,"",n_pt-1,pt_bins,nResponseBins, -1.2, 1.2);
  
-   for(int k=0; k<n_pt-1; k++){
+    for(int k=0; k<n_pt-1; k++){
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
       name = name5 + eta_name + "_" + pt_name; 
       hdata_ptave[k][j] = new TH1D(name,"",3000,0,3000); //only used for GetMean and GetStdDev in the pT extrapolations
@@ -288,52 +288,54 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae_eta(bool mpf
 
   //Mikko's request: delete super-high data point in 2.8-2.9 bin (j==13) above ~400 GeV pT (point no 6 & 7 [c++])
 // <<<<<<< HEAD
-   if(graph1_mpf[4]->GetN() == 9){
-      graph1_mpf[4]->RemovePoint(8);
-      graph1_mpf[4]->RemovePoint(7);
-     }
-   else if(graph1_mpf[4]->GetN() == 8){
-     graph1_mpf[4]->RemovePoint(7);
-     }
+//FIXME different point numbers in fabs(eta) version, check this. first look at the plots including this points
+  // if(graph1_mpf[4]->GetN() == 9){
+  //     graph1_mpf[4]->RemovePoint(8);
+  //     graph1_mpf[4]->RemovePoint(7);
+  //    }
+  //  else if(graph1_mpf[4]->GetN() == 8){
+  //    graph1_mpf[4]->RemovePoint(7);
+  //    }
    
-   if(graph1_mpf[3]->GetN() == 9){
-     graph1_mpf[3]->RemovePoint(8);
-    }
-   if(graph1_mpf[2]->GetN() == 8){
-    graph1_mpf[2]->RemovePoint(7);
-    }
+  //  if(graph1_mpf[3]->GetN() == 9){
+  //    graph1_mpf[3]->RemovePoint(8);
+  //   }
+  //  if(graph1_mpf[2]->GetN() == 8){
+  //   graph1_mpf[2]->RemovePoint(7);
+  //   }
  
-   if(graph1_mpf[2]->GetN() == 6){
-    graph1_mpf[2]->RemovePoint(5);
-   }
+  //  if(graph1_mpf[2]->GetN() == 6){
+  //   graph1_mpf[2]->RemovePoint(5);
+   // }
 
 
-   if(graph1_mpf[31]->GetN() == 9){
-      graph1_mpf[31]->RemovePoint(8);
-      graph1_mpf[31]->RemovePoint(7);
-     }
-   else if(graph1_mpf[31]->GetN() == 8){
-     graph1_mpf[31]->RemovePoint(7);
-     }
+   // if(graph1_mpf[31]->GetN() == 9){
+   //    graph1_mpf[31]->RemovePoint(8);
+   //    graph1_mpf[31]->RemovePoint(7);
+   //   }
+   // else if(graph1_mpf[31]->GetN() == 8){
+   //   graph1_mpf[31]->RemovePoint(7);
+   //   }
    
-   if(graph1_mpf[32]->GetN() == 9){
-     graph1_mpf[32]->RemovePoint(8);
-    }
-   if(graph1_mpf[33]->GetN() == 8){
-    graph1_mpf[33]->RemovePoint(7);
-    }
+   // if(graph1_mpf[32]->GetN() == 9){
+   //   graph1_mpf[32]->RemovePoint(8);
+   //  }
+   // if(graph1_mpf[33]->GetN() == 8){
+   //  graph1_mpf[33]->RemovePoint(7);
+   //  }
  
-   if(graph1_mpf[34]->GetN() == 6){
-    graph1_mpf[34]->RemovePoint(5);
-   }
+   // if(graph1_mpf[34]->GetN() == 6){
+   //  graph1_mpf[34]->RemovePoint(5);
+   // }
 
-
-  for(int k=0; k<n_pt-1; k++){
-    double x = 0;
-    double val = 0;
-    graph1_mpf[13]->GetPoint(k,x,val);
-    // cout << "AFTER: In eta bin no 13: ratio of responses in pT bin no " << k << " at " << x << " : " << val << endl; 
-  }
+  
+  //TODO: is this (debug?) loop needed? its is already done above as well
+  // for(int k=0; k<n_pt-1; k++){
+  //   double x = 0;
+  //   double val = 0;
+  //   graph1_mpf[13]->GetPoint(k,x,val);
+  //   // cout << "AFTER: In eta bin no 13: ratio of responses in pT bin no " << k << " at " << x << " : " << val << endl; 
+  // }
 
 
   // create horizontal line for plotting ("ideal value")
@@ -345,10 +347,10 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae_eta(bool mpf
   TF1 * f2[n_eta-1];
 
 
-
   // create output .dat file, including the kFSR extrapolation (alpha->0)
   FILE *fp, *fp2, *l2resfile;
   if(mpfMethod){
+    CorrectionObject::make_path(CorrectionObject::_outpath+"output/");
     fp = fopen(CorrectionObject::_outpath+"output/pT_MPF_"+CorrectionObject::_generator_tag+"_extrapolations.dat","w");
     fp2 = fopen(CorrectionObject::_outpath+"output/pT_MPF_"+CorrectionObject::_generator_tag+"_constantExtrapolation.dat","w");
     l2resfile = fopen(CorrectionObject::_outpath+"output/L2Res_MPF_"+CorrectionObject::_generator_tag+".dat","w");
@@ -362,13 +364,16 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae_eta(bool mpf
 
 
   /* +++++++++++++++++++++++ Plots +++++++++++++++++++ */
+  CorrectionObject::make_path(CorrectionObject::_outpath+"plots/");
+
   TCanvas* asd[n_eta-1];
   TString plotname[n_eta-1];
   double Vcov[3][n_eta-1];//covariance matrix for log lin fit results
   TH1D* h_chi2_loglin = new TH1D("h_chi2_loglin", "Chi2/ndf for each eta bin; #eta ;#chi^{2}/ndf", n_eta-1, eta_bins);
   TH1D* h_chi2_const =  new TH1D("h_chi2_const", "Chi2/ndf for each eta bin; #eta ;#chi^{2}/ndf", n_eta-1, eta_bins);
- 
-  for (int j=n_eta-19; j>0; --j){
+
+//TODO if problems remain check this strange for-loop
+for (int j=n_eta-19; j>0; --j){
     if(mpfMethod){
       cout<<"integer j: "<<j<<endl;
       cout<<"Eta down : "<<eta_range[j-1]<<endl;
@@ -562,12 +567,12 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae_eta(bool mpf
  
     //Do the fit!
     if(graph_filled[j]){
-   TFitResultPtr fitloglin;
-    if(j==35){
-      cout<<"Fixed slope parameter: "<< f1[j-1]->GetParameter(1.) <<endl;
-      double slope = f1[j-1]->GetParameter(1.);
-      f1[j]->FixParameter(1,slope); //fixing slope for last eta bin (Vidyo Meeting 07.07.2017)
-    }
+      TFitResultPtr fitloglin;
+      if(j==35){
+	cout<<"Fixed slope parameter: "<< f1[j-1]->GetParameter(1.) <<endl;
+	double slope = f1[j-1]->GetParameter(1.);
+	f1[j]->FixParameter(1,slope); //fixing slope for last eta bin (Vidyo Meeting 07.07.2017)
+      }
       fitloglin =  graph1_mpf[j]->Fit(plotname[j]+"f1","SM","",55,1200);
       TMatrixDSym cov = fitloglin->GetCovarianceMatrix();
       Vcov[0][j] = cov(0,0);
@@ -842,7 +847,6 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae_eta(bool mpf
       loglin_var[j] = loglin_var[j]/loglin_norm_var;
     }
 
-
     //Histograms to hold the output
     TH1D* Residual_logpt_MPF = new TH1D("res_logpt_mpf","res_logpt_mpf", n_eta-1,eta_bins);
     TH1D* Residual_const_MPF = new TH1D("res_const_mpf","res_const_mpf", n_eta-1,eta_bins);
@@ -851,7 +855,6 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae_eta(bool mpf
 
     TH1D* Residual_logpt_MPF_val = new TH1D("res_logpt_mpf_val","res_logpt_mpf_val", n_eta-1,eta_bins);
     TH1D* Residual_const_MPF_val = new TH1D("res_const_mpf_val","res_const_mpf_val", n_eta-1,eta_bins);
-
 
     ofstream output, output_loglin, uncerts, uncerts_loglin, output_hybrid, uncerts_hybrid;
     output.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_MPF_FLAT_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");

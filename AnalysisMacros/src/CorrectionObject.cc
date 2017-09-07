@@ -3,8 +3,8 @@
 #include <TFile.h>
 // #include "../../include/helper_fkt.h"
 
-CorrectionObject::CorrectionObject(const TString & runnr, const TString & generator, const TString & collection, const TString & input_path, const TString & input_path_MC, const TString & weight_path, const bool & closuretest,const bool & trigger_fwd,const bool & trigger_central):
-  _runnr(runnr), _collection(collection), _generator(generator),_input_path(input_path),_input_path_MC(input_path_MC),_weight_path(weight_path), _closuretest(closuretest), _trigger_fwd(trigger_fwd), _trigger_central(trigger_central)
+CorrectionObject::CorrectionObject(const TString & runnr, const TString & generator, const TString & collection, const TString & input_path, const TString & input_path_MC, const TString & weight_path, const bool & closuretest,const bool & trigger_fwd,const bool & trigger_central, const TString & outpath_postfix):
+  _runnr(runnr), _collection(collection), _generator(generator),_input_path(input_path),_input_path_MC(input_path_MC),_weight_path(weight_path), _closuretest(closuretest), _trigger_fwd(trigger_fwd), _trigger_central(trigger_central), _outpath_postfix(outpath_postfix)
     {
       TString s_tmp = _collection;
       s_tmp.ReplaceAll("CHS", "PFchs");
@@ -22,7 +22,7 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
 
      TString input_base = inputPath;
      input_base.Resize(input_base.Last('/')+1);
-     _outpath    = input_base +"Run" + _runnr + "/";
+     _outpath    = input_base +"Run" + _runnr + _outpath_postfix + "/";
 
           
 // "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_AK4CHS.root
@@ -97,8 +97,9 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
       if(_runnr == "BCD")    _lumitag      = "RunBCD  12.9 fb^{-1}";
       else if(_runnr == "G") _lumitag      = "RunG  7.6 fb^{-1}";
       else if(_runnr == "B") _lumitag      = "RunB  TODO fb^{-1}";
+      else if(_runnr == "BC") _lumitag      = "RunBC 8.3 fb^{-1}";   //2017! 
       //FIXME differentiate between 2016 (5.8 fb^{-1}) and 2017
-      else if(_runnr == "C") _lumitag      = "RunC  2.6 fb^{-1}";
+      else if(_runnr == "C") _lumitag      = "RunC  TODO fb^{-1}";
       else if(_runnr == "D") _lumitag      = "RunD  4.3 fb^{-1}";
       else if(_runnr == "E") _lumitag      = "RunE  4.1 fb^{-1}";
       else if(_runnr == "F") _lumitag      = "RunF  3.2 fb^{-1}";
