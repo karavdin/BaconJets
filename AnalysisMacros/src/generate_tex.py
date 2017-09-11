@@ -2,12 +2,8 @@
 
 import subprocess
 import sys
-
-img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunBC_newPtBinning/plots/"
-
-img_path_base = img_path_base_2 + "control/"
-
-img_path_base_th = img_path_base_2 + "thresholds/"
+import os
+import os.path
 
 output_name = "controlplotsC_newPtBinning.tex"
 # print len(sys.argv)
@@ -16,6 +12,34 @@ output_name = "controlplotsC_newPtBinning.tex"
 
 if len(sys.argv) > 1:
     output_name = sys.argv[1] + ".tex"
+
+img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/"
+if output_name.find("controlplotsC") > -1:
+    if output_name.find("newPtBinning") > -1:
+        img_path_base_2 = img_path_base_2 + "RunC_newPtBinning"
+    else:
+        img_path_base_2 = img_path_base_2 + "RunC"
+elif output_name.find("controlplotsB") > -1:
+    if output_name.find("newPtBinning") > -1:
+        img_path_base_2 = img_path_base_2 + "RunB_newPtBinning"
+    else:
+        img_path_base_2 = img_path_base_2 + "RunB"
+elif output_name.find("controlplotsBC") > -1:
+    if output_name.find("newPtBinning") > -1:
+        img_path_base_2 = img_path_base_2 + "RunBC_newPtBinning"
+    else:
+        img_path_base_2 = img_path_base_2 + "RunBC"
+else:
+    raise RuntimeError("Cant identifiy ouput name %s" % output_name)
+
+img_path_base_2 = img_path_base_2 + "/plots/"
+
+if not os.path.isdir(img_path_base_2):
+    raise RuntimeError("Path %s does not exist" % img_path_base_2)
+
+img_path_base = img_path_base_2 + "control/"
+
+img_path_base_th = img_path_base_2 + "thresholds/"
 
 
 etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
