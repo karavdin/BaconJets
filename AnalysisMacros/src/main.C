@@ -8,7 +8,7 @@ using namespace std;
 
 
 
-int main(){
+int main(int argc,char *argv[]){
   //************************************************************
   //
   // Declare file directories 
@@ -22,8 +22,19 @@ int main(){
 
   cout << "Hello from main(). What am I going to do?\nWill it involve dead regions and high jetiness?\n13371n6 1n 7h3 57uff" << endl << endl;
   
+  // cout<<argc<<endl;
 
+  // for(int i=0;i<argc;i++){
+  //   cout<<argv[i]<<endl;
+  // }
 
+  TString run_nr = "BC";
+  if(argc==2){
+    run_nr=argv[1];
+      }
+  else if(argc>2){
+    cout<< "main() got to many arguments, continue with default values"<<endl;
+  }
   TString generator    = "pythia";
   bool    closure_test    = false;
   bool    trigger_fwd     = false;     //Use for Weight Calc
@@ -31,7 +42,8 @@ int main(){
   TString collection    = "AK4CHS";
 
 
-  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds/Run17B_Data.root"; //_noEtaPhiClean.root"; 
+  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/Run17";
+  input_path+= run_nr+"_Data_newPtBinning.root";
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
   TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
   TString outpath_postfix = "_newPtBinning";//"_noEtaPhiClean";
@@ -40,14 +52,14 @@ int main(){
     vector<CorrectionObject> Objects;
   
 
-    Objects.emplace_back(CorrectionObject("B", generator,collection, input_path, input_path_MC, weight_path, closure_test, trigger_fwd, trigger_central, outpath_postfix));
+    Objects.emplace_back(CorrectionObject(run_nr, generator,collection, input_path, input_path_MC, weight_path, closure_test, trigger_fwd, trigger_central, outpath_postfix));
  
     cout << "testobject is " << Objects[0] << endl;
 
 
 //       for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots();
-//       for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
-// // // //       //  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae_eta();  //extended eta range to negative Values 
+      // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
+      //  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae_eta();  //extended eta range to negative Values 
 
 // std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(true)\n"<<std::endl;
     //   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Pt_Extrapolation_Alternative_CorrectFormulae(true);   //MPF method
