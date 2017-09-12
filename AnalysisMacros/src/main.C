@@ -29,10 +29,16 @@ int main(int argc,char *argv[]){
   // }
 
   TString run_nr = "B";
+  bool muonCrosscheckEndings = false;
   if(argc==2){
     run_nr=argv[1];
       }
-  else if(argc>2){
+  else if(argc==3){
+    run_nr=argv[1];
+    TString muonCrosscheckEndings_ = argv[2];
+    muonCrosscheckEndings = (muonCrosscheckEndings_=="true" || muonCrosscheckEndings_=="True" || muonCrosscheckEndings_=="1") ;
+  }
+  else if(argc>3){
     cout<< "main() got to many arguments, continue with default values"<<endl;
   }
   TString generator    = "pythia";
@@ -41,23 +47,26 @@ int main(int argc,char *argv[]){
   bool    trigger_central = true;     //Use for Weight Calc
   TString collection    = "AK4CHS";
 
+  cout<<"Run Nr.: "<<run_nr<<endl;
+  if(muonCrosscheckEndings) cout<<"Doing single muon crosscheck plots"<<endl;
+  
 
-  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/Run17"; //_DeriveThresholds_inclSiMu/Run17";
-    input_path+= run_nr+"_Data_newPtBinning.root";//"_Data_wMu17.root";
+  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data";
+  if(muonCrosscheckEndings) input_path+="_DeriveThresholds_inclSiMu";
+  input_path+="/Run17";
+  input_path+= run_nr + (muonCrosscheckEndings ? "_Data_wMu17.root" : "_Data_newPtBinning.root");
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
   TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
-  TString outpath_postfix = "_newPtBinning";//"_noEtaPhiClean";"_wMu17";
+  TString outpath_postfix = muonCrosscheckEndings ? "_wMu17" : "_newPtBinning";//"_noEtaPhiClean";
   
   //eine Klasse: enthaelt Info ueber runnr, Generator, collection, Strings zu MC/DATA-files, memberfunctions: controlPlots, kFSR etc.
     vector<CorrectionObject> Objects;
   
-
     Objects.emplace_back(CorrectionObject(run_nr, generator,collection, input_path, input_path_MC, weight_path, closure_test, trigger_fwd, trigger_central, outpath_postfix));
  
     cout << "testobject is " << Objects[0] << endl;
 
-
-      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
+      // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
       // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
       //  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae_eta();  //extended eta range to negative Values 
 
@@ -98,7 +107,8 @@ int main(int argc,char *argv[]){
 
     // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
 
-    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck("HLT_Mu17");  
+   if(muonCrosscheckEndings){  
+    for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck("HLT_Mu17");  }
 
   cout << endl <<"Closing MC and DATA files." << endl;
   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CloseFiles();
