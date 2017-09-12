@@ -29,18 +29,21 @@ int main(int argc,char *argv[]){
   // }
 
   TString run_nr = "B";
+  TString dataname_end = "newPtBinning";
   bool muonCrosscheckEndings = false;
-  if(argc==2){
-    run_nr=argv[1];
-      }
-  else if(argc==3){
-    run_nr=argv[1];
-    TString muonCrosscheckEndings_ = argv[2];
-    muonCrosscheckEndings = (muonCrosscheckEndings_=="true" || muonCrosscheckEndings_=="True" || muonCrosscheckEndings_=="1") ;
+  TString mode ="";
+  switch(argc){
+  case 4:{ mode = argv[3];
+	muonCrosscheckEndings = (mode=="Mu"); 
+	if(muonCrosscheckEndings) mode = "DeriveThresholds_inclSiMu";}
+  case 3: dataname_end = argv[2];
+  case 2:{ run_nr=argv[1];
+    break;}
+  case 1: break;
+  default:{ cout<< "main() got to many arguments, continue with default values"<<endl;
+    break;}
   }
-  else if(argc>3){
-    cout<< "main() got to many arguments, continue with default values"<<endl;
-  }
+  
   TString generator    = "pythia";
   bool    closure_test    = false;
   bool    trigger_fwd     = false;     //Use for Weight Calc
@@ -48,16 +51,19 @@ int main(int argc,char *argv[]){
   TString collection    = "AK4CHS";
 
   cout<<"Run Nr.: "<<run_nr<<endl;
+  // cout<<dataname_end<<mode<<endl;
   if(muonCrosscheckEndings) cout<<"Doing single muon crosscheck plots"<<endl;
   
 
   TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data";
-  if(muonCrosscheckEndings) input_path+="_DeriveThresholds_inclSiMu";
-  input_path+="/Run17";
-  input_path+= run_nr + (muonCrosscheckEndings ? "_Data_wMu17.root" : "_Data_newPtBinning.root");
+  if(mode!="") input_path+="_";
+  input_path+=mode + "/Run17";
+  input_path+= run_nr + "_Data";
+  if(dataname_end!="") input_path+="_";
+  input_path += dataname_end + ".root";
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
   TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
-  TString outpath_postfix = muonCrosscheckEndings ? "_wMu17" : "_newPtBinning";//"_noEtaPhiClean";
+  TString outpath_postfix = dataname_end; 
   
   //eine Klasse: enthaelt Info ueber runnr, Generator, collection, Strings zu MC/DATA-files, memberfunctions: controlPlots, kFSR etc.
     vector<CorrectionObject> Objects;
@@ -66,7 +72,7 @@ int main(int argc,char *argv[]){
  
     cout << "testobject is " << Objects[0] << endl;
 
-      // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
+      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
       // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
       //  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae_eta();  //extended eta range to negative Values 
 

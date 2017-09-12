@@ -77,11 +77,6 @@ void CorrectionObject::ControlPlots(bool forEverySingleTrigger){
   Eta_assym_bot_MC->Add(Eta_neg_MC,+1);
   Eta_assym_top_MC->Divide(Eta_assym_bot_MC);
 
-  cout<<"MC event count:"<<endl;
-  cout<<pt_jet1_MC->GetEntries()<<endl;
-  cout<<pt_jet2_MC->GetEntries()<<endl;
-  cout<<pt_jet3_MC->GetEntries()<<endl;
-
   bool use_mc=true;
   if (pt_jet1_MC->GetEntries()==0 && pt_jet2_MC->GetEntries()==0){
     cout<<"no MC found, wont be used"<<endl;
