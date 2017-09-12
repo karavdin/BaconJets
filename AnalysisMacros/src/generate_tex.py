@@ -1,53 +1,46 @@
 #! /usr/bin/env python
 
 import subprocess
+import sys
+import os
+import os.path
 
-img_path_base = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunBC/plots/control/"
+output_name = "controlplotsC_newPtBinning.tex"
+# print len(sys.argv)
+# for a in sys.argv:
+#     print a
 
-img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunBC/plots/"
+if len(sys.argv) > 1:
+    output_name = sys.argv[1] + ".tex"
 
-img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds/RunBC_eta/plots/thresholds/"
+img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/"
+if output_name.find("controlplotsC") > -1:
+    if output_name.find("newPtBinning") > -1:
+        img_path_base_2 = img_path_base_2 + "RunC_newPtBinning"
+    else:
+        img_path_base_2 = img_path_base_2 + "RunC"
+elif output_name.find("controlplotsB") > -1:
+    if output_name.find("newPtBinning") > -1:
+        img_path_base_2 = img_path_base_2 + "RunB_newPtBinning"
+    else:
+        img_path_base_2 = img_path_base_2 + "RunB"
+elif output_name.find("controlplotsBC") > -1:
+    if output_name.find("newPtBinning") > -1:
+        img_path_base_2 = img_path_base_2 + "RunBC_newPtBinning"
+    else:
+        img_path_base_2 = img_path_base_2 + "RunBC"
+else:
+    raise RuntimeError("Cant identifiy ouput name %s" % output_name)
 
-document_base = """
-\documentclass[t,compress]{beamer}
-\mode<presentation>{
-%\usetheme{CambridgeUS}
-\usetheme{Madrid}
-\usecolortheme{beaver}
-}
+img_path_base_2 = img_path_base_2 + "/plots/"
 
-\usepackage{graphicx} % Allows including images
-\usepackage[percent]{overpic}
-\usepackage{hyperref}
-\usepackage{booktabs}
-\usepackage{amsmath}
-\usepackage{upgreek}
-%\usepackage{adjustbox}
-\usepackage{setspace}
+if not os.path.isdir(img_path_base_2):
+    raise RuntimeError("Path %s does not exist" % img_path_base_2)
 
-\usepackage{amsmath,amssymb}
-\usepackage{color}
+img_path_base = img_path_base_2 + "control/"
 
-\usepackage{xcolor}
-\usepackage{pict2e}
+img_path_base_th = img_path_base_2 + "thresholds/"
 
-\usepackage{overpic}
-
-\\title[L2 residual corrections]{L2 residual corrections derived on di-jet events: Controlplots}
-\\author[Christoph Garbers]{Anastasia Karavdina, Arne Reimers, Jens Multhaup, \underline{Christoph Garbers}}
-\institute[UHH]{University of Hamburg}
-
-\date{\\today}
-
-\\begin{document}
-
-\\begin{frame}
- \\titlepage
-\end{frame}
-
-"""
-
-document_end = '\end{document}'
 
 etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
         2.172, 2.322, 2.500, 2.650, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191]
@@ -55,8 +48,8 @@ etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
 etas_str = ["00", "0261", "0522", "0783", "1044", "1305", "1479", "1653", "193",
             "2172", "2322", "25", "2650", "2853", "2964", "3139", "3489", "3839", "5191"]
 
-pt_str = ["73", "95", "129", "163", "230",
-          "299", "365", "453", "566", "1000", "2000"]
+pt_str = ["71", "99", "161", "235", "304",
+          "368", "458", "484", "536", "1000", "2000"]
 
 trigger_val = ["40", "60", "80", "140",
                "200", "260", "320", "400", "450", "500"]
@@ -100,6 +93,48 @@ single_pics = [
     "L2Res_logpt_MPF_kFSRfit_AK4PFchs_pythia8",
     "L2Res_logpt_MPF_kFSRfit_diffAK4PFchs_pythia8",
 ]
+
+
+document_base = """
+\documentclass[t,compress]{beamer}
+\mode<presentation>{
+%\usetheme{CambridgeUS}
+\usetheme{Madrid}
+\usecolortheme{beaver}
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage[percent]{overpic}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{upgreek}
+%\usepackage{adjustbox}
+\usepackage{setspace}
+
+\usepackage{amsmath,amssymb}
+\usepackage{color}
+
+\usepackage{xcolor}
+\usepackage{pict2e}
+
+\usepackage{overpic}
+
+\\title[L2 residual corrections]{L2 residual corrections derived on di-jet events: Controlplots}
+\\author[Christoph Garbers]{Anastasia Karavdina, Arne Reimers, Jens Multhaup, \underline{Christoph Garbers}}
+\institute[UHH]{University of Hamburg}
+
+\date{\\today}
+
+\\begin{document}
+
+\\begin{frame}
+ \\titlepage
+\end{frame}
+
+"""
+
+document_end = '\end{document}'
 
 frames_list = []
 
@@ -190,53 +225,54 @@ for i, eta in enumerate(etas[:-1]):
     frames_list[-1] += "\end{frame}\n\n"
 
 
-frames_list.append(
-    "\\begin{frame}{new trigger thresholds}\n")
+# frames_list.append(
+#     "\\begin{frame}{new trigger thresholds}\n")
 
-for i, th in enumerate(trigger_val[1:]):
-    if i and not i % 5:
-        frames_list[-1] += "\\newline\n\n"
-    frames_list[-1] += "\\begin{minipage}{0.19\\textwidth}\n"
-    frames_list[-1] += "\\tiny HLT  " + th + "\n \\newline\n"
-    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
-        img_path_base_th + "HLT\_PFJet"
-    frames_list[-1] += th
-    frames_list[-1] += ".pdf}\n"
-    frames_list[-1] += "\end{minipage}\n"
+# for i, th in enumerate(trigger_val[1:]):
+#     if i and not i % 5:
+#         frames_list[-1] += "\\newline\n\n"
+#     frames_list[-1] += "\\begin{minipage}{0.19\\textwidth}\n"
+#     frames_list[-1] += "\\tiny HLT  " + th + "\n \\newline\n"
+#     frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+#         img_path_base_th + "HLT\_PFJet"
+#     frames_list[-1] += th
+#     frames_list[-1] += ".pdf}\n"
+#     frames_list[-1] += "\end{minipage}\n"
 
-frames_list[-1] += "\end{frame}\n\n"
+# frames_list[-1] += "\end{frame}\n\n"
 
-frames_list.append(
-    "\\begin{frame}{new trigger thresholds}\n")
+# frames_list.append(
+#     "\\begin{frame}{new trigger thresholds}\n")
 
-frames_list[-1] += "Trigger value: 60; 0.95 threshold: 71.3344; 0.90 threshold: 68.0774; Old Threshold: 73\n \\newline\n\n"
+# frames_list[-1] += "Trigger value: 60; 0.95 threshold: 71.3344; 0.90 threshold: 68.0774; Old Threshold: 73\n \\newline\n\n"
 
-frames_list[-1] += "Trigger value: 80; 0.95 threshold: 99.1579; 0.90 threshold: 94.2628; Old Threshold: 95\n\\newline\n\n"
+# frames_list[-1] += "Trigger value: 80; 0.95 threshold: 99.1579; 0.90 threshold: 94.2628; Old Threshold: 95\n\\newline\n\n"
 
-frames_list[-1] += "Trigger value: 140; 0.95 threshold: 160.742; 0.90 threshold: 154.666; Old Threshold: 129\n\\newline\n\n"
+# frames_list[-1] += "Trigger value: 140; 0.95 threshold: 160.742; 0.90 threshold: 154.666; Old Threshold: 129\n\\newline\n\n"
 
-frames_list[-1] += "Trigger value: 200; 0.95 threshold: 235.561; 0.90 threshold: 226.326; Old Threshold: 163\n\\newline\n\n"
+# frames_list[-1] += "Trigger value: 200; 0.95 threshold: 235.561; 0.90 threshold: 226.326; Old Threshold: 163\n\\newline\n\n"
 
-frames_list[-1] += "Trigger value: 260; 0.95 threshold: 302.189; 0.90 threshold: 290.749; Old Threshold: 230\n\\newline\n\n"
+# frames_list[-1] += "Trigger value: 260; 0.95 threshold: 302.189; 0.90 threshold: 290.749; Old Threshold: 230\n\\newline\n\n"
 
-frames_list[-1] += "Trigger value: 320; 0.95 threshold: 365.67; 0.90 threshold: 352.587; Old Threshold: 299\n\\newline\n\n"
+# frames_list[-1] += "Trigger value: 320; 0.95 threshold: 365.67; 0.90 threshold: 352.587; Old Threshold: 299\n\\newline\n\n"
 
-frames_list[-1] += "Trigger value: 400; 0.95 threshold: 456.089; 0.90 threshold: 440.161; Old Threshold: 365\n\\newline\n\n"
+# frames_list[-1] += "Trigger value: 400; 0.95 threshold: 456.089; 0.90 threshold: 440.161; Old Threshold: 365\n\\newline\n\n"
 
-frames_list[-1] += "Trigger value: 450; 0.95 threshold: 483.422; 0.90 threshold: 469.9; Old Threshold: 453\n\\newline\n\n"
+# frames_list[-1] += "Trigger value: 450; 0.95 threshold: 483.422; 0.90 threshold: 469.9; Old Threshold: 453\n\\newline\n\n"
 
-frames_list[-1] += "Trigger value: 500; 0.95 threshold: 531.781; 0.90 threshold: 517.682; Old Threshold: 566\n\\newline\n\n"
+# frames_list[-1] += "Trigger value: 500; 0.95 threshold: 531.781; 0.90 threshold: 517.682; Old Threshold: 566\n\\newline\n\n"
 
 
-frames_list[-1] += "\end{frame}\n\n"
+# frames_list[-1] += "\end{frame}\n\n"
 
-with open("controlplotsBC_thresholds.tex", 'w') as file_:
+
+with open(output_name, 'w') as file_:
     file_.write(document_base)
     for frame in frames_list:
         file_.write(frame)
     file_.write(document_end)
 
-print "\ngenerated controlplotsBC_thresholds.tex\n"
+print "\ngenerated " + output_name + "\n"
 
 # process = subprocess.Popen(["pdflatex, controlplots.tex"]  # rm controlplots.[tosnla][^e]*
 #                            )
