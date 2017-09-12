@@ -27,6 +27,7 @@ workdir*
 *.toc
 *.pdf
 AnalysisMacros/src/auto
+AnalysisMacros/src/main
 \#*#
 #as long this is not used it does not have to be included
 include/helper_fkt.h

@@ -28,7 +28,7 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
-  TString run_nr = "BC";
+  TString run_nr = "B";
   if(argc==2){
     run_nr=argv[1];
       }
@@ -42,11 +42,11 @@ int main(int argc,char *argv[]){
   TString collection    = "AK4CHS";
 
 
-  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/Run17";
-  input_path+= run_nr+"_Data_newPtBinning.root";
+  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/Run17"; //_DeriveThresholds_inclSiMu/Run17";
+    input_path+= run_nr+"_Data_newPtBinning.root";//"_Data_wMu17.root";
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
   TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
-  TString outpath_postfix = "_newPtBinning";//"_noEtaPhiClean";
+  TString outpath_postfix = "_newPtBinning";//"_noEtaPhiClean";"_wMu17";
   
   //eine Klasse: enthaelt Info ueber runnr, Generator, collection, Strings zu MC/DATA-files, memberfunctions: controlPlots, kFSR etc.
     vector<CorrectionObject> Objects;
@@ -57,7 +57,7 @@ int main(int argc,char *argv[]){
     cout << "testobject is " << Objects[0] << endl;
 
 
-//       for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots();
+      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
       // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
       //  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae_eta();  //extended eta range to negative Values 
 
@@ -85,9 +85,9 @@ int main(int argc,char *argv[]){
 
      
 // // //Run all macros to calculate L2Res corrections 
-   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
-      // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();  //For Closure Test
- 
+   // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
+         // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();  //For Closure Test
+     
 // // // //Macros to compare different Runs 
 // // //    // Objects[0].L2ResAllRuns();
 // // //    // Objects[0].L2ResOverlay(true);
@@ -97,6 +97,8 @@ int main(int argc,char *argv[]){
 // // //    // Objects[0].L2Res_JEC();
 
     // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
+
+    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck("HLT_Mu17");  
 
   cout << endl <<"Closing MC and DATA files." << endl;
   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CloseFiles();

@@ -73,8 +73,9 @@ using namespace std;
     inline void set_lumitag(TString x){_lumitag = x;}
 
     //Main functions for calculating L2 residuals, defined in CorrectionObject.cc
-    void ControlPlots();
+    void ControlPlots(bool forEverySingleTrigger = false);
     void Derive_Thresholds();
+    void Derive_Thresholds_SiMuCrosscheck(TString siMu_dirName_);
     void kFSR();
     void kFSR_CorrectFormulae();
     void kFSR_CorrectFormulae_eta();
