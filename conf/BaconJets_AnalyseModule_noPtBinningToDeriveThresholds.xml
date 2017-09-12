@@ -40,7 +40,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DataBCD_deriveThresholds_wMu17"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DataBCD_deriveThresholds_wIsoMu27"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -64,11 +64,11 @@
 <!-- </InputData> -->
 
 
-<!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_promptReco_2017_SingleMuon" Cacheable="&CACHEABLE;"> -->
-<!--           &DATA_RunB_promptReco_2017_SingleMuon;  -->
-<!--           <InputTree Name="AnalysisTree"/> -->
-<!--           <OutputTree Name="AnalysisTree"/> -->
-<!-- </InputData> -->
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_promptReco_2017_SingleMuon" Cacheable="&CACHEABLE;">
+          &DATA_RunB_promptReco_2017_SingleMuon;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+</InputData>
 
 <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_promptReco_2017_SingleMuon" Cacheable="&CACHEABLE;">
           &DATA_RunC_promptReco_2017_SingleMuon;
@@ -102,7 +102,7 @@
 
       <Item Name="use_sframe_weight" Value="true"/>  <!--false-->
       
-      <Item Name="triggerSiMu" Value="HLT_Mu17_v*"/>
+      <Item Name="triggerSiMu" Value="HLT_IsoMu20_v*"/>
       <Item Name="triggerSiMu_DirName" Value="HLT_Mu17"/>
       
       <Item Name="trigger40" Value="HLT_PFJet40_v*"/>
