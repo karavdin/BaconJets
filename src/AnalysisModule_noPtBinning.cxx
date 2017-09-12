@@ -1209,6 +1209,29 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
   
     sel.SetEvent(event);
 
+
+    if(event.isRealData){
+      if(pass_triggerSiMu) {h_trgSiMu->fill(event); h_lumi_TrigSiMu->fill(event);}      
+      
+      if(pass_trigger40) {h_trg40->fill(event); h_lumi_Trig40->fill(event);}
+      if(pass_trigger60) {h_trg60->fill(event); h_lumi_Trig60->fill(event);} 
+      if(pass_trigger80) {h_trg80->fill(event); h_lumi_Trig80->fill(event);}
+      if(pass_trigger140) {h_trg140->fill(event); h_lumi_Trig140->fill(event);}
+      if(pass_trigger200) {h_trg200->fill(event); h_lumi_Trig200->fill(event);}
+      if(pass_trigger260) {h_trg260->fill(event); h_lumi_Trig260->fill(event);}
+      if(pass_trigger320) {h_trg320->fill(event); h_lumi_Trig320->fill(event);} 
+      if(pass_trigger400) {h_trg400->fill(event); h_lumi_Trig400->fill(event);}
+      if(pass_trigger450) {h_trg450->fill(event); h_lumi_Trig450->fill(event);}
+      if(pass_trigger500) {h_trg500->fill(event); h_lumi_Trig500->fill(event);}
+
+    }
+    else{    
+      if(debug){
+	cout << "before Pt selection (MC only) : " << endl;
+	cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
+      }
+
+    
 //##################################################   Advanced Selections   ##################################################################
     //good primary vertex
     int nGoodVts = sel.goodPVertex();
@@ -1254,26 +1277,6 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     h_lumi_dijet->fill(event);
     h_match->fill(event);
     h_lumi_match->fill(event);
-    if(event.isRealData){
-      if(pass_triggerSiMu) {h_trgSiMu->fill(event); h_lumi_TrigSiMu->fill(event);}      
-      
-      if(pass_trigger40) {h_trg40->fill(event); h_lumi_Trig40->fill(event);}
-      if(pass_trigger60) {h_trg60->fill(event); h_lumi_Trig60->fill(event);} 
-      if(pass_trigger80) {h_trg80->fill(event); h_lumi_Trig80->fill(event);}
-      if(pass_trigger140) {h_trg140->fill(event); h_lumi_Trig140->fill(event);}
-      if(pass_trigger200) {h_trg200->fill(event); h_lumi_Trig200->fill(event);}
-      if(pass_trigger260) {h_trg260->fill(event); h_lumi_Trig260->fill(event);}
-      if(pass_trigger320) {h_trg320->fill(event); h_lumi_Trig320->fill(event);} 
-      if(pass_trigger400) {h_trg400->fill(event); h_lumi_Trig400->fill(event);}
-      if(pass_trigger450) {h_trg450->fill(event); h_lumi_Trig450->fill(event);}
-      if(pass_trigger500) {h_trg500->fill(event); h_lumi_Trig500->fill(event);}
-
-    }
-    else{    
-      if(debug){
-	cout << "before Pt selection (MC only) : " << endl;
-	cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
-      }
 
 
       if(!sel.PtMC(event)) return false; // For MC only one Pt threshold
