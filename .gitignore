@@ -26,6 +26,7 @@ workdir*
 *.snm
 *.toc
 *.pdf
+*.tex
 AnalysisMacros/src/auto
 AnalysisMacros/src/main
 \#*#
