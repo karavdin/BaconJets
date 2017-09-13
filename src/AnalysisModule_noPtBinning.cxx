@@ -1209,7 +1209,22 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
   
     sel.SetEvent(event);
 
+    
+//##################################################   Advanced Selections   ##################################################################
+    //good primary vertex
+    int nGoodVts = sel.goodPVertex();
 
+    if(debug){
+      cout << "debug is: " << debug << endl;
+      cout << "before good vertex selection : " << endl;
+      cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
+    }
+
+    if(nGoodVts<=0) return false;
+    event.set(tt_nGoodvertices, nGoodVts);
+    h_afternVts->fill(event);
+
+    //fill single trigger for efficiency plots before the dijet selection
     if(event.isRealData){
       if(pass_triggerSiMu) {h_trgSiMu->fill(event); h_lumi_TrigSiMu->fill(event);}      
       
@@ -1232,20 +1247,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
       }
 
     
-//##################################################   Advanced Selections   ##################################################################
-    //good primary vertex
-    int nGoodVts = sel.goodPVertex();
-
-    if(debug){
-      cout << "debug is: " << debug << endl;
-      cout << "before good vertex selection : " << endl;
-      cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
-    }
-
-    if(nGoodVts<=0) return false;
-    event.set(tt_nGoodvertices, nGoodVts);
-    h_afternVts->fill(event);
-
+    
 
 //DiJet-Events
 
@@ -1466,3 +1468,12 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
   // as we want to run the ExampleCycleNew directly with AnalysisModuleRunner,
   // make sure the ExampleModule is found by class name. This is ensured by this macro:
   UHH2_REGISTER_ANALYSIS_MODULE(AnalysisModule_noPtBinning)
+//  ____________
+// < Hallo Welt >
+//  ------------
+//         \   ^__^
+//          \  (oo)\_______
+//             (__)\       )\/\
+//                 ||----w |
+//                 ||     ||
+  

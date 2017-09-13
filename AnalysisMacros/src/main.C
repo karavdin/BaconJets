@@ -21,6 +21,8 @@ int main(int argc,char *argv[]){
   //************************************************************
 
   cout << "Hello from main(). What am I going to do?\nWill it involve dead regions and high jetiness?\n13371n6 1n 7h3 57uff" << endl << endl;
+
+  //TODO at some point do --help
   
   // cout<<argc<<endl;
 
@@ -31,17 +33,36 @@ int main(int argc,char *argv[]){
   TString run_nr = "B";
   TString dataname_end = "newPtBinning";
   bool muonCrosscheckEndings = false;
+  TString muonTriggerName = "HLT_Mu17";
   TString mode ="";
-  switch(argc){
-  case 4:{ mode = argv[3];
-	muonCrosscheckEndings = (mode=="Mu"); 
-	if(muonCrosscheckEndings) mode = "DeriveThresholds_inclSiMu";}
-  case 3: dataname_end = argv[2];
-  case 2:{ run_nr=argv[1];
-    break;}
-  case 1: break;
-  default:{ cout<< "main() got to many arguments, continue with default values"<<endl;
-    break;}
+  bool do_fullPlots=false;
+  bool do_trgControlPlolts=false;
+  for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+	if(arg[0]=='-'){
+	  if(arg[1]=='-'){
+	    if(arg=="--mode"){
+	       mode = argv[i+1];
+	       muonCrosscheckEndings = (mode=="Mu"); 
+	       if(muonCrosscheckEndings) mode = "DeriveThresholds_inclSiMu";
+	    }
+	    else if(arg=="--dname"){
+	       dataname_end = argv[i+1];
+	    }
+	    else if(arg=="--run"){
+	       run_nr = argv[i+1];
+	    }
+	    else if(arg=="--FP"){
+	       do_fullPlots=true;
+	    }
+	    else if(arg=="--tCP"){
+	       do_trgControlPlolts=true;
+	    }
+	    else if(arg=="--muTrg"){
+	      muonTriggerName = argv[i+1];
+	    }
+	  }
+	}
   }
   
   TString generator    = "pythia";
@@ -63,7 +84,8 @@ int main(int argc,char *argv[]){
   input_path += dataname_end + ".root";
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
   TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
-  TString outpath_postfix = dataname_end; 
+  TString outpath_postfix = (dataname_end!="") ? "_" : "";
+  outpath_postfix  +=  dataname_end; 
   
   //eine Klasse: enthaelt Info ueber runnr, Generator, collection, Strings zu MC/DATA-files, memberfunctions: controlPlots, kFSR etc.
     vector<CorrectionObject> Objects;
@@ -72,7 +94,12 @@ int main(int argc,char *argv[]){
  
     cout << "testobject is " << Objects[0] << endl;
 
-      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
+    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
+    
+    if(do_trgControlPlolts) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
+
+    if(muonCrosscheckEndings) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);  
+
       // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
       //  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae_eta();  //extended eta range to negative Values 
 
@@ -92,7 +119,7 @@ int main(int argc,char *argv[]){
 // //    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit_eta_0_13(); //Mikkos Macro
 
   // std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;
-  //     for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
+
       
 //      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].MatchingPlots();
 
@@ -113,11 +140,11 @@ int main(int argc,char *argv[]){
 
     // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
 
-   if(muonCrosscheckEndings){  
-    for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck("HLT_Mu17");  }
 
   cout << endl <<"Closing MC and DATA files." << endl;
   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CloseFiles();
   cout << "Going to return 0 now, cya." << endl << endl;
   return 0;
 }
+
+// Have you heard that entropy isn't what it used to be? 
