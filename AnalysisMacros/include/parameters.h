@@ -5,7 +5,6 @@
 using namespace std;
 
 
-
 const int nResponseBins = 100;// 100
 const int n_etabarr=5; // needed for the normalization to 1 in the barrel
 
@@ -25,9 +24,6 @@ const int triggerVal[n_trigger] = {40, 60, 80, 140, 200, 260, 320, 400, 450, 500
 const int n_pt = 12;
 const TString pt_range[n_pt]= {"41", "70", "99", "164", "238", "306", "369", "459", "487", "537", "1000", "2000"};
 const double pt_bins[n_pt]       = {41, 70, 99, 164, 238, 306, 369, 459, 487, 537, 1000, 2000};
-
-// const TString pt_range[n_pt]= {"51", "73", "95", "129", "163", "230", "299", "365", "453", "566", "1000", "2000"};
-// const double pt_bins[n_pt]       = {51, 73, 95, 129, 163, 230, 299, 365, 453, 566, 1000, 2000};
 
 //Eta bins:
 
@@ -60,16 +56,10 @@ const int n_eta_common = 19;
 const double eta_common_bins[n_eta_common] ={0, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.93, 2.172, 2.322, 2.5, 2.65, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191};
 const TString eta_common_range[n_eta_common] = {"0.000", "0.261", "0.522", "0.783", "1.044", "1.305", "1.479", "1.653", "1.930", "2.172", "2.322", "2.500", "2.650", "2.853", "2.964", "3.139", "3.489", "3.839", "5.191"};
 
-const TString eta_output[n_eta_common-1] = {"eta_00_03", "eta_03_05","eta_05_08","eta_08_10","eta_10_13","eta_13_15","eta_15_17", "eta_17_19", "eta_19_22", "eta_22_23", "eta_23_25", "eta_25_27", "eta_27_29", "eta_29_30", "eta_30_31", "eta_31_35", "eta_35_38", "eta_38_52"};  //Anastasia comparison macro
-
-/*
-const TString eta_output[n_eta_common-1] = {"eta00-026", "eta026-052","eta052-078","eta078-104","eta104-130","eta130-147","eta147-165", "eta165-193", "eta193-217", "eta217-232", "eta232-250", "eta250-265", "eta265-285", "eta285-296", "eta296-313", "eta313-348", "eta348-383", "eta383-519" };
-*/
+const TString eta_output[n_eta_common-1] = {"eta_00_03", "eta_03_05","eta_05_08","eta_08_10","eta_10_13","eta_13_15","eta_15_17", "eta_17_19", "eta_19_22", "eta_22_23", "eta_23_25", "eta_25_27", "eta_27_29", "eta_29_30", "eta_30_31", "eta_31_35", "eta_35_38", "eta_38_52"};  
 
 const int n_eta_common_2 = 19;
 const double eta_common_bins_2[n_eta_common] ={0, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.93, 2.172, 2.322, 2.5, 2.65, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191};
 const TString eta_common_range_2[n_eta_common] = {"0.000", "0.261", "0.522", "0.783", "1.044", "1.305", "1.479", "1.653", "1.930", "2.172", "2.322", "2.500", "2.650", "2.853", "2.964", "3.139", "3.489", "3.839", "5.191"};
-/*
-const TString eta_output_2[n_eta_common-1] = {"eta00-026", "eta026-052","eta052-078","eta078-104","eta104-130","eta130-147","eta147-165", "eta165-193", "eta193-217", "eta217-232", "eta232-250", "eta250-265", "eta265-285", "eta285-296", "eta296-313", "eta313-348", "eta348-383", "eta383-519"};
-*/
-const TString eta_output_2[n_eta_common-1] = {"eta_00_03", "eta_03_05","eta_05_08","eta_08_10","eta_10_13","eta_13_15","eta_15_17", "eta_17_19", "eta_19_22", "eta_22_23", "eta_23_25", "eta_25_27", "eta_27_29", "eta_29_30", "eta_30_31", "eta_31_35", "eta_35_38", "eta_38_52"};  //Anastasia comparison macro
+
+const TString eta_output_2[n_eta_common-1] = {"eta_00_03", "eta_03_05","eta_05_08","eta_08_10","eta_10_13","eta_13_15","eta_15_17", "eta_17_19", "eta_19_22", "eta_22_23", "eta_23_25", "eta_25_27", "eta_27_29", "eta_29_30", "eta_30_31", "eta_31_35", "eta_35_38", "eta_38_52"};

@@ -21,7 +21,7 @@
 
 using namespace std;
 
-void CorrectionObject::FinalControlPlots_CorrectFormulae(){
+void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cut){
   cout << "--------------- Starting FinalControlPlots_CorrectFormulae() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
@@ -203,6 +203,10 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
       myCount_cut++;
       continue;
     }
+    if(abs_asymmetry_cut and abs_asymmetry_cut<fabs(*asymmetry_data)){
+      myCount_cut++;
+      continue;
+    }
     //fill histos in bins of eta
     for(int i=0; i<n_eta-1; i++){
       if(fabs(*probejet_eta_data)<eta_bins[i+1] && fabs(*probejet_eta_data)>=eta_bins[i]){
@@ -271,6 +275,10 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
       myCount_cut_mc+=*weight_mc;
       continue;
     }
+    if(abs_asymmetry_cut and (abs_asymmetry_cut<fabs(*asymmetry_mc))){
+      myCount_cut_mc+=*weight_mc;
+      continue;
+    }
     //fill histos in bins of eta
     
     for(int i=0; i<n_eta-1; i++){
@@ -313,7 +321,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
  
 
   ofstream output;
-  output.open(CorrectionObject::_outpath+"plots/control/Number_Events_Pt_Eta_bins_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
+  output.open(CorrectionObject::_outpath+"plots/control/Number_Events_Pt_Eta_bins_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+ (abs_asymmetry_cut ? "_wAsymCut":"") + ".txt");
     
 
   output << "Number of events in each bin for MC" << endl;
@@ -600,7 +608,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     //tex->DrawLatex(0.53,0.91,CorrectionObject::_lumitag+"(13TeV)");
 
-    c_mpf->SaveAs(CorrectionObject::_outpath+"plots/control/MPF_Response_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c_mpf->SaveAs(CorrectionObject::_outpath+"plots/control/MPF_Response_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
     TCanvas* c_rel = new TCanvas();
@@ -629,7 +637,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     //tex->DrawLatex(0.53,0.91,CorrectionObject::_lumitag+"(13TeV)");
 
-    c_rel->SaveAs(CorrectionObject::_outpath+"plots/control/Rel_Response_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c_rel->SaveAs(CorrectionObject::_outpath+"plots/control/Rel_Response_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
     //delete leg_rel;
@@ -697,7 +705,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
     leg1.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
  
-    c1->SaveAs(CorrectionObject::_outpath+"plots/control/B_NormDistribution_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c1->SaveAs(CorrectionObject::_outpath+"plots/control/B_NormDistribution_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
     TCanvas* c2 = new TCanvas();
@@ -731,7 +739,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
     leg2.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
     //tex_lumi->DrawLatex(0.50,0.91,CorrectionObject::_lumitag+"(13TeV)");
-    c2->SaveAs(CorrectionObject::_outpath+"plots/control/B_NormDistribution_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c2->SaveAs(CorrectionObject::_outpath+"plots/control/B_NormDistribution_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
     TCanvas* c3 = new TCanvas();
@@ -764,7 +772,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
     leg3.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
     //tex_lumi->DrawLatex(0.6,0.91,"MC");
-    c3->SaveAs(CorrectionObject::_outpath+"plots/control/A_NormDistribution_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c3->SaveAs(CorrectionObject::_outpath+"plots/control/A_NormDistribution_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
 
@@ -798,7 +806,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
     leg4.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
     //tex_lumi->DrawLatex(0.50,0.91,CorrectionObject::_lumitag+"(13TeV)");
-    c4->SaveAs(CorrectionObject::_outpath+"plots/control/A_NormDistribution_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");    
+    c4->SaveAs(CorrectionObject::_outpath+"plots/control/A_NormDistribution_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");    
 
 
 
@@ -833,7 +841,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
     leg5.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
     //tex_lumi->DrawLatex(0.6,0.91,"MC");
-    c5->SaveAs(CorrectionObject::_outpath+"plots/control/METoverPt_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c5->SaveAs(CorrectionObject::_outpath+"plots/control/METoverPt_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
  
 
 
@@ -865,7 +873,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
     leg6.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
     //tex_lumi->DrawLatex(0.50,0.91,CorrectionObject::_lumitag+"(13TeV)");
-    c6->SaveAs(CorrectionObject::_outpath+"plots/control/METoverPt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");    
+    c6->SaveAs(CorrectionObject::_outpath+"plots/control/METoverPt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");    
 
     ///END MET over sum pt
 
@@ -907,7 +915,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg7.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
-    c7->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_neutEmEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c7->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_neutEmEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
 
@@ -944,7 +952,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg8.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
-    c8->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_neutEmEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c8->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_neutEmEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
     TCanvas* c9 = new TCanvas();
@@ -982,7 +990,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg9.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
-    c9->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_neutHadEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c9->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_neutHadEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");
 
 
 
@@ -1021,7 +1029,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg10.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
-    c10->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_neutHadEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c10->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_neutHadEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
 
@@ -1060,7 +1068,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg11.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
-    c11->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_chEmEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c11->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_chEmEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
     TCanvas* c12 = new TCanvas();
     tdrCanvas(c12,"c12",hEF,4,10,kSquare,"DATA");
@@ -1097,7 +1105,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg12.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
-    c12->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_chEmEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c12->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_chEmEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
     TCanvas* c13 = new TCanvas();
@@ -1134,7 +1142,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg13.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
-    c13->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_chHadEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c13->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_chHadEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");
 
     TCanvas* c14 = new TCanvas();
     tdrCanvas(c14,"c14",hEF,4,10,kSquare,"DATA");
@@ -1170,7 +1178,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg14.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
-    c14->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_chHadEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c14->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_chHadEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");
 
 
     TCanvas* c15 = new TCanvas();
@@ -1204,7 +1212,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg15.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
-    c15->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_photonEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c15->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_photonEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");
 
     TCanvas* c16 = new TCanvas();
     tdrCanvas(c16,"c16",hEF,4,10,kSquare,"DATA");
@@ -1237,7 +1245,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg16.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
-    c16->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_photonEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c16->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_photonEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
   TCanvas* c17 = new TCanvas();
@@ -1271,7 +1279,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg17.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
-    c17->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_muonEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c17->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_muonEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");
 
     TCanvas* c18 = new TCanvas();
     tdrCanvas(c18,"c18",hEF,4,10,kSquare,"DATA");
@@ -1303,7 +1311,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg18.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
-    c18->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_muonEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c18->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_muonEF_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
 
     TCanvas* c19 = new TCanvas();
@@ -1338,7 +1346,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg19.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
-    c19->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_phi_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c19->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_phi_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
     TCanvas* c20 = new TCanvas();
     tdrCanvas(c20,"c20",hEF,4,10,kSquare,"DATA");
@@ -1372,7 +1380,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
 
     leg20.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
-    c20->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_phi_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
+    c20->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_phi_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
     
     //END Different energy fractions
@@ -1423,7 +1431,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
     TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
     tex->DrawLatex(0.52,0.85, text);
 
-    c1->SaveAs(CorrectionObject::_outpath+"plots/control/Pt_ave_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");    
+    c1->SaveAs(CorrectionObject::_outpath+"plots/control/Pt_ave_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");    
 
 
     delete tex;
@@ -1454,7 +1462,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
     TString text1 = eta_range[i] + " < |#eta| < " + eta_range[i+1];
     tex1->DrawLatex(0.52,0.85, text1);
 
-    c2->SaveAs(CorrectionObject::_outpath+"plots/control/MET_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");    
+    c2->SaveAs(CorrectionObject::_outpath+"plots/control/MET_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");    
 
 
     delete tex1;
@@ -1486,7 +1494,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(){
     TString text2 = eta_range[i] + " < |#eta| < " + eta_range[i+1];
     tex2->DrawLatex(0.52,0.85, text1);
 
-    c3->SaveAs(CorrectionObject::_outpath+"plots/control/alpha_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");    
+    c3->SaveAs(CorrectionObject::_outpath+"plots/control/alpha_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");    
 
 
     delete tex2;
@@ -1517,16 +1525,11 @@ TCanvas* c4 = new TCanvas();
     TString text4 = eta_range[i] + " < |#eta| < " + eta_range[i+1];
     tex4->DrawLatex(0.52,0.85, text1);
 
-    c4->SaveAs(CorrectionObject::_outpath+"plots/control/jet3_pt_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");    
-
+    c4->SaveAs(CorrectionObject::_outpath+"plots/control/jet3_pt_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");    
 
     delete tex4;
     delete c4;
-    
-
   }
-
-
 
   delete c_0;
   delete h;
@@ -1545,17 +1548,9 @@ TCanvas* c4 = new TCanvas();
     delete hmc_pt_ave[i];
   }
 
-
   delete f_mpf_mc;
   delete f_mpf_data;
   delete f_rel_mc;
   delete f_rel_data;
-
-
-
-
-
-
-
 
 }

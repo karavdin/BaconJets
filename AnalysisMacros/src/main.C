@@ -19,6 +19,7 @@ static void show_usage(std::string name)
     	      << "\t--derThresh\t\tDerive the trigger thresholds.\n"
 	      << "\t--mu\t\tDo the single muon threshold crosscheck.\n"
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
+	      << "\t--pj_asym_cut\t\tDo some of the probejet control plots with a cut on the asymmetry.\n"      
 	      << "\n\tThe input path is created as /nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC <D for single muon crosscheck> _Data <_mode> /Run17 <run> _Data <_dname> .root" 
               << std::endl;
 }
@@ -38,9 +39,7 @@ int main(int argc,char *argv[]){
 
   cout << "Hello from main(). What am I going to do?\nWill it involve dead regions and high jetiness?\n13371n6 1n 7h3 57uff" << endl << endl;
 
-  //TODO at some point do --help
-  
-  // cout<<argc<<endl;
+   // cout<<argc<<endl;
 
   // for(int i=0;i<argc;i++){
   //   cout<<argv[i]<<endl;
@@ -53,7 +52,8 @@ int main(int argc,char *argv[]){
   TString mode ="";
   bool do_fullPlots=false;
   bool do_trgControlPlolts=false;
-  bool do_deriveThresholds=false; 
+  bool do_deriveThresholds=false;
+  bool do_asym_cut = false;
   for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
 	if(arg=="-h"||arg=="--help"){
@@ -65,8 +65,6 @@ int main(int argc,char *argv[]){
 	  if(arg[1]=='-'){
 	    if(arg=="--mode"){
 	       mode = argv[i+1];
-	       muonCrosscheck = (mode=="mu"); 
-	       if(muonCrosscheck) mode = "DeriveThresholds_inclSiMu";
 	    }
 	    else if(arg=="--dname"){
 	       dataname_end = argv[i+1];
@@ -89,11 +87,14 @@ int main(int argc,char *argv[]){
 	    else if(arg=="--muTrg"){
 	      muonTriggerName = argv[i+1];
 	    }
+	    else if(arg=="--pj_asym_cut"){
+	      do_asym_cut=true;
+	    }
 	  }
 	}
   }
 
-  if(not (do_fullPlots or do_trgControlPlolts or do_deriveThresholds or muonCrosscheck)){  //TODO at some point do --help
+  if(not (do_fullPlots or do_trgControlPlolts or do_deriveThresholds or muonCrosscheck or do_asym_cut)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -135,48 +136,17 @@ int main(int argc,char *argv[]){
 
     if(do_deriveThresholds) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
  
-    if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);  
+    if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);
 
-      // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
-      //  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae_eta();  //extended eta range to negative Values 
+    if(do_asym_cut) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.5);
 
-// std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(true)\n"<<std::endl;
-    //   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Pt_Extrapolation_Alternative_CorrectFormulae(true);   //MPF method
-    // std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(false)\n"<<std::endl;
-    //   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Pt_Extrapolation_Alternative_CorrectFormulae(false);  //pT bal method
-
-    // // // //       //for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Pt_Extrapolation_Alternative_CorrectFormulae_eta(true); //extended eta range to negative Values 
-// // // //       //for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Pt_Extrapolation_Alternative_CorrectFormulae_eta(false); //extended eta range to negative Values
-      
-  // std::cout<<"\nStarting L2ResOutput()\n"<<std::endl;
-      // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L2ResOutput();
-
-// //       // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L2ResOutput_eta();
-// //    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit(); //Mikkos Macro 
-// //    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit_eta_0_13(); //Mikkos Macro
-
-  // std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;
-
-      
-//      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].MatchingPlots();
-
-   // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae_eta(); //extended eta range to negative Values
-
-     
-// // //Run all macros to calculate L2Res corrections 
-   // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
-         // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();  //For Closure Test
-     
-// // // //Macros to compare different Runs 
+     // // // //Macros to compare different Runs 
 // // //    // Objects[0].L2ResAllRuns();
 // // //    // Objects[0].L2ResOverlay(true);
 // // //    // Objects[0].L2ResOverlay(false);
 
 // // // //Compare up/nominal/down Variations of JER
 // // //    // Objects[0].L2Res_JEC();
-
-    // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
-
 
   cout << endl <<"Closing MC and DATA files." << endl;
   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CloseFiles();

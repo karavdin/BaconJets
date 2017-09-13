@@ -91,7 +91,7 @@ using namespace std;
     void InputForGlobalFit();
     void InputForGlobalFit_eta_0_13();
     void FinalControlPlots();
-    void FinalControlPlots_CorrectFormulae();
+    void FinalControlPlots_CorrectFormulae(double abs_asymmetry_cut=0.); //if the double is 0. the cut wont be applied
     void FinalControlPlots_CorrectFormulae_eta();
     void CalculateMCWeights();
     void CalculateMCWeights_TriggerThresholds(bool CentralTriggers);
