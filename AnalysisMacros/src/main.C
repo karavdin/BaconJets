@@ -6,6 +6,22 @@
 
 using namespace std;
 
+static void show_usage(std::string name)
+{
+    std::cerr << "Usage: " << name << " <option(s)> [VARIABLE]\n"
+              << "Options:\n"
+              << "\t-h,--help\t\tShow this help message\n"
+              << "\t--mode\t\tMode in which the plots was created, used in the input path.\n"
+              << "\t--dname\t\tSuffix for the input and putput path.\n"
+              << "\t--run\t\tRun Nr, default is B, used in the input path\n"
+	      << "\t--FP\t\tRun all main control plots.\n"
+	      << "\t--tCP\t\tRun control plots of the jet pt, eta and count for all trigger separately.\n"
+    	      << "\t--derThresh\t\tDerive the trigger thresholds.\n"
+	      << "\t--mu\t\tDo the single muon threshold crosscheck.\n"
+	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
+	      << "\n\tThe input path is created as /nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC <D for single muon crosscheck> _Data <_mode> /Run17 <run> _Data <_dname> .root" 
+              << std::endl;
+}
 
 
 int main(int argc,char *argv[]){
@@ -40,6 +56,11 @@ int main(int argc,char *argv[]){
   bool do_deriveThresholds=false; 
   for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
+	if(arg=="-h"||arg=="--help"){
+	  show_usage(argv[0]);
+	    return 0;
+	  }
+
 	if(arg[0]=='-'){
 	  if(arg[1]=='-'){
 	    if(arg=="--mode"){
@@ -74,6 +95,7 @@ int main(int argc,char *argv[]){
 
   if(not (do_fullPlots or do_trgControlPlolts or do_deriveThresholds or muonCrosscheck)){  //TODO at some point do --help
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
+    show_usage(argv[0]);
   }
   
   TString generator    = "pythia";
@@ -85,7 +107,6 @@ int main(int argc,char *argv[]){
   cout<<"Run Nr.: "<<run_nr<<endl;
   // cout<<dataname_end<<mode<<endl;
   if(muonCrosscheck) cout<<"Doing single muon crosscheck plots"<<endl;
-  
 
   TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC";
   if(muonCrosscheck) input_path+="D";
