@@ -31,20 +31,21 @@ int main(int argc,char *argv[]){
   // }
 
   TString run_nr = "B";
-  TString dataname_end = "newPtBinning";
-  bool muonCrosscheckEndings = false;
+  TString dataname_end = "";
+  bool muonCrosscheck = false;
   TString muonTriggerName = "HLT_Mu17";
   TString mode ="";
   bool do_fullPlots=false;
   bool do_trgControlPlolts=false;
+  bool do_deriveThresholds=false; 
   for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
 	if(arg[0]=='-'){
 	  if(arg[1]=='-'){
 	    if(arg=="--mode"){
 	       mode = argv[i+1];
-	       muonCrosscheckEndings = (mode=="Mu"); 
-	       if(muonCrosscheckEndings) mode = "DeriveThresholds_inclSiMu";
+	       muonCrosscheck = (mode=="mu"); 
+	       if(muonCrosscheck) mode = "DeriveThresholds_inclSiMu";
 	    }
 	    else if(arg=="--dname"){
 	       dataname_end = argv[i+1];
@@ -58,11 +59,21 @@ int main(int argc,char *argv[]){
 	    else if(arg=="--tCP"){
 	       do_trgControlPlolts=true;
 	    }
+	    else if(arg=="--derThresh"){
+	       do_deriveThresholds=true;
+	    }	    
+	    else if(arg=="--mu"){
+	       muonCrosscheck=true;
+	    }	    
 	    else if(arg=="--muTrg"){
 	      muonTriggerName = argv[i+1];
 	    }
 	  }
 	}
+  }
+
+  if(not (do_fullPlots or do_trgControlPlolts or do_deriveThresholds or muonCrosscheck)){  //TODO at some point do --help
+    cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
   }
   
   TString generator    = "pythia";
@@ -73,10 +84,12 @@ int main(int argc,char *argv[]){
 
   cout<<"Run Nr.: "<<run_nr<<endl;
   // cout<<dataname_end<<mode<<endl;
-  if(muonCrosscheckEndings) cout<<"Doing single muon crosscheck plots"<<endl;
+  if(muonCrosscheck) cout<<"Doing single muon crosscheck plots"<<endl;
   
 
-  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data";
+  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC";
+  if(muonCrosscheck) input_path+="D";
+  input_path+="_Data";
   if(mode!="") input_path+="_";
   input_path+=mode + "/Run17";
   input_path+= run_nr + "_Data";
@@ -97,8 +110,11 @@ int main(int argc,char *argv[]){
     if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
     
     if(do_trgControlPlolts) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
+    
 
-    if(muonCrosscheckEndings) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);  
+    if(do_deriveThresholds) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
+ 
+    if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);  
 
       // for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
       //  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae_eta();  //extended eta range to negative Values 
