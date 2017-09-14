@@ -156,15 +156,18 @@ int main(int argc,char *argv[]){
     if(asym_cut) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(asym_cut);
     
     if(do_lumiControlPlots){
-      if(run_nr="B")
-	for(int lumibin_ : lumibins_B )
-	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);
-      else if(run_nr="C")
-	for(int lumibin_ : lumibins_C )
-	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);
-      else
-	for(int lumibin_ : lumibins_BC )
-	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);
+      if(run_nr=="B"){
+	for(int lumibin_ : lumibins_B ){
+	  cout << "\nStart lumi bin" << lumibin_<<endl;
+	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);}}
+      else if(run_nr=="C"){
+	for(int lumibin_ : lumibins_C ){
+	  cout << "\nStart lumi bin" << lumibin_<<endl;
+	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);}}
+      else{
+	for(int lumibin_ : lumibins_BC ){
+	  cout << "\nStart lumi bin " << lumibin_<<endl;	  
+	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);}}
     } 
 
     if(do_lumi_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Lumi_Plots();

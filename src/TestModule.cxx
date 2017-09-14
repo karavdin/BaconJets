@@ -497,7 +497,7 @@ class TestModule: public uhh2::AnalysisModule {
 	 //JEC-Version Data: V4
 	  else if(JEC_Version == "Summer16_03Feb2017_V4"){
 	    //closure
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V4_G_L123_AK4PFchs_DATA;              //ReReco Data + Summer16 V7
+	    JEC_corr              = JERFiles::Summer16_03Feb2017_V4_H_L123_AK4PFchs_DATA;              //ReReco Data + Summer16 V7
 	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V4_G_L1RC_AK4PFchs_DATA;
 	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V4_BCD_L123_AK4PFchs_DATA;
 	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V4_BCD_L1RC_AK4PFchs_DATA;
