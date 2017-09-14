@@ -16,12 +16,13 @@ static void show_usage(std::string name)
               << "\t--run\t\tRun Nr, default is B, used in the input path\n"
 	      << "\t-FP\t\tRun all main control plots.\n"
 	      << "\t-tCP\t\tRun control plots of the jet pt, eta and count for all trigger separately.\n"
+      	      << "\t-lFCP\t\tRun final control plots for all lumi bins separately.\n"        
     	      << "\t-derThresh\t\tDerive the trigger thresholds.\n"
-    	      << "\t-LP\t\tPlot the luminosities.\n"      
-	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
+    	      << "\t-LP\t\tPlot the luminosities.\n"
+  	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
-	      << "\t--asym_cut\t\tCut Value with which some of the control plots will be made.\n"      
-	      << "\n\tThe input path is created as /nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC <D for single muon crosscheck> _Data <_mode> /Run17 <run> _Data <_dname> .root" 
+	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"      
+	      << "\n\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/2017PromptReco/Residuals/Run17BC <D for single muon crosscheck> _Data <_mode> /Run17 <run> _Data <_dname> .root\n\tThe completion script assumes the same file structure."	    
               << std::endl;
 }
 
@@ -52,7 +53,8 @@ int main(int argc,char *argv[]){
   TString muonTriggerName = "HLT_Mu17";
   TString mode ="";
   bool do_fullPlots=false;
-  bool do_trgControlPlolts=false;
+  bool do_trgControlPlots=false;
+  bool do_lumiControlPlots=false;
   bool do_deriveThresholds=false;
   bool do_lumi_plot=false;
   double asym_cut = 0.;
@@ -69,8 +71,11 @@ int main(int argc,char *argv[]){
 	       do_fullPlots=true;
 	  }
 	  else if(arg=="-tCP"){
-	    do_trgControlPlolts=true;
+	    do_trgControlPlots=true;
 	  }
+	  else if(arg=="-lFCP"){
+	    do_lumiControlPlots=true;
+	  }	  
 	  else if(arg=="-derThresh"){
 	    do_deriveThresholds=true;
 	  }	    
@@ -104,7 +109,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_trgControlPlolts or do_deriveThresholds or muonCrosscheck or asym_cut or do_lumi_plot)){
+  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_deriveThresholds or muonCrosscheck or asym_cut or do_lumi_plot)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -119,7 +124,7 @@ int main(int argc,char *argv[]){
   // cout<<dataname_end<<mode<<endl;
   if(muonCrosscheck) cout<<"Doing single muon crosscheck plots"<<endl;
 
-  TString input_path  = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC";
+  TString input_path  = "/nfs/dust/cms/user/"+(string)getenv("USER")+"/forBaconJets/2017PromptReco/Residuals/Run17BC";
   if(muonCrosscheck) input_path+="D";
   input_path+="_Data";
   if(mode!="") input_path+="_";
@@ -139,9 +144,9 @@ int main(int argc,char *argv[]){
  
     cout << "testobject is " << Objects[0] << endl;
 
-    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
+    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
     
-    if(do_trgControlPlolts) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
+    if(do_trgControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
     
 
     if(do_deriveThresholds) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
@@ -149,6 +154,18 @@ int main(int argc,char *argv[]){
     if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);
 
     if(asym_cut) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(asym_cut);
+    
+    if(do_lumiControlPlots){
+      if(run_nr="B")
+	for(int lumibin_ : lumibins_B )
+	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);
+      else if(run_nr="C")
+	for(int lumibin_ : lumibins_C )
+	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);
+      else
+	for(int lumibin_ : lumibins_BC )
+	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);
+    } 
 
     if(do_lumi_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Lumi_Plots();
 
