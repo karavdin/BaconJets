@@ -98,6 +98,7 @@ using namespace std;
     void FullCycle_CorrectFormulae();
     void FullCycle_CorrectFormulae_eta();
     void MatchingPlots();
+    void Lumi_Plots();
     
 static bool make_path(std::string path_name){
     int status = 1;

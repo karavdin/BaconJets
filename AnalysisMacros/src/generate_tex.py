@@ -152,6 +152,7 @@ for i, spic in enumerate(single_pics):
     frames_list[-1] += "\end{minipage}\n"
 frames_list[-1] += "\end{frame}\n\n"
 
+
 for i, eta in enumerate(etas[:-1]):
     frames_list.append(
         "\\begin{frame}{" + str(eta) + " - " + str(etas[i + 1]) + "}\n")
@@ -264,6 +265,32 @@ for i, eta in enumerate(etas[:-1]):
 
 
 # frames_list[-1] += "\end{frame}\n\n"
+
+
+for i, eta in enumerate(etas[:-1]):
+    frames_list.append(
+        "\\begin{frame}{with abs(A)$<$0.05 cut " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+
+    for j, pic_base in enumerate(pic_bases[:8]):
+        if j and not j % 4:
+            frames_list[-1] += "\\newline\n\n"
+        frames_list[-1] += "\t\includegraphics[width=0.24\\textwidth]{" + img_path_base + \
+            pic_base + "_eta_" + etas_str[i] + \
+            "_" + etas_str[i + 1] + "_wAsymCut.pdf}\n"
+
+    frames_list[-1] += "\end{frame}\n\n"
+    frames_list.append(
+        "\\begin{frame}{with abs(A)$<$" + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+
+    for j, pic_base in enumerate(pic_bases[8:20]):
+        if j and not j % 4:
+            frames_list[-1] += "\\newline\n\n"
+            frames_list[-1] += "\\vspace{-0.65cm}\n"
+        frames_list[-1] += "\t\includegraphics[width=0.24\\textwidth]{" + img_path_base + \
+            pic_base + "_eta_" + etas_str[i] + \
+            "_" + etas_str[i + 1] + "_wAsymCut.pdf}\n"
+
+    frames_list[-1] += "\end{frame}\n\n"
 
 
 with open(output_name, 'w') as file_:
