@@ -25,6 +25,7 @@ const int triggerVal[n_trigger] = {40, 60, 80, 140, 200, 260, 320, 400, 450, 500
 
 const int n_pt = 12;
 const TString pt_range[n_pt]= {"41", "70", "99", "164", "238", "306", "369", "459", "487", "537", "1000", "2000"};
+//TODO keep this in check with BaconJets/include/constants.h
 const double pt_bins[n_pt]       = {41, 70, 99, 164, 238, 306, 369, 459, 487, 537, 1000, 2000};
 
 //Eta bins:
@@ -70,4 +71,4 @@ const TString eta_output_2[n_eta_common-1] = {"eta_00_03", "eta_03_05","eta_05_0
 //LumiBins for the Runs
 const int lumibins_BC[3] = {0, 1, 2};
 const int lumibins_B[2] = {0, 1};
-const int lumibins_C[2] = {2};
+const int lumibins_C[1] = {2};

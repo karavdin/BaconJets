@@ -1,31 +1,10 @@
 #ifndef  CONSTANTS_H
 #define  CONSTANTS_H
 
-//#pragma once
-
-/* #include <iostream> */
-/* #include <vector> */
-
-/* using namespace std; */
-/* namespace uhh2bacon { */
-
-/* class constants { */
-
-/* public: */
-/*   constants(){}; */
-/*   ~constants(){}; */
-
-/** \brief Binning **/
-
 //19 bin edges, 18 actual bins
 constexpr static int n_eta = 19;
 static std::vector<double>   eta_range  =  {0, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.93, 2.172, 2.322, 2.5, 2.65, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191};
 static std::vector<double>   eta_range_mikko  = {0, 0.783, 1.305, 1.93, 2.5, 2.964, 3.2, 5.191};
-
-static std::vector<double>   pt_range   = {56, 78, 100, 168, 232, 300, 366, 453, 562};
-
-// static std::vector<double>   pt_range   = {43, 80, 88, 135, 223, 290, 365, 448, 561};
-// static std::vector<double>   pt_range   = {57, 80, 101, 170, 231, 290, 365, 478, 556};
 
 static std::vector<double>   alpha_range= {0., 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25};
 
@@ -90,17 +69,17 @@ constexpr static float s_Pt_Ave300HF_cut  = 426;
  // constexpr static float s_Pt_Ave500_cut  = 566;
 
 //2017
- constexpr static float s_Pt_AveMC_cut   = 43;
- constexpr static float s_Pt_Ave40_cut   = 43;
- constexpr static float s_Pt_Ave60_cut   = 71;
+ constexpr static float s_Pt_AveMC_cut   = 41;
+ constexpr static float s_Pt_Ave40_cut   = 41;
+ constexpr static float s_Pt_Ave60_cut   = 70;
  constexpr static float s_Pt_Ave80_cut   = 99;
- constexpr static float s_Pt_Ave140_cut  = 161;
- constexpr static float s_Pt_Ave200_cut  = 235;
- constexpr static float s_Pt_Ave260_cut  = 304;
- constexpr static float s_Pt_Ave320_cut  = 368;
- constexpr static float s_Pt_Ave400_cut  = 458;
- constexpr static float s_Pt_Ave450_cut  = 484; 
- constexpr static float s_Pt_Ave500_cut  = 536;
+ constexpr static float s_Pt_Ave140_cut  = 164;
+ constexpr static float s_Pt_Ave200_cut  = 238;
+ constexpr static float s_Pt_Ave260_cut  = 306;
+ constexpr static float s_Pt_Ave320_cut  = 369;
+ constexpr static float s_Pt_Ave400_cut  = 459;
+ constexpr static float s_Pt_Ave450_cut  = 487; 
+ constexpr static float s_Pt_Ave500_cut  = 537;
 
 // 2016
 constexpr static float s_Pt_Ave60HF_cut   = 100;
