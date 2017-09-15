@@ -31,10 +31,10 @@ _main()
 	    COMPREPLY=( $(compgen -W "HLT_Mu17 HLT_IsoMu20 HLT_IsoMu20" -- ${cur}) )
             return 0
             ;;
-	# --input)
-	    # COMPREPLY=( $(compgen -o filenames -f -- ${cur}) )
-            # return 0
-            # ;;	
+	--input)
+	    COMPREPLY=( $(compgen -o filenames -f -- ${cur}) )
+            return 0
+            ;;	
         *)
         ;;
     esac

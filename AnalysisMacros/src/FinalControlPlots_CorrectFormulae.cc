@@ -260,7 +260,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
   TTreeReaderValue<Float_t> probejet_pt_mc(myReader_MC, "probejet_pt");
   TTreeReaderValue<Float_t> barreljet_pt_mc(myReader_MC, "barreljet_pt");
   TTreeReaderValue<Float_t> alpha_mc(myReader_MC, "alpha");
-  TTreeReaderValue<Float_t> asymmetry_mc(myReader_MC, "asymetry");
+  TTreeReaderValue<Float_t> asymmetry_mc(myReader_MC, "asymmetry");
   TTreeReaderValue<Float_t> B_mc(myReader_MC, "B");
   TTreeReaderValue<Float_t> weight_mc(myReader_MC, "weight");
   TTreeReaderValue<Float_t> MET_mc(myReader_MC, "MET");
