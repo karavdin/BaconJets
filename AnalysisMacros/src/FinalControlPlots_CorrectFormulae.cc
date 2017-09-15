@@ -21,9 +21,11 @@
 
 using namespace std;
 
-void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cut, int lumi_bin){
+void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cut, bool plot_full_A ,int lumi_bin){
   cout << "--------------- Starting FinalControlPlots_CorrectFormulae() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
+
+  if(plot_full_A) CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/fullAsym/");
 
   //Table with number of events in each pT- and eta-bin
   
@@ -258,7 +260,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
   TTreeReaderValue<Float_t> probejet_pt_mc(myReader_MC, "probejet_pt");
   TTreeReaderValue<Float_t> barreljet_pt_mc(myReader_MC, "barreljet_pt");
   TTreeReaderValue<Float_t> alpha_mc(myReader_MC, "alpha");
-  TTreeReaderValue<Float_t> asymmetry_mc(myReader_MC, "asymmetry");
+  TTreeReaderValue<Float_t> asymmetry_mc(myReader_MC, "asymetry");
   TTreeReaderValue<Float_t> B_mc(myReader_MC, "B");
   TTreeReaderValue<Float_t> weight_mc(myReader_MC, "weight");
   TTreeReaderValue<Float_t> MET_mc(myReader_MC, "MET");
@@ -782,6 +784,29 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
 
 
+    if(plot_full_A){
+          for(int j=0; j<n_pt-1; j++){
+	        TCanvas* cFullA = new TCanvas();
+		tdrCanvas(cFullA,"cFullA",h,4,10,kSquare,CorrectionObject::_lumitag);
+		TH1D* htemp_rel_data;
+		TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
+		TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+		TString name_rel_data = "hist_data_A_"+eta_name+"_"+pt_name;
+		htemp_rel_data = (TH1D*)f_rel_data->Get(name_rel_data);
+		htemp_rel_data->Draw("E");
+		htemp_rel_data->GetXaxis()->SetTitle("A");
+		htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");
+		htemp_rel_data->GetYaxis()->SetTitleOffset(1.5);
+		htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+		htemp_rel_data->Draw("E");		
+		tex->DrawLatex(0.47,0.85,"Data, " + text);
+		tex->DrawLatex(0.54,0.8,legname);		
+		cFullA->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "") + ".pdf");
+		delete cFullA;
+		delete htemp_rel_data;
+	  }
+    }
+    
     TCanvas* c4 = new TCanvas();
     tdrCanvas(c4,"c4",h,4,10,kSquare,CorrectionObject::_lumitag);
     TLegend leg4 = tdrLeg(0.17,0.6,0.85,0.79);

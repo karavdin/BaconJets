@@ -15,14 +15,17 @@ static void show_usage(std::string name)
               << "\t--dname\t\tSuffix for the input and putput path.\n"
               << "\t--run\t\tRun Nr, default is B, used in the input path\n"
 	      << "\t-FP\t\tRun all main control plots.\n"
+ 	      << "\t-FCP\t\tRun all final control plots.\n"     
 	      << "\t-tCP\t\tRun control plots of the jet pt, eta and count for all trigger separately.\n"
-      	      << "\t-lFCP\t\tRun final control plots for all lumi bins separately.\n"        
+      	      << "\t-lFCP\t\tRun final control plots for all lumi bins separately.\n"
+	      <<"\t-aFCP\t\tRun final control plots and plot all data asymetrie histograms seperaty."
     	      << "\t-derThresh\t\tDerive the trigger thresholds.\n"
     	      << "\t-LP\t\tPlot the luminosities.\n"
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
-	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"      
-	      << "\n\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/2017PromptReco/Residuals/Run17BC <D for single muon crosscheck> _Data <_mode> /Run17 <run> _Data <_dname> .root\n\tThe completion script assumes the same file structure."	    
+	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
+	      <<"\t--input\t\tPath to the input data, if none is giveb following is used:\n"
+	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data <_mode> /Run17 <run> _Data <_dname> .root\n\tThe completion script assumes the same file structure."	    
               << std::endl;
 }
 
@@ -55,8 +58,11 @@ int main(int argc,char *argv[]){
   bool do_fullPlots=false;
   bool do_trgControlPlots=false;
   bool do_lumiControlPlots=false;
+  bool do_asymControlPlots=false;
   bool do_deriveThresholds=false;
   bool do_lumi_plot=false;
+  bool do_finalControlPlots = false;
+  TString input_path_="";
   double asym_cut = 0.;
   for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
@@ -70,11 +76,17 @@ int main(int argc,char *argv[]){
 	  if(arg=="-FP"){
 	       do_fullPlots=true;
 	  }
+	  else if(arg=="-FCP"){
+	    do_finalControlPlots=true;
+	  }
 	  else if(arg=="-tCP"){
 	    do_trgControlPlots=true;
 	  }
 	  else if(arg=="-lFCP"){
 	    do_lumiControlPlots=true;
+	  }
+	  else if(arg=="-aFCP"){
+	    do_asymControlPlots=true;
 	  }	  
 	  else if(arg=="-derThresh"){
 	    do_deriveThresholds=true;
@@ -104,12 +116,14 @@ int main(int argc,char *argv[]){
 	      else if(arg=="--asym_cut"){
 		asym_cut = stod(argv[i+1]);
 	      }
-
+	      else if(arg=="--input"){
+		input_path_ = argv[i+1];
+	      }
 	  }
 	}
   }
 
-  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_deriveThresholds or muonCrosscheck or asym_cut or do_lumi_plot)){
+  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholds or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -124,14 +138,21 @@ int main(int argc,char *argv[]){
   // cout<<dataname_end<<mode<<endl;
   if(muonCrosscheck) cout<<"Doing single muon crosscheck plots"<<endl;
 
-  TString input_path  = "/nfs/dust/cms/user/"+(string)getenv("USER")+"/forBaconJets/2017PromptReco/Residuals/Run17BC";
-  if(muonCrosscheck) input_path+="D";
+  TString input_path;
+  if(input_path_!=""){
+    input_path=input_path_;
+  }
+  else{
+      input_path  = "/nfs/dust/cms/user/"+(string)getenv("USER")+"/forBaconJets/2017PromptReco/Residuals/Run17BCD";
+  // if(muonCrosscheck) input_path+="D";
   input_path+="_Data";
   if(mode!="") input_path+="_";
   input_path+=mode + "/Run17";
   input_path+= run_nr + "_Data";
   if(dataname_end!="") input_path+="_";
   input_path += dataname_end + ".root";
+  }
+  
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
   TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
   TString outpath_postfix = (dataname_end!="") ? "_" : "";
@@ -152,22 +173,26 @@ int main(int argc,char *argv[]){
     if(do_deriveThresholds) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
  
     if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);
-
+    
+    if(do_finalControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
+    
     if(asym_cut) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(asym_cut);
+
+    if(do_asymControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,true);  
     
     if(do_lumiControlPlots){
       if(run_nr=="B"){
 	for(int lumibin_ : lumibins_B ){
 	  cout << "\nStart lumi bin" << lumibin_<<endl;
-	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);}}
+	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,false,lumibin_);}}
       else if(run_nr=="C"){
 	for(int lumibin_ : lumibins_C ){
 	  cout << "\nStart lumi bin" << lumibin_<<endl;
-	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);}}
+	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,false,lumibin_);}}
       else{
 	for(int lumibin_ : lumibins_BC ){
 	  cout << "\nStart lumi bin " << lumibin_<<endl;	  
-	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,lumibin_);}}
+	  for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,false,lumibin_);}}
     } 
 
     if(do_lumi_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Lumi_Plots();

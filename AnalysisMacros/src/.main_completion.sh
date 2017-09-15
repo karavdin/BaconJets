@@ -4,7 +4,7 @@ _main()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--help --mode --dname --run -FP -tCP -lFCP -derThresh -LP -mu --muTrg --asym_cut"
+    opts="--help --mode --dname --run -FP -FCP -tCP -lFCP -aFCP -derThresh -LP -mu --muTrg --asym_cut --input"
 
     case "${prev}" in
 	--run)
@@ -30,7 +30,11 @@ _main()
 	--muTrg)
 	    COMPREPLY=( $(compgen -W "HLT_Mu17 HLT_IsoMu20 HLT_IsoMu20" -- ${cur}) )
             return 0
-            ;;	    
+            ;;
+	# --input)
+	    # COMPREPLY=( $(compgen -o filenames -f -- ${cur}) )
+            # return 0
+            # ;;	
         *)
         ;;
     esac

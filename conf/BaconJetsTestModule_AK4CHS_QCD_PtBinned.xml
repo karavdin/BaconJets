@@ -176,7 +176,7 @@
 	 <Item Name="pileup_directory_data_down" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_20/src/UHH2/BaconJets/data/PileUp/80X/800pb/nPU_minBiasXsec58000.root"/> -->
 
 
-      <Item Name="lumihists_lumi_per_bin" Value="500."/>
+      <Item Name="lumihists_lumi_per_bin" Value="50."/>
 
 
       <Item Name="use_sframe_weight" Value="true"/>  <!--false-->
