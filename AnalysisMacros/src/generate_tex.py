@@ -311,6 +311,67 @@ for i, th in enumerate(trigger_val[1:]):
     frames_list[-1] += "\end{minipage}\n"
 frames_list[-1] += "\end{frame}\n\n"
 
+frames_list.append(
+    "\\begin{frame}{Not Understood: Asymmetry Distribution}\n")
+frames_list[-1] += "\t\scriptsize $A=\\frac{p_t^{tag}-p_t^{probe}}{p_t^{tag}+p_t^{probe}}$, jets are assigned randomly from the two leading jets\n\\newline\n"
+i = 0
+j = 2
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 3
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 9
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+frames_list[-1] += "\\newline\n"
+
+i = 0
+j = 2
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 3
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 9
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\t\n"
+frames_list[-1] += "\end{frame}\n\n"
+
 ################ backup ##################################################
 
 frames_list.append(
