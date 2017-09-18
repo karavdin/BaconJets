@@ -376,13 +376,13 @@ frames_list[-1] += "\end{frame}\n\n"
 frames_list.append(
     "\\begin{frame}{Jet Properties after Selection for Run B}\n")
 frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B +\
-    "control/ControlPlots_Selection_pythia8_jets.pdf} \n"
+    "ControlPlots_Selection_pythia8_jets.pdf} \n"
 frames_list[-1] += "\end{frame}\n\n"
 
 frames_list.append(
     "\\begin{frame}{Jet Properties after Selection for Run C}\n")
 frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C +\
-    "control/ControlPlots_Selection_pythia8_jets.pdf} \n"
+    "ControlPlots_Selection_pythia8_jets.pdf} \n"
 frames_list[-1] += "\end{frame}\n\n"
 
 ################ backup ##################################################

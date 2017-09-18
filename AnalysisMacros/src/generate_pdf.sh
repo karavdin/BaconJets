@@ -1,4 +1,4 @@
-file_name=controlplotsBC_newPtBinning
+file_name=controlplotsBC_14Sept
 if [ "$#" = "1" ]
    then file_name=controlplots${1}_14Sept
 fi
