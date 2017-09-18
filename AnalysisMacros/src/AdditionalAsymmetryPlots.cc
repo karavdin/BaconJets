@@ -28,17 +28,26 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/fullAsym/");
 
   //Table with number of events in each pT- and eta-bin
-  
-  //Set up histos for ratios of responses
+
   TH1D *hdata_asymmetry[n_pt-1][n_eta-1]; // A for data
   TH2D *hdata_asymmetry_nvert[n_pt-1][n_eta-1]; // A for data
   TH2D *hdata_asymmetry_rho[n_pt-1][n_eta-1]; // A for data
- 
+
+  TH1D *hdata_jet1_pt[n_eta-1];
+  TH1D *hdata_jet2_pt[n_eta-1];  
+  TH1D *hdata_jet3_pt[n_eta-1];
+  
   int count = 0;
   TString name1 = "hist_data_A_";
+  TString name2 = "hist_data_";
  
   for(int j=0; j<n_eta-1; j++){
       TString eta_name = "eta_"+eta_range2[j]+"_"+eta_range2[j+1];
+
+      hdata_jet1_pt[j] = new TH1D(name2+"jet1_pt_"+eta_name,"",nResponseBins,0,1500);
+      hdata_jet2_pt[j] = new TH1D(name2+"jet2_pt_"+eta_name,"",nResponseBins,0,1500);    
+      hdata_jet3_pt[j] = new TH1D(name2+"jet3_pt_"+eta_name,"",nResponseBins,0,700);
+      
     for(int k=0; k<n_pt-1; k++){
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
 
@@ -62,9 +71,14 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   TTreeReaderValue<Float_t> probejet_eta_data(myReader_DATA, "probejet_eta");
   TTreeReaderValue<Float_t> probejet_pt_data(myReader_DATA, "probejet_pt");
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
+  
   TTreeReaderValue<int> nvertices_data(myReader_DATA, "nvertices");
   TTreeReaderValue<Float_t> rho_data(myReader_DATA, "rho");
   
+  TTreeReaderValue<Float_t> jet1_pt_data(myReader_DATA, "jet1_pt");
+  TTreeReaderValue<Float_t> jet2_pt_data(myReader_DATA, "jet2_pt");
+  TTreeReaderValue<Float_t> jet3_pt_data(myReader_DATA, "jet3_pt");
+    
   int myCount = 0;
   int myCount_cut = 0;
   while (myReader_DATA.Next()) {
@@ -78,6 +92,9 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
       for(int j=0; j<n_eta-1; j++){
 	if(fabs(*probejet_eta_data)>eta_bins[j+1] || fabs(*probejet_eta_data)<eta_bins[j]) continue;
 	else{
+	  hdata_jet1_pt[j]->Fill(*jet1_pt_data,*weight_data);
+	  hdata_jet2_pt[j]->Fill(*jet2_pt_data,*weight_data);
+	  hdata_jet3_pt[j]->Fill(*jet3_pt_data,*weight_data);	  
 	  hdata_asymmetry[k][j]->Fill(*asymmetry_data,*weight_data);
 	  hdata_asymmetry_rho[k][j]->Fill(*asymmetry_data,*rho_data,*weight_data);
 	  hdata_asymmetry_nvert[k][j]->Fill(*asymmetry_data,*nvertices_data,*weight_data);
@@ -90,7 +107,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   //DEBUG
   std::cout<<"\ncount data "<<myCount<<"  count cut data "<<myCount_cut<<std::endl<<std::endl;
 
-  TFile* test_out_data_A = new TFile(CorrectionObject::_outpath+"plots/control/A_1d_data_smaller_split"+".root","RECREATE");
+  TFile* test_out_data_A = new TFile(CorrectionObject::_outpath+"plots/control/A_1d_data_smaller_split.root","RECREATE");
   for(int j=0; j<n_eta-1; j++){
     for(int k=0; k<n_pt-1; k++){
       hdata_asymmetry[k][j]->Write();
@@ -99,7 +116,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   test_out_data_A->Close();
   delete test_out_data_A;
 
-  TFile* test_out_data_A_rho = new TFile(CorrectionObject::_outpath+"plots/control/A_rho_2d_data"+".root","RECREATE");
+  TFile* test_out_data_A_rho = new TFile(CorrectionObject::_outpath+"plots/control/A_rho_2d_data.root","RECREATE");
   for(int j=0; j<n_eta-1; j++){
     for(int k=0; k<n_pt-1; k++){
       hdata_asymmetry_rho[k][j]->Write();
@@ -109,7 +126,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   delete test_out_data_A_rho;
   
 
-  TFile* test_out_data_A_nvert = new TFile(CorrectionObject::_outpath+"plots/control/A_nvert_2d_data"+".root","RECREATE");
+  TFile* test_out_data_A_nvert = new TFile(CorrectionObject::_outpath+"plots/control/A_nvert_2d_data.root","RECREATE");
   for(int j=0; j<n_eta-1; j++){
     for(int k=0; k<n_pt-1; k++){
       hdata_asymmetry_nvert[k][j]->Write();
@@ -117,6 +134,15 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   }
   test_out_data_A_nvert->Close();
   delete test_out_data_A_nvert;
+
+    TFile* test_out_data_jet_pt = new TFile(CorrectionObject::_outpath+"plots/control/jet_pt_data.root","RECREATE");
+  for(int j=0; j<n_eta-1; j++){
+      hdata_jet1_pt[j]->Write();
+      hdata_jet2_pt[j]->Write();
+      hdata_jet3_pt[j]->Write();     
+  }
+  test_out_data_jet_pt->Close();
+  delete test_out_data_jet_pt;
   
 
 
@@ -178,6 +204,131 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   //********************************************************************  Plot all Control Hists ********************************************************************************
 
   //Get histo files
+ 
+
+  TFile* f_jet_pt = new TFile(CorrectionObject::_outpath+"plots/control/jet_pt_data.root","READ");
+  for(int i=0; i<n_eta-1; i++){
+    TString eta_name = "eta_"+eta_range2[i]+"_"+eta_range2[i+1];
+    
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+
+    TLatex *tex_lumi = new TLatex();
+    tex_lumi->SetNDC();
+    tex_lumi->SetTextSize(0.045); 
+    
+      TCanvas* cFull_pt1 = new TCanvas();
+      tdrCanvas(cFull_pt1,"cFull_pt1",h,4,10,kSquare,CorrectionObject::_lumitag);
+      TH1D* htemp_rel_data;
+      TString name_rel_data = "hist_data_jet1_pt_"+eta_name;
+      htemp_rel_data = (TH1D*)f_jet_pt->Get(name_rel_data);
+      htemp_rel_data->Draw("E");
+      htemp_rel_data->GetXaxis()->SetTitle("pt jet1");
+      htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");      
+      htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data->Draw("E");		
+      tex->DrawLatex(0.47,0.85,"Data, " + text);
+      cFull_pt1->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/jet1_pt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+ ".pdf");
+      delete cFull_pt1;
+      delete htemp_rel_data;
+    
+  }
+
+  for(int i=0; i<n_eta-1; i++){
+    TString eta_name = "eta_"+eta_range2[i]+"_"+eta_range2[i+1];
+    
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+
+    TLatex *tex_lumi = new TLatex();
+    tex_lumi->SetNDC();
+    tex_lumi->SetTextSize(0.045); 
+    
+      TCanvas* cFull_pt2 = new TCanvas();
+      tdrCanvas(cFull_pt2,"cFull_pt2",h,4,10,kSquare,CorrectionObject::_lumitag);
+      TH1D* htemp_rel_data;
+      TString name_rel_data = "hist_data_jet2_pt_"+eta_name;
+      htemp_rel_data = (TH1D*)f_jet_pt->Get(name_rel_data);
+      htemp_rel_data->Draw("E");
+      htemp_rel_data->GetXaxis()->SetTitle("pt jet2");
+      htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");      
+      htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data->Draw("E");		
+      tex->DrawLatex(0.47,0.85,"Data, " + text);
+      cFull_pt2->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/jet2_pt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+ ".pdf");
+      delete cFull_pt2;
+      delete htemp_rel_data;
+    
+  }
+
+  for(int i=0; i<n_eta-1; i++){
+    TString eta_name = "eta_"+eta_range2[i]+"_"+eta_range2[i+1];
+    
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+
+    TLatex *tex_lumi = new TLatex();
+    tex_lumi->SetNDC();
+    tex_lumi->SetTextSize(0.045); 
+    
+      TCanvas* cFull_pt3 = new TCanvas();
+      tdrCanvas(cFull_pt3,"cFull_pt3",h,4,10,kSquare,CorrectionObject::_lumitag);
+      TH1D* htemp_rel_data;
+      TString name_rel_data = "hist_data_jet3_pt_"+eta_name;
+      htemp_rel_data = (TH1D*)f_jet_pt->Get(name_rel_data);
+      htemp_rel_data->Draw("E");
+      htemp_rel_data->GetXaxis()->SetTitle("pt jet3");
+      htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");      
+      htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data->Draw("E");		
+      tex->DrawLatex(0.47,0.85,"Data, " + text);
+      cFull_pt3->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/jet3_pt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+ ".pdf");
+      delete cFull_pt3;
+      delete htemp_rel_data;
+    
+  }  
+  
+
+   TFile* f_rel_data_nvert = new TFile(CorrectionObject::_outpath+"plots/control/A_nvert_2d_data.root","READ");
+  for(int i=0; i<n_eta-1; i++){
+    TString eta_name = "eta_"+eta_range2[i]+"_"+eta_range2[i+1];
+    
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+
+    TLatex *tex_lumi = new TLatex();
+    tex_lumi->SetNDC();
+    tex_lumi->SetTextSize(0.045); 
+    
+    for(int j=0; j<n_pt-1; j++){
+      TCanvas* cFullA_nvert = new TCanvas();
+      // tdrCanvas(cFullA_nvert,"cFullA_nvert",h,4,10,kSquare,CorrectionObject::_lumitag);
+      TH2D* htemp_rel_data_nvert;
+      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
+      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+      TString name_rel_data = "hist_data_A_nvert_"+eta_name+"_"+pt_name;
+      htemp_rel_data_nvert = (TH2D*)f_rel_data_nvert->Get(name_rel_data);
+      htemp_rel_data_nvert->Draw("E");
+      htemp_rel_data_nvert->GetXaxis()->SetTitle("A");
+      htemp_rel_data_nvert->GetYaxis()->SetTitle("n vertices");
+      htemp_rel_data_nvert->GetZaxis()->SetTitle("Entries per Bin");      
+      htemp_rel_data_nvert->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data_nvert->Draw("COLZ");		
+      tex->DrawLatex(0.47,0.85,"Data, " + text);
+      tex->DrawLatex(0.54,0.8,legname);		
+      cFullA_nvert->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_nvert_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
+      delete cFullA_nvert;
+      delete htemp_rel_data_nvert;
+    }
+  }
  
   TFile* f_rel_data = new TFile(CorrectionObject::_outpath+"plots/control/A_1d_data_smaller_split"+".root","READ");
   for(int i=0; i<n_eta-1; i++){
@@ -249,42 +400,6 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
       delete htemp_rel_data_rho;
     }
   }
-
-   TFile* f_rel_data_nvert = new TFile(CorrectionObject::_outpath+"plots/control/A_nvert_2d_data.root","READ");
-  for(int i=0; i<n_eta-1; i++){
-    TString eta_name = "eta_"+eta_range2[i]+"_"+eta_range2[i+1];
-    
-    TLatex *tex = new TLatex();
-    tex->SetNDC();
-    tex->SetTextSize(0.045); 
-    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
-
-    TLatex *tex_lumi = new TLatex();
-    tex_lumi->SetNDC();
-    tex_lumi->SetTextSize(0.045); 
-    
-    for(int j=0; j<n_pt-1; j++){
-      TCanvas* cFullA_nvert = new TCanvas();
-      // tdrCanvas(cFullA_nvert,"cFullA_nvert",h,4,10,kSquare,CorrectionObject::_lumitag);
-      TH2D* htemp_rel_data_nvert;
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
-      TString name_rel_data = "hist_data_A_nvert_"+eta_name+"_"+pt_name;
-      htemp_rel_data_nvert = (TH2D*)f_rel_data_nvert->Get(name_rel_data);
-      htemp_rel_data_nvert->Draw("E");
-      htemp_rel_data_nvert->GetXaxis()->SetTitle("A");
-      htemp_rel_data_nvert->GetYaxis()->SetTitle("n vertices");
-      htemp_rel_data_nvert->GetZaxis()->SetTitle("Entries per Bin");      
-      htemp_rel_data_nvert->GetXaxis()->SetLimits(-1.2,1.2);
-      htemp_rel_data_nvert->Draw("COLZ");		
-      tex->DrawLatex(0.47,0.85,"Data, " + text);
-      tex->DrawLatex(0.54,0.8,legname);		
-      cFullA_nvert->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_nvert_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
-      delete cFullA_nvert;
-      delete htemp_rel_data_nvert;
-    }
-  }
- 
   
 
 }

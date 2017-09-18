@@ -20,11 +20,9 @@ void CorrectionObject::ControlPlots(bool forEverySingleTrigger){
   gStyle->SetOptStat(0);
 
   TString dirNames[11] = {"Selection", "HLT_PFJet40", "HLT_PFJet60", "HLT_PFJet80","HLT_PFJet140","HLT_PFJet200","HLT_PFJet260","HLT_PFJet320","HLT_PFJet400","HLT_PFJet450","HLT_PFJet500"};
-  
+
   int loop_inter = 1;
   if(forEverySingleTrigger) loop_inter=11;
-
-  
   
   for(int i = 0; i<loop_inter ; i++){
 
@@ -37,7 +35,6 @@ void CorrectionObject::ControlPlots(bool forEverySingleTrigger){
   TString MCtitle = "MC";
   TString SavePlots = CorrectionObject::_outpath + "plots/control/ControlPlots_" + dirName + "_" + CorrectionObject::_generator_tag;
  CorrectionObject::make_path(std::string((_outpath + "plots/control/").Data()));
-
 
   /* ++++++++++++++++ Collect all histograms ++++++++++++++++ */
   TH1F* pt_jet1_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/pt_1");
