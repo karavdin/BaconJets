@@ -17,7 +17,7 @@
 #include <TVirtualFitter.h>
 #include <TMath.h>
 #include <TFile.h>
-
+#include <TH2D.h>
 
 using namespace std;
 
@@ -31,7 +31,9 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   
   //Set up histos for ratios of responses
   TH1D *hdata_asymmetry[n_pt-1][n_eta-1]; // A for data
-
+  TH2D *hdata_asymmetry_nvert[n_pt-1][n_eta-1]; // A for data
+  TH2D *hdata_asymmetry_rho[n_pt-1][n_eta-1]; // A for data
+ 
   int count = 0;
   TString name1 = "hist_data_A_";
  
@@ -42,6 +44,10 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
 
       TString name = name1 + eta_name + "_" + pt_name; 
       hdata_asymmetry[k][j] = new TH1D(name,"",3*nResponseBins, -1.2, 1.2);
+      name = name1+"nvert_" + eta_name + "_" + pt_name;      
+      hdata_asymmetry_nvert[k][j] = new TH2D(name,"",nResponseBins/2, -1.2, 1.2,nResponseBins/10 ,0,60);
+      name = name1+"rho_" + eta_name + "_" + pt_name;    
+      hdata_asymmetry_rho[k][j] = new TH2D(name,"",nResponseBins/2, -1.2, 1.2,nResponseBins/10 ,0,60);
     
       count++;
     }
@@ -56,6 +62,8 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   TTreeReaderValue<Float_t> probejet_eta_data(myReader_DATA, "probejet_eta");
   TTreeReaderValue<Float_t> probejet_pt_data(myReader_DATA, "probejet_pt");
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
+  TTreeReaderValue<int> nvertices_data(myReader_DATA, "nvertices");
+  TTreeReaderValue<Float_t> rho_data(myReader_DATA, "rho");
   
   int myCount = 0;
   int myCount_cut = 0;
@@ -71,6 +79,9 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
 	if(fabs(*probejet_eta_data)>eta_bins[j+1] || fabs(*probejet_eta_data)<eta_bins[j]) continue;
 	else{
 	  hdata_asymmetry[k][j]->Fill(*asymmetry_data,*weight_data);
+	  hdata_asymmetry_rho[k][j]->Fill(*asymmetry_data,*rho_data,*weight_data);
+	  hdata_asymmetry_nvert[k][j]->Fill(*asymmetry_data,*nvertices_data,*weight_data);
+	  myCount++;
 	}
       }
     }
@@ -88,7 +99,25 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   test_out_data_A->Close();
   delete test_out_data_A;
 
+  TFile* test_out_data_A_rho = new TFile(CorrectionObject::_outpath+"plots/control/A_rho_2d_data"+".root","RECREATE");
+  for(int j=0; j<n_eta-1; j++){
+    for(int k=0; k<n_pt-1; k++){
+      hdata_asymmetry_rho[k][j]->Write();
+    }
+  }
+  test_out_data_A_rho->Close();
+  delete test_out_data_A_rho;
+  
 
+  TFile* test_out_data_A_nvert = new TFile(CorrectionObject::_outpath+"plots/control/A_nvert_2d_data"+".root","RECREATE");
+  for(int j=0; j<n_eta-1; j++){
+    for(int k=0; k<n_pt-1; k++){
+      hdata_asymmetry_nvert[k][j]->Write();
+    }
+  }
+  test_out_data_A_nvert->Close();
+  delete test_out_data_A_nvert;
+  
 
 
   //R_MC and R_DATA overlaid in the same plot as a function of pT, in bins of |eta|
@@ -148,8 +177,6 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
 
   //********************************************************************  Plot all Control Hists ********************************************************************************
 
-  //Plot 1d response distributions in a particular eta-bin for different pt-bins onto a single canvas
-
   //Get histo files
  
   TFile* f_rel_data = new TFile(CorrectionObject::_outpath+"plots/control/A_1d_data_smaller_split"+".root","READ");
@@ -186,6 +213,79 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
       delete htemp_rel_data;
     }
   }
+
+  TFile* f_rel_data_rho = new TFile(CorrectionObject::_outpath+"plots/control/A_rho_2d_data.root","READ");
+  cout<<"Read rho root file"<<endl;
+  for(int i=0; i<n_eta-1; i++){
+    TString eta_name = "eta_"+eta_range2[i]+"_"+eta_range2[i+1];
+    
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+
+    TLatex *tex_lumi = new TLatex();
+    tex_lumi->SetNDC();
+    tex_lumi->SetTextSize(0.045); 
+    
+    for(int j=0; j<n_pt-1; j++){
+      TCanvas* cFullA_rho = new TCanvas();
+      // tdrCanvas(cFullA_rho,"cFullA_rho",h,4,10,kSquare,CorrectionObject::_lumitag);
+      TH2D* htemp_rel_data_rho;
+      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
+      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+      TString name_rel_data = "hist_data_A_rho_"+eta_name+"_"+pt_name;
+      htemp_rel_data_rho = (TH2D*)f_rel_data_rho->Get(name_rel_data);
+      htemp_rel_data_rho->Draw("E");
+      htemp_rel_data_rho->GetXaxis()->SetTitle("A");
+      htemp_rel_data_rho->GetYaxis()->SetTitle("rho");
+      htemp_rel_data_rho->GetZaxis()->SetTitle("Entries per Bin");      
+      htemp_rel_data_rho->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data_rho->Draw("COLZ");		
+      tex->DrawLatex(0.47,0.85,"Data, " + text);
+      tex->DrawLatex(0.54,0.8,legname);		
+      cFullA_rho->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_rho_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
+      delete cFullA_rho;
+      delete htemp_rel_data_rho;
+    }
+  }
+
+   TFile* f_rel_data_nvert = new TFile(CorrectionObject::_outpath+"plots/control/A_nvert_2d_data.root","READ");
+  for(int i=0; i<n_eta-1; i++){
+    TString eta_name = "eta_"+eta_range2[i]+"_"+eta_range2[i+1];
+    
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+
+    TLatex *tex_lumi = new TLatex();
+    tex_lumi->SetNDC();
+    tex_lumi->SetTextSize(0.045); 
+    
+    for(int j=0; j<n_pt-1; j++){
+      TCanvas* cFullA_nvert = new TCanvas();
+      // tdrCanvas(cFullA_nvert,"cFullA_nvert",h,4,10,kSquare,CorrectionObject::_lumitag);
+      TH2D* htemp_rel_data_nvert;
+      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
+      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+      TString name_rel_data = "hist_data_A_nvert_"+eta_name+"_"+pt_name;
+      htemp_rel_data_nvert = (TH2D*)f_rel_data_nvert->Get(name_rel_data);
+      htemp_rel_data_nvert->Draw("E");
+      htemp_rel_data_nvert->GetXaxis()->SetTitle("A");
+      htemp_rel_data_nvert->GetYaxis()->SetTitle("n vertices");
+      htemp_rel_data_nvert->GetZaxis()->SetTitle("Entries per Bin");      
+      htemp_rel_data_nvert->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data_nvert->Draw("COLZ");		
+      tex->DrawLatex(0.47,0.85,"Data, " + text);
+      tex->DrawLatex(0.54,0.8,legname);		
+      cFullA_nvert->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_nvert_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
+      delete cFullA_nvert;
+      delete htemp_rel_data_nvert;
+    }
+  }
+ 
+  
 
 }
     
