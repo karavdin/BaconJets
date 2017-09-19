@@ -18,14 +18,15 @@ static void show_usage(std::string name)
  	      << "\t-FCP\t\tRun all final control plots.\n"     
 	      << "\t-tCP\t\tRun control plots of the jet pt, eta and count for all trigger separately.\n"
       	      << "\t-lFCP\t\tRun final control plots for all lumi bins separately.\n"
-	      <<"\t-aFCP\t\tRun final control plots and plot all data asymetrie histograms seperaty.\n"
-	      <<"\t-aAP\t\tDo asymmetry plots for all eta and pt bins sepertely.\n"
+	      << "\t-aFCP\t\tRun final control plots and plot all data asymetrie histograms seperaty.\n"
+	      << "\t-aAP\t\tDo asymmetry plots for all eta and pt bins sepertely.\n"
     	      << "\t-derThresh\t\tDerive the trigger thresholds.\n"
     	      << "\t-LP\t\tPlot the luminosities.\n"
+	      << "\t-TEC\t\tCheck if the trigger are really exclusive.\v"
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
-	      <<"\t--input\t\tPath to the input data, if none is giveb following is used:\n"
+      	      <<"\t--input\t\tPath to the input data, if none is giveb following is used:\n"
 	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data <_mode> /Run17 <run> _Data <_dname> .root\n\tThe completion script assumes the same file structure."	    
               << std::endl;
 }
@@ -63,7 +64,8 @@ int main(int argc,char *argv[]){
   bool do_deriveThresholds=false;
   bool do_lumi_plot=false;
   bool do_finalControlPlots = false;
-  bool do_addAsymPlots = false;  
+  bool do_addAsymPlots = false;
+  bool do_triggerEx = false; 
   TString input_path_="";
   double asym_cut = 0.;
   for (int i = 1; i < argc; ++i) {
@@ -89,7 +91,10 @@ int main(int argc,char *argv[]){
 	  }
 	  else if(arg=="-aFCP"){
 	    do_asymControlPlots=true;
-	  }	  
+	  }
+	  else if(arg=="-TEC"){
+	    do_triggerEx=true;
+	  }	    	  
 	  else if(arg=="-derThresh"){
 	    do_deriveThresholds=true;
 	  }	    
@@ -127,7 +132,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholds or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots or do_addAsymPlots)){
+  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholds or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -202,6 +207,8 @@ int main(int argc,char *argv[]){
     if(do_lumi_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Lumi_Plots();
 
     if(do_addAsymPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].AdditionalAsymmetryPlots();
+
+    if(do_triggerEx) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].triggerExclusivityCheck();
 
      // // // //Macros to compare different Runs 
 // // //    // Objects[0].L2ResAllRuns();

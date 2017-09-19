@@ -100,6 +100,7 @@ using namespace std;
     void MatchingPlots();
     void Lumi_Plots();
     void AdditionalAsymmetryPlots();
+    void triggerExclusivityCheck();
     
 static bool make_path(std::string path_name){
     int status = 1;

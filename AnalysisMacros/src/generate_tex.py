@@ -426,7 +426,6 @@ for i, eta in enumerate(etas[:-1]):
 
     frames_list.append(
         "\\begin{frame}{Run B, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-
     frames_list[-1] += "\t Pt: \includegraphics[width=0.3\\textwidth]{" + img_path_baseMain_B + \
         "kFSR_Pt" + "_eta_" + etas_str[i] + \
         "_" + etas_str[i + 1] + ".pdf}\n"
@@ -442,6 +441,18 @@ for i, eta in enumerate(etas[:-1]):
         "_" + etas_str[i + 1] + ".pdf}\n"
     frames_list[-1] += "\end{frame}\n\n"
 
+    frames_list.append(
+        "\\begin{frame}{Run B Jet Pt, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+    frames_list[-1] += "\t\includegraphics[width=0.3\\textwidth]{" + img_path_base_B + \
+        "fullAsym/jet1_pt_DATA_pythia8_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\t\includegraphics[width=0.3\\textwidth]{" + img_path_base_B + \
+        "fullAsym/jet2_pt_DATA_pythia8_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\t\includegraphics[width=0.3\\textwidth]{" + img_path_base_B + \
+        "fullAsym/jet3_pt_DATA_pythia8_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\end{frame}\n\n"
 
 ############# eta loop C  #########################
 
@@ -472,7 +483,6 @@ for i, eta in enumerate(etas[:-1]):
 
     frames_list.append(
         "\\begin{frame}{Run C, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-
     frames_list[-1] += "\t Pt: \includegraphics[width=0.3\\textwidth]{" + img_path_baseMain_C + \
         "kFSR_Pt" + "_eta_" + etas_str[i] + \
         "_" + etas_str[i + 1] + ".pdf}\n"
@@ -487,6 +497,20 @@ for i, eta in enumerate(etas[:-1]):
         "kFSR_MPF_pythia8" + "_eta_" + etas_str[i] + \
         "_" + etas_str[i + 1] + ".pdf}\n"
     frames_list[-1] += "\end{frame}\n\n"
+
+    frames_list.append(
+        "\\begin{frame}{Run C Jet Pt, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+    frames_list[-1] += "\t\includegraphics[width=0.3\\textwidth]{" + img_path_base_C + \
+        "fullAsym/jet1_pt_DATA_pythia8_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\t\includegraphics[width=0.3\\textwidth]{" + img_path_base_C + \
+        "fullAsym/jet2_pt_DATA_pythia8_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\t\includegraphics[width=0.3\\textwidth]{" + img_path_base_C + \
+        "fullAsym/jet3_pt_DATA_pythia8_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\end{frame}\n\n"
+
 
 ############# eta loop MC  #########################
 

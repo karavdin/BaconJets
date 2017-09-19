@@ -22,7 +22,7 @@
 using namespace std;
 
 void CorrectionObject::AdditionalAsymmetryPlots(){
-  cout << "--------------- Starting FinalControlPlots_CorrectFormulae() ---------------" << endl << endl;
+  cout << "--------------- StartingAdditionalAsymmetryPlots() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/fullAsym/");
@@ -44,9 +44,9 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
   for(int j=0; j<n_eta-1; j++){
       TString eta_name = "eta_"+eta_range2[j]+"_"+eta_range2[j+1];
 
-      hdata_jet1_pt[j] = new TH1D(name2+"jet1_pt_"+eta_name,"",nResponseBins,0,1500);
-      hdata_jet2_pt[j] = new TH1D(name2+"jet2_pt_"+eta_name,"",nResponseBins,0,1500);    
-      hdata_jet3_pt[j] = new TH1D(name2+"jet3_pt_"+eta_name,"",nResponseBins,0,700);
+      hdata_jet1_pt[j] = new TH1D(name2+"jet1_pt_"+eta_name,"",nResponseBins,0,600);
+      hdata_jet2_pt[j] = new TH1D(name2+"jet2_pt_"+eta_name,"",nResponseBins,0,600);    
+      hdata_jet3_pt[j] = new TH1D(name2+"jet3_pt_"+eta_name,"",nResponseBins,0,600);
       
     for(int k=0; k<n_pt-1; k++){
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
@@ -92,9 +92,9 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
       for(int j=0; j<n_eta-1; j++){
 	if(fabs(*probejet_eta_data)>eta_bins[j+1] || fabs(*probejet_eta_data)<eta_bins[j]) continue;
 	else{
-	  hdata_jet1_pt[j]->Fill(*jet1_pt_data,*weight_data);
-	  hdata_jet2_pt[j]->Fill(*jet2_pt_data,*weight_data);
-	  hdata_jet3_pt[j]->Fill(*jet3_pt_data,*weight_data);	  
+	  hdata_jet1_pt[j]->Fill(fabs(*jet1_pt_data),*weight_data);
+	  hdata_jet2_pt[j]->Fill(fabs(*jet2_pt_data),*weight_data);
+	  hdata_jet3_pt[j]->Fill(fabs(*jet3_pt_data),*weight_data);	  
 	  hdata_asymmetry[k][j]->Fill(*asymmetry_data,*weight_data);
 	  hdata_asymmetry_rho[k][j]->Fill(*asymmetry_data,*rho_data,*weight_data);
 	  hdata_asymmetry_nvert[k][j]->Fill(*asymmetry_data,*nvertices_data,*weight_data);
@@ -224,11 +224,11 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
       TH1D* htemp_rel_data;
       TString name_rel_data = "hist_data_jet1_pt_"+eta_name;
       htemp_rel_data = (TH1D*)f_jet_pt->Get(name_rel_data);
-      htemp_rel_data->Draw("E");
+      htemp_rel_data->Draw();
       htemp_rel_data->GetXaxis()->SetTitle("pt jet1");
       htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");      
-      htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
-      htemp_rel_data->Draw("E");		
+      // htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data->Draw("EP");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       cFull_pt1->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/jet1_pt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+ ".pdf");
       delete cFull_pt1;
@@ -253,11 +253,11 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
       TH1D* htemp_rel_data;
       TString name_rel_data = "hist_data_jet2_pt_"+eta_name;
       htemp_rel_data = (TH1D*)f_jet_pt->Get(name_rel_data);
-      htemp_rel_data->Draw("E");
+      htemp_rel_data->Draw();
       htemp_rel_data->GetXaxis()->SetTitle("pt jet2");
       htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");      
-      htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
-      htemp_rel_data->Draw("E");		
+      // htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data->Draw("EP");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       cFull_pt2->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/jet2_pt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+ ".pdf");
       delete cFull_pt2;
@@ -282,11 +282,11 @@ void CorrectionObject::AdditionalAsymmetryPlots(){
       TH1D* htemp_rel_data;
       TString name_rel_data = "hist_data_jet3_pt_"+eta_name;
       htemp_rel_data = (TH1D*)f_jet_pt->Get(name_rel_data);
-      htemp_rel_data->Draw("E");
+      htemp_rel_data->Draw();
       htemp_rel_data->GetXaxis()->SetTitle("pt jet3");
       htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");      
-      htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
-      htemp_rel_data->Draw("E");		
+      // htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data->Draw("EP");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       cFull_pt3->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/jet3_pt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+ ".pdf");
       delete cFull_pt3;
