@@ -1,14 +1,10 @@
 #include "../include/parameters.h"
 #include "../include/useful_functions.h"
 #include "../include/CorrectionObject.h"
-
-#include <iostream>
-#include <fstream>
-#include <string> 
+#include "../include/tdrstyle_mod15.h"
 
 #include <TStyle.h>
 #include <TF1.h>
-#include <TH1.h>
 #include <TH1D.h>
 #include <TH2D.h>
 #include <TGraph.h>
@@ -28,48 +24,76 @@
 #include <TFile.h>
 #include <TProfile.h>
 
-
 using namespace std;
 
-void CorrectionObject::Derive_Thresholds(bool pt1_check){
-  cout << "--------------- Starting Derive_Thresholds() ---------------" << endl << endl;
-  cout << "!!! THE WAY THE THRESHOLD WERE ESTIMATED HERE IS WRONG !!!" << endl << endl;
+void CorrectionObject::Derive_Thresholds_alternativeWay(){
+  cout << "--------------- Starting Derive_Thresholds_alternativeWay() ---------------" << endl << endl;
+  gStyle->SetOptStat(0);
+
+  bool pt1_check = false;
+  
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/thresholds/");
-  TStyle* m_gStyle = new TStyle();
-  m_gStyle->SetOptFit(000);
 
+  int trg_nr=n_trigger;
   
-  // fill the histos for pt average in bins of eta
-  TH1D* ptave_data[n_trigger];
-  TH1D* ptave_data_eff[n_trigger-1];  
-  int countPt = 0;
-  TString namehist = "ptave_";
-  
-  for(int i=0; i<n_trigger; i++){
-    TString dirName = "HLT_PFJet";
-    dirName += to_string(triggerVal[i]); 
-    TString var1 = "pt_ave";
-    if(pt1_check) var1="pt_1";
+  TH1D *hdata_pt_ave[trg_nr-1];
+  TH1D *hdata_pt_ave_wNext[trg_nr-1];
 
-    TH1D* hist;
-    
-    cout << "looking for "<<dirName << endl;
-    
-    ptave_data[i] = (TH1D*) CorrectionObject::_DATAFile->Get(dirName+"/"+var1) ->Clone();
-    ptave_data[i]->SetName(dirName);
-    ptave_data[i]->Print();
-    
-    countPt++;
+  for(int j=0; j<trg_nr-1; j++){
+    TString name = "pt_ave_trg"+to_string(triggerVal[j]);
+    TString name2 = "pt_ave_wNext_trg"+to_string(triggerVal[j]);
 
-    if(i>0){
-      ptave_data_eff[i-1] = (TH1D*) ptave_data[i]->Clone();
-      ptave_data_eff[i-1]->Add((TH1D*)ptave_data[i-1]);
-      ptave_data_eff[i-1]->Divide(ptave_data[i-1]);
-      ptave_data_eff[i-1]->Rebin(6);
-      ptave_data_eff[i-1]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[i])+".root");
-    }
-
+    hdata_pt_ave[j]= new TH1D(name,"",nResponseBins*6,0,j<7?600:1200);
+    hdata_pt_ave_wNext[j]= new TH1D(name2,"",nResponseBins*6,0,j<7?600:1200);
   }
+  
+
+  //Get relevant information from DATA, loop over DATA events
+  TTreeReader myReader_DATA("AnalysisTree", CorrectionObject::_DATAFile);
+  TTreeReaderValue<int> trg40(myReader_DATA, "trigger40");
+  TTreeReaderValue<int> trg60(myReader_DATA, "trigger60");
+  TTreeReaderValue<int> trg80(myReader_DATA, "trigger80");
+  TTreeReaderValue<int> trg140(myReader_DATA, "trigger140");
+  TTreeReaderValue<int> trg200(myReader_DATA, "trigger200");
+  TTreeReaderValue<int> trg260(myReader_DATA, "trigger260");
+  TTreeReaderValue<int> trg320(myReader_DATA, "trigger320");
+  TTreeReaderValue<int> trg400(myReader_DATA, "trigger400");
+  TTreeReaderValue<int> trg450(myReader_DATA, "trigger450");
+  TTreeReaderValue<int> trg500(myReader_DATA, "trigger500");
+  TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
+  TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
+
+  TTreeReaderValue<int> trg_arr[trg_nr] = {trg40,trg60,trg80,trg140,trg200,trg260,trg320,trg400,trg450,trg500};
+  
+  int myCount = 0;
+  int myCount_notX = 0;
+  bool allExclusive = true;
+  while (myReader_DATA.Next()) {
+    bool exclusive = true;
+    exclusive = (*trg40)^(*trg60)^(*trg80)^(*trg140)^(*trg200)^(*trg260)^(*trg320)^(*trg400)^(*trg450)^(*trg500);
+    for(int j=0; j<trg_nr-1; j++){
+       if(*(trg_arr[j])) hdata_pt_ave[j]->Fill(*pt_ave_data);
+       if((*(trg_arr[j]))&&(*(trg_arr[j+1]))) hdata_pt_ave_wNext[j]->Fill(*pt_ave_data);
+    }
+    myCount++;
+    if(!exclusive){
+      myCount_notX++;
+    }
+  }
+
+  std::cout<<"\ncount data "<<myCount<<"  count data trg not exclusive "<<myCount_notX<<std::endl;
+  
+  TH1D* ptave_data_eff[n_trigger-1];
+  for(int j=0; j<trg_nr-1; j++){
+    hdata_pt_ave_wNext[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j])+"_pt_ave_wNext"+".root");
+    hdata_pt_ave[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j])+"_pt_ave"+".root");
+    
+    ptave_data_eff[j]= (TH1D*) hdata_pt_ave_wNext[j]->Clone();
+    ptave_data_eff[j]->Divide((TH1D*) hdata_pt_ave[j]->Clone());
+    ptave_data_eff[j]->Rebin(6);
+    ptave_data_eff[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j+1])+".root");
+  }
+
 
   cout << "fit the thresholds" << endl << endl;
 
@@ -82,13 +106,13 @@ void CorrectionObject::Derive_Thresholds(bool pt1_check){
   double thresholds09_errUp[n_trigger-1];
   double thresholds_errDown[n_trigger-1];
   double thresholds09_errDown[n_trigger-1];
-  double fitrange_up[n_trigger-1] = {50, 50, 50, 60, 60, 70 , 90, 60, 80};
-  double fitrange_down[n_trigger-1] = {-10, -10, -30, -30, -30, -30 , -30, -10, 0}; 
+  // double fitrange_up[n_trigger-1] = {50, 50, 50, 60, 60, 70 , 90, 60, 80};
+  // double fitrange_down[n_trigger-1] = {-10, -10, -30, -30, -30, -30 , -30, -10, 0}; 
   for(int i=0; i<n_trigger-1; i++){
     TString fitname = "fit";
     fitname +=  to_string(triggerVal[i+1]); 
-    func[i] = new TF1(fitname,SmoothFit,triggerVal[i]-fitrange_down[i],
-		      triggerVal[i+1]+fitrange_up[i],3);
+    func[i] = new TF1(fitname,SmoothFit,triggerVal[i]-20,
+		      triggerVal[i+1]+200,3);
     func[i]->SetParameters(triggerVal[i+1], 40., 1.);
     func[i]->SetParNames("p0", "p1", "N");
     ptave_data_eff[i]->Fit(func[i],"R");
@@ -140,6 +164,7 @@ void CorrectionObject::Derive_Thresholds(bool pt1_check){
   }
   myfile.close();
 
+
   TCanvas* c = new TCanvas("c");
   // TMultiGraph* mg = new TMultiGraph();
   // mg->Add(gr09);
@@ -147,7 +172,7 @@ void CorrectionObject::Derive_Thresholds(bool pt1_check){
   // mg->Draw();
   gr09->SetMarkerStyle(3);
   gr09->Draw("ap");
-  c->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger09"+(pt1_check ? "pt1":"")+".eps","eps");    
+  c->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger09"+(pt1_check ? "pt1":"")+".pdf","pdf");    
    TCanvas* c2 = new TCanvas("c2");
    gr09->SetMarkerStyle(3);
    gr095->SetMarkerStyle(5);
@@ -155,10 +180,10 @@ void CorrectionObject::Derive_Thresholds(bool pt1_check){
   mg->Add(gr09);
   mg->Add(gr095);
   mg->Draw("ap");
-  mg->GetHistogram()->GetXaxis()->SetRangeUser(0.,600.);
+  // mg->GetHistogram()->GetXaxis()->SetRangeUser(0.,600.);
   mg->Draw("ap");  
   // gr095->Draw("ap");
-  c2->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger"+(pt1_check ? "pt1":"")+".eps","eps");
+  c2->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger"+(pt1_check ? "pt1":"")+".pdf","pdf");
 
 
 
@@ -175,10 +200,13 @@ void CorrectionObject::Derive_Thresholds(bool pt1_check){
       line09->SetLineColor(kBlack);
       line09->SetLineStyle(2);
       line09->Draw();     
-      c1->Print(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[i+1])+(pt1_check ? "pt1":"")+".eps","eps");
+      c1->Print(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[i+1])+(pt1_check ? "pt1":"")+".pdf","pdf");
 
   }
     
-    
-  
+
 }
+    
+    
+
+

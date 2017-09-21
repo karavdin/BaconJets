@@ -3,6 +3,8 @@
 #include "../include/CorrectionObject.h"
 #include "../include/parameters.h"
 #include <TString.h>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,7 +14,8 @@ static void show_usage(std::string name)
               << "Options:\n"
               << "\t-h,--help\t\tShow this help message\n"
               << "\t--mode\t\tMode in which the plots was created, used in the input path.\n"
-              << "\t--dname\t\tSuffix for the input and putput path.\n"
+              << "\t--dname\t\tSuffix for the input and output path.\n"
+	      << "\t--outSuffix\t\Additional output suffix."
               << "\t--run\t\tRun Nr, default is B, used in the input path\n"
 	      << "\t-FP\t\tRun all main control plots.\n"
  	      << "\t-FCP\t\tRun all final control plots.\n"     
@@ -21,8 +24,10 @@ static void show_usage(std::string name)
 	      << "\t-aFCP\t\tRun final control plots and plot all data asymetrie histograms seperaty.\n"
 	      << "\t-aAP\t\tDo asymmetry plots for all eta and pt bins sepertely.\n"
     	      << "\t-derThresh\t\tDerive the trigger thresholds.\n"
+      	      << "\t-derThresh_pt1\t\tDerive the trigger thresholds for the jet 1 pt as crosscheck.\n"    
     	      << "\t-LP\t\tPlot the luminosities.\n"
-	      << "\t-TEC\t\tCheck if the trigger are really exclusive.\v"
+	      << "\t-TEC\t\tCheck if the trigger are really exclusive.\n"
+ 	      << "\t-BC\t\tUse the older BC directory instead of the BCD directory.\n"     
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
@@ -52,8 +57,10 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
+  std::vector<std::string> argl = {"-FP", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThresh", "-derThresh_pt1", "-BC", "-LP", "-aAP", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix"}; 
   TString run_nr = "B";
   TString dataname_end = "";
+  TString outSuf = "";
   bool muonCrosscheck = false;
   TString muonTriggerName = "HLT_Mu17";
   TString mode ="";
@@ -62,22 +69,28 @@ int main(int argc,char *argv[]){
   bool do_lumiControlPlots=false;
   bool do_asymControlPlots=false;
   bool do_deriveThresholds=false;
+  bool do_deriveThresholds_pt1Check=false; 
   bool do_lumi_plot=false;
   bool do_finalControlPlots = false;
   bool do_addAsymPlots = false;
-  bool do_triggerEx = false; 
+  bool do_triggerEx = false;
+  bool use_BC = false;
   TString input_path_="";
   double asym_cut = 0.;
   for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
 	if(arg=="-h"||arg=="--help"){
 	  show_usage(argv[0]);
-	    return 0;
+	  return 0;
 	  }
 
 	if(arg[0]=='-'){
-	  
-	  if(arg=="-FP"){
+	  if(std::find(argl.begin(), argl.end(), arg) == argl.end()){
+	    cout<<"Unknown option "<<arg<<endl;
+	    show_usage(argv[0]);
+	    return 0;	    
+	  } 
+	  else if(arg=="-FP"){
 	       do_fullPlots=true;
 	  }
 	  else if(arg=="-FCP"){
@@ -97,7 +110,10 @@ int main(int argc,char *argv[]){
 	  }	    	  
 	  else if(arg=="-derThresh"){
 	    do_deriveThresholds=true;
-	  }	    
+	  }
+	  else if(arg=="-derThresh_pt1"){
+	    do_deriveThresholds_pt1Check=true;
+	  }	  
 	  else if(arg=="-mu"){
 	    muonCrosscheck=true;
 	  }
@@ -106,15 +122,20 @@ int main(int argc,char *argv[]){
 	  }
 	  else if(arg=="-aAP"){
 	    do_addAsymPlots=true;
+	  }
+	  else if(arg=="-BC"){
+	    use_BC=true;
 	  }	  
 	  else if(arg[1]=='-'){
-	      
-	      if(arg=="--mode"){
+	    if(arg=="--mode"){
 	       mode = argv[i+1];
 	      }
 	      else if(arg=="--dname"){
 		dataname_end = argv[i+1];
 	      }
+	      else if(arg=="--outSuffix"){
+		outSuf = argv[i+1];
+	      }	    
 	      else if(arg=="--run"){
 		run_nr = argv[i+1];
 	      }
@@ -132,7 +153,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholds or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
+  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholds or do_deriveThresholds_pt1Check or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -152,7 +173,8 @@ int main(int argc,char *argv[]){
     input_path=input_path_;
   }
   else{
-      input_path  = "/nfs/dust/cms/user/"+(string)getenv("USER")+"/forBaconJets/2017PromptReco/Residuals/Run17BCD";
+      input_path  = "/nfs/dust/cms/user/"+(string)getenv("USER")+"/forBaconJets/2017PromptReco/Residuals/Run17BC";
+      if(!use_BC) input_path+="D";
   // if(muonCrosscheck) input_path+="D";
   input_path+="_Data";
   if(mode!="") input_path+="_";
@@ -165,7 +187,9 @@ int main(int argc,char *argv[]){
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
   TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
   TString outpath_postfix = (dataname_end!="") ? "_" : "";
-  outpath_postfix  +=  dataname_end; 
+  outpath_postfix  +=  dataname_end;
+  if(outSuf!="") outpath_postfix += "_";
+  outpath_postfix += outSuf;
   
   //eine Klasse: enthaelt Info ueber runnr, Generator, collection, Strings zu MC/DATA-files, memberfunctions: controlPlots, kFSR etc.
     vector<CorrectionObject> Objects;
@@ -179,7 +203,8 @@ int main(int argc,char *argv[]){
     if(do_trgControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
     
 
-    if(do_deriveThresholds) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds();
+    if(do_deriveThresholds) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_alternativeWay();
+    if(do_deriveThresholds_pt1Check) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds(true);   
  
     if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);
     
