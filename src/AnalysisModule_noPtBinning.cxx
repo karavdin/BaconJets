@@ -61,7 +61,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     //    std::unique_ptr<uhh2::AndSelection> trigger_sel;
 
     std::unique_ptr<uhh2::Selection> triggerSiMu_sel;
-  
+
+    std::unique_ptr<uhh2::Selection> minBias_sel;
     std::unique_ptr<uhh2::Selection> trigger40_sel;
     std::unique_ptr<uhh2::Selection> trigger60_sel;
     std::unique_ptr<uhh2::Selection> trigger80_sel;
@@ -113,7 +114,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Event::Handle<int> tt_Nmuon; Event::Handle<float> tt_muon_pt;
     Event::Handle<int> tt_Nele; Event::Handle<float> tt_ele_pt;
     Event::Handle<float> tt_dR_jet3_barreljet;  Event::Handle<float> tt_dR_jet3_probejet;
-    Event::Handle<int> tt_triggerSiMu;  
+    Event::Handle<int> tt_triggerSiMu;
+    Event::Handle<int> tt_minBias;  
     Event::Handle<int> tt_trigger40;
     Event::Handle<int> tt_trigger60;
     Event::Handle<int> tt_trigger80;
@@ -126,9 +128,9 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Event::Handle<int> tt_trigger500;
 
     std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
-    std::unique_ptr<JECAnalysisHists> h_trgSiMu ,h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg450,h_trg500;
+  std::unique_ptr<JECAnalysisHists> h_trgSiMu, h_minBias ,h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg450,h_trg500;
     std::unique_ptr<LuminosityHists> h_lumi_nocuts, h_lumi_sel, h_lumi_dijet, h_lumi_match, h_lumi_final;    
-    std::unique_ptr<LuminosityHists> h_lumi_TrigSiMu, h_lumi_Trig40, h_lumi_Trig60, h_lumi_Trig80, h_lumi_Trig140, h_lumi_Trig200, h_lumi_Trig260, h_lumi_Trig320, h_lumi_Trig400,h_lumi_Trig450, h_lumi_Trig500;
+  std::unique_ptr<LuminosityHists> h_lumi_TrigSiMu, h_lumi_minBias ,h_lumi_Trig40, h_lumi_Trig60, h_lumi_Trig80, h_lumi_Trig140, h_lumi_Trig200, h_lumi_Trig260, h_lumi_Trig320, h_lumi_Trig400,h_lumi_Trig450, h_lumi_Trig500;
     std::unique_ptr<JECRunnumberHists> h_runnr_input;
     std::unique_ptr<JECCrossCheckHists> h_input,h_lumisel, h_beforeCleaner,h_afterCleaner,h_2jets,h_beforeJEC,h_afterJEC,h_afterJER,h_afterMET,h_beforeTriggerData,h_afterTriggerData,h_beforeFlatFwd,h_afterFlatFwd,h_afterPtEtaReweight,h_afterLumiReweight,h_afterUnflat,h_afternVts;
     uhh2bacon::Selection sel;
@@ -194,7 +196,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     
     if(!isMC){
     const std::string& triggerSiMu = ctx.get("triggerSiMu", "NULL");
-    
+
+    const std::string& minBias = ctx.get("minBias", "NULL");   
     const std::string& trigger40 = ctx.get("trigger40", "NULL");
     const std::string& trigger60 = ctx.get("trigger60", "NULL");
     const std::string& trigger80 = ctx.get("trigger80", "NULL");
@@ -210,7 +213,9 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 
       if(triggerSiMu != "NULL") triggerSiMu_sel.reset(new TriggerSelection(triggerSiMu));
       else triggerSiMu_sel.reset(new uhh2::AndSelection(ctx));
-      
+
+      if(minBias != "NULL") minBias_sel.reset(new TriggerSelection(minBias));
+      else minBias_sel.reset(new uhh2::AndSelection(ctx));      
       if(trigger40 != "NULL") trigger40_sel.reset(new TriggerSelection(trigger40));
       else trigger40_sel.reset(new uhh2::AndSelection(ctx));
       if(trigger60 != "NULL") trigger60_sel.reset(new TriggerSelection(trigger60));
@@ -670,7 +675,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     tt_integrated_lumi = ctx.declare_event_output<float>("integrated_lumi");
 
     tt_triggerSiMu = ctx.declare_event_output<int>("triggerSiMu");
-    
+
+    tt_minBias = ctx.declare_event_output<int>("minBias");
     tt_trigger40 = ctx.declare_event_output<int>("trigger40");
     tt_trigger60 = ctx.declare_event_output<int>("trigger60");
     tt_trigger80 = ctx.declare_event_output<int>("trigger80");
@@ -713,6 +719,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     
     h_trgSiMu.reset(new JECAnalysisHists(ctx,ctx.get("triggerSiMu_DirName", "NULL")));
     
+    h_trg40.reset(new JECAnalysisHists(ctx,"HLT_minBias"));
     h_trg40.reset(new JECAnalysisHists(ctx,"HLT_PFJet40"));
     h_trg60.reset(new JECAnalysisHists(ctx,"HLT_PFJet60"));
     h_trg80.reset(new JECAnalysisHists(ctx,"HLT_PFJet80"));
@@ -731,7 +738,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     h_lumi_final.reset(new LuminosityHists(ctx,"Lumi_Final"));
 
     h_lumi_TrigSiMu.reset(new LuminosityHists(ctx,"Lumi_TrigSiMu"));   
-    
+
+    h_lumi_Trig40.reset(new LuminosityHists(ctx,"Lumi_minBias"));      
     h_lumi_Trig40.reset(new LuminosityHists(ctx,"Lumi_Trig40"));  
     h_lumi_Trig60.reset(new LuminosityHists(ctx,"Lumi_Trig60")); 
     h_lumi_Trig80.reset(new LuminosityHists(ctx,"Lumi_Trig80")); 
@@ -1053,7 +1061,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 //*****************************************
     
     int triggerSiMu  = 0;
-    
+
+    int minBias  = 0;   
     int trigger40  = 0;
     int trigger60  = 0;
     int trigger80  = 0;
@@ -1066,6 +1075,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     int trigger500 = 0;
     
     bool pass_triggerSiMu=false;
+    bool pass_minBias=false;   
     bool pass_trigger40=false; bool pass_trigger60=false; bool pass_trigger80=false;
     bool pass_trigger140=false; bool pass_trigger200=false; bool pass_trigger260=false;
     bool pass_trigger320=false; bool pass_trigger400=false; bool pass_trigger450=false;  bool pass_trigger500=false;
@@ -1083,7 +1093,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
       float pt_ave_ = pt_ave; //i think this is not used
 
       pass_triggerSiMu = (triggerSiMu_sel->passes(event));
-      
+
+      pass_minBias = (minBias_sel->passes(event));
       pass_trigger40 = (trigger40_sel->passes(event));
       pass_trigger60 = (trigger60_sel->passes(event));
       pass_trigger80 = (trigger80_sel->passes(event));
@@ -1099,7 +1110,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
  //Count Events passed Trigger
 
       int n_trig = 0;
-   
+      
+      if(pass_minBias){ n_trig++; trigger40 = 1;}   
       if(pass_trigger40){ n_trig++; trigger40 = 1;}
       if(pass_trigger60){ n_trig++; trigger60 = 1;}
       if(pass_trigger80){ n_trig++; trigger80 = 1;}
@@ -1118,7 +1130,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 	pass_trigger = pass_triggerSiMu;
       }
       else{
-	pass_trigger = (pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500);
+	pass_trigger = (pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500);
     }
 
 
@@ -1195,7 +1207,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     event.set(tt_integrated_lumi,int_lumi_event);
 
     event.set(tt_triggerSiMu, triggerSiMu);   
-    
+
+    event.set(tt_minBias, minBias);  
     event.set(tt_trigger40, trigger40);
     event.set(tt_trigger60, trigger60);
     event.set(tt_trigger80, trigger80);
@@ -1227,7 +1240,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     //fill single trigger for efficiency plots before the dijet selection
     if(event.isRealData){
       if(pass_triggerSiMu) {h_trgSiMu->fill(event); h_lumi_TrigSiMu->fill(event);}      
-      
+
+      if(pass_minBias) {h_minBias->fill(event); h_lumi_minBias->fill(event);}     
       if(pass_trigger40) {h_trg40->fill(event); h_lumi_Trig40->fill(event);}
       if(pass_trigger60) {h_trg60->fill(event); h_lumi_Trig60->fill(event);} 
       if(pass_trigger80) {h_trg80->fill(event); h_lumi_Trig80->fill(event);}

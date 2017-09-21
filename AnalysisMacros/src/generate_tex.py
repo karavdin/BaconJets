@@ -59,7 +59,7 @@ img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/R
 img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunC/plots/"
 
 
-img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC/plots/thresholds/"
+img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC_highPlusLow/plots/thresholds/"
 
 
 etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
@@ -280,24 +280,24 @@ frames_list[-1] += "\tThresholds taken out of Run C, agrees with Run B.\n\\newli
 frames_list[-1] += """
 \\begin{tabular}{|c|c|c|}
   \hline
-  trigger & 0.95 threshold [GeV] & threshold 2016 [GeV] \\\\\hline
-  40 & 41 & 51 \\\\ \hline
-  60 & 70 & 73 \\\\ \hline
-  80 & 99 & 95\\\\ \hline
-  140 & 164 & 129\\\\ \hline
-  200 & 238 & 163\\\\ \hline
-  260 & 306 & 230\\\\ \hline
-  320 & 369 & 299\\\\ \hline
-  400 & 459 & 365\\\\ \hline
-  450 & 487 & 453\\\\ \hline
-  500 & 537 & 566\\\\ \hline
+  trigger path & 0.95 threshold & threshold 2016 [GeV] \\\\\hline
+ HLT\_PFJet40\_v* & 52 & 51 \\\\ \hline
+ HLT\_PFJet60\_v* & 72 & 73 \\\\ \hline
+ HLT\_PFJet80\_v* & 92 & 95\\\\ \hline
+  HLT\_PFJet140\_v* & 168 & 129\\\\ \hline
+ HLT\_PFJet200\_v* & 232 & 163\\\\ \hline
+ HLT\_PFJet260\_v* & 290 & 230\\\\ \hline
+ HLT\_PFJet320\_v* & 351 & 299\\\\ \hline
+ HLT\_PFJet400\_v* & 442 & 365\\\\ \hline
+  HLT\_PFJet450\_v* & 485 & 453\\\\ \hline
+  HLT\_PFJet500\_v* & 538 & 566\\\\ \hline
 \end{tabular}
 """
 frames_list[-1] += "\end{frame}\n\n"
 
 frames_list.append(
     "\\begin{frame}{Single PF Jet Trigger Thresholds}\n")
-frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N(\\text{low and high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\n"
+frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N(\\text{low trg}) + N(\\text{high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\nThe plateaus are not at one cause of different prescales of the different triggers. Still the numbers dont add up... investigation is goin on\n\\newline\n"
 
 for i, th in enumerate(trigger_val[1:]):
     if i and not i % 4:
@@ -309,11 +309,27 @@ for i, th in enumerate(trigger_val[1:]):
     frames_list[-1] += th
     frames_list[-1] += ".pdf}\n"
     frames_list[-1] += "\end{minipage}\n"
+
+# frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
+# frames_list[-1] += "\t\\tiny pt\_ave distributions\n \\newline\n"
+# frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+#     img_path_base_th + "pt_ave_usedForThresh.pdf}\n"
+# frames_list[-1] += "\end{minipage}\n"
+
 frames_list[-1] += "\end{frame}\n\n"
+
+# frames_list.append(
+#     "\\begin{frame}{Single PF Jet Trigger Thresholds}\n")
+# frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
+# frames_list[-1] += "\t\\tiny pt\_ave distributions\n \\newline\n"
+# frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+#     img_path_base_th + "pt_ave_usedForThresh.pdf}\n"
+# frames_list[-1] += "\end{minipage}\n"
+# frames_list[-1] += "\end{frame}\n\n"
 
 frames_list.append(
     "\\begin{frame}{Not Understood: Asymmetry Distribution}\n")
-frames_list[-1] += "\t\scriptsize $A=\\frac{p_t^{tag}-p_t^{probe}}{p_t^{tag}+p_t^{probe}}$, jets are assigned randomly from the two leading jets\n\\newline\n"
+frames_list[-1] += "\t\scriptsize $A=\\frac{p_t^{tag}-p_t^{probe}}{p_t^{tag}+p_t^{probe}}$, jets are assigned randomly from the two leading jets. Only one trigger is used per pt-bin.\n\\newline\n"
 i = 0
 j = 2
 frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
@@ -367,6 +383,67 @@ frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
 frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
 frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C +\
     "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\t\n"
+frames_list[-1] += "\end{frame}\n\n"
+
+
+frames_list.append(
+    "\\begin{frame}{Not Understood: Asymmetry Distribution, does not look pile-up dependend}\n")
+i = 0
+j = 2
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B +\
+    "fullAsym/A_nvert_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 3
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B +\
+    "fullAsym/A_nvert_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 9
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B +\
+    "fullAsym/A_nvert_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+frames_list[-1] += "\\newline\n"
+
+i = 0
+j = 2
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C +\
+    "fullAsym/A_nvert_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 3
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C +\
+    "fullAsym/A_nvert_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+    "_" + pt_str_full[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 9
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C +\
+    "fullAsym/A_nvert_DATA_pythia8" + "_eta_" + etas_str[i] +\
     "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
     "_" + pt_str_full[j + 1] + ".pdf}\n"
 frames_list[-1] += "\end{minipage}\t\n"
