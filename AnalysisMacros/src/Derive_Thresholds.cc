@@ -109,7 +109,7 @@ void CorrectionObject::Derive_Thresholds(bool pt1_check){
   TGraphErrors* gr095 = new TGraphErrors(n_trigger-1, triggerVal_noLow  ,thresholds);
   TF1* func095 = new TF1("func095", "pol1" , 0, 501);
   func095->SetLineColor(kBlue);
-  // TFitResultPtr r = gr095->Fit(func095);
+  TFitResultPtr r = gr095->Fit(func095);
   double thr40 = gr095->Eval(40);
   // double x[1] = { thr40 };
   // double err[1];
@@ -118,7 +118,7 @@ void CorrectionObject::Derive_Thresholds(bool pt1_check){
   
   TGraphErrors* gr09 = new TGraphErrors(n_trigger-1, triggerVal_noLow ,thresholds09);
   TF1* func09 = new TF1("func09", "pol1" , 0, 501);
-  // r = gr09->Fit(func09);  
+  r = gr09->Fit(func09);  
   double thr40_09 = gr09->Eval(40);
   // x[1] = { thr40_09 };
   // r->GetConfidenceIntervals(1, 1, 1, x, err, 0.683, false);

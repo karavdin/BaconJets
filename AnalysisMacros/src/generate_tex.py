@@ -13,7 +13,7 @@ output_name = "controlplotsC_newPtBinning.tex"
 if len(sys.argv) > 1:
     output_name = sys.argv[1] + ".tex"
 
-img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/"
+img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/"
 if output_name.find("controlplotsBCD") > -1:
     if output_name.find("newPtBinning") > -1:
         img_path_base_2 = img_path_base_2 + "RunBCD_newPtBinning"
@@ -50,13 +50,13 @@ if not os.path.isdir(img_path_base_2):
 
 img_path_base = img_path_base_2 + "control/"
 
-img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunB/plots/control/"
+img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunB/plots/control/"
 
-img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunC/plots/control/"
+img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC/plots/control/"
 
-img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunB/plots/"
+img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunB/plots/"
 
-img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunC/plots/"
+img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC/plots/"
 
 
 img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC_highPlusLow/plots/thresholds/"
@@ -71,8 +71,10 @@ etas_str = ["00", "0261", "0522", "0783", "1044", "1305", "1479", "1653", "193",
 pt_str = ["70", "99", "164", "238", "306",
           "369", "459", "487", "537", "1000", "2000"]
 
-pt_str_full = ["41", "70", "99", "164", "238", "306",
-               "369", "459", "487", "537", "1000", "2000"]
+pt_str_full = ["46", "68", "91", "158", "225", "292",
+               "359", "443", "486", "536", "1000", "2000"]
+
+pt_str = pt_str_full[1:];
 
 trigger_val = ["40", "60", "80", "140",
                "200", "260", "320", "400", "450", "500"]

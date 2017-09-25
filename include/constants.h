@@ -69,17 +69,17 @@ constexpr static float s_Pt_Ave300HF_cut  = 426;
  // constexpr static float s_Pt_Ave500_cut  = 566;
 
 //2017
- constexpr static float s_Pt_AveMC_cut   = 41;
- constexpr static float s_Pt_Ave40_cut   = 41;
- constexpr static float s_Pt_Ave60_cut   = 70;
- constexpr static float s_Pt_Ave80_cut   = 99;
- constexpr static float s_Pt_Ave140_cut  = 164;
- constexpr static float s_Pt_Ave200_cut  = 238;
- constexpr static float s_Pt_Ave260_cut  = 306;
- constexpr static float s_Pt_Ave320_cut  = 369;
- constexpr static float s_Pt_Ave400_cut  = 459;
- constexpr static float s_Pt_Ave450_cut  = 487; 
- constexpr static float s_Pt_Ave500_cut  = 537;
+ constexpr static float s_Pt_AveMC_cut   = 46;
+ constexpr static float s_Pt_Ave40_cut   = 46;
+ constexpr static float s_Pt_Ave60_cut   = 68;
+ constexpr static float s_Pt_Ave80_cut   = 91;
+ constexpr static float s_Pt_Ave140_cut  = 158;
+ constexpr static float s_Pt_Ave200_cut  = 225;
+ constexpr static float s_Pt_Ave260_cut  = 292;
+ constexpr static float s_Pt_Ave320_cut  = 359;
+ constexpr static float s_Pt_Ave400_cut  = 443;
+ constexpr static float s_Pt_Ave450_cut  = 486; 
+ constexpr static float s_Pt_Ave500_cut  = 536;
 
 // 2016
 constexpr static float s_Pt_Ave60HF_cut   = 100;

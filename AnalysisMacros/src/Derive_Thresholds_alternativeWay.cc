@@ -26,7 +26,8 @@
 
 using namespace std;
 
-void CorrectionObject::Derive_Thresholds_alternativeWay(){
+void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
+							){
   cout << "--------------- Starting Derive_Thresholds_alternativeWay() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
@@ -47,7 +48,10 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(){
     hdata_pt_ave_wNext[j]= new TH1D(name2,"",nResponseBins*6,0,j<7?600:1200);
   }
   
-
+  // TH1D* hdata_pt_ave_minBias = new TH1D(name,"",nResponseBins*6,0,600);
+  // TH1D* hdata_pt_ave_minBias_higher = new TH1D(name,"",nResponseBins*6,0,1200);
+  
+  
   //Get relevant information from DATA, loop over DATA events
   TTreeReader myReader_DATA("AnalysisTree", CorrectionObject::_DATAFile);
   TTreeReaderValue<int> trg40(myReader_DATA, "trigger40");
@@ -62,6 +66,7 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(){
   TTreeReaderValue<int> trg500(myReader_DATA, "trigger500");
   TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
+  // if(use_minBias)   TTreeReaderValue<int> trgminBias(myReader_DATA, "triggerminBias");
 
   TTreeReaderValue<int> trg_arr[trg_nr] = {trg40,trg60,trg80,trg140,trg200,trg260,trg320,trg400,trg450,trg500};
   
@@ -97,6 +102,9 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(){
 
   cout << "fit the thresholds" << endl << endl;
 
+  bool use_for_extrapol[n_trigger-1];
+  int n_extrapol=0;
+  
   TF1 *func[n_trigger-1];
   double thresholds[n_trigger-1];
   double thresholds09[n_trigger-1];
@@ -117,50 +125,98 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(){
     func[i]->SetParNames("p0", "p1", "N");
     ptave_data_eff[i]->Fit(func[i],"R");
 
+    use_for_extrapol[i] = func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.;
+    cout<< (func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.)<<endl;
+    if(use_for_extrapol[i]) n_extrapol++;
+    
     thresholds[i] = func[i]->GetX(0.95*func[i]->GetParameter(2), triggerVal[i+1]-10, 800);
     thresholds09[i] = func[i]->GetX(0.9*func[i]->GetParameter(2), triggerVal[i+1]-10, 800);
- 
-    cout<< std::fixed << std::setprecision(2) << "Trigger value: "<< triggerVal[i+1] << "; 0.95 threshold: "<< thresholds[i]  << endl;;
-    cout<< std::fixed << std::setprecision(2) << "Trigger value: "<< triggerVal[i+1] << "; 0.90 threshold: "<< thresholds09[i]  << endl;
-    cout << "Old Threshold: " << pt_bins[i+1] <<endl <<endl;
+
   }
 
+
+  cout<<"Debug: use_for_extrapolation array ";
+  for(int i=0; i<n_trigger-1; i++){
+    cout<<use_for_extrapol[i];
+  }
+  cout<<endl;
   
   const double triggerVal_noLow[n_trigger-1] = {60, 80, 140, 200, 260, 320, 400, 450, 500};
-  cout << "extrapolate the threshold of the lowest trigger" << endl << endl;
-  
+  cout << "extrapolate the threshold of the lower trigger from "<< n_extrapol<<" fitted thresholds" << endl << endl;
     
-  TGraphErrors* gr095 = new TGraphErrors(n_trigger-1, triggerVal_noLow  ,thresholds);
+  double extrapol_x[n_extrapol];
+  double extrapol_y[n_extrapol];
+  
+  // cout<<"Debug1"<<endl;
+    
+  int gCount = 0;
+  for(int i=0; i<n_trigger-1; i++){
+    if(!use_for_extrapol[i]) continue;
+    extrapol_x[gCount]=triggerVal_noLow[i];
+    extrapol_y[gCount]=thresholds[i];
+    gCount++;
+  }
+  // cout<<"Debug2"<<endl;;
+  double extrapol_x09[n_extrapol];
+  double extrapol_y09[n_extrapol];
+  gCount = 0;
+  for(int i=0; i<n_trigger-1; i++){
+    if(!use_for_extrapol[i]) continue;
+    extrapol_x09[gCount]=triggerVal_noLow[i];
+    extrapol_y09[gCount]=thresholds09[i];
+    gCount++;
+  }
+  
+  cout<<"Debug: extrapol_x array ";
+  for(int i=0; i<n_extrapol; i++){
+    cout<<extrapol_x[i]<<" ";
+  }
+  cout<<endl;
+   cout<<"Debug: extrapol_y array "; 
+  for(int i=0; i<n_extrapol; i++){
+    cout<<extrapol_y[i]<<" ";
+  }
+  cout<<endl;
+
+  
+  // cout<<"Debug3"<<endl;;
+  double all_thresholds[n_trigger];
+  double all_thresholds09[n_trigger]; 
+    
+  TGraphErrors* gr095 = new TGraphErrors(n_extrapol,  extrapol_x , extrapol_y);
   TF1* func095 = new TF1("func095", "pol1" , 0, 501);
   func095->SetLineColor(kBlue);
-  // TFitResultPtr r = gr095->Fit(func095);
-  double thr40 = gr095->Eval(40);
-  // double x[1] = { thr40 };
-  // double err[1];
-  // r->GetConfidenceIntervals(1, 1, 1, x, err, 0.683, false);
-  // double thr40_err = err[0];
-  
-  TGraphErrors* gr09 = new TGraphErrors(n_trigger-1, triggerVal_noLow ,thresholds09);
-  TF1* func09 = new TF1("func09", "pol1" , 0, 501);
-  // r = gr09->Fit(func09);  
-  double thr40_09 = gr09->Eval(40);
-  // x[1] = { thr40_09 };
-  // r->GetConfidenceIntervals(1, 1, 1, x, err, 0.683, false);
-  // double thr40_09_err = err[0];
+  TFitResultPtr r = gr095->Fit(func095);
+  all_thresholds[0]=gr095->Eval(40);
+  for(int i=0; i<n_trigger-1; i++){
+    if(use_for_extrapol[i]) all_thresholds[i+1]=thresholds[i];
+    else all_thresholds[i+1]=gr095->Eval(triggerVal_noLow[i]);
+  }  
 
-    cout<< std::fixed << std::setprecision(2) << "Trigger value: "<< triggerVal[0] << "; 0.95 threshold: "<< thr40 << endl;;
-    cout<< std::fixed << std::setprecision(2) << "Trigger value: "<< triggerVal[0] << "; 0.90 threshold: "<< thr40_09  << endl;
-    cout << "Old Threshold: " << pt_bins[0] <<endl <<endl;
-  
+  // cout<<"Debug4"<<endl;;
+  TGraphErrors* gr09 = new TGraphErrors(n_extrapol, extrapol_x09 , extrapol_y09);
+  TF1* func09 = new TF1("func09", "pol1" , 0, 501);
+  r = gr09->Fit(func09);  
+  all_thresholds09[0]=gr09->Eval(40);
+  for(int i=0; i<n_trigger-1; i++){
+    if(use_for_extrapol[i]) all_thresholds09[i+1]=thresholds09[i];
+    else all_thresholds09[i+1]=gr09->Eval(triggerVal_noLow[i]);
+  }  
+
+  cout<<endl;
+  for(int i=0; i<n_trigger; i++){
+    cout<< std::fixed << std::setprecision(2) << "Trigger value: "<< triggerVal[i] << "; 0.95 threshold: "<< all_thresholds[i]  << endl;;
+    cout<< std::fixed << std::setprecision(2) << "Trigger value: "<< triggerVal[i] << "; 0.90 threshold: "<< all_thresholds09[i]  << endl;
+    cout << "Old Threshold: " << pt_bins[i] <<endl <<endl;  
+  }
     
   cout << "Draw plots to "<<CorrectionObject::_outpath+"plots/thresholds" << endl;
 
   ofstream myfile;
   myfile.open (CorrectionObject::_outpath+"plots/thresholds/"+"/thresholds.txt",ios::trunc);
   myfile << "trigger  old  \t  0.90 \t  0.95  \n";
-  myfile<< std::fixed << std::setprecision(2) << triggerVal[0]<< " \t " << pt_bins[0]<< " \t "<< thr40_09  << " \t "<< thr40   << " \n";
-  for(int i=0; i<n_trigger-1; i++){
-    myfile<< std::fixed << std::setprecision(2) << triggerVal[i+1]<< " \t " << pt_bins[i+1]<< " \t "<< thresholds09[i]<< " \t "<< thresholds[i] << " \n"; 
+  for(int i=0; i<n_trigger; i++){
+    myfile<< std::fixed << std::setprecision(2) << triggerVal[i]<< " \t " << pt_bins[i]<< " \t "<< all_thresholds09[i]<< " \t "<< all_thresholds[i] << " \n"; 
   }
   myfile.close();
 
@@ -170,9 +226,9 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(){
   // mg->Add(gr09);
   // mg->Add(gr095);
   // mg->Draw();
-  gr09->SetMarkerStyle(3);
-  gr09->Draw("ap");
-  c->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger09"+(pt1_check ? "pt1":"")+".pdf","pdf");    
+  gr095->SetMarkerStyle(3);
+  gr095->Draw("ap");
+  c->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger095"+(pt1_check ? "pt1":"")+".pdf","pdf");    
    TCanvas* c2 = new TCanvas("c2");
    gr09->SetMarkerStyle(3);
    gr095->SetMarkerStyle(5);
@@ -180,12 +236,9 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(){
   mg->Add(gr09);
   mg->Add(gr095);
   mg->Draw("ap");
-  // mg->GetHistogram()->GetXaxis()->SetRangeUser(0.,600.);
+  mg->GetHistogram()->GetXaxis()->SetRangeUser(0.,600.);
   mg->Draw("ap");  
-  // gr095->Draw("ap");
   c2->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger"+(pt1_check ? "pt1":"")+".pdf","pdf");
-
-
 
   
   for(int i=0; i<n_trigger-1; i++){
