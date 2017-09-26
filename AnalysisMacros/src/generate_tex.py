@@ -59,8 +59,9 @@ img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/R
 img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC/plots/"
 
 
-img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC_highPlusLow/plots/thresholds/"
-
+img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC/plots/thresholds/"
+img_path_base_th_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunB/plots/thresholds/"
+img_path_base_th_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC/plots/thresholds/"
 
 etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
         2.172, 2.322, 2.500, 2.650, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191]
@@ -276,32 +277,30 @@ frames_list[-1] += "\end{frame}\n\n"
 ################ thresholds #########################
 
 frames_list.append(
-    "\\begin{frame}{Single PF Jet Trigger Thresholds}\n")
-frames_list[-1] += "\tThresholds taken out of Run C, agrees with Run B.\n\\newline\n\\newline"
-
+    "\\begin{frame}{Single PF Jet Trigger Thresholds RunBC}\n")
 frames_list[-1] += """
 \\begin{tabular}{|c|c|c|}
   \hline
   trigger path & 0.95 threshold & threshold 2016 [GeV] \\\\\hline
- HLT\_PFJet40\_v* & 52 & 51 \\\\ \hline
- HLT\_PFJet60\_v* & 72 & 73 \\\\ \hline
- HLT\_PFJet80\_v* & 92 & 95\\\\ \hline
-  HLT\_PFJet140\_v* & 168 & 129\\\\ \hline
- HLT\_PFJet200\_v* & 232 & 163\\\\ \hline
- HLT\_PFJet260\_v* & 290 & 230\\\\ \hline
- HLT\_PFJet320\_v* & 351 & 299\\\\ \hline
- HLT\_PFJet400\_v* & 442 & 365\\\\ \hline
-  HLT\_PFJet450\_v* & 485 & 453\\\\ \hline
-  HLT\_PFJet500\_v* & 538 & 566\\\\ \hline
+ HLT\_PFJet40\_v* & 46 & 51 \\\\ \hline
+ HLT\_PFJet60\_v* & 68 & 73 \\\\ \hline
+ HLT\_PFJet80\_v* & 91 & 95\\\\ \hline
+  HLT\_PFJet140\_v* & 158 & 129\\\\ \hline
+ HLT\_PFJet200\_v* & 225 & 163\\\\ \hline
+ HLT\_PFJet260\_v* & 292 & 230\\\\ \hline
+ HLT\_PFJet320\_v* & 359 & 299\\\\ \hline
+ HLT\_PFJet400\_v* & 443 & 365\\\\ \hline
+  HLT\_PFJet450\_v* & 486 & 453\\\\ \hline
+  HLT\_PFJet500\_v* & 536 & 566\\\\ \hline
 \end{tabular}
 """
 frames_list[-1] += "\end{frame}\n\n"
 
 frames_list.append(
-    "\\begin{frame}{Single PF Jet Trigger Thresholds}\n")
-frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N(\\text{low trg}) + N(\\text{high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\nThe plateaus are not at one cause of different prescales of the different triggers. Still the numbers dont add up... investigation is goin on\n\\newline\n"
+    "\\begin{frame}{Single PF Jet Trigger Thresholds Run BC}\n")
+frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N(\\text{low trg}) + N(\\text{high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\nThe plateaus are not at one cause of different prescales of the different triggers.\n\\newline\n"
 
-for i, th in enumerate(trigger_val[1:]):
+for i, th in enumerate(trigger_val[4:]):
     if i and not i % 4:
         frames_list[-1] += "\t\\newline\n\n"
     frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
@@ -311,6 +310,12 @@ for i, th in enumerate(trigger_val[1:]):
     frames_list[-1] += th
     frames_list[-1] += ".pdf}\n"
     frames_list[-1] += "\end{minipage}\n"
+
+frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
+frames_list[-1] += "\t\\tiny extrapolation\n \\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+                   img_path_base_th + "extrapolateLowestTrigger.pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
 
 # frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
 # frames_list[-1] += "\t\\tiny pt\_ave distributions\n \\newline\n"
@@ -475,6 +480,78 @@ frames_list.append(
 
     """
 )
+
+
+##############threshold pt check #####################
+frames_list.append(
+    "\\begin{frame}{Single PF Jet Trigger Thresholds Run BC}\n")
+for i, th in enumerate(trigger_val[4:]):
+    # if i and not i % 4:
+    #     frames_list[-1] += "\t\\newline\n\n"
+    frames_list[-1] += "\\begin{minipage}{0.15\\textwidth}\n"
+    frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += "_pt1.pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += "_pt2.pdf}\n\\newline"
+    frames_list[-1] += "\end{minipage}\n"
+
+frames_list[-1] += "\end{frame}\n\n"
+
+frames_list.append(
+    "\\begin{frame}{Single PF Jet Trigger Thresholds Run B}\n")
+for i, th in enumerate(trigger_val[4:]):
+    # if i and not i % 4:
+    #     frames_list[-1] += "\t\\newline\n\n"
+    frames_list[-1] += "\\begin{minipage}{0.15\\textwidth}\n"
+    frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_B + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_B + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += "_pt1.pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_B + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += "_pt2.pdf}\n\\newline"
+    frames_list[-1] += "\end{minipage}\n"
+
+frames_list[-1] += "\end{frame}\n\n"
+
+frames_list.append(
+    "\\begin{frame}{Single PF Jet Trigger Thresholds Run C}\n")
+for i, th in enumerate(trigger_val[4:]):
+    # if i and not i % 4:
+    #    frames_list[-1] += "\t\\newline\n\n"
+    frames_list[-1] += "\\begin{minipage}{0.15\\textwidth}\n"
+    frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_C + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_C + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += "_pt1.pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_C + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += "_pt2.pdf}\n\\newline"
+    frames_list[-1] += "\end{minipage}\n"
+
+frames_list[-1] += "\end{frame}\n\n"
+
 
 ############# eta loop B  #########################
 

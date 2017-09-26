@@ -76,7 +76,7 @@ using namespace std;
     void ControlPlots(bool forEverySingleTrigger = false);
     void Derive_Thresholds(bool pt1_check = false);
     void Derive_Thresholds_SiMuCrosscheck(TString siMu_dirName_);
-    void Derive_Thresholds_alternativeWay();
+    void Derive_Thresholds_alternativeWay(bool pt_check = false);
     void kFSR();
     void kFSR_CorrectFormulae();
     void kFSR_CorrectFormulae_eta();

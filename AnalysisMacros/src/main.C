@@ -24,7 +24,7 @@ static void show_usage(std::string name)
 	      << "\t-aFCP\t\tRun final control plots and plot all data asymetrie histograms seperaty.\n"
 	      << "\t-aAP\t\tDo asymmetry plots for all eta and pt bins sepertely.\n"
     	      << "\t-derThresh\t\tDerive the trigger thresholds.\n"
-      	      << "\t-derThresh_pt1\t\tDerive the trigger thresholds for the jet 1 pt as crosscheck.\n"    
+      	      << "\t-derThresh_ptCheck\t\tDerive the trigger efficiency distributions for the jet 1 and 2 pt as crosscheck.\n"    
     	      << "\t-LP\t\tPlot the luminosities.\n"
 	      << "\t-TEC\t\tCheck if the trigger are really exclusive.\n"
  	      << "\t-BC\t\tUse the older BC directory instead of the BCD directory.\n"     
@@ -57,7 +57,7 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
-  std::vector<std::string> argl = {"-FP", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThresh", "-derThresh_pt1", "-BC", "-LP", "-aAP", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix"}; 
+  std::vector<std::string> argl = {"-FP", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThresh", "-derThresh_ptCheck", "-BC", "-LP", "-aAP", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix"}; 
   TString run_nr = "B";
   TString dataname_end = "";
   TString outSuf = "";
@@ -69,7 +69,7 @@ int main(int argc,char *argv[]){
   bool do_lumiControlPlots=false;
   bool do_asymControlPlots=false;
   bool do_deriveThresholds=false;
-  bool do_deriveThresholds_pt1Check=false; 
+  bool do_deriveThresholds_ptCheck=false; 
   bool do_lumi_plot=false;
   bool do_finalControlPlots = false;
   bool do_addAsymPlots = false;
@@ -111,8 +111,8 @@ int main(int argc,char *argv[]){
 	  else if(arg=="-derThresh"){
 	    do_deriveThresholds=true;
 	  }
-	  else if(arg=="-derThresh_pt1"){
-	    do_deriveThresholds_pt1Check=true;
+	  else if(arg=="-derThresh_ptCheck"){
+	    do_deriveThresholds_ptCheck=true;
 	  }	  
 	  else if(arg=="-mu"){
 	    muonCrosscheck=true;
@@ -153,7 +153,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholds or do_deriveThresholds_pt1Check or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
+  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholds or do_deriveThresholds_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -204,7 +204,7 @@ int main(int argc,char *argv[]){
     
 
     if(do_deriveThresholds) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_alternativeWay();
-    if(do_deriveThresholds_pt1Check) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds(true);   
+    if(do_deriveThresholds_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_alternativeWay(true);   
  
     if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);
     

@@ -26,13 +26,10 @@
 
 using namespace std;
 
-void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
-							){
+void CorrectionObject::Derive_Thresholds_alternativeWay(bool pt_check){
   cout << "--------------- Starting Derive_Thresholds_alternativeWay() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
-  bool pt1_check = false;
-  
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/thresholds/");
 
   int trg_nr=n_trigger;
@@ -40,17 +37,32 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
   TH1D *hdata_pt_ave[trg_nr-1];
   TH1D *hdata_pt_ave_wNext[trg_nr-1];
 
+  TH1D *hdata_pt_1[trg_nr-1];
+  TH1D *hdata_pt_2[trg_nr-1];
+
+  TH1D *hdata_pt_1_wNext[trg_nr-1];
+  TH1D *hdata_pt_2_wNext[trg_nr-1];    
+
+  
   for(int j=0; j<trg_nr-1; j++){
     TString name = "pt_ave_trg"+to_string(triggerVal[j]);
     TString name2 = "pt_ave_wNext_trg"+to_string(triggerVal[j]);
 
     hdata_pt_ave[j]= new TH1D(name,"",nResponseBins*6,0,j<7?600:1200);
     hdata_pt_ave_wNext[j]= new TH1D(name2,"",nResponseBins*6,0,j<7?600:1200);
+
+
+    TString name_1 = "pt_1_trg"+to_string(triggerVal[j]);
+    TString name2_1 = "pt_1_wNext_trg"+to_string(triggerVal[j]);
+    TString name_2 = "pt_2_trg"+to_string(triggerVal[j]);
+    TString name2_2 = "pt_2_wNext_trg"+to_string(triggerVal[j]);
+      
+    hdata_pt_1[j]= new TH1D(name_1,"",nResponseBins*6,0,j<7?600:1200);
+    hdata_pt_1_wNext[j]= new TH1D(name2_1,"",nResponseBins*6,0,j<7?600:1200);
+    hdata_pt_2[j]= new TH1D(name_2,"",nResponseBins*6,0,j<7?600:1200);
+    hdata_pt_2_wNext[j]= new TH1D(name2_2,"",nResponseBins*6,0,j<7?600:1200);
+    
   }
-  
-  // TH1D* hdata_pt_ave_minBias = new TH1D(name,"",nResponseBins*6,0,600);
-  // TH1D* hdata_pt_ave_minBias_higher = new TH1D(name,"",nResponseBins*6,0,1200);
-  
   
   //Get relevant information from DATA, loop over DATA events
   TTreeReader myReader_DATA("AnalysisTree", CorrectionObject::_DATAFile);
@@ -66,7 +78,10 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
   TTreeReaderValue<int> trg500(myReader_DATA, "trigger500");
   TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
-  // if(use_minBias)   TTreeReaderValue<int> trgminBias(myReader_DATA, "triggerminBias");
+
+  TTreeReaderValue<Float_t> pt_1_data(myReader_DATA, "jet1_pt");
+  TTreeReaderValue<Float_t> pt_2_data(myReader_DATA, "jet2_pt");
+  
 
   TTreeReaderValue<int> trg_arr[trg_nr] = {trg40,trg60,trg80,trg140,trg200,trg260,trg320,trg400,trg450,trg500};
   
@@ -77,8 +92,20 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
     bool exclusive = true;
     exclusive = (*trg40)^(*trg60)^(*trg80)^(*trg140)^(*trg200)^(*trg260)^(*trg320)^(*trg400)^(*trg450)^(*trg500);
     for(int j=0; j<trg_nr-1; j++){
-       if(*(trg_arr[j])) hdata_pt_ave[j]->Fill(*pt_ave_data);
-       if((*(trg_arr[j]))&&(*(trg_arr[j+1]))) hdata_pt_ave_wNext[j]->Fill(*pt_ave_data);
+      if(*(trg_arr[j])){
+	hdata_pt_ave[j]->Fill(*pt_ave_data);
+	if(pt_check){
+	  hdata_pt_1[j]->Fill(*pt_1_data);
+	  hdata_pt_2[j]->Fill(*pt_2_data);
+	}
+      }
+      if((*(trg_arr[j]))&&(*(trg_arr[j+1]))){
+	hdata_pt_ave_wNext[j]->Fill(*pt_ave_data);
+	if(pt_check){
+	  hdata_pt_1_wNext[j]->Fill(*pt_1_data);
+	  hdata_pt_2_wNext[j]->Fill(*pt_2_data);
+	}
+      }
     }
     myCount++;
     if(!exclusive){
@@ -89,6 +116,10 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
   std::cout<<"\ncount data "<<myCount<<"  count data trg not exclusive "<<myCount_notX<<std::endl;
   
   TH1D* ptave_data_eff[n_trigger-1];
+
+  TH1D* pt1_data_eff[n_trigger-1];
+  TH1D* pt2_data_eff[n_trigger-1];
+  
   for(int j=0; j<trg_nr-1; j++){
     hdata_pt_ave_wNext[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j])+"_pt_ave_wNext"+".root");
     hdata_pt_ave[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j])+"_pt_ave"+".root");
@@ -97,6 +128,19 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
     ptave_data_eff[j]->Divide((TH1D*) hdata_pt_ave[j]->Clone());
     ptave_data_eff[j]->Rebin(6);
     ptave_data_eff[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j+1])+".root");
+
+    if(pt_check){
+      pt1_data_eff[j]= (TH1D*) hdata_pt_1_wNext[j]->Clone();
+      pt1_data_eff[j]->Divide((TH1D*) hdata_pt_1[j]->Clone());
+      pt1_data_eff[j]->Rebin(6);
+      pt1_data_eff[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j+1])+"_pt1.root");
+
+      pt2_data_eff[j]= (TH1D*) hdata_pt_2_wNext[j]->Clone();
+      pt2_data_eff[j]->Divide((TH1D*) hdata_pt_2[j]->Clone());
+      pt2_data_eff[j]->Rebin(6);
+      pt2_data_eff[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j+1])+"_pt2.root");
+    }
+    
   }
 
 
@@ -228,7 +272,7 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
   // mg->Draw();
   gr095->SetMarkerStyle(3);
   gr095->Draw("ap");
-  c->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger095"+(pt1_check ? "pt1":"")+".pdf","pdf");    
+  c->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger095"+".pdf","pdf");    
    TCanvas* c2 = new TCanvas("c2");
    gr09->SetMarkerStyle(3);
    gr095->SetMarkerStyle(5);
@@ -236,14 +280,18 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
   mg->Add(gr09);
   mg->Add(gr095);
   mg->Draw("ap");
-  mg->GetHistogram()->GetXaxis()->SetRangeUser(0.,600.);
+  mg->GetXaxis()->SetLimits(0.,600.);
+  mg->GetYaxis()->SetLimits(0.,550.);
+  mg->GetXaxis()->SetTitle("p_{t}^{ave}");
+  mg->GetYaxis()->SetTitle("threshold");    
   mg->Draw("ap");  
-  c2->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger"+(pt1_check ? "pt1":"")+".pdf","pdf");
+  c2->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger"+".pdf","pdf");
 
-  
-  for(int i=0; i<n_trigger-1; i++){
+    for(int i=0; i<n_trigger-1; i++){
       TCanvas* c1 = new TCanvas("c1");
       ptave_data_eff[i]->Draw();
+      ptave_data_eff[i]->GetXaxis()->SetTitle("p_{t}^{ave}");
+      ptave_data_eff[i]->GetYaxis()->SetTitle("#epsilon");      
       TLine *line = new TLine(thresholds[i],0,thresholds[i],
 			      1.05*func[i]->GetParameter(2));
       line->SetLineColor(kBlack);
@@ -253,7 +301,21 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(// bool use_minBias
       line09->SetLineColor(kBlack);
       line09->SetLineStyle(2);
       line09->Draw();     
-      c1->Print(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[i+1])+(pt1_check ? "pt1":"")+".pdf","pdf");
+      c1->Print(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[i+1])+".pdf","pdf");
+
+      if(pt_check){
+	TCanvas* c4 = new TCanvas("c4");
+	pt1_data_eff[i]->Draw();
+	pt1_data_eff[i]->GetXaxis()->SetTitle("p_{t}^{1}");
+	pt1_data_eff[i]->GetYaxis()->SetTitle("#epsilon");      
+	c4->Print(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[i+1])+"_pt1.pdf","pdf");
+	
+	TCanvas* c3 = new TCanvas("c3");
+	pt2_data_eff[i]->Draw();
+	pt2_data_eff[i]->GetXaxis()->SetTitle("p_{t}^{2}");
+	pt2_data_eff[i]->GetYaxis()->SetTitle("#epsilon");      
+	c3->Print(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[i+1])+"_pt2.pdf","pdf");	
+      }
 
   }
     
