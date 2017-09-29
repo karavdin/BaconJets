@@ -142,6 +142,7 @@ int main(int argc,char *argv[]){
 	    	    
 	      else if(arg=="--muTrg"){
 		muonTriggerName = argv[i+1];
+		muonCrosscheck=true;
 	      }
 	      else if(arg=="--asym_cut"){
 		asym_cut = stod(argv[i+1]);
@@ -180,6 +181,7 @@ int main(int argc,char *argv[]){
   if(mode!="") input_path+="_";
   input_path+=mode + "/Run17";
   input_path+= run_nr + "_Data";
+  if(muonCrosscheck) input_path +="_"+ muonTriggerName;
   if(dataname_end!="") input_path+="_";
   input_path += dataname_end + ".root";
   }
@@ -206,7 +208,7 @@ int main(int argc,char *argv[]){
     if(do_deriveThresholds) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_alternativeWay();
     if(do_deriveThresholds_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_alternativeWay(true);   
  
-    if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiMuCrosscheck(muonTriggerName);
+    if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_alternativeWay();
     
     if(do_finalControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
     

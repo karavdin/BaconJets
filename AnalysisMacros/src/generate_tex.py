@@ -13,32 +13,17 @@ output_name = "controlplotsC_newPtBinning.tex"
 if len(sys.argv) > 1:
     output_name = sys.argv[1] + ".tex"
 
-img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/"
+img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/"
 if output_name.find("controlplotsBCD") > -1:
-    if output_name.find("newPtBinning") > -1:
-        img_path_base_2 = img_path_base_2 + "RunBCD_newPtBinning"
-    else:
-        img_path_base_2 = img_path_base_2 + "RunBCD"
+    img_path_base_2 = img_path_base_2 + "RunBCD_newPt2"
 elif output_name.find("controlplotsBC") > -1:
-    if output_name.find("newPtBinning") > -1:
-        img_path_base_2 = img_path_base_2 + "RunBC_newPtBinning"
-    else:
-        img_path_base_2 = img_path_base_2 + "RunBC"
+    img_path_base_2 = img_path_base_2 + "RunBC_newPt2"
 elif output_name.find("controlplotsC") > -1:
-    if output_name.find("newPtBinning") > -1:
-        img_path_base_2 = img_path_base_2 + "RunC_newPtBinning"
-    else:
-        img_path_base_2 = img_path_base_2 + "RunC"
+    img_path_base_2 = img_path_base_2 + "RunC_newPt2"
 elif output_name.find("controlplotsB") > -1:
-    if output_name.find("newPtBinning") > -1:
-        img_path_base_2 = img_path_base_2 + "RunB_newPtBinning"
-    else:
-        img_path_base_2 = img_path_base_2 + "RunB"
+    img_path_base_2 = img_path_base_2 + "RunB_newPt2"
 elif output_name.find("controlplotsD") > -1:
-    if output_name.find("newPtBinning") > -1:
-        img_path_base_2 = img_path_base_2 + "RunD_newPtBinning"
-    else:
-        img_path_base_2 = img_path_base_2 + "RunD"
+    img_path_base_2 = img_path_base_2 + "RunD"
 
 else:
     raise RuntimeError("Cant identifiy ouput name %s" % output_name)
@@ -50,18 +35,22 @@ if not os.path.isdir(img_path_base_2):
 
 img_path_base = img_path_base_2 + "control/"
 
-img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunB/plots/control/"
+img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunB_newPt2/plots/control/"
 
-img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC/plots/control/"
+img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunC_newPt2/plots/control/"
 
-img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunB/plots/"
+img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunB_newPt2/plots/"
 
-img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC/plots/"
+img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunC_newPt2/plots/"
 
 
-img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC/plots/thresholds/"
-img_path_base_th_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunB/plots/thresholds/"
-img_path_base_th_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC/plots/thresholds/"
+img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC_new/plots/thresholds/"
+img_path_base_th_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunB_new/plots/thresholds/"
+img_path_base_th_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC_new/plots/thresholds/"
+
+img_path_base_th_mu = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC/plots/thresholds/"
+img_path_base_th_B_mu = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunB/plots/thresholds/"
+img_path_base_th_C_mu = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC/plots/thresholds/"
 
 etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
         2.172, 2.322, 2.500, 2.650, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191]
@@ -69,10 +58,7 @@ etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
 etas_str = ["00", "0261", "0522", "0783", "1044", "1305", "1479", "1653", "193",
             "2172", "2322", "25", "2650", "2853", "2964", "3139", "3489", "3839", "5191"]
 
-pt_str = ["70", "99", "164", "238", "306",
-          "369", "459", "487", "537", "1000", "2000"]
-
-pt_str_full = ["46", "68", "91", "158", "225", "292",
+pt_str_full = ["40", "62", "85", "153", "222", "290",
                "359", "443", "486", "536", "1000", "2000"]
 
 pt_str = pt_str_full[1:];
@@ -282,12 +268,12 @@ frames_list[-1] += """
 \\begin{tabular}{|c|c|c|}
   \hline
   trigger path & 0.95 threshold & threshold 2016 [GeV] \\\\\hline
- HLT\_PFJet40\_v* & 46 & 51 \\\\ \hline
- HLT\_PFJet60\_v* & 68 & 73 \\\\ \hline
- HLT\_PFJet80\_v* & 91 & 95\\\\ \hline
-  HLT\_PFJet140\_v* & 158 & 129\\\\ \hline
- HLT\_PFJet200\_v* & 225 & 163\\\\ \hline
- HLT\_PFJet260\_v* & 292 & 230\\\\ \hline
+ HLT\_PFJet40\_v* & 40 & 51 \\\\ \hline
+ HLT\_PFJet60\_v* & 62 & 73 \\\\ \hline
+ HLT\_PFJet80\_v* & 85 & 95\\\\ \hline
+  HLT\_PFJet140\_v* & 153 & 129\\\\ \hline
+ HLT\_PFJet200\_v* & 222 & 163\\\\ \hline
+ HLT\_PFJet260\_v* & 290 & 230\\\\ \hline
  HLT\_PFJet320\_v* & 359 & 299\\\\ \hline
  HLT\_PFJet400\_v* & 443 & 365\\\\ \hline
   HLT\_PFJet450\_v* & 486 & 453\\\\ \hline
@@ -485,10 +471,19 @@ frames_list.append(
 ##############threshold pt check #####################
 frames_list.append(
     "\\begin{frame}{Single PF Jet Trigger Thresholds Run BC}\n")
+
+frames_list[-1] += "\\begin{minipage}{0.08\\textwidth}\n"
+frames_list[-1] += "\t \\vspace{0.1cm}\n \\tiny pt ave\\newline\n "
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny pt 1\\newline\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny pt 2\\newline\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny x-check\\newline\n "
+frames_list[-1] += "\t \\vspace{0.8cm}\n \n "
+frames_list[-1] += "\end{minipage}\n"
+
 for i, th in enumerate(trigger_val[4:]):
     # if i and not i % 4:
     #     frames_list[-1] += "\t\\newline\n\n"
-    frames_list[-1] += "\\begin{minipage}{0.15\\textwidth}\n"
+    frames_list[-1] += "\\begin{minipage}{0.14\\textwidth}\n"
     frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
     frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
         img_path_base_th + "HLT_PFJet"
@@ -502,6 +497,10 @@ for i, th in enumerate(trigger_val[4:]):
         img_path_base_th + "HLT_PFJet"
     frames_list[-1] += th
     frames_list[-1] += "_pt2.pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_mu + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
     frames_list[-1] += "\end{minipage}\n"
 
 frames_list[-1] += "\end{frame}\n\n"
@@ -525,6 +524,10 @@ for i, th in enumerate(trigger_val[4:]):
         img_path_base_th_B + "HLT_PFJet"
     frames_list[-1] += th
     frames_list[-1] += "_pt2.pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_B_mu + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
     frames_list[-1] += "\end{minipage}\n"
 
 frames_list[-1] += "\end{frame}\n\n"
@@ -548,6 +551,10 @@ for i, th in enumerate(trigger_val[4:]):
         img_path_base_th_C + "HLT_PFJet"
     frames_list[-1] += th
     frames_list[-1] += "_pt2.pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_C_mu + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
     frames_list[-1] += "\end{minipage}\n"
 
 frames_list[-1] += "\end{frame}\n\n"

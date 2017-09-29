@@ -41,8 +41,7 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(bool pt_check){
   TH1D *hdata_pt_2[trg_nr-1];
 
   TH1D *hdata_pt_1_wNext[trg_nr-1];
-  TH1D *hdata_pt_2_wNext[trg_nr-1];    
-
+  TH1D *hdata_pt_2_wNext[trg_nr-1];
   
   for(int j=0; j<trg_nr-1; j++){
     TString name = "pt_ave_trg"+to_string(triggerVal[j]);
@@ -98,14 +97,16 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(bool pt_check){
 	  hdata_pt_1[j]->Fill(*pt_1_data);
 	  hdata_pt_2[j]->Fill(*pt_2_data);
 	}
-      }
-      if((*(trg_arr[j]))&&(*(trg_arr[j+1]))){
+	if(*(trg_arr[j+1])){
 	hdata_pt_ave_wNext[j]->Fill(*pt_ave_data);
-	if(pt_check){
-	  hdata_pt_1_wNext[j]->Fill(*pt_1_data);
-	  hdata_pt_2_wNext[j]->Fill(*pt_2_data);
+	   if(pt_check){
+	     hdata_pt_1_wNext[j]->Fill(*pt_1_data);
+	     hdata_pt_2_wNext[j]->Fill(*pt_2_data);
+	   }
 	}
+	
       }
+
     }
     myCount++;
     if(!exclusive){
@@ -123,21 +124,24 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(bool pt_check){
   for(int j=0; j<trg_nr-1; j++){
     hdata_pt_ave_wNext[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j])+"_pt_ave_wNext"+".root");
     hdata_pt_ave[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j])+"_pt_ave"+".root");
-    
-    ptave_data_eff[j]= (TH1D*) hdata_pt_ave_wNext[j]->Clone();
+
+    hdata_pt_ave_wNext[j]->Rebin(6);
+    hdata_pt_ave[j]->Rebin(6);
+    ptave_data_eff[j]= (TH1D*) hdata_pt_ave_wNext[j]->Clone();    
     ptave_data_eff[j]->Divide((TH1D*) hdata_pt_ave[j]->Clone());
-    ptave_data_eff[j]->Rebin(6);
     ptave_data_eff[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j+1])+".root");
 
     if(pt_check){
+      hdata_pt_1_wNext[j]->Rebin(6);
+      hdata_pt_1[j]->Rebin(6);
       pt1_data_eff[j]= (TH1D*) hdata_pt_1_wNext[j]->Clone();
       pt1_data_eff[j]->Divide((TH1D*) hdata_pt_1[j]->Clone());
-      pt1_data_eff[j]->Rebin(6);
       pt1_data_eff[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j+1])+"_pt1.root");
 
+      hdata_pt_2_wNext[j]->Rebin(6);
+      hdata_pt_2[j]->Rebin(6);
       pt2_data_eff[j]= (TH1D*) hdata_pt_2_wNext[j]->Clone();
       pt2_data_eff[j]->Divide((TH1D*) hdata_pt_2[j]->Clone());
-      pt2_data_eff[j]->Rebin(6);
       pt2_data_eff[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJet"+to_string(triggerVal[j+1])+"_pt2.root");
     }
     
@@ -169,7 +173,8 @@ void CorrectionObject::Derive_Thresholds_alternativeWay(bool pt_check){
     func[i]->SetParNames("p0", "p1", "N");
     ptave_data_eff[i]->Fit(func[i],"R");
 
-    use_for_extrapol[i] = func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.;
+    // use_for_extrapol[i] = func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.;
+    use_for_extrapol[i] = triggerVal[i+1]>190;
     cout<< (func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.)<<endl;
     if(use_for_extrapol[i]) n_extrapol++;
     

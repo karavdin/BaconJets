@@ -21,8 +21,8 @@
 <!ENTITY TRIGGER_CENTRAL     "true">  <!--Trigger Flag -->
 <!ENTITY TRIGGER_FWD         "false"> <!--Trigger Flag -->
 
-<!ENTITY TRIGGER_SINGLEMUON  "false"> <!--Trigger Flag -->
-<!ENTITY TRIGGER_SINGLEMUON_NAME  "Mu17"> <!--Trigger Flag -->
+<!ENTITY TRIGGER_SINGLEMUON  "true"> <!--Trigger Flag -->
+<!ENTITY TRIGGER_SINGLEMUON_NAME  "Mu50"> <!--Trigger Flag -->
 
 <!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_JetHT_Run2017B_PromtReco_v1.xml">
 
@@ -43,7 +43,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DataBC_deriveThresholds_wMinBias"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DataBC_deriveThresholds_wMu50"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -66,23 +66,23 @@
 <!--           <OutputTree Name="AnalysisTree"/> -->
 <!-- </InputData> -->
 
-<InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_promptReco_2017" Cacheable="&CACHEABLE;">
-          &DATA_RunD_promptReco_2017;
+<!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_promptReco_2017" Cacheable="&CACHEABLE;"> -->
+<!--           &DATA_RunD_promptReco_2017; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!-- </InputData> -->
+
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_promptReco_2017_SingleMuon" Cacheable="&CACHEABLE;">
+          &DATA_RunB_promptReco_2017_SingleMuon;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
 </InputData>
 
-<!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_promptReco_2017_SingleMuon" Cacheable="&CACHEABLE;"> -->
-<!--           &DATA_RunB_promptReco_2017_SingleMuon; -->
-<!--           <InputTree Name="AnalysisTree"/> -->
-<!--           <OutputTree Name="AnalysisTree"/> -->
-<!-- </InputData> -->
-
-<!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_promptReco_2017_SingleMuon" Cacheable="&CACHEABLE;"> -->
-<!--           &DATA_RunC_promptReco_2017_SingleMuon; -->
-<!--           <InputTree Name="AnalysisTree"/> -->
-<!--           <OutputTree Name="AnalysisTree"/> -->
-<!-- </InputData> -->
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_promptReco_2017_SingleMuon" Cacheable="&CACHEABLE;">
+          &DATA_RunC_promptReco_2017_SingleMuon;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+</InputData>
 
 <!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_promptReco_2017_SingleMuon" Cacheable="&CACHEABLE;"> -->
 <!--           &DATA_RunD_promptReco_2017_SingleMuon; -->
