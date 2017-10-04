@@ -53,7 +53,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_Data_newThreshs"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_Data_newThreshsPlus10"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -144,11 +144,11 @@
           <OutputTree Name="AnalysisTree"/>
 </InputData>
 
-<InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_promptReco_2017" Cacheable="&CACHEABLE;">
-          &DATA_RunD_promptReco_2017;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-</InputData>
+<!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_promptReco_2017" Cacheable="&CACHEABLE;"> -->
+<!--           &DATA_RunD_promptReco_2017; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!-- </InputData> -->
 
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>

@@ -30,9 +30,6 @@
 #include "TFile.h"
 #include "TTree.h"
 
-// Int_t   Runnr;
-// Int_t   Eventnr;
-
 using namespace std;
 using namespace uhh2;
 
@@ -848,7 +845,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     sort_by_pt<Electron>(*event.electrons);
 //std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
 
-    if (event.electrons->size()>0 || event.muons->size()>0) return false; //TEST lepton cleaning 
+    if(!trigger_singlemuon)  if (event.electrons->size()>0 || event.muons->size()>0) return false; //TEST lepton cleaning, no lepton cleaning for the muon trigger x-check 
 
     h_runnr_input->fill(event);
 
@@ -1265,7 +1262,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 
 //DiJet-Events
 
-    if(!sel.DiJet()) return false;
+    // if(!sel.DiJet()) return false;
     h_nocuts->fill(event);
     h_lumi_nocuts->fill(event);
 
@@ -1288,7 +1285,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
    }
 
 //Advanced Selection: DiJet Events
-    if(!sel.DiJetAdvanced(event)) return false;
+    // if(!sel.DiJetAdvanced(event)) return false;
     h_dijet->fill(event);
     h_lumi_dijet->fill(event);
     h_match->fill(event);

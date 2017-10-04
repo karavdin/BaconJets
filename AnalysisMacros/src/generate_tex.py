@@ -34,23 +34,26 @@ if not os.path.isdir(img_path_base_2):
     raise RuntimeError("Path %s does not exist" % img_path_base_2)
 
 img_path_base = img_path_base_2 + "control/"
-
 img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunB_newPt2/plots/control/"
-
 img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunC_newPt2/plots/control/"
-
 img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunB_newPt2/plots/"
-
 img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunC_newPt2/plots/"
+
+img_path_base_B_p10 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunB_plus10/plots/control/"
+img_path_base_C_p10 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC_plus10/plots/control/"
 
 
 img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC_new/plots/thresholds/"
 img_path_base_th_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunB_new/plots/thresholds/"
 img_path_base_th_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC_new/plots/thresholds/"
 
-img_path_base_th_mu = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC/plots/thresholds/"
-img_path_base_th_B_mu = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunB/plots/thresholds/"
-img_path_base_th_C_mu = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC/plots/thresholds/"
+img_path_base_th_mu = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC_wIsoMu27/plots/thresholds/"
+img_path_base_th_B_mu = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunB_wMu50/plots/thresholds/"
+img_path_base_th_C_mu = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC_wMu50/plots/thresholds/"
+
+img_path_base_th_mu20 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC_wIsoMu20/plots/thresholds/"
+img_path_base_th_mu50 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC_wMu50/plots/thresholds/"
+img_path_base_th_mu27 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC_wMu27/plots/thresholds/"
 
 etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
         2.172, 2.322, 2.500, 2.650, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191]
@@ -284,7 +287,7 @@ frames_list[-1] += "\end{frame}\n\n"
 
 frames_list.append(
     "\\begin{frame}{Single PF Jet Trigger Thresholds Run BC}\n")
-frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N(\\text{low trg}) + N(\\text{high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\nThe plateaus are not at one cause of different prescales of the different triggers.\n\\newline\n"
+frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N(\\text{low trg} \&\& \\text{high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\nThe plateaus are not at one cause of different prescales of the different triggers.\n\\newline\n"
 
 for i, th in enumerate(trigger_val[4:]):
     if i and not i % 4:
@@ -498,7 +501,7 @@ for i, th in enumerate(trigger_val[4:]):
     frames_list[-1] += th
     frames_list[-1] += "_pt2.pdf}\n\\newline"
     frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
-        img_path_base_th_mu + "HLT_PFJet"
+        img_path_base_th_mu50 + "HLT_PFJet"
     frames_list[-1] += th
     frames_list[-1] += ".pdf}\n\\newline"
     frames_list[-1] += "\end{minipage}\n"
@@ -507,10 +510,19 @@ frames_list[-1] += "\end{frame}\n\n"
 
 frames_list.append(
     "\\begin{frame}{Single PF Jet Trigger Thresholds Run B}\n")
+frames_list[-1] += "\\begin{minipage}{0.08\\textwidth}\n"
+frames_list[-1] += "\t \\vspace{0.1cm}\n \\tiny pt ave\\newline\n "
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny pt 1\\newline\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny pt 2\\newline\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny x-check\\newline\n "
+frames_list[-1] += "\t \\vspace{0.8cm}\n \n "
+frames_list[-1] += "\end{minipage}\n"
+
+
 for i, th in enumerate(trigger_val[4:]):
     # if i and not i % 4:
     #     frames_list[-1] += "\t\\newline\n\n"
-    frames_list[-1] += "\\begin{minipage}{0.15\\textwidth}\n"
+    frames_list[-1] += "\\begin{minipage}{0.14\\textwidth}\n"
     frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
     frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
         img_path_base_th_B + "HLT_PFJet"
@@ -534,10 +546,18 @@ frames_list[-1] += "\end{frame}\n\n"
 
 frames_list.append(
     "\\begin{frame}{Single PF Jet Trigger Thresholds Run C}\n")
+
+frames_list[-1] += "\\begin{minipage}{0.08\\textwidth}\n"
+frames_list[-1] += "\t \\vspace{0.1cm}\n \\tiny pt ave\\newline\n "
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny pt 1\\newline\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny pt 2\\newline\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny x-check\\newline\n "
+frames_list[-1] += "\t \\vspace{0.8cm}\n \n "
+frames_list[-1] += "\end{minipage}\n"
 for i, th in enumerate(trigger_val[4:]):
     # if i and not i % 4:
     #    frames_list[-1] += "\t\\newline\n\n"
-    frames_list[-1] += "\\begin{minipage}{0.15\\textwidth}\n"
+    frames_list[-1] += "\\begin{minipage}{0.14\\textwidth}\n"
     frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
     frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
         img_path_base_th_C + "HLT_PFJet"
@@ -557,6 +577,93 @@ for i, th in enumerate(trigger_val[4:]):
     frames_list[-1] += ".pdf}\n\\newline"
     frames_list[-1] += "\end{minipage}\n"
 
+frames_list[-1] += "\end{frame}\n\n"
+
+
+############ pt bins shifted by 10 GeV ############
+pt_str_p10 = ["50", "72", "95", "163", "232", "300",
+              "369", "453", "496", "546", "1000", "2000"]
+frames_list.append(
+    "\\begin{frame}{Asymmetry Distribution with pt bins shifted by 10 GeV}\n")
+i = 0
+j = 2
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B_p10 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p10[j] +\
+    "_" + pt_str_p10[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 3
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B_p10 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p10[j] +\
+    "_" + pt_str_p10[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 9
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B_p10 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p10[j] +\
+    "_" + pt_str_p10[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+frames_list[-1] += "\\newline\n"
+
+i = 0
+j = 2
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C_p10 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p10[j] +\
+    "_" + pt_str_p10[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 3
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C_p10 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p10[j] +\
+    "_" + pt_str_p10[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 9
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C_p10 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p10[j] +\
+    "_" + pt_str_p10[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\t\n"
+frames_list[-1] += "\end{frame}\n\n"
+
+
+frames_list.append(
+    "\\begin{frame}{Asymmetry Distr. with pt bins shifted by 10 GeV Run B}\n")
+pic_base = pic_bases[0]
+for i, eta_str in enumerate(etas[:-1]):
+    if i and not i % 5:
+        frames_list[-1] += "\\newline\n\n"
+    frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_B_p10 + \
+        pic_base + "_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
+frames_list[-1] += "\end{frame}\n\n"
+
+frames_list.append(
+    "\\begin{frame}{Asymmetry Distr. with pt bins shifted by 10 GeV Run C}\n")
+pic_base = pic_bases[0]
+for i, eta_str in enumerate(etas[:-1]):
+    if i and not i % 5:
+        frames_list[-1] += "\\newline\n\n"
+    frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_C_p10 + \
+        pic_base + "_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
 frames_list[-1] += "\end{frame}\n\n"
 
 
@@ -716,6 +823,45 @@ for i, eta in enumerate(etas[:-1]):
             "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
             "_" + pt_str_full[j + 1] + ".pdf}\n"
     frames_list[-1] += "\end{frame}\n\n"
+
+
+##############threshold x-check other mu trgs #####################
+frames_list.append(
+    "\\begin{frame}{Single PF Jet Trigger Thresholds Run BC}\n")
+
+frames_list[-1] += "\\begin{minipage}{0.08\\textwidth}\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny IsoMu27\\newline\n "
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny IsoMu20\\newline\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny Mu50\\newline\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \\tiny Mu27\\newline\n"
+frames_list[-1] += "\t \\vspace{0.8cm}\n \n "
+frames_list[-1] += "\end{minipage}\n"
+
+for i, th in enumerate(trigger_val[4:]):
+    # if i and not i % 4:
+    #     frames_list[-1] += "\t\\newline\n\n"
+    frames_list[-1] += "\\begin{minipage}{0.14\\textwidth}\n"
+    frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_mu + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_mu20 + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_mu50 + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_mu27 + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n\\newline"
+
+    frames_list[-1] += "\end{minipage}\n"
+
+frames_list[-1] += "\end{frame}\n\n"
 
 
 #################### Asymmetry Cut stuff #########################

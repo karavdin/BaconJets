@@ -24,9 +24,15 @@ const int n_trigger = 10;
 const int triggerVal[n_trigger] = {40, 60, 80, 140, 200, 260, 320, 400, 450, 500};
 
 const int n_pt = 12;
-const TString pt_range[n_pt]= {"46", "68", "91", "158", "225", "292", "359", "443", "486", "536", "1000", "2000"};
+const TString pt_range[n_pt]= {"40", "62", "85", "153", "222", "290", "359", "443", "486", "536", "1000", "2000"};
 //TODO keep this in check with BaconJets/include/constants.h
-const double pt_bins[n_pt]       = {46, 68, 91, 158, 225, 292, 359, 443, 486, 536, 1000, 2000};
+
+
+const double pt_bins[n_pt]       = {40, 62, 85, 153, 222, 290, 359, 443, 486, 536, 1000, 2000};
+
+//shifted bins up for assym dip checks 
+ // const double pt_bins[n_pt]       = {50, 72, 95, 163, 232, 300, 369, 453, 496, 546, 1010, 2010};
+// const TString pt_range[n_pt]= {"50", "72", "95", "163", "232", "300", "369", "453", "496", "546", "1010", "2010"};
 
 //Eta bins:
 
