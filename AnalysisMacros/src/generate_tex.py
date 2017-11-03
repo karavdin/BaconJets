@@ -24,7 +24,6 @@ elif output_name.find("controlplotsB") > -1:
     img_path_base_2 = img_path_base_2 + "RunB_newPt2"
 elif output_name.find("controlplotsD") > -1:
     img_path_base_2 = img_path_base_2 + "RunD"
-
 else:
     raise RuntimeError("Cant identifiy ouput name %s" % output_name)
 
@@ -41,6 +40,9 @@ img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/R
 
 img_path_base_B_p10 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunB_plus10/plots/control/"
 img_path_base_C_p10 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC_plus10/plots/control/"
+
+img_path_base_B_p50 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunB_plus50/plots/control/"
+img_path_base_C_p50 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC_plus50/plots/control/"
 
 
 img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunBC_new/plots/thresholds/"
@@ -662,6 +664,93 @@ for i, eta_str in enumerate(etas[:-1]):
     if i and not i % 5:
         frames_list[-1] += "\\newline\n\n"
     frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_C_p10 + \
+        pic_base + "_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
+frames_list[-1] += "\end{frame}\n\n"
+
+
+############ pt bins shifted by 50 GeV ############
+pt_str_p50 = ["90", "112", "135", "203", "272", "340",
+              "409", "493", "536", "586", "1050", "2050"]
+frames_list.append(
+    "\\begin{frame}{Asymmetry Distribution with pt bins shifted by 50 GeV}\n")
+i = 0
+j = 2
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B_p50 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p50[j] +\
+    "_" + pt_str_p50[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 3
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B_p50 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p50[j] +\
+    "_" + pt_str_p50[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 9
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run B\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_B_p50 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p50[j] +\
+    "_" + pt_str_p50[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+frames_list[-1] += "\\newline\n"
+
+i = 0
+j = 2
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C_p50 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p50[j] +\
+    "_" + pt_str_p50[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 3
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C_p50 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p50[j] +\
+    "_" + pt_str_p50[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 9
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run C\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_C_p50 +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_p50[j] +\
+    "_" + pt_str_p50[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\t\n"
+frames_list[-1] += "\end{frame}\n\n"
+
+
+frames_list.append(
+    "\\begin{frame}{Asymmetry Distr. with pt bins shifted by 50 GeV Run B}\n")
+pic_base = pic_bases[0]
+for i, eta_str in enumerate(etas[:-1]):
+    if i and not i % 5:
+        frames_list[-1] += "\\newline\n\n"
+    frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_B_p50 + \
+        pic_base + "_eta_" + etas_str[i] + \
+        "_" + etas_str[i + 1] + ".pdf}\n"
+frames_list[-1] += "\end{frame}\n\n"
+
+frames_list.append(
+    "\\begin{frame}{Asymmetry Distr. with pt bins shifted by 50 GeV Run C}\n")
+pic_base = pic_bases[0]
+for i, eta_str in enumerate(etas[:-1]):
+    if i and not i % 5:
+        frames_list[-1] += "\\newline\n\n"
+    frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_C_p50 + \
         pic_base + "_eta_" + etas_str[i] + \
         "_" + etas_str[i + 1] + ".pdf}\n"
 frames_list[-1] += "\end{frame}\n\n"

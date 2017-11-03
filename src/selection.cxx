@@ -85,6 +85,11 @@ bool Selection::PtMC(uhh2::Event& evt)
   return true;
 }
 
+  //still in testing
+int Selection::FindMatchingJet(uhh2::Event& evt, int jetid){
+
+  return jetid;
+}  
 
 bool Selection::DiJet()
 {

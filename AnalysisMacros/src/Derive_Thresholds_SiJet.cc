@@ -24,16 +24,19 @@
 #include <TFile.h>
 #include <TProfile.h>
 
+#include <vector>
+
 using namespace std;
 
-void CorrectionObject::Derive_Thresholds_alternativeWay(bool pt_check){
-  cout << "--------------- Starting Derive_Thresholds_alternativeWay() ---------------" << endl << endl;
+void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check){
+  cout << "--------------- Starting Derive_Thresholds_SiJet() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/thresholds/");
 
-  int trg_nr=n_trigger;
-  
+  int trg_nr=n_triggerSi;
+  int n_trigger = n_triggerSi;
+  vector<int> triggerVal(triggerValSi, triggerValSi + sizeof(triggerValSi) / sizeof(triggerValSi[0]));
   TH1D *hdata_pt_ave[trg_nr-1];
   TH1D *hdata_pt_ave_wNext[trg_nr-1];
 

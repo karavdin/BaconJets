@@ -23,15 +23,18 @@ static void show_usage(std::string name)
       	      << "\t-lFCP\t\tRun final control plots for all lumi bins separately.\n"
 	      << "\t-aFCP\t\tRun final control plots and plot all data asymetrie histograms seperaty.\n"
 	      << "\t-aAP\t\tDo asymmetry plots for all eta and pt bins sepertely.\n"
-    	      << "\t-derThresh\t\tDerive the trigger thresholds.\n"
-      	      << "\t-derThresh_ptCheck\t\tDerive the trigger efficiency distributions for the jet 1 and 2 pt as crosscheck.\n"    
+    	      << "\t-derThreshSi\t\tDerive the trigger thresholds for single jet trigger.\n"
+      	      << "\t-derThreshSi_ptCheck\t\tDerive the trigger efficiency distributions for the jet 1 and 2 pt as crosscheck for single jet trigger.\n"
+	      << "\t-derThreshDi\t\tDerive the trigger thresholds for di jet trigger.\n"
+      	      << "\t-derThreshDi_ptCheck\t\tDerive the trigger efficiency distributions for the jet 1 and 2 pt as crosscheck for di jet trigger.\n"
     	      << "\t-LP\t\tPlot the luminosities.\n"
 	      << "\t-TEC\t\tCheck if the trigger are really exclusive.\n"
- 	      << "\t-BC\t\tUse the older BC directory instead of the BCD directory.\n"     
+ 	      << "\t-BC\t\tUse the older BC directory instead of the BCD directory.\n"
+       	      << "\t-D\t\tUse the D directory instead of the BCD directory.\n"     
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
-      	      <<"\t--input\t\tPath to the input data, if none is giveb following is used:\n"
+      	      <<"\t--input\t\tPath to the input data, if none is given following is used:\n"
 	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data <_mode> /Run17 <run> _Data <_dname> .root\n\tThe completion script assumes the same file structure."	    
               << std::endl;
 }
@@ -57,7 +60,7 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
-  std::vector<std::string> argl = {"-FP", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThresh", "-derThresh_ptCheck", "-BC", "-LP", "-aAP", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix"}; 
+  std::vector<std::string> argl = {"-FP", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D" , "-LP", "-aAP", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix"}; 
   TString run_nr = "B";
   TString dataname_end = "";
   TString outSuf = "";
@@ -68,13 +71,16 @@ int main(int argc,char *argv[]){
   bool do_trgControlPlots=false;
   bool do_lumiControlPlots=false;
   bool do_asymControlPlots=false;
-  bool do_deriveThresholds=false;
-  bool do_deriveThresholds_ptCheck=false; 
+  bool do_deriveThresholdsSi=false;
+  bool do_deriveThresholdsSi_ptCheck=false; 
+  bool do_deriveThresholdsDi=false;
+  bool do_deriveThresholdsDi_ptCheck=false;
   bool do_lumi_plot=false;
   bool do_finalControlPlots = false;
   bool do_addAsymPlots = false;
   bool do_triggerEx = false;
   bool use_BC = false;
+  bool use_D = false; 
   TString input_path_="";
   double asym_cut = 0.;
   for (int i = 1; i < argc; ++i) {
@@ -108,11 +114,17 @@ int main(int argc,char *argv[]){
 	  else if(arg=="-TEC"){
 	    do_triggerEx=true;
 	  }	    	  
-	  else if(arg=="-derThresh"){
-	    do_deriveThresholds=true;
+	  else if(arg=="-derThreshSi"){
+	    do_deriveThresholdsSi=true;
 	  }
-	  else if(arg=="-derThresh_ptCheck"){
-	    do_deriveThresholds_ptCheck=true;
+	  else if(arg=="-derThreshSi_ptCheck"){
+	    do_deriveThresholdsSi_ptCheck=true;
+	  }	  	    	  
+	  else if(arg=="-derThreshDi"){
+	    do_deriveThresholdsDi=true;
+	  }
+	  else if(arg=="-derThreshDi_ptCheck"){
+	    do_deriveThresholdsDi_ptCheck=true;
 	  }	  
 	  else if(arg=="-mu"){
 	    muonCrosscheck=true;
@@ -125,6 +137,9 @@ int main(int argc,char *argv[]){
 	  }
 	  else if(arg=="-BC"){
 	    use_BC=true;
+	  }
+	  else if(arg=="-D"){
+	    use_D=true;
 	  }	  
 	  else if(arg[1]=='-'){
 	    if(arg=="--mode"){
@@ -154,7 +169,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholds or do_deriveThresholds_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
+  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -174,8 +189,10 @@ int main(int argc,char *argv[]){
     input_path=input_path_;
   }
   else{
-      input_path  = "/nfs/dust/cms/user/"+(string)getenv("USER")+"/forBaconJets/2017PromptReco/Residuals/Run17BC";
-      if(!use_BC) input_path+="D";
+      input_path  = "/nfs/dust/cms/user/"+(string)getenv("USER")+"/forBaconJets/2017PromptReco/Residuals/Run17";
+      if(use_BC) input_path+="BC";
+      else if(use_D) input_path+="D";
+      else input_path+="BCD";
   // if(muonCrosscheck) input_path+="D";
   input_path+="_Data";
   if(mode!="") input_path+="_";
@@ -205,10 +222,13 @@ int main(int argc,char *argv[]){
     if(do_trgControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
     
 
-    if(do_deriveThresholds) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_alternativeWay();
-    if(do_deriveThresholds_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_alternativeWay(true);   
+    if(do_deriveThresholdsSi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet();
+    if(do_deriveThresholdsSi_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet(true);
+
+    if(do_deriveThresholdsDi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_DiJet();
+    if(do_deriveThresholdsDi_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_DiJet(true);    
  
-    if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_alternativeWay();
+    if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet();
     
     if(do_finalControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae();
     

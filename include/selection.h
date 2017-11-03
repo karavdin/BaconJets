@@ -56,6 +56,9 @@ class Selection {
     bool PUpthat(uhh2::Event& evt);
     bool EtaPhi(uhh2::Event& evt);
     bool EtaPhiCleaning(uhh2::Event& evt);
+
+    //jetmatching
+    int FindMatchingJet(uhh2::Event& evt, int jetid);
 };
 
 }

@@ -37,6 +37,8 @@ void CorrectionObject::Lumi_Plots(){
   TStyle* m_gStyle = new TStyle();
   m_gStyle->SetOptFit(000);
 
+  int n_trigger = n_triggerSi;
+  vector<int> triggerVal(triggerValSi, triggerValSi + sizeof(triggerValSi) / sizeof(triggerValSi[0]));
   
   // fill the histos for pt average in bins of eta
   TH1D* lumi_data[n_trigger+5];

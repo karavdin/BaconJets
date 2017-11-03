@@ -20,8 +20,10 @@ const double alpha_bins[n_alpha] = {0.050, 0.100, 0.150, 0.200, 0.250, 0.300, 0.
 
 //Pt bins:
 
-const int n_trigger = 10;
-const int triggerVal[n_trigger] = {40, 60, 80, 140, 200, 260, 320, 400, 450, 500};
+const int n_triggerDi = 9;
+const int n_triggerSi = 10;
+const int triggerValSi[n_triggerSi] = {40, 60, 80, 140, 200, 260, 320, 400, 450, 500};
+const int triggerValDi[n_triggerDi] = {40, 60, 80, 140, 200, 260, 320, 400, 500};
 
 const int n_pt = 12;
 const TString pt_range[n_pt]= {"40", "62", "85", "153", "222", "290", "359", "443", "486", "536", "1000", "2000"};
@@ -31,8 +33,8 @@ const TString pt_range[n_pt]= {"40", "62", "85", "153", "222", "290", "359", "44
 const double pt_bins[n_pt]       = {40, 62, 85, 153, 222, 290, 359, 443, 486, 536, 1000, 2000};
 
 //shifted bins up for assym dip checks 
- // const double pt_bins[n_pt]       = {50, 72, 95, 163, 232, 300, 369, 453, 496, 546, 1010, 2010};
-// const TString pt_range[n_pt]= {"50", "72", "95", "163", "232", "300", "369", "453", "496", "546", "1010", "2010"};
+// const double pt_bins[n_pt]       = {90, 112, 135, 203, 272, 340, 409, 493, 536, 586, 1050, 2050};
+// const TString pt_range[n_pt]= {"90", "112", "135", "203", "272", "340", "409", "493", "536", "586", "1050", "2050"};
 
 //Eta bins:
 
