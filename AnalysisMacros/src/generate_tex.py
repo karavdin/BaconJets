@@ -71,6 +71,25 @@ pt_str = pt_str_full[1:];
 trigger_val = ["40", "60", "80", "140",
                "200", "260", "320", "400", "450", "500"]
 
+pt_str_full_Di = [
+    "51",
+    "51",
+    "74",
+    "96",
+    "148",
+    "214",
+    "285",
+    "346",
+    "426",
+    "525",
+    "1000",
+    "2000"]
+
+pt_str_Di = pt_str_full_Di[1:];
+
+trigger_val_Di = ["40", "60", "80", "140",
+                  "200", "260", "320", "400", "500"]
+
 pic_bases = [  # "alpha_pythia8",
     "A_NormDistribution_DATA_pythia8",
     # "A_NormDistribution_MC_pythia8",
