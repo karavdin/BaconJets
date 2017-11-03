@@ -26,15 +26,40 @@ const int triggerValSi[n_triggerSi] = {40, 60, 80, 140, 200, 260, 320, 400, 450,
 const int triggerValDi[n_triggerDi] = {40, 60, 80, 140, 200, 260, 320, 400, 500};
 
 const int n_pt = 12;
-const TString pt_range[n_pt]= {"40", "62", "85", "153", "222", "290", "359", "443", "486", "536", "1000", "2000"};
-//TODO keep this in check with BaconJets/include/constants.h
 
+// //for Si derived trigger
+// const TString pt_range[n_pt]= {"40", "62", "85", "153", "222", "290", "359", "443", "486", "536", "1000", "2000"};
+// //TODO keep this in check with BaconJets/include/constants.h
 
-const double pt_bins[n_pt]       = {40, 62, 85, 153, 222, 290, 359, 443, 486, 536, 1000, 2000};
+// const double pt_bins[n_pt]       = {40, 62, 85, 153, 222, 290, 359, 443, 486, 536, 1000, 2000};
 
-//shifted bins up for assym dip checks 
-// const double pt_bins[n_pt]       = {90, 112, 135, 203, 272, 340, 409, 493, 536, 586, 1050, 2050};
-// const TString pt_range[n_pt]= {"90", "112", "135", "203", "272", "340", "409", "493", "536", "586", "1050", "2050"};
+//for Di derived triggers
+double pt_bins[n_pt] = {
+  51,
+  51,
+  74,
+  96,
+  148,
+  214,
+  285,
+  346,
+  426,
+  525,
+  1000,
+  2000};
+const TString pt_range[n_pt]= {
+  "51",
+  "51",
+  "74",
+  "96",
+  "148",
+  "214",
+  "285",
+  "346",
+  "426",
+  "525",
+  "1000",
+  "2000"};
 
 //Eta bins:
 
