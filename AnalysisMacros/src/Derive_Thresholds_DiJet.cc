@@ -100,7 +100,7 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check){
 	  hdata_pt_1[j]->Fill(*pt_1_data);
 	  hdata_pt_2[j]->Fill(*pt_2_data);
 	}
-	//}
+      }
 	if(*(trg_arr[j+1])){
 	hdata_pt_ave_wNext[j]->Fill(*pt_ave_data);
 	   if(pt_check){
@@ -108,7 +108,6 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check){
 	     hdata_pt_2_wNext[j]->Fill(*pt_2_data);
 	   }
 	}
-      }
 	
     }
     myCount++;
@@ -177,7 +176,7 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check){
     ptave_data_eff[i]->Fit(func[i],"R");
 
     // use_for_extrapol[i] = func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.;
-    use_for_extrapol[i] = true;//triggerVal[i+1]>190;
+    use_for_extrapol[i] = true;//triggerVal[i+1]>190 || triggerVal[i+1]<70;
     cout<< (func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.)<<endl;
     if(use_for_extrapol[i]) n_extrapol++;
     
