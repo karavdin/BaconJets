@@ -38,6 +38,10 @@ img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Resid
 img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunB_newPt2/plots/"
 img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data/RunC_newPt2/plots/"
 
+img_path_base_D_DiJet = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17D_Data/RunD_DiJet/plots/control/"
+img_path_baseMain_D_DiJet = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17D_Data/RunD_DiJet/plots/"
+img_path_base_th_D_DiJet = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC_new/plots/thresholds/"
+
 img_path_base_B_p10 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunB_plus10/plots/control/"
 img_path_base_C_p10 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC_plus10/plots/control/"
 
@@ -238,6 +242,84 @@ frames_list.append(
     """
 )
 
+
+############## Run D DiJet ##########################
+
+frames_list.append(
+    "\\begin{frame}{L2Res with 2017 Run D}\n")
+for i, spic in enumerate(first_pics):
+    if i and not i % 3:
+        frames_list[-1] += "\\newline\n\n"
+    frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+    frames_list[-1] += "\t\\tiny  " + \
+        spic.replace("_", " ").replace("pythia8", " ").replace(
+            "AK4PFchs", " ").replace("logpt", " ") + "\n \t\\newline\n"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_baseMain_D_DiJet + \
+        spic + ".pdf}\n"
+    frames_list[-1] += "\end{minipage}\n"
+frames_list[-1] += "\end{frame}\n\n"
+
+
+frames_list.append(
+    "\\begin{frame}{DiJet Trigger Thresholds Run D}\n")
+frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N(\\text{low trg} \&\& \\text{high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\nThe plateaus are not at one cause of different prescales of the different triggers.\n\\newline\n"
+
+for i, th in enumerate(trigger_val[4:]):
+    if i and not i % 4:
+        frames_list[-1] += "\t\\newline\n\n"
+    frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
+    frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
+    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+        img_path_base_th_D_DiJet + "HLT_PFJet"
+    frames_list[-1] += th
+    frames_list[-1] += ".pdf}\n"
+    frames_list[-1] += "\end{minipage}\n"
+
+frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
+frames_list[-1] += "\t\\tiny extrapolation\n \\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+                   img_path_base_th_D_DiJet + "extrapolateLowestTrigger.pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+
+frames_list[-1] += "\end{frame}\n\n"
+
+
+frames_list.append(
+    "\\begin{frame}{Not Understood: Asymmetry Distribution}\n")
+frames_list[-1] += "\t\scriptsize $A=\\frac{p_t^{tag}-p_t^{probe}}{p_t^{tag}+p_t^{probe}}$, jets are assigned randomly from the two leading jets. Only one trigger is used per pt-bin.\n\\newline\n"
+i = 0
+j = 2
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run D\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_D_DiJet +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full_Di[j] +\
+    "_" + pt_str_full_Di[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 3
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run D\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_D_DiJet +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full_Di[j] +\
+    "_" + pt_str_full_Di[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+i = 9
+j = 8
+frames_list[-1] += "\\begin{minipage}{0.3\\textwidth}\n"
+frames_list[-1] += "\t\scriptsize Run D\n\t\\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_D_DiJet +\
+    "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+    "_" + etas_str[i + 1] + "_pt_" + pt_str_full_Di[j] +\
+    "_" + pt_str_full_Di[j + 1] + ".pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+frames_list[-1] += "\\newline\n"
+
+frames_list[-1] += "\end{frame}\n\n"
+
+
+### Run B C #####
 ################ kFSR #########################
 
 
@@ -343,6 +425,10 @@ frames_list[-1] += "\end{frame}\n\n"
 #     img_path_base_th + "pt_ave_usedForThresh.pdf}\n"
 # frames_list[-1] += "\end{minipage}\n"
 # frames_list[-1] += "\end{frame}\n\n"
+
+
+########## Asym Examples ##########
+
 
 frames_list.append(
     "\\begin{frame}{Not Understood: Asymmetry Distribution}\n")

@@ -15,7 +15,7 @@ static void show_usage(std::string name)
               << "\t-h,--help\t\tShow this help message\n"
               << "\t--mode\t\tMode in which the plots was created, used in the input path.\n"
               << "\t--dname\t\tSuffix for the input and output path.\n"
-	      << "\t--outSuffix\t\Additional output suffix."
+	      << "\t--outSuffix\t\Additional output suffix.\n"
               << "\t--run\t\tRun Nr, default is B, used in the input path\n"
 	      << "\t-FP\t\tRun all main control plots.\n"
  	      << "\t-FCP\t\tRun all final control plots.\n"     

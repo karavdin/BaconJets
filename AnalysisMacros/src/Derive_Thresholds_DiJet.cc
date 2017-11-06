@@ -101,13 +101,13 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check){
 	  hdata_pt_2[j]->Fill(*pt_2_data);
 	}
       }
-	if(*(trg_arr[j+1])){
+      if(*(trg_arr[j+1])){
 	hdata_pt_ave_wNext[j]->Fill(*pt_ave_data);
 	   if(pt_check){
 	     hdata_pt_1_wNext[j]->Fill(*pt_1_data);
 	     hdata_pt_2_wNext[j]->Fill(*pt_2_data);
 	   }
-	}
+      }
 	
     }
     myCount++;
