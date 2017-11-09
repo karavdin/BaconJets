@@ -40,7 +40,7 @@ img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/R
 
 img_path_base_D_DiJet = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17D_Data/RunD_DiJet/plots/control/"
 img_path_baseMain_D_DiJet = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17D_Data/RunD_DiJet/plots/"
-img_path_base_th_D_DiJet = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/RunC_new/plots/thresholds/"
+img_path_base_th_D_DiJet = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17D_Data_DeriveThresholds_noDiJCut/RunD_2/plots/thresholds/"
 
 img_path_base_B_p10 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunB_plus10/plots/control/"
 img_path_base_C_p10 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data_newThreshs/RunC_plus10/plots/control/"
@@ -267,13 +267,14 @@ frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N(\\text{low t
 for i, th in enumerate(trigger_val[4:]):
     if i and not i % 4:
         frames_list[-1] += "\t\\newline\n\n"
-    frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
-    frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
-    frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
-        img_path_base_th_D_DiJet + "HLT_PFJet"
-    frames_list[-1] += th
-    frames_list[-1] += ".pdf}\n"
-    frames_list[-1] += "\end{minipage}\n"
+    if not i == 4:
+        frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
+        frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
+        frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+                           img_path_base_th_D_DiJet + "HLT_DiPFJetAve"
+        frames_list[-1] += th
+        frames_list[-1] += ".pdf}\n"
+        frames_list[-1] += "\end{minipage}\n"
 
 frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
 frames_list[-1] += "\t\\tiny extrapolation\n \\newline\n"
@@ -281,6 +282,26 @@ frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
                    img_path_base_th_D_DiJet + "extrapolateLowestTrigger.pdf}\n"
 frames_list[-1] += "\end{minipage}\n"
 
+frames_list[-1] += "\end{frame}\n\n"
+
+
+frames_list.append(
+    "\\begin{frame}{Single PF Jet Trigger Thresholds Run D DiJet}\n")
+frames_list[-1] += """
+\\begin{tabular}{|c|c|c|}
+  \hline
+  trigger path & 0.95 threshold & threshold 2016 [GeV] \\\\\hline
+  HLT\_DiPFJetAve40\_v* & 51 & 51 \\\\ \hline    
+ HLT\_DiPFJetAve60\_v* & 74 &73 \\\\ \hline
+ HLT\_DiPFJetAve80\_v* & 96 &95 \\\\ \hline
+ HLT\_DiPFJetAve140\_v* & 148 &163 \\\\ \hline
+ HLT\_DiPFJetAve200\_v* & 214 &230\\\\ \hline
+ HLT\_DiPFJetAve260\_v* & 285 &299\\\\ \hline
+ HLT\_DiPFJetAve320\_v* & 346 &365\\\\ \hline
+ HLT\_DiPFJetAve400\_v* & 426 &453\\\\ \hline
+ HLT\_DiPFJetAve500\_v* & 525 &566\\\\ \hline
+\end{tabular}
+"""
 frames_list[-1] += "\end{frame}\n\n"
 
 

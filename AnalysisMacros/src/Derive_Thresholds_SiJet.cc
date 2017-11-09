@@ -59,10 +59,10 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check){
     TString name_2 = "pt_2_trg"+to_string(triggerVal[j]);
     TString name2_2 = "pt_2_wNext_trg"+to_string(triggerVal[j]);
       
-    hdata_pt_1[j]= new TH1D(name_1,"",nResponseBins*6,0,j<7?600:1200);
-    hdata_pt_1_wNext[j]= new TH1D(name2_1,"",nResponseBins*6,0,j<7?600:1200);
-    hdata_pt_2[j]= new TH1D(name_2,"",nResponseBins*6,0,j<7?600:1200);
-    hdata_pt_2_wNext[j]= new TH1D(name2_2,"",nResponseBins*6,0,j<7?600:1200);
+    hdata_pt_1[j]= new TH1D(name_1,"",nResponseBins*3,0,j<7?600:1200);
+    hdata_pt_1_wNext[j]= new TH1D(name2_1,"",nResponseBins*3,0,j<7?600:1200);
+    hdata_pt_2[j]= new TH1D(name_2,"",nResponseBins*3,0,j<7?600:1200);
+    hdata_pt_2_wNext[j]= new TH1D(name2_2,"",nResponseBins*3,0,j<7?600:1200);
     
   }
   
@@ -171,14 +171,14 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check){
   for(int i=0; i<n_trigger-1; i++){
     TString fitname = "fit";
     fitname +=  to_string(triggerVal[i+1]); 
-    func[i] = new TF1(fitname,SmoothFit,triggerVal[i]-20,
-		      triggerVal[i+1]+200,3);
+    func[i] = new TF1(fitname,SmoothFit,triggerVal[i]-(triggerVal[i+1]<490 ? 20 : 150),
+		      triggerVal[i+1]+(triggerVal[i+1]<490 ? 200 : 500),3);
     func[i]->SetParameters(triggerVal[i+1], 40., 1.);
     func[i]->SetParNames("p0", "p1", "N");
     ptave_data_eff[i]->Fit(func[i],"R");
 
     // use_for_extrapol[i] = func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.;
-    use_for_extrapol[i] = triggerVal[i+1]>190;
+    use_for_extrapol[i] = true; //triggerVal[i+1]>190;
     cout<< (func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.)<<endl;
     if(use_for_extrapol[i]) n_extrapol++;
     
