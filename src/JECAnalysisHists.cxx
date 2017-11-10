@@ -35,6 +35,8 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     book<TH1F>("MET","MET all jets; MET",400,0,400);
 
     book<TH1F>("nPu","Number of PU events",60,0,60);
+    book<TH1F>("matchJetId_0","Matching Result for first TrgObj Jet",13,-3,10);
+    book<TH1F>("matchJetId_1","Matching Result for second TrgObj Jet",13,-3,10);  
     book<TH1F>("N_PV","Number of PVtx",60,0,60);
     book<TH1F>("weight_histo","weight_histo ",20,0,2);
 
@@ -97,7 +99,8 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     tt_mpf_r = ctx.get_handle<float>("mpf_r");
     tt_asymmetry = ctx.get_handle<float>("asymmetry");
     tt_nPU = ctx.get_handle<int>("nPU");
-
+    tt_matchJetId_0 =ctx.get_handle<int>("matchJetId_0");
+    tt_matchJetId_1 =ctx.get_handle<int>("matchJetId_1");    
 }
 
 void JECAnalysisHists::fill(const uhh2::Event & ev){
@@ -125,6 +128,8 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
        
     hist("MET")->Fill(ev.met->pt(), weight);
     hist("nPu")->Fill(ev.get(tt_nPU), weight);
+    hist("matchJetId_0")->Fill(ev.get(tt_matchJetId_0), weight);
+    hist("matchJetId_1")->Fill(ev.get(tt_matchJetId_1), weight);			       
     hist("weight_histo")->Fill(weight, 1);
   }
   

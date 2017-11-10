@@ -4,6 +4,7 @@
 
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
+#include "UHH2/core/include/FlavorParticle.h"
 
 #include <TFile.h>
 #include <TH1D.h>
@@ -39,6 +40,17 @@ class Selection {
     TFile* cut_map;
     TH2D* h_map;
 
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger40;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger60;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger80;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger140;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger200;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger260;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger320;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger400;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger450;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger500;
+
     public:
     Selection(uhh2::Context & ctx);
     ~Selection();
@@ -57,8 +69,10 @@ class Selection {
     bool EtaPhi(uhh2::Event& evt);
     bool EtaPhiCleaning(uhh2::Event& evt);
 
-    //jetmatching
-    int FindMatchingJet(uhh2::Event& evt, int jetid);
+    //jetmatching, find the jet in the event that corresponds to the jetid-th jet in the trigger object of the trigger with threshold trigger_th
+  //returns -1 if the triggerobject does not contain less than jetid jets
+  //returns -2 if no jet is matched within dR
+  int FindMatchingJet(unsigned int jetid, unsigned int trigger_th);
 };
 
 }

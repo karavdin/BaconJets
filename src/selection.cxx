@@ -3,6 +3,7 @@
 #include <iostream>
 #include "UHH2/core/include/Jet.h"
 #include "UHH2/core/include/Event.h"
+#include "UHH2/core/include/GenericEvent.h"
 #include "UHH2/core/include/PrimaryVertex.h"
 // #include "UHH2/BaconTrans/baconheaders/TJet.hh"
 //#include "UHH2/BaconTrans/baconheaders/TVertex.hh"
@@ -12,6 +13,8 @@
 #include <TFile.h>
 #include <TH1D.h>
 #include <TH2D.h>
+
+#include <vector>
 
 using namespace std;
 namespace uhh2bacon {
@@ -67,6 +70,16 @@ Selection::Selection(uhh2::Context & ctx) :
   cut_map->Close();
   }
 
+ handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet40" );
+ handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet60" );
+ handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet80" );
+ handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet140" );
+ handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet200" );
+ handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet260" );
+ handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet320" );
+ handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
+ handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet450" );
+ handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
 
 }
 
@@ -86,31 +99,84 @@ bool Selection::PtMC(uhh2::Event& evt)
 }
 
   //still in testing
-int Selection::FindMatchingJet(uhh2::Event& evt, int jetid){
+  int Selection::FindMatchingJet(unsigned int jetid, unsigned int trigger_th){
+    assert(event);
 
-  return jetid;
+    float dR_min=0.3;
+    
+    float eta = 1000;
+    float phi = 1000;
+
+    // cout<<"DEBUG in Selection::FindMatchingJet"<<endl;
+    
+    uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_sw;
+      
+    switch(trigger_th){
+    case 40:  handle_sw = handle_trigger40;
+             break;
+    case 60: handle_sw = handle_trigger60;
+	     break;
+    case 80: handle_sw = handle_trigger80;
+	     break;
+    case 140: handle_sw = handle_trigger140;
+	     break;
+    case 200: handle_sw = handle_trigger200;
+	     break;
+    case 260: handle_sw = handle_trigger260;
+	     break;
+    case 320: handle_sw = handle_trigger320;
+	     break;
+    case 450: handle_sw = handle_trigger450;
+	     break;
+    case 400: handle_sw = handle_trigger400;
+	     break;
+    case 500: handle_sw = handle_trigger500;
+	     break;
+    }
+
+    //DEBUG
+    // cout<<"Selection::FindMatchingJet after switch  "<<endl; 
+
+    if(jetid >= event->get(handle_sw).size()){
+      return -1;
+    }
+
+    eta = event->get(handle_sw).at(jetid).eta();
+    // cout<<"got eta"<<endl; 
+    phi = event->get(handle_sw).at(jetid).phi();     
+
+    //DEBUG
+    // cout<<"eta phi "<<eta<<" "<<phi<<endl; 
+
+    const unsigned int njets = event->jets->size();
+    unsigned int jetid_new = 0;
+
+    float dR = 1000.;
+    while(jetid_new < njets && dR > dR_min ){
+      //DEBUG
+      // cout<<jetid_new<<endl;
+      float deta = eta - event->jets->at(jetid_new).eta();
+      float dphi =  TVector2::Phi_mpi_pi(phi - event->jets->at(jetid_new).phi());
+      dR = TMath::Sqrt( deta*deta+dphi*dphi );
+      jetid_new++;
+    }
+    jetid_new--;
+    if(dR>dR_min)
+      jetid_new = -2;
+    
+    //DEBUG
+    cout<<dR<<endl;
+
+  return jetid_new;
 }  
 
 bool Selection::DiJet()
 {
     assert(event);
     const int njets = event->jets->size();
-    if (njets>=2) return true;
-
-
-   //  const TClonesArray & js = event->get(h_jets);
-//     const baconhep::TEventInfo & info = event->get(h_eventInfo);
-//     baconhep::TEventInfo* eventInfo= new baconhep::TEventInfo(info);
-//     assert(eventInfo);
-
-//     int njets = js.GetEntries();
-// //     std::cout << "hallo"<<std::endl;
-
-//     // njets >= 2
-//     if (njets>=2) return true;
-
-    return false;
+    return njets >= 2;
 }
+  
 bool Selection::DiJetAdvanced(uhh2::Event& evt)
 {
     assert(event);

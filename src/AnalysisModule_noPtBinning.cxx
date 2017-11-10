@@ -106,6 +106,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Event::Handle<float> tt_B;
     Event::Handle<float> tt_MET;
     Event::Handle<int> tt_nPU;
+    Event::Handle<int> tt_matchJetId_0;
+    Event::Handle<int> tt_matchJetId_1;		
     Event::Handle<float> tt_ev_weight;
     Event::Handle<float> tt_jets_pt;//sum of jets pT
     Event::Handle<int> tt_jet_n;//number of jets
@@ -143,7 +145,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Event::Handle<int> tt_triggerDi320;
     Event::Handle<int> tt_triggerDi400;
     Event::Handle<int> tt_triggerDi500;
-
+  
     std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
   std::unique_ptr<JECAnalysisHists> h_trgSiMu, h_minBias ,h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg450,h_trg500;
    std::unique_ptr<JECAnalysisHists> h_trgDi40, h_trgDi60, h_trgDi80, h_trgDi140, h_trgDi200,h_trgDi260,h_trgDi320,h_trgDi400,h_trgDi500; 
@@ -702,6 +704,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     tt_B = ctx.declare_event_output<float>("B");
     tt_MET = ctx.declare_event_output<float>("MET");
     tt_nPU = ctx.declare_event_output<int>("nPU");
+    tt_matchJetId_0 = ctx.declare_event_output<int>("matchJetId_0");
+    tt_matchJetId_1 = ctx.declare_event_output<int>("matchJetId_1");   
     tt_ev_weight = ctx.declare_event_output<float>("weight");
     tt_jets_pt= ctx.declare_event_output<float>("sum_jets_pt");
     tt_jet_n= ctx.declare_event_output<int>("Njet");
@@ -834,7 +838,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
     
-    debug = true;
+    debug = false;
  
     n_evt = 0;
     TString name_weights = ctx.get("MC_Weights_Path");
@@ -922,11 +926,11 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     //LEPTON selection
     muoSR_cleaner->process(event);
     sort_by_pt<Muon>(*event.muons); 
-   std::cout<<"#muons = "<<event.muons->size()<<std::endl;
+    if(debug) std::cout<<"#muons = "<<event.muons->size()<<std::endl;
 
     eleSR_cleaner->process(event);
     sort_by_pt<Electron>(*event.electrons);
-std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
+    if(debug)  std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
 
     if(!trigger_singlemuon)  if (event.electrons->size()>0 || event.muons->size()>0) return false; //TEST lepton cleaning, no lepton cleaning for the muon trigger x-check 
 
@@ -993,7 +997,7 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
     
     h_beforeJEC->fill(event);
  
-    std::cout <<" before jetleptoncleaner  "<<std::endl;
+    if(debug) std::cout <<" before jetleptoncleaner  "<<std::endl;
     jetleptoncleaner->process(event);
 
     //DEBUG
@@ -1004,8 +1008,9 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
       
     h_afterJEC->fill(event);
 
-//#############################################################################################################
-//################################  Apply JER and MET  ########################################################
+//##############################################################################################
+    
+//################################  Apply JER and MET  #########################################
 
 
     //Apply JER to all jet collections
@@ -1023,7 +1028,8 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
     h_afterMET->fill(event); 
 
    
-//############################################################################################################    
+//##############################################################################################
+
 
 
  //Calculate pt_ave
@@ -1034,7 +1040,7 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
     float pt_ave = (jet1_pt + jet2_pt)/2.;
 
 
-//###############################  Declare Probe and Barrel Jet  ###########################################
+//###############################  Declare Probe and Barrel Jet  ###############################
 
     Jet* jet_probe = jet1; Jet* jet_barrel = jet2;
     if ((fabs(jet1->eta())<s_eta_barr)&&(fabs(jet2->eta())<s_eta_barr)) {
@@ -1079,7 +1085,9 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
     float nPU = 0 ;//todo for data?
     if(!event.isRealData) nPU = event.genInfo->pileup_TrueNumInteractions();
 
-
+    float matchJetId_0 = -10.;
+    float matchJetId_1 = -10.;
+    
     float genjet1_pt = 0;
     float genjet2_pt = 0;
     float genjet3_pt = 0;
@@ -1154,7 +1162,7 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
     int triggerDi320 = 0;
     int triggerDi400 = 0;
     int triggerDi500 = 0;
-    
+
     bool pass_triggerSiMu=false;
     bool pass_minBias=false;   
     bool pass_trigger40=false; bool pass_trigger60=false; bool pass_trigger80=false;
@@ -1251,6 +1259,7 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
       if(!pass_trigger){
 	return false;
       }
+            
     }
 
     h_afterTriggerData->fill(event);
@@ -1309,7 +1318,6 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
     event.set(tt_dR_jet3_barreljet,dR_jet3_barreljet);
     event.set(tt_dR_jet3_probejet,dR_jet3_probejet);
 
-
     event.set(tt_inst_lumi,inst_lumi);
     event.set(tt_integrated_lumi_in_bin,fill_event_integrated_lumi);
     event.set(tt_lumibin,event_in_lumibin);
@@ -1339,7 +1347,7 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
     event.set(tt_triggerDi320, triggerDi320);
     event.set(tt_triggerDi400, triggerDi400);
     event.set(tt_triggerDi500, triggerDi500);
-  
+
     sel.SetEvent(event);
 
     
@@ -1363,17 +1371,88 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
 
       if(pass_minBias) {h_minBias->fill(event); h_lumi_minBias->fill(event);}     
       
-      if(pass_trigger40) {h_trg40->fill(event); h_lumi_Trig40->fill(event);}
-      if(pass_trigger60) {h_trg60->fill(event); h_lumi_Trig60->fill(event);} 
-      if(pass_trigger80) {h_trg80->fill(event); h_lumi_Trig80->fill(event);}
-      if(pass_trigger140) {h_trg140->fill(event); h_lumi_Trig140->fill(event);}
-      if(pass_trigger200) {h_trg200->fill(event); h_lumi_Trig200->fill(event);}
-      if(pass_trigger260) {h_trg260->fill(event); h_lumi_Trig260->fill(event);}
-      if(pass_trigger320) {h_trg320->fill(event); h_lumi_Trig320->fill(event);} 
-      if(pass_trigger400) {h_trg400->fill(event); h_lumi_Trig400->fill(event);}
-      if(pass_trigger450) {h_trg450->fill(event); h_lumi_Trig450->fill(event);}
-      if(pass_trigger500) {h_trg500->fill(event); h_lumi_Trig500->fill(event);}
-
+      if(pass_trigger40){
+	matchJetId_0 = sel.FindMatchingJet(0,40);
+	matchJetId_1 = sel.FindMatchingJet(1,40);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	h_trg40->fill(event);
+	h_lumi_Trig40->fill(event);
+      }
+      if(pass_trigger60){
+	matchJetId_0 = sel.FindMatchingJet(0,60);
+	matchJetId_1 = sel.FindMatchingJet(1,60);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	h_trg60->fill(event);
+	h_lumi_Trig60->fill(event);
+      }
+      if(pass_trigger80){
+	matchJetId_0 = sel.FindMatchingJet(0,80);
+	matchJetId_1 = sel.FindMatchingJet(1,80);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	h_trg80->fill(event);
+	h_lumi_Trig80->fill(event);
+      }
+      if(pass_trigger140){
+	matchJetId_0 = sel.FindMatchingJet(0,140);
+	matchJetId_1 = sel.FindMatchingJet(1,140);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	h_trg140->fill(event);
+	h_lumi_Trig140->fill(event);
+      }
+      if(pass_trigger200){
+	matchJetId_0 = sel.FindMatchingJet(0,200);
+	matchJetId_1 = sel.FindMatchingJet(1,200);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	h_trg200->fill(event);
+	h_lumi_Trig200->fill(event);
+      }
+      if(pass_trigger260){
+	matchJetId_0 = sel.FindMatchingJet(0,260);
+	matchJetId_1 = sel.FindMatchingJet(1,260);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	h_trg260->fill(event);
+	h_lumi_Trig260->fill(event);
+      }
+      if(pass_trigger320){
+	matchJetId_0 = sel.FindMatchingJet(0,320);
+	matchJetId_1 = sel.FindMatchingJet(1,320);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	h_trg320->fill(event);
+	h_lumi_Trig320->fill(event);
+      }
+      if(pass_trigger400){
+	matchJetId_0 = sel.FindMatchingJet(0,400);
+	matchJetId_1 = sel.FindMatchingJet(1,400);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	sel.SetEvent(event);
+	h_trg400->fill(event);
+	h_lumi_Trig400->fill(event);
+      }
+      if(pass_trigger450){
+	matchJetId_0 = sel.FindMatchingJet(0,450);
+	matchJetId_1 = sel.FindMatchingJet(1,450);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	h_trg450->fill(event);
+	h_lumi_Trig450->fill(event);
+      }
+      if(pass_trigger500){
+	matchJetId_0 = sel.FindMatchingJet(0,500);
+	matchJetId_1 = sel.FindMatchingJet(1,500);
+	event.set(tt_matchJetId_0, matchJetId_0);
+	event.set(tt_matchJetId_1, matchJetId_1);	
+	h_trg500->fill(event);
+	h_lumi_Trig500->fill(event);
+      }
+      
       if(pass_triggerDi40) {h_trgDi40->fill(event); h_lumi_TrigDi40->fill(event);}
       if(pass_triggerDi60) {h_trgDi60->fill(event); h_lumi_TrigDi60->fill(event);} 
       if(pass_triggerDi80) {h_trgDi80->fill(event); h_lumi_TrigDi80->fill(event);}
@@ -1410,13 +1489,13 @@ std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
     //PhiEta Region cleaning
     if(apply_EtaPhi_cut && !sel.EtaPhiCleaning(event)) return false; 
 
-   if(debug){
+   // if(debug){
      cout << "before 'dijet advanced selection' : " << endl;
      cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
-   }
+   // }
 
 //Advanced Selection: DiJet Events
-    // if(!sel.DiJetAdvanced(event)) return false;
+    // if(!sel.DiJetAdvanced(event)) return false;   
     h_dijet->fill(event);
     h_lumi_dijet->fill(event);
     h_match->fill(event);
