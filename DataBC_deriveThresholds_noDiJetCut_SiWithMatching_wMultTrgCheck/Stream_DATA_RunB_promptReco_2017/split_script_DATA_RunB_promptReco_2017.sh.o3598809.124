@@ -1,0 +1,932 @@
+ ( INFO  )  SCycleController   : Initializing
+ ( INFO  )  SCycleController   : Deleting all analysis cycle algorithms from memory
+ ( INFO  )  SCycleController   : Reading xml file: 'DATA_RunB_promptReco_2017_124.xml'
+ ( INFO  )  SCycleController   : Created cycle 'uhh2::AnalysisModuleRunner'
+ ( INFO  )  SCycleBaseExec     : Initializing from configuration
+ ( INFO  )  SCycleBaseExec     : Reading SInputData: DATA - DATA_RunB_promptReco_2017
+ ( INFO  )  SCycleConfig       : ===========================================================
+ ( INFO  )  SCycleConfig       :                     Cycle configuration
+ ( INFO  )  SCycleConfig       :   - Running mode: LOCAL
+ ( INFO  )  SCycleConfig       :   - Target luminosity: 8317
+ ( INFO  )  SCycleConfig       :   - Output directory: /nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut///DataBC_deriveThresholds_noDiJetCut_SiWithMatching_wMultTrgCheck/
+ ( INFO  )  SCycleConfig       :   - Post-fix: _123
+ ( INFO  )  SInputData         :  ---------------------------------------------------------
+ ( INFO  )  SInputData         :  Type               : DATA
+ ( INFO  )  SInputData         :  Version            : DATA_RunB_promptReco_2017
+ ( INFO  )  SInputData         :  Total luminosity   : 1pb-1
+ ( INFO  )  SInputData         :  NEventsMax         : -1
+ ( INFO  )  SInputData         :  NEventsSkip        : 0
+ ( INFO  )  SInputData         :  Cacheable          : No
+ ( INFO  )  SInputData         :  Skip validation    : No
+ ( INFO  )  SInputData         :  Skip file lookup   : No
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5429_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_542_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5430_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5431_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5432_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5433_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5434_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5435_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5436_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5437_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5438_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5439_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_543_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5440_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5441_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5442_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5443_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5444_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5445_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5446_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5447_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5448_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5449_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_544_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5450_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5451_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5452_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5453_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5454_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5455_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5456_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5457_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5458_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5459_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_545_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5460_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5461_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5462_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5463_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Input File         : '/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_5464_Ntuple.root' (file) | '0' (lumi)
+ ( INFO  )  SInputData         :  Tree               : 'AnalysisTree' (name) | 'Flat input tree' (type)
+ ( INFO  )  SInputData         :  Tree               : 'AnalysisTree' (name) | 'Flat output tree' (type)
+ ( INFO  )  SInputData         :  ---------------------------------------------------------
+ ( INFO  )  SCycleConfig       : ===========================================================
+ ( INFO  )  SCycleController   : Job 'ExampleCycleJob' configured
+ ( INFO  )  SCycleController   : Time needed for initialisation:   0.23 s
+ ( INFO  )  SCycleController   : Entering ExecuteAllCycles()
+ ( INFO  )  SInputData         : Input type "DATA" version "DATA_RunB_promptReco_2017" : 393039 events
+ ( INFO  )  SCycleController   : Executing Cycle #0 ('uhh2::AnalysisModuleRunner') locally
+ ( INFO  )  SCycleController   : Processing input data type: DATA version: DATA_RunB_promptReco_2017
+ ( INFO  )  SCycleBaseExec     : Initialised InputData "DATA" (Version:DATA_RunB_promptReco_2017) on worker node
+ AnalysisModule = AnalysisModule_noPtBinning
+ Apply_Lumiweights = false
+ Apply_Unflattening = false
+ Apply_Weights = false
+ ClosureTest = false
+ Cut_dir = /nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/EtaPhiCut/
+ ElectronCollection = slimmedElectrons
+ EtaPhi_cut = true
+ GenJetCollection = slimmedGenJets
+ GenParticleCollection = GenParticles
+ JEC_Version = Summer16_03Feb2017_V3
+ JetCollection = slimmedJets
+ JetLabel = AK4CHS
+ MC_Weights_Path = /nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup_ForWeights/
+ METName = slMETsCHS
+ METoverPt_cut = false
+ MuonCollection = slimmedMuons
+ PrimaryVertexCollection = offlineSlimmedPrimaryVertices
+ TauCollection = slimmedTaus
+ Trigger_Central = false
+ Trigger_FWD = false
+ Trigger_Single = true
+ Trigger_SingleMuon = false
+ dataset_lumi = 1.000000000000000000e+00
+ dataset_type = DATA
+ dataset_version = DATA_RunB_promptReco_2017
+ jersmear_direction = nominal
+ lumi_file = /nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/data/Cert_294927-304507_13TeV_PromptReco_Collisions17_JSON.root
+ lumihists_lumi_per_bin = 500.
+ minBias = HLT_L1MinimumBiasHF_OR_v*
+ n_events_total = 3.930390000000000000e+05
+ target_lumi = 8.317000000000000000e+03
+ trigger140 = HLT_PFJet140_v*
+ trigger200 = HLT_PFJet200_v*
+ trigger260 = HLT_PFJet260_v*
+ trigger320 = HLT_PFJet320_v*
+ trigger40 = HLT_PFJet40_v*
+ trigger400 = HLT_PFJet400_v*
+ trigger450 = HLT_PFJet450_v*
+ trigger500 = HLT_PFJet500_v*
+ trigger60 = HLT_PFJet60_v*
+ trigger80 = HLT_PFJet80_v*
+ triggerDi140 = HLT_DiPFJetAve140_v*
+ triggerDi200 = HLT_DiPFJetAve200_v*
+ triggerDi260 = HLT_DiPFJetAve260_v*
+ triggerDi320 = HLT_DiPFJetAve320_v*
+ triggerDi40 = HLT_DiPFJetAve40_v*
+ triggerDi400 = HLT_DiPFJetAve400_v*
+ triggerDi500 = HLT_DiPFJetAve500_v*
+ triggerDi60 = HLT_DiPFJetAve60_v*
+ triggerDi80 = HLT_DiPFJetAve80_v*
+ triggerSiMu = HLT_Mu27_v*
+ triggerSiMu_DirName = HLT_Mu27
+ use_sframe_weight = true
+start
+ ( INFO  )  SCycleBaseExec     : Processing entry: 999 (999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1999 (1999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2999 (2999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3999 (3999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4999 (4999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5999 (5999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6999 (6999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7999 (7999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8999 (8999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9999 (9999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 999 (10999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1999 (11999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2999 (12999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3999 (13999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4999 (14999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5999 (15999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6999 (16999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7999 (17999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8999 (18999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9999 (19999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 999 (20999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1999 (21999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2999 (22999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3999 (23999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4999 (24999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5999 (25999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6999 (26999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7999 (27999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8999 (28999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9999 (29999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 999 (30999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1999 (31999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2999 (32999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3999 (33999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4999 (34999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5999 (35999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6999 (36999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7999 (37999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8999 (38999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9999 (39999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 999 (40999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1999 (41999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2999 (42999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (43999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (44999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (45999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (46999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (47999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (48999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (49999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (50999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (51999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (52999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (53999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (54999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (55999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (56999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (57999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (58999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (59999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (60999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (61999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (62999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (63999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (64999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (65999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (66999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (67999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (68999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (69999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (70999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (71999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (72999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (73999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (74999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (75999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (76999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (77999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (78999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (79999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (80999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (81999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (82999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (83999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (84999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (85999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (86999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (87999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (88999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (89999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (90999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (91999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (92999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (93999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (94999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (95999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (96999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (97999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (98999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (99999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 2 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 2
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (100999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (101999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (102999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (103999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (104999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (105999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (106999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (107999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (108999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (109999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (110999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (111999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (112999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (113999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (114999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (115999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (116999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (117999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (118999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (119999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (120999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (121999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (122999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (123999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (124999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (125999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (126999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (127999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (128999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (129999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (130999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (131999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (132999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (133999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (134999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (135999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (136999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (137999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (138999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to 2 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to -1 instead of 2
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (139999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (140999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (141999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (142999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (143999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (144999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (145999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (146999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (147999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (148999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (149999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (150999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (151999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (152999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (153999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (154999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (155999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (156999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (157999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (158999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 2 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 2
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (159999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (160999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (161999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (162999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (163999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (164999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (165999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (166999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (167999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (168999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (169999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (170999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (171999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (172999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (173999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (174999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (175999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (176999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (177999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (178999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (179999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (180999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (181999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (182999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (183999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (184999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (185999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (186999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (187999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (188999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (189999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (190999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (191999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (192999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (193999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (194999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (195999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (196999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (197999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (198999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (199999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (200999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (201999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (202999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 2 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 2
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (203999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (204999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (205999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (206999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (207999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (208999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (209999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (210999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (211999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (212999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (213999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (214999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 2 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 2
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (215999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (216999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (217999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (218999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (219999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (220999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (221999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (222999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (223999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (224999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (225999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (226999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (227999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (228999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (229999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (230999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (231999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (232999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (233999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (234999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (235999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (236999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (237999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (238999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (239999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (240999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (241999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (242999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (243999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (244999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (245999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (246999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (247999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (248999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (249999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (250999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (251999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (252999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (253999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (254999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (255999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (256999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (257999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (258999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (259999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (260999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (261999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (262999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (263999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (264999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (265999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (266999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (267999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (268999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (269999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (270999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (271999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (272999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (273999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (274999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (275999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (276999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (277999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (278999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (279999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (280999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (281999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (282999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (283999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (284999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (285999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (286999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (287999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (288999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (289999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (290999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (291999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (292999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (293999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (294999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (295999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (296999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (297999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (298999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (299999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (300999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (301999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (302999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (303999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (304999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (305999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (306999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (307999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (308999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (309999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (310999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (311999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (312999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (313999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (314999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (315999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (316999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (317999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (318999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (319999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (320999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (321999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (322999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (323999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (324999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 2 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 2
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (325999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (326999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (327999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (328999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to -1 instead of 0
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (329999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (330999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (331999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (332999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (333999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (334999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (335999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (336999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (337999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (338999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (339999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (340999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (341999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (342999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (343999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (344999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (345999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (346999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (347999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 1, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (348999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (349999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (350999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (351999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (352999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (353999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (354999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (355999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (356999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (357999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (358999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (359999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (360999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (361999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to 0 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 1 instead of 1, jet id 1 was matched to -1 instead of 0
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (362999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (363999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (364999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (365999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (366999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (367999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (368999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (369999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (370999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (371999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (372999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (373999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (374999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (375999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (376999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (377999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (378999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (379999 / 393039 events processed so far)
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to 1 instead of -1
+new jet id differed for different trg.  jet id 0 was matched to 0 instead of 0, jet id 1 was matched to -1 instead of 1
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (380999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (381999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (382999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 960 (383999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 1960 (384999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 2960 (385999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 3960 (386999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 4960 (387999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 5960 (388999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 6960 (389999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 7960 (390999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 8960 (391999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Processing entry: 9960 (392999 / 393039 events processed so far)
+ ( INFO  )  SCycleBaseExec     : Terminated InputData "DATA" (Version:DATA_RunB_promptReco_2017) on worker node
+ ( INFO  )  SCycleController   : Writing output of "uhh2::AnalysisModuleRunner" to: /nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut///DataBC_deriveThresholds_noDiJetCut_SiWithMatching_wMultTrgCheck/uhh2.AnalysisModuleRunner.DATA.DATA_RunB_promptReco_2017_123.root
+ ( INFO  )  SCycleController   : Overall cycle statistics:
+ ( INFO  )  SCycleController   :     393039 Events - Real time 141.39 s  -  2780 Hz | CPU time 117.79 s  -  3337 Hz

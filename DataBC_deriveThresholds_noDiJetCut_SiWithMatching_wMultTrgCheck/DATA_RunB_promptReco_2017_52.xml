@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
+
+
+<!ENTITY PROOFdir            "/nfs/dust/cms/user/garbersc/forBaconJets/.proof2"> 
+<!ENTITY NEVT                "-1">
+
+<!ENTITY CACHEABLE           "False">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut/">
+
+<!ENTITY b_closuretest       "false">
+<!ENTITY jec_version         "Summer16_03Feb2017_V3"> <!--TODO keep in mind that this is old, why V3 and not V4??? -->
+<!ENTITY APPLY_WEIGHTS       "false">
+<!ENTITY WEIGHT_PATH         "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup_ForWeights/"> <!-- Change Weight-Path: CENTRAL/FWD -->
+<!ENTITY Cut_PATH            "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/EtaPhiCut/">
+
+<!ENTITY APPLY_METoverPTcut  "false">  <!--Apply MET Cut-->
+<!ENTITY APPLY_EtaPhi_cut    "true">   <!--Apply Eta Phi cleaning during ECAL problems -->
+<!ENTITY APPLY_LUMIWEIGHTS   "false"> 
+<!ENTITY APPLY_UNFLATTENING  "false">
+<!ENTITY TRIGGER_CENTRAL     "false">  <!--Trigger Flag -->
+<!ENTITY TRIGGER_FWD         "false"> <!--Trigger Flag -->
+
+<!ENTITY TRIGGER_SINGLEMUON  "false"> <!--Trigger Flag -->
+<!ENTITY TRIGGER_SINGLEMUON_NAME  "Mu27"> <!--Trigger Flag -->
+
+<!ENTITY USE_SINGLE_TRIGGER "true" > <!-- if true use the single jet trigger, else the dijet trigger -->
+
+<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_JetHT_Run2017B_PromtReco_v2.xml">
+
+<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_JetHT_Run2017C_PromtReco_v2.xml">
+
+<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_JetHT_Run2017D_PromtReco_v1.xml">
+
+
+<!ENTITY DATA_RunB_promptReco_2017_SingleMuon SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_SingleMuon_Run2017B_PromptReco.xml">
+
+<!ENTITY DATA_RunC_promptReco_2017_SingleMuon SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_SingleMuon_Run2017C_PromtReco_v1.xml">
+
+<!ENTITY DATA_RunD_promptReco_2017_SingleMuon SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_SingleMuon_Run2017D_PromtReco_v1.xml">
+
+
+]>
+
+
+<!--
+<ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="DataBC_deriveThresholds_noDiJetCut_SiWithMatching_wMultTrgCheck"/>
+-->
+
+<!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
+<JobConfiguration JobName="ExampleCycleJob" OutputLevel="INFO">
+	<Library Name="libSUHH2BaconJets"/>
+	<Package Name="libSUHH2BaconJets"/>
+	<Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data_DeriveThresholds_noDiJCut///DataBC_deriveThresholds_noDiJetCut_SiWithMatching_wMultTrgCheck/" PostFix="_51" TargetLumi="8317">
+		<InputData Cacheable="False" Lumi="1.0" Type="DATA" Version="DATA_RunB_promptReco_2017">
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2837_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2838_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2839_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_283_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2840_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2841_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2842_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2843_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2844_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2845_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2846_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2847_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2848_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2849_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_284_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2850_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2851_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2852_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2853_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2854_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2855_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2856_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2857_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2858_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2859_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_285_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2860_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2861_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2862_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2863_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2864_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2865_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2866_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2867_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2868_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2869_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_286_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2870_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2871_Ntuple.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/user/garbersc/forBaconJets/workdirs/Run2017_RunB_PromtReco_v1_completeDataset/JetHT_RunB_PromptReco_v1_2872_Ntuple.root" Lumi="0.0"/>
+			<OutputTree Name="AnalysisTree"/>
+			<InputTree Name="AnalysisTree"/>
+		</InputData>
+		<UserConfig>
+			<Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
+			<Item Name="GenParticleCollection" Value="GenParticles"/>
+			<Item Name="ElectronCollection" Value="slimmedElectrons"/>
+			<Item Name="MuonCollection" Value="slimmedMuons"/>
+			<Item Name="TauCollection" Value="slimmedTaus"/>
+			<Item Name="JetCollection" Value="slimmedJets"/>
+			<Item Name="JetLabel" Value="AK4CHS"/>
+			<Item Name="GenJetCollection" Value="slimmedGenJets"/>
+			<Item Name="METName" Value="slMETsCHS"/>
+			<Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/data/Cert_294927-304507_13TeV_PromptReco_Collisions17_JSON.root"/>
+			<Item Name="lumihists_lumi_per_bin" Value="500."/>
+			<Item Name="use_sframe_weight" Value="true"/>
+			<Item Name="triggerSiMu" Value="HLT_Mu27_v*"/>
+			<Item Name="triggerSiMu_DirName" Value="HLT_Mu27"/>
+			<Item Name="minBias" Value="HLT_L1MinimumBiasHF_OR_v*"/>
+			<Item Name="trigger40" Value="HLT_PFJet40_v*"/>
+			<Item Name="trigger60" Value="HLT_PFJet60_v*"/>
+			<Item Name="trigger80" Value="HLT_PFJet80_v*"/>
+			<Item Name="trigger140" Value="HLT_PFJet140_v*"/>
+			<Item Name="trigger200" Value="HLT_PFJet200_v*"/>
+			<Item Name="trigger260" Value="HLT_PFJet260_v*"/>
+			<Item Name="trigger320" Value="HLT_PFJet320_v*"/>
+			<Item Name="trigger400" Value="HLT_PFJet400_v*"/>
+			<Item Name="trigger450" Value="HLT_PFJet450_v*"/>
+			<Item Name="trigger500" Value="HLT_PFJet500_v*"/>
+			<Item Name="triggerDi40" Value="HLT_DiPFJetAve40_v*"/>
+			<Item Name="triggerDi60" Value="HLT_DiPFJetAve60_v*"/>
+			<Item Name="triggerDi80" Value="HLT_DiPFJetAve80_v*"/>
+			<Item Name="triggerDi140" Value="HLT_DiPFJetAve140_v*"/>
+			<Item Name="triggerDi200" Value="HLT_DiPFJetAve200_v*"/>
+			<Item Name="triggerDi260" Value="HLT_DiPFJetAve260_v*"/>
+			<Item Name="triggerDi320" Value="HLT_DiPFJetAve320_v*"/>
+			<Item Name="triggerDi400" Value="HLT_DiPFJetAve400_v*"/>
+			<Item Name="triggerDi500" Value="HLT_DiPFJetAve500_v*"/>
+			<Item Name="ClosureTest" Value="false"/>
+			<Item Name="JEC_Version" Value="Summer16_03Feb2017_V3"/>
+			<Item Name="jersmear_direction" Value="nominal"/>
+			<Item Name="Apply_Lumiweights" Value="false"/>
+			<Item Name="Apply_Unflattening" Value="false"/>
+			<Item Name="Apply_Weights" Value="false"/>
+			<Item Name="MC_Weights_Path" Value="/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup_ForWeights/"/>
+			<Item Name="METoverPt_cut" Value="false"/>
+			<Item Name="EtaPhi_cut" Value="true"/>
+			<Item Name="Cut_dir" Value="/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/EtaPhiCut/"/>
+			<Item Name="Trigger_Central" Value="false"/>
+			<Item Name="Trigger_FWD" Value="false"/>
+			<Item Name="Trigger_SingleMuon" Value="false"/>
+			<Item Name="Trigger_Single" Value="true"/>
+			<Item Name="AnalysisModule" Value="AnalysisModule_noPtBinning"/>
+		</UserConfig>
+	</Cycle>
+</JobConfiguration>

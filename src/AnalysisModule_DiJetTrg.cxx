@@ -143,8 +143,6 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     double integrated_lumi;
     vector<run_lumi> upper_binborders_runnrs;
     vector<double> lumi_in_bins;
-
-
   };
 
   AnalysisModule_DiJetTrg::AnalysisModule_DiJetTrg(uhh2::Context & ctx) :

@@ -70,6 +70,12 @@ Selection::Selection(uhh2::Context & ctx) :
   cut_map->Close();
   }
 
+ diJetTrg  = (ctx.get("Trigger_Single") == "false");
+
+ // //DEBUG
+ // cout<<"\n!!!!!!!! selection diJetTrg "<<diJetTrg<<endl<<endl;
+
+ if(!diJetTrg){
  handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet40" );
  handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet60" );
  handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet80" );
@@ -80,7 +86,21 @@ Selection::Selection(uhh2::Context & ctx) :
  handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
  handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet450" );
  handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+ }
+ else{
+  handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve40" );
+ handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60" );
+ handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80" );
+ handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve140" );
+ handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve200" );
+ handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve260" );
+ handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve320" );
+ handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve400" );
+ handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve500" );
 
+  //as dummy
+  handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
+ }
 }
 
 void Selection::SetEvent(uhh2::Event& evt)
@@ -107,12 +127,13 @@ bool Selection::PtMC(uhh2::Event& evt)
     float eta = 1000;
     float phi = 1000;
 
+    //DEBUG
     // cout<<"DEBUG in Selection::FindMatchingJet"<<endl;
     
     uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_sw;
       
     switch(trigger_th){
-    case 40:  handle_sw = handle_trigger40;
+    case 40: handle_sw = handle_trigger40;
              break;
     case 60: handle_sw = handle_trigger60;
 	     break;
@@ -135,37 +156,39 @@ bool Selection::PtMC(uhh2::Event& evt)
     }
 
     //DEBUG
-    // cout<<"Selection::FindMatchingJet after switch  "<<endl; 
+    // cout<<"Selection::FindMatchingJet after switch, jet id: "<<jetid<<" th: "<<trigger_th<<endl; 
 
     if(jetid >= event->get(handle_sw).size()){
+      //DEBUG
+      // cout<<"get out with -1"<<endl;
       return -1;
     }
-
+    
     eta = event->get(handle_sw).at(jetid).eta();
     // cout<<"got eta"<<endl; 
     phi = event->get(handle_sw).at(jetid).phi();     
 
-    //DEBUG
+    // DEBUG
     // cout<<"eta phi "<<eta<<" "<<phi<<endl; 
 
     const unsigned int njets = event->jets->size();
-    unsigned int jetid_new = 0;
+    unsigned int jetid_new = -2;
 
     float dR = 1000.;
-    while(jetid_new < njets && dR > dR_min ){
+    for(unsigned int i = 0 ; i < njets ; i++){
       //DEBUG
-      // cout<<jetid_new<<endl;
-      float deta = eta - event->jets->at(jetid_new).eta();
-      float dphi =  TVector2::Phi_mpi_pi(phi - event->jets->at(jetid_new).phi());
+      // cout<<i<<endl;
+      float deta = eta - event->jets->at(i).eta();
+      float dphi =  TVector2::Phi_mpi_pi(phi - event->jets->at(i).phi());
       dR = TMath::Sqrt( deta*deta+dphi*dphi );
-      jetid_new++;
+      if(dR < dR_min){
+	jetid_new = i;
+	break;
+      }
     }
-    jetid_new--;
-    if(dR>dR_min)
-      jetid_new = -2;
     
     //DEBUG
-    cout<<dR<<endl;
+    // cout<<jetid_new<<"  "<<dR<<endl;
 
   return jetid_new;
 }  

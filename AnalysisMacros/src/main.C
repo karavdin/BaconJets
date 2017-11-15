@@ -28,6 +28,7 @@ static void show_usage(std::string name)
 	      << "\t-derThreshDi\t\tDerive the trigger thresholds for di jet trigger.\n"
       	      << "\t-derThreshDi_ptCheck\t\tDerive the trigger efficiency distributions for the jet 1 and 2 pt as crosscheck for di jet trigger.\n"
     	      << "\t-LP\t\tPlot the luminosities.\n"
+     	      << "\t-MP\t\tPlot the matching jet ids.\n"     
 	      << "\t-TEC\t\tCheck if the trigger are really exclusive.\n"
  	      << "\t-BC\t\tUse the older BC directory instead of the BCD directory.\n"
        	      << "\t-D\t\tUse the D directory instead of the BCD directory.\n"     
@@ -60,7 +61,7 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
-  std::vector<std::string> argl = {"-FP", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D" , "-LP", "-aAP", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix"}; 
+  std::vector<std::string> argl = {"-FP", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D" , "-LP", "-MP" , "-aAP", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix"}; 
   TString run_nr = "B";
   TString dataname_end = "";
   TString outSuf = "";
@@ -70,6 +71,7 @@ int main(int argc,char *argv[]){
   bool do_fullPlots=false;
   bool do_trgControlPlots=false;
   bool do_lumiControlPlots=false;
+  bool do_matchtrg_plots=false;
   bool do_asymControlPlots=false;
   bool do_deriveThresholdsSi=false;
   bool do_deriveThresholdsSi_ptCheck=false; 
@@ -132,6 +134,9 @@ int main(int argc,char *argv[]){
 	  else if(arg=="-LP"){
 	    do_lumi_plot=true;
 	  }
+	  else if(arg=="-MP"){
+	    do_matchtrg_plot=true;
+	  }
 	  else if(arg=="-aAP"){
 	    do_addAsymPlots=true;
 	  }
@@ -169,7 +174,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot or do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
+  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plotor do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -252,7 +257,9 @@ int main(int argc,char *argv[]){
     } 
 
     if(do_lumi_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Lumi_Plots();
-
+    
+    if(do_matchtrg_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetMatching_Plots();
+    
     if(do_addAsymPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].AdditionalAsymmetryPlots();
 
     if(do_triggerEx) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].triggerExclusivityCheck();

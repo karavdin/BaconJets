@@ -30,6 +30,8 @@
 #include "TFile.h"
 #include "TTree.h"
 
+#include <stdexcept>
+
 using namespace std;
 using namespace uhh2;
 
@@ -177,7 +179,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
   };
 
   AnalysisModule_noPtBinning::AnalysisModule_noPtBinning(uhh2::Context & ctx) :
-    sel(ctx)
+		  sel(ctx)
   {
 
     
@@ -1030,114 +1032,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
    
 //##############################################################################################
 
-
-
- //Calculate pt_ave
-   sort_by_pt<Jet>(*event.jets);
-    Jet* jet1 = &event.jets->at(0);// leading jet
-    Jet* jet2 = &event.jets->at(1);// sub-leading jet
-    float jet1_pt = jet1->pt(); float jet2_pt = jet2->pt();
-    float pt_ave = (jet1_pt + jet2_pt)/2.;
-
-
-//###############################  Declare Probe and Barrel Jet  ###############################
-
-    Jet* jet_probe = jet1; Jet* jet_barrel = jet2;
-    if ((fabs(jet1->eta())<s_eta_barr)&&(fabs(jet2->eta())<s_eta_barr)) {
-      int ran = rand();
-      int numb = ran % 2 + 1;
-      if(numb==1){
-	jet_probe = jet2;
-	jet_barrel = jet1;
-      }
-      if(numb==2){
-	jet_probe = jet1;
-	jet_barrel = jet2;
-      }
-    } 
-    else if ((fabs(jet1->eta())<s_eta_barr)||(fabs(jet2->eta())<s_eta_barr)){
-      if(fabs(jet1->eta())<s_eta_barr){
-	jet_probe = jet2;
-	jet_barrel = jet1;
-      }
-      else{
-	jet_probe = jet1;
-	jet_barrel = jet2;
-      }
-    }
-
-    double dR_jet3_barreljet = -1;
-    double dR_jet3_probejet = -1;
-    if(event.jets->size()>2){
-      dR_jet3_barreljet = deltaR(event.jets->at(2), *jet_barrel);
-      dR_jet3_probejet = deltaR(event.jets->at(2), *jet_probe);
-    }
-//##########################################################################################################
-
-    //read or calculated values for dijet events
-    float gen_pthat = 0; //pt hat (from QCD simulation)
-    float gen_weight = 0;
-    if(!event.isRealData){
-      gen_weight = event.weight;
-      gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph
-    }
-    float nvertices = event.pvs->size(); 
-    float nPU = 0 ;//todo for data?
-    if(!event.isRealData) nPU = event.genInfo->pileup_TrueNumInteractions();
-
-    float matchJetId_0 = -10.;
-    float matchJetId_1 = -10.;
     
-    float genjet1_pt = 0;
-    float genjet2_pt = 0;
-    float genjet3_pt = 0;
-    if(isMC){
-      if(event.genjets->size()>0)genjet1_pt = event.genjets->at(0).pt();
-      if(event.genjets->size()>1)genjet2_pt = event.genjets->at(1).pt();
-      if(event.genjets->size()>2)genjet3_pt = event.genjets->at(2).pt();
-    }
-
-    auto factor_raw1 = jet1->JEC_factor_raw();     auto factor_raw2 = jet2->JEC_factor_raw();
-    float jet1_ptRaw = jet1_pt*factor_raw1;  float jet2_ptRaw = jet2_pt*factor_raw2;
-    float probejet_eta = jet_probe->eta(); 
-    float  probejet_phi = jet_probe->phi(); 
-    float  probejet_pt = jet_probe->pt(); 
-    auto factor_raw_probe = jet_probe->JEC_factor_raw();
-    float probejet_ptRaw = probejet_pt*factor_raw_probe;
-    float barreljet_eta = jet_barrel->eta(); 
-    float  barreljet_phi = jet_barrel->phi(); 
-    float  barreljet_pt = jet_barrel->pt(); 
-    auto factor_raw_barrel = jet_barrel->JEC_factor_raw();
-    float barreljet_ptRaw = barreljet_pt*factor_raw_barrel;
-
-//##########################  Get third Jet for alpha, asymmetry calculation  ################################
-
-
-   float jet3_pt = 0; float jet3_ptRaw = 0;
-    if(jet_n>2){
-      Jet* jet3 = &event.jets->at(2);
-      jet3_pt = jet3->pt();
-      auto factor_raw3 = jet3->JEC_factor_raw();
-      jet3_ptRaw = jet3_pt*factor_raw3;
-    }
-    float alpha = jet3_pt/pt_ave;
-    float asymmetry = (probejet_pt - barreljet_pt)/(probejet_pt + barreljet_pt);
-    float rel_r = (1+asymmetry)/(1-asymmetry);
-    TVector2 pt, met;
-    met.Set(event.met->pt() * cos(event.met->phi()),event.met->pt() * sin(event.met->phi()));
-    pt.Set(barreljet_pt * cos(barreljet_phi),barreljet_pt* sin(barreljet_phi));
-    float mpf_r = 1 + (met.Px()*pt.Px() + met.Py()*pt.Py())/(pt.Px()*pt.Px() + pt.Py()*pt.Py());
-    float B = (met.Px()*pt.Px() + met.Py()*pt.Py())/((probejet_pt + barreljet_pt) * sqrt(pt.Px()*pt.Px() + pt.Py()*pt.Py())); //vec_MET*vec_ptbarr/(2ptave*ptbarr)
-
-    float jets_pt = 0;
-    for(int i=2;i<jet_n;i++){
-      jets_pt += ((Jet*)&event.jets->at(i))->pt();
-    }
-    
-    
-//###############################################################################################################
-    
-////###############################################  Trigger  ################################################
+////###############################################  Trigger  ##################################
  
     int triggerSiMu  = 0;
 
@@ -1182,8 +1078,6 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
       // }
       //      cout << " =================== " << endl;
       //       pass_trigger = trigger_sel->passes(event);
-
-      float pt_ave_ = pt_ave; //i think this is not used
 
       pass_triggerSiMu = (triggerSiMu_sel->passes(event));
 
@@ -1263,7 +1157,340 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     }
 
     h_afterTriggerData->fill(event);
-//#####################################################################################################################
+//##############################################################################################
+
+    int jetid_0 = 0;
+    int jetid_1 = 1;
+    int jetid_2 = 2;
+
+    int jetid_0_last = 0;
+    int jetid_1_last = 1;
+    int jetid_2_last = 2;   
+    
+    //FIXME check for multiple passes as below!!!
+    
+    if(event.isRealData){
+
+      jetid_0 = -10;
+      jetid_1 = -10;
+      jetid_2 = -10;
+
+      jetid_0_last =  -10;
+      jetid_1_last =  -10;
+      jetid_2_last =  -10;   
+          
+      sel.SetEvent(event);
+      if(ts ? pass_trigger500 : pass_triggerDi500){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,500);
+	jetid_1 = sel.FindMatchingJet(1,500);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,500);
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }
+	}
+      }
+      if(pass_trigger450){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,450);
+	jetid_1 = sel.FindMatchingJet(1,450);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,450);
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }	   
+	}
+      }
+      if(ts ? pass_trigger400 : pass_triggerDi400){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,400);
+	jetid_1 = sel.FindMatchingJet(1,400);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,450);
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }	   
+	}
+      }
+      if(ts ? pass_trigger320 : pass_triggerDi320){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,320);
+	jetid_1 = sel.FindMatchingJet(1,320);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,320);
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }	   
+	}
+      }
+      if(ts ? pass_trigger260 : pass_triggerDi260){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,260);
+	jetid_1 = sel.FindMatchingJet(1,260);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,260);
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }	   
+	}
+      }
+      if(ts ? pass_trigger200 : pass_triggerDi200){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,200);
+	jetid_1 = sel.FindMatchingJet(1,200);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,200);
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }	   
+	}
+      }
+      if(ts ? pass_trigger140 : pass_triggerDi140){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,140);
+	jetid_1 = sel.FindMatchingJet(1,140);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,140);
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }	   
+	}
+      }
+      if(ts ? pass_trigger80 : pass_triggerDi80){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,80);
+	jetid_1 = sel.FindMatchingJet(1,80);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,80);
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }	   
+	}
+      }
+      if(ts ? pass_trigger60 : pass_triggerDi60){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,60);
+	jetid_1 = sel.FindMatchingJet(1,60);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,60);	
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }   
+	}
+      }
+      if(ts ? pass_trigger40 : pass_triggerDi40){
+	jetid_0_last = jetid_0;
+	jetid_1_last = jetid_1;
+	jetid_0 = sel.FindMatchingJet(0,40);
+	jetid_1 = sel.FindMatchingJet(1,40);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	if(jet_n>2){
+	  jetid_2_last = jetid_2;	   
+	  jetid_2 = sel.FindMatchingJet(2,40);	 
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }  
+	}
+      }
+    }
+
+    if(jetid_0 < 0 || jetid_1 < 0){
+      return false;
+    }
+
+    if(jetid_0>=jet_n) throw invalid_argument("matched id of jet 0 is not in jet vector");
+    if(jetid_1>=jet_n) throw invalid_argument("matched id of jet 1 is not in jet vector");   
+    
+ //Calculate pt_ave
+   sort_by_pt<Jet>(*event.jets);
+    Jet* jet1 = &event.jets->at(jetid_0);// leading jet
+    Jet* jet2 = &event.jets->at(jetid_1);// sub-leading jet
+    float jet1_pt = jet1->pt(); float jet2_pt = jet2->pt();
+    float pt_ave = (jet1_pt + jet2_pt)/2.;
+
+//###############################  Declare Probe and Barrel Jet  ###############################
+
+    Jet* jet_probe = jet1; Jet* jet_barrel = jet2;
+    if ((fabs(jet1->eta())<s_eta_barr)&&(fabs(jet2->eta())<s_eta_barr)) {
+      int ran = rand();
+      int numb = ran % 2 + 1;
+      if(numb==1){
+	jet_probe = jet2;
+	jet_barrel = jet1;
+      }
+      if(numb==2){
+	jet_probe = jet1;
+	jet_barrel = jet2;
+      }
+    } 
+    else if ((fabs(jet1->eta())<s_eta_barr)||(fabs(jet2->eta())<s_eta_barr)){
+      if(fabs(jet1->eta())<s_eta_barr){
+	jet_probe = jet2;
+	jet_barrel = jet1;
+      }
+      else{
+	jet_probe = jet1;
+	jet_barrel = jet2;
+      }
+    }
+
+//##############################################################################################
+
+    //read or calculated values for dijet events
+    float gen_pthat = 0; //pt hat (from QCD simulation)
+    float gen_weight = 0;
+    if(!event.isRealData){
+      gen_weight = event.weight;
+      gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph
+    }
+    float nvertices = event.pvs->size(); 
+    float nPU = 0 ;//todo for data?
+    if(!event.isRealData) nPU = event.genInfo->pileup_TrueNumInteractions();
+
+    float matchJetId_0 = -10.;
+    float matchJetId_1 = -10.;
+    
+    float genjet1_pt = 0;
+    float genjet2_pt = 0;
+    float genjet3_pt = 0;
+    if(isMC){
+      if(event.genjets->size()>0)genjet1_pt = event.genjets->at(0).pt();
+      if(event.genjets->size()>1)genjet2_pt = event.genjets->at(1).pt();
+      if(event.genjets->size()>2)genjet3_pt = event.genjets->at(2).pt();
+    }
+
+    auto factor_raw1 = jet1->JEC_factor_raw();     auto factor_raw2 = jet2->JEC_factor_raw();
+    float jet1_ptRaw = jet1_pt*factor_raw1;  float jet2_ptRaw = jet2_pt*factor_raw2;
+    float probejet_eta = jet_probe->eta(); 
+    float  probejet_phi = jet_probe->phi(); 
+    float  probejet_pt = jet_probe->pt(); 
+    auto factor_raw_probe = jet_probe->JEC_factor_raw();
+    float probejet_ptRaw = probejet_pt*factor_raw_probe;
+    float barreljet_eta = jet_barrel->eta(); 
+    float  barreljet_phi = jet_barrel->phi(); 
+    float  barreljet_pt = jet_barrel->pt(); 
+    auto factor_raw_barrel = jet_barrel->JEC_factor_raw();
+    float barreljet_ptRaw = barreljet_pt*factor_raw_barrel;
+
+//##########################  Get third Jet for alpha, asymmetry calculation  ##################
+	      
+    double dR_jet3_barreljet = -1;
+    double dR_jet3_probejet = -1;
+
+   float jet3_pt = 0; float jet3_ptRaw = 0;
+    if(jet_n>2 && jetid_2 >= 0){
+      if(jetid_2>=jet_n) throw invalid_argument("matched id of jet 2 is not in jet vector");     
+      Jet* jet3 = &event.jets->at(jetid_2);
+      jet3_pt = jet3->pt();
+      auto factor_raw3 = jet3->JEC_factor_raw();
+      jet3_ptRaw = jet3_pt*factor_raw3;
+      dR_jet3_barreljet = deltaR(*jet3, *jet_barrel);
+      dR_jet3_probejet = deltaR(*jet3, *jet_probe);
+    }
+    float alpha = jet3_pt/pt_ave;
+    float asymmetry = (probejet_pt - barreljet_pt)/(probejet_pt + barreljet_pt);
+    float rel_r = (1+asymmetry)/(1-asymmetry);
+    TVector2 pt, met;
+    met.Set(event.met->pt() * cos(event.met->phi()),event.met->pt() * sin(event.met->phi()));
+    pt.Set(barreljet_pt * cos(barreljet_phi),barreljet_pt* sin(barreljet_phi));
+    float mpf_r = 1 + (met.Px()*pt.Px() + met.Py()*pt.Py())/(pt.Px()*pt.Px() + pt.Py()*pt.Py());
+    float B = (met.Px()*pt.Px() + met.Py()*pt.Py())/((probejet_pt + barreljet_pt) * sqrt(pt.Px()*pt.Px() + pt.Py()*pt.Py())); //vec_MET*vec_ptbarr/(2ptave*ptbarr)
+
+    float jets_pt = 0;
+    for(int i=2;i<jet_n;i++){
+      jets_pt += ((Jet*)&event.jets->at(i))->pt();
+    }
+    
+    
+//##############################################################################################
 
    h_afterUnflat->fill(event);
     
@@ -1356,103 +1583,229 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     int nGoodVts = sel.goodPVertex();
 
     if(debug){
-      cout << "debug is: " << debug << endl;
+      cout << "debug is on" << endl;
       cout << "before good vertex selection : " << endl;
       cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
     }
 
     if(nGoodVts<=0) return false;
+    if(debug) cout << "after good vertex selection " << endl;
     event.set(tt_nGoodvertices, nGoodVts);
+    if(debug) cout << "after good vertex set " << endl;      
     h_afternVts->fill(event);
-
+    if(debug) cout << "after good vertex fill " << endl;
+	      
     //fill single trigger for efficiency plots before the dijet selection
     if(event.isRealData){
-      if(pass_triggerSiMu) {h_trgSiMu->fill(event); h_lumi_TrigSiMu->fill(event);}      
+    if(debug) cout << "in is real data" << endl;
 
-      if(pass_minBias) {h_minBias->fill(event); h_lumi_minBias->fill(event);}     
+    float matchJetId_0 = -10;
+    float matchJetId_1 = -10;
+    event.set(tt_matchJetId_0, matchJetId_0);
+    event.set(tt_matchJetId_1, matchJetId_1);
+
+    if(pass_triggerSiMu) {h_trgSiMu->fill(event); h_lumi_TrigSiMu->fill(event);}      
+
+    if(pass_minBias) {h_minBias->fill(event); h_lumi_minBias->fill(event);}     
+    if(debug) cout << "after min Bias fill" << endl;
+                
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
       
-      if(pass_trigger40){
-	matchJetId_0 = sel.FindMatchingJet(0,40);
-	matchJetId_1 = sel.FindMatchingJet(1,40);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	h_trg40->fill(event);
-	h_lumi_Trig40->fill(event);
+    float matchJetId_0_last = -10.;
+    float matchJetId_1_last = -10.;
+
+    if(pass_trigger40){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,40);
+      matchJetId_1 = sel.FindMatchingJet(1,40);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
+      h_trg40->fill(event);
+      h_lumi_Trig40->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      if(pass_trigger60){
-	matchJetId_0 = sel.FindMatchingJet(0,60);
-	matchJetId_1 = sel.FindMatchingJet(1,60);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	h_trg60->fill(event);
-	h_lumi_Trig60->fill(event);
+
+    }
+    if(pass_trigger60){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,60);
+      matchJetId_1 = sel.FindMatchingJet(1,60);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
+      h_trg60->fill(event);
+      h_lumi_Trig60->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      if(pass_trigger80){
-	matchJetId_0 = sel.FindMatchingJet(0,80);
-	matchJetId_1 = sel.FindMatchingJet(1,80);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	h_trg80->fill(event);
-	h_lumi_Trig80->fill(event);
+
+    }
+    if(pass_trigger80){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,80);
+      matchJetId_1 = sel.FindMatchingJet(1,80);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
+      h_trg80->fill(event);
+      h_lumi_Trig80->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      if(pass_trigger140){
-	matchJetId_0 = sel.FindMatchingJet(0,140);
-	matchJetId_1 = sel.FindMatchingJet(1,140);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	h_trg140->fill(event);
-	h_lumi_Trig140->fill(event);
+
+    }
+    if(pass_trigger140){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,140);
+      matchJetId_1 = sel.FindMatchingJet(1,140);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
+      h_trg140->fill(event);
+      h_lumi_Trig140->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      if(pass_trigger200){
-	matchJetId_0 = sel.FindMatchingJet(0,200);
-	matchJetId_1 = sel.FindMatchingJet(1,200);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	h_trg200->fill(event);
-	h_lumi_Trig200->fill(event);
+
+    }
+    if(pass_trigger200){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,200);
+      matchJetId_1 = sel.FindMatchingJet(1,200);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
+      h_trg200->fill(event);
+      h_lumi_Trig200->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      if(pass_trigger260){
-	matchJetId_0 = sel.FindMatchingJet(0,260);
-	matchJetId_1 = sel.FindMatchingJet(1,260);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	h_trg260->fill(event);
-	h_lumi_Trig260->fill(event);
+
+    }
+    if(pass_trigger260){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,260);
+      matchJetId_1 = sel.FindMatchingJet(1,260);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
+      h_trg260->fill(event);
+      h_lumi_Trig260->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      if(pass_trigger320){
-	matchJetId_0 = sel.FindMatchingJet(0,320);
-	matchJetId_1 = sel.FindMatchingJet(1,320);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	h_trg320->fill(event);
-	h_lumi_Trig320->fill(event);
+
+    }
+    if(pass_trigger320){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,320);
+      matchJetId_1 = sel.FindMatchingJet(1,320);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);	
+      h_trg320->fill(event);
+      h_lumi_Trig320->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      if(pass_trigger400){
-	matchJetId_0 = sel.FindMatchingJet(0,400);
-	matchJetId_1 = sel.FindMatchingJet(1,400);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	sel.SetEvent(event);
-	h_trg400->fill(event);
-	h_lumi_Trig400->fill(event);
+    }
+    if(pass_trigger400){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,400);
+      matchJetId_1 = sel.FindMatchingJet(1,400);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
+      h_trg400->fill(event);
+      h_lumi_Trig400->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      if(pass_trigger450){
-	matchJetId_0 = sel.FindMatchingJet(0,450);
-	matchJetId_1 = sel.FindMatchingJet(1,450);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	h_trg450->fill(event);
-	h_lumi_Trig450->fill(event);
+
+    }
+    if(pass_trigger450){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,450);
+      matchJetId_1 = sel.FindMatchingJet(1,450);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
+      h_trg450->fill(event);
+      h_lumi_Trig450->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      if(pass_trigger500){
-	matchJetId_0 = sel.FindMatchingJet(0,500);
-	matchJetId_1 = sel.FindMatchingJet(1,500);
-	event.set(tt_matchJetId_0, matchJetId_0);
-	event.set(tt_matchJetId_1, matchJetId_1);	
-	h_trg500->fill(event);
-	h_lumi_Trig500->fill(event);
+
+    }
+    if(pass_trigger500){
+      matchJetId_0_last = matchJetId_0;
+      matchJetId_1_last = matchJetId_1;
+      matchJetId_0 = sel.FindMatchingJet(0,500);
+      matchJetId_1 = sel.FindMatchingJet(1,500);
+      event.set(tt_matchJetId_0, matchJetId_0);
+      event.set(tt_matchJetId_1, matchJetId_1);
+      if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
+      h_trg500->fill(event);
+      h_lumi_Trig500->fill(event);
+      if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
+	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
+	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
+	  if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
+	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	}
       }
-      
+
+    }
+      sel.SetEvent(event);
+
+      if(debug) cout<<"AnalysisModule_noPtBinning after matching  matchJetId0: "<<matchJetId_0<<endl;
+     
       if(pass_triggerDi40) {h_trgDi40->fill(event); h_lumi_TrigDi40->fill(event);}
       if(pass_triggerDi60) {h_trgDi60->fill(event); h_lumi_TrigDi60->fill(event);} 
       if(pass_triggerDi80) {h_trgDi80->fill(event); h_lumi_TrigDi80->fill(event);}

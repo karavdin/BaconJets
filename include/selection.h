@@ -40,6 +40,8 @@ class Selection {
     TFile* cut_map;
     TH2D* h_map;
 
+  bool diJetTrg;
+
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger40;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger60;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger80;
