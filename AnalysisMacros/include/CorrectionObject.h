@@ -100,6 +100,7 @@ using namespace std;
     void FullCycle_CorrectFormulae_eta();
     void MatchingPlots();
     void Lumi_Plots();
+    void JetMatching_Plots();  
     void AdditionalAsymmetryPlots();
     void triggerExclusivityCheck();
     

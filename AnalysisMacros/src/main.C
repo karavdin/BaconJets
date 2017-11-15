@@ -71,13 +71,13 @@ int main(int argc,char *argv[]){
   bool do_fullPlots=false;
   bool do_trgControlPlots=false;
   bool do_lumiControlPlots=false;
-  bool do_matchtrg_plots=false;
   bool do_asymControlPlots=false;
   bool do_deriveThresholdsSi=false;
   bool do_deriveThresholdsSi_ptCheck=false; 
   bool do_deriveThresholdsDi=false;
   bool do_deriveThresholdsDi_ptCheck=false;
   bool do_lumi_plot=false;
+  bool do_matchtrg_plot=false;
   bool do_finalControlPlots = false;
   bool do_addAsymPlots = false;
   bool do_triggerEx = false;
@@ -174,7 +174,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plotor do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
+  if(not (do_fullPlots or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_triggerEx)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
