@@ -52,7 +52,6 @@ void CorrectionObject::JetMatching_Plots(){
     dirNames[i] = TString("HLT_PFJet") + to_string(triggerVal[i]); 
   }
 
-
   TString var1 = "matchJetId_0";
   TString var2 = "matchJetId_1";  
     
