@@ -1325,8 +1325,7 @@ if(debug){
     // bool pass_trigger100_HFJEC=false; bool pass_trigger160_HFJEC=false;
     // bool pass_trigger220_HFJEC=false; bool pass_trigger300_HFJEC=false;
 
-    //TODO check the value, on first glance the 450 and 500 vut values might be to low...
-    double trg_thresh[10] = {s_Pt_Ave40_cut,s_Pt_Ave60_cut,s_Pt_Ave80_cut,s_Pt_Ave140_cut,s_Pt_Ave200_cut,s_Pt_Ave260_cut,s_Pt_Ave320_cut,s_Pt_Ave400_cut, s_Pt_Ave450_cut, s_Pt_Ave500_cut};
+       double trg_thresh[10] = {s_Pt_Ave40_cut,s_Pt_Ave60_cut,s_Pt_Ave80_cut,s_Pt_Ave140_cut,s_Pt_Ave200_cut,s_Pt_Ave260_cut,s_Pt_Ave320_cut,s_Pt_Ave400_cut, s_Pt_Ave450_cut, s_Pt_Ave500_cut};
     double trgHF_thresh[6] = {s_Pt_Ave60HF_cut,s_Pt_Ave80HF_cut,s_Pt_Ave100HF_cut,s_Pt_Ave160HF_cut,s_Pt_Ave220HF_cut,s_Pt_Ave300HF_cut}; 
 
     if(event.isRealData){

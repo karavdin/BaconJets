@@ -28,14 +28,14 @@ const int triggerValDi[n_triggerDi] = {40, 60, 80, 140, 200, 260, 320, 400, 500}
 const int n_pt = 12;
 
 // //for Si derived trigger
-// const TString pt_range[n_pt]= {"40", "62", "85", "153", "222", "290", "359", "443", "486", "536", "1000", "2000"};
+const TString pt_range[n_pt]= {"40", "62", "85", "153", "222", "290", "359", "443", "486", "536", "1000", "2000"};
 // //TODO keep this in check with BaconJets/include/constants.h
 
-// const double pt_bins[n_pt]       = {40, 62, 85, 153, 222, 290, 359, 443, 486, 536, 1000, 2000};
+const double pt_bins[n_pt]       = {40, 62, 85, 153, 222, 290, 359, 443, 486, 536, 1000, 2000};
 
 //for Di derived triggers
-const double pt_bins[n_pt] = {51, 51, 74, 96, 148, 214, 285, 346, 426, 525, 1000, 2000};
-const TString pt_range[n_pt]= {"51", "51", "74", "96", "148", "214", "285", "346", "426", "525", "1000", "2000"};
+// const double pt_bins[n_pt] = {51, 51, 74, 96, 148, 214, 285, 346, 426, 525, 1000, 2000};
+// const TString pt_range[n_pt]= {"51", "51", "74", "96", "148", "214", "285", "346", "426", "525", "1000", "2000"};
 
 //Eta bins:
 

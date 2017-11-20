@@ -91,6 +91,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     Event::Handle<float> tt_B;
     Event::Handle<float> tt_MET;
     Event::Handle<int> tt_nPU;
+    Event::Handle<int> tt_matchJetId_0;
+    Event::Handle<int> tt_matchJetId_1;	
     Event::Handle<float> tt_ev_weight;
     Event::Handle<float> tt_jets_pt;//sum of jets pT
     Event::Handle<int> tt_jet_n;//number of jets
@@ -629,6 +631,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     tt_B = ctx.declare_event_output<float>("B");
     tt_MET = ctx.declare_event_output<float>("MET");
     tt_nPU = ctx.declare_event_output<int>("nPU");
+    tt_matchJetId_0 = ctx.declare_event_output<int>("matchJetId_0");
+    tt_matchJetId_1 = ctx.declare_event_output<int>("matchJetId_1");  
     tt_ev_weight = ctx.declare_event_output<float>("weight");
     tt_jets_pt= ctx.declare_event_output<float>("sum_jets_pt");
     tt_jet_n= ctx.declare_event_output<int>("Njet");
@@ -1422,6 +1426,9 @@ if(debug){
  //fill the containers
     double pu_pthat = -1;
     if(!event.isRealData) pu_pthat = event.genInfo->PU_pT_hat_max();
+    event.set(tt_matchJetId_0,-10.);
+    event.set(tt_matchJetId_1,-10.);
+    
     event.set(tt_gen_pthat,gen_pthat);
     event.set(tt_gen_PUpthat,pu_pthat);
     event.set(tt_gen_weight,gen_weight);

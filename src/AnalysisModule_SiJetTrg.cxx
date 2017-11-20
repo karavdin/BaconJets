@@ -41,7 +41,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     explicit AnalysisModule_SiJetTrg(uhh2::Context&);
     virtual bool process(uhh2::Event&) override;
     ~AnalysisModule_SiJetTrg();
-
+    int* ThreeJetMatching(int trg_pt, int jidl0, int jidl1, int jidl2, int jet_n, int retarr[]);
+  
   protected:
     // correctors
     std::unique_ptr<JetCorrector> jet_corrector, jet_corrector_BCD, jet_corrector_EFearly, jet_corrector_FlateG, jet_corrector_H;
@@ -191,8 +192,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     trigger_central = (ctx.get("Trigger_Central") == "true");
     trigger_fwd     = (ctx.get("Trigger_FWD") == "true");
 
-    // ts  = (ctx.get("Trigger_Single") == "true"); //if true use single jet trigger, if false di jet trigger TODO collapse the SiJet and DiJEt AnalysisModules into one?
-    ts = true;
+    ts  = (ctx.get("Trigger_Single") == "true"); //if true use single jet trigger, if false di jet trigger TODO collapse the SiJet and DiJEt AnalysisModules into one?
+    // ts = true;
     
     if(!isMC){
     const std::string& triggerSiMu = ctx.get("triggerSiMu", "NULL");
@@ -247,7 +248,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     JEC_Version = ctx.get("JEC_Version");
 
     split_JEC_MC   = false; //Different MC corrections only existed for Spring16_25ns_V8* 
-    split_JEC_DATA = true;
+    split_JEC_DATA = false; //TODO check the JEC!!!
     
     std::vector<std::string> JEC_corr,       JEC_corr_BCD,       JEC_corr_EFearly,       JEC_corr_FlateG,       JEC_corr_H,      JEC_corr_MC_FlateGH;
     std::vector<std::string> JEC_corr_L1RC,  JEC_corr_BCD_L1RC,  JEC_corr_EFearly_L1RC,  JEC_corr_FlateG_L1RC,  JEC_corr_H_L1RC, JEC_corr_MC_FlateGH_L1RC;
@@ -756,7 +757,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
     
-    debug = false;
+    debug = true;
  
     n_evt = 0;
     TString name_weights = ctx.get("MC_Weights_Path");
@@ -815,6 +816,36 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
 
   AnalysisModule_SiJetTrg::~AnalysisModule_SiJetTrg() {}
+
+int* AnalysisModule_SiJetTrg::ThreeJetMatching(int trg_pt, int jidl0, int jidl1, int jidl2, int jet_n, int retarr[]){
+	int jetid_0_last = jidl0;
+	int jetid_1_last = jidl1;
+	int jetid_0 = sel.FindMatchingJet(0,trg_pt);
+	int jetid_1 = sel.FindMatchingJet(1,trg_pt);
+	if(jetid_0_last != -10 || jetid_1_last!= -10){
+	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
+	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	  }
+	}
+	int jetid_2 = -10;
+	if(jet_n>2){
+	  int jetid_2_last = jidl2;	   
+	  jetid_2 = sel.FindMatchingJet(2,trg_pt);
+	  if(jetid_2_last != -10){
+	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	  }
+	}
+	else{
+	  jetid_2 = jidl2;
+	}
+	retarr[0] = jetid_0;
+	retarr[1] = jetid_1;
+	retarr[2] = jetid_2;	
+	return retarr;
+      }
+
 
   bool AnalysisModule_SiJetTrg::process(Event & event) {
  //###############################################################
@@ -910,14 +941,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     h_beforeJEC->fill(event);
  
     if(debug) std::cout <<" before jetleptoncleaner  "<<std::endl;
-    jetleptoncleaner->process(event);
-
-    //DEBUG
-    if(debug){
-      std::cout <<" after jetleptoncleaner  "<<std::endl;
-    }
+    if (event.electrons->size()!=0 || event.muons->size()!=0)    jetleptoncleaner->process(event);
+    if(debug) std::cout <<" after jetleptoncleaner  "<<std::endl;
     jet_corrector->process(event);
-      
+    if(debug) std::cout <<" after jet_corrector  "<<std::endl;
+    
     h_afterJEC->fill(event);
 
 //##############################################################################################
@@ -978,6 +1006,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     bool pass_triggerDi40=false; bool pass_triggerDi60=false; bool pass_triggerDi80=false;
     bool pass_triggerDi140=false; bool pass_triggerDi200=false; bool pass_triggerDi260=false;
     bool pass_triggerDi320=false; bool pass_triggerDi400=false; bool pass_triggerDi500=false;
+
+    double trg_thresh[10] = {s_Pt_Ave40_cut,s_Pt_Ave60_cut,s_Pt_Ave80_cut,s_Pt_Ave140_cut,s_Pt_Ave200_cut,s_Pt_Ave260_cut,s_Pt_Ave320_cut,s_Pt_Ave400_cut, s_Pt_Ave450_cut, s_Pt_Ave500_cut};
+
+    int n_trig = 0;
+    bool pass_trigger;
     
     if(event.isRealData){
         pass_minBias = (minBias_sel->passes(event));
@@ -996,24 +1029,10 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       }
 
  //Count Events passed Trigger
-
-      int n_trig = 0;
       
       if(pass_minBias){ n_trig++; minBias = 1;}
-      
-      if(pass_trigger40){ n_trig++; trigger40 = 1;}
-      if(pass_trigger60){ n_trig++; trigger60 = 1;}
-      if(pass_trigger80){ n_trig++; trigger80 = 1;}
-      if(pass_trigger140){ n_trig++; trigger140 = 1;}
-      if(pass_trigger200){ n_trig++; trigger200 = 1;}
-      if(pass_trigger260){ n_trig++; trigger260 = 1;}
-      if(pass_trigger320){ n_trig++; trigger320 = 1;}
-      if(pass_trigger400){ n_trig++; trigger400 = 1;}
-      if(pass_trigger500){ n_trig++; trigger500 = 1;}
-      if(pass_trigger450){ n_trig++; trigger450 = 1;}
-
+ 
       //HLT Selection
-      bool pass_trigger;
 
       pass_trigger = pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
     
@@ -1026,7 +1045,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(!pass_trigger){
 	return false;
       }
-            
     }
 
     h_afterTriggerData->fill(event);
@@ -1054,24 +1072,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
           
       sel.SetEvent(event);
       if(ts ? pass_trigger500 : pass_triggerDi500){
-	jetid_0_last = jetid_0;
-	jetid_1_last = jetid_1;
-	jetid_0 = sel.FindMatchingJet(0,500);
-	jetid_1 = sel.FindMatchingJet(1,500);
-	if(jetid_0_last != -10 || jetid_1_last!= -10){
-	  if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
-	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
-	    if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
-	    if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
-	  }
-	}
-	if(jet_n>2){
-	  jetid_2_last = jetid_2;	   
-	  jetid_2 = sel.FindMatchingJet(2,500);
-	  if(jetid_2_last != -10){
-	    if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
-	  }
-	}
+	int ret_dummy[3];
+	int *ret_jetids_o = AnalysisModule_SiJetTrg::ThreeJetMatching(500, jetid_0, jetid_1, jetid_2, jet_n, ret_dummy);
+	jetid_0 = ret_jetids_o[0];
+	jetid_1 = ret_jetids_o[1];
+	jetid_2 = ret_jetids_o[2];
       }
       if(pass_trigger450){
 	jetid_0_last = jetid_0;
@@ -1264,11 +1269,40 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     
  //Calculate pt_ave
    sort_by_pt<Jet>(*event.jets);
-    Jet* jet1 = &event.jets->at(jetid_0);// leading jet
-    Jet* jet2 = &event.jets->at(jetid_1);// sub-leading jet
-    float jet1_pt = jet1->pt(); float jet2_pt = jet2->pt();
-    float pt_ave = (jet1_pt + jet2_pt)/2.;
+   Jet* jet1 = &event.jets->at(jetid_0);// leading jet
+   Jet* jet2 = &event.jets->at(jetid_1);// sub-leading jet
+   float jet1_pt = jet1->pt(); float jet2_pt = jet2->pt();
+   float pt_ave = (jet1_pt + jet2_pt)/2.;
 
+    if(event.isRealData){
+      //update trigger passes by the thresholds
+      pass_trigger40 = (pass_trigger40 && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);
+      pass_trigger60 = (pass_trigger60 && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2]);
+      pass_trigger80 = (pass_trigger80 && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]); 
+      pass_trigger140 = (pass_trigger140 && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]);
+      pass_trigger200 = (pass_trigger200 && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]);
+      pass_trigger260 = (pass_trigger260 && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]); 
+      pass_trigger320 = (pass_trigger320 && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]); 
+      pass_trigger400 = (pass_trigger400 && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]);
+      pass_trigger450 = (pass_trigger450 && pt_ave>trg_thresh[8] && pt_ave<trg_thresh[9]);
+      pass_trigger500 = (pass_trigger500 && pt_ave>trg_thresh[9]);
+    
+      if(pass_trigger40){ n_trig++; trigger40 = 1;}
+      if(pass_trigger60){ n_trig++; trigger60 = 1;}
+      if(pass_trigger80){ n_trig++; trigger80 = 1;}
+      if(pass_trigger140){ n_trig++; trigger140 = 1;}
+      if(pass_trigger200){ n_trig++; trigger200 = 1;}
+      if(pass_trigger260){ n_trig++; trigger260 = 1;}
+      if(pass_trigger320){ n_trig++; trigger320 = 1;}
+      if(pass_trigger400){ n_trig++; trigger400 = 1;}
+      if(pass_trigger500){ n_trig++; trigger500 = 1;}
+      if(pass_trigger450){ n_trig++; trigger450 = 1;}
+
+      pass_trigger = pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
+
+      if(!pass_trigger) return false;
+    }
+      
 //###############################  Declare Probe and Barrel Jet  ###############################
 
     Jet* jet_probe = jet1; Jet* jet_barrel = jet2;
@@ -1320,8 +1354,10 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(event.genjets->size()>2)genjet3_pt = event.genjets->at(2).pt();
     }
 
-    auto factor_raw1 = jet1->JEC_factor_raw();     auto factor_raw2 = jet2->JEC_factor_raw();
-    float jet1_ptRaw = jet1_pt*factor_raw1;  float jet2_ptRaw = jet2_pt*factor_raw2;
+    auto factor_raw1 = jet1->JEC_factor_raw();
+    auto factor_raw2 = jet2->JEC_factor_raw();
+    float jet1_ptRaw = jet1_pt*factor_raw1;
+    float jet2_ptRaw = jet2_pt*factor_raw2;
     float probejet_eta = jet_probe->eta(); 
     float  probejet_phi = jet_probe->phi(); 
     float  probejet_pt = jet_probe->pt(); 
@@ -1369,7 +1405,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     
     int flavor = 0;
     
- //fill the containers
+ //fill that containers!
     double pu_pthat = -1;
     if(!event.isRealData) pu_pthat = event.genInfo->PU_pT_hat_max();
     event.set(tt_gen_pthat,gen_pthat);
@@ -1423,6 +1459,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     event.set(tt_lumibin,event_in_lumibin);
     event.set(tt_integrated_lumi,int_lumi_event);
 
+    event.set(tt_triggerSiMu, triggerSiMu);    
     event.set(tt_minBias, minBias);
     event.set(tt_trigger40, trigger40);
     event.set(tt_trigger60, trigger60);
@@ -1453,10 +1490,15 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     if(debug) cout << "after good vertex set " << endl;      
     h_afternVts->fill(event);
     if(debug) cout << "after good vertex fill " << endl;
+    
+    matchJetId_0 = -10;
+    matchJetId_1 = -10;
+    event.set(tt_matchJetId_0, matchJetId_0);
+    event.set(tt_matchJetId_1, matchJetId_1);
 
-//DiJet-Events
-
+    //DiJet-Events      
     if(!sel.DiJet()) return false;
+    if(debug) cout << "after diJet sel" << endl;
     h_nocuts->fill(event);
     h_lumi_nocuts->fill(event);
 
@@ -1488,18 +1530,15 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
    if(!event.isRealData){
      if(!sel.PtMC(event)) return false; // For MC only one Pt threshold
    }
-    	      
 	      
     //fill single trigger for efficiency plots before the dijet selection
     if(event.isRealData){
     if(debug) cout << "in is real data" << endl;
 
-    float matchJetId_0 = -10;
-    float matchJetId_1 = -10;
-    event.set(tt_matchJetId_0, matchJetId_0);
-    event.set(tt_matchJetId_1, matchJetId_1);
-
-    if(pass_minBias) {h_minBias->fill(event); h_lumi_minBias->fill(event);}     
+    if(pass_minBias) {
+      h_minBias->fill(event);
+      // h_lumi_minBias->fill(event);
+    }     
     if(debug) cout << "after min Bias fill" << endl;
                 
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
@@ -1516,7 +1555,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_1, matchJetId_1);
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
       h_trg40->fill(event);
-      h_lumi_Trig40->fill(event);
+      // h_lumi_Trig40->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1524,7 +1563,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
 	}
       }
-
     }
     if(pass_trigger60){
       matchJetId_0_last = matchJetId_0;
@@ -1535,7 +1573,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_1, matchJetId_1);
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
       h_trg60->fill(event);
-      h_lumi_Trig60->fill(event);
+      // h_lumi_Trig60->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1543,7 +1581,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
 	}
       }
-
     }
     if(pass_trigger80){
       matchJetId_0_last = matchJetId_0;
@@ -1554,7 +1591,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_1, matchJetId_1);
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
       h_trg80->fill(event);
-      h_lumi_Trig80->fill(event);
+      // h_lumi_Trig80->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1562,7 +1599,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
 	}
       }
-
     }
     if(pass_trigger140){
       matchJetId_0_last = matchJetId_0;
@@ -1573,7 +1609,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_1, matchJetId_1);
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
       h_trg140->fill(event);
-      h_lumi_Trig140->fill(event);
+      // h_lumi_Trig140->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1581,7 +1617,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
 	}
       }
-
     }
     if(pass_trigger200){
       matchJetId_0_last = matchJetId_0;
@@ -1592,7 +1627,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_1, matchJetId_1);
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
       h_trg200->fill(event);
-      h_lumi_Trig200->fill(event);
+      // h_lumi_Trig200->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1600,7 +1635,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
 	}
       }
-
     }
     if(pass_trigger260){
       matchJetId_0_last = matchJetId_0;
@@ -1611,7 +1645,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_1, matchJetId_1);
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
       h_trg260->fill(event);
-      h_lumi_Trig260->fill(event);
+      // h_lumi_Trig260->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1619,7 +1653,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
 	}
       }
-
     }
     if(pass_trigger320){
       matchJetId_0_last = matchJetId_0;
@@ -1629,7 +1662,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_0, matchJetId_0);
       event.set(tt_matchJetId_1, matchJetId_1);	
       h_trg320->fill(event);
-      h_lumi_Trig320->fill(event);
+      // h_lumi_Trig320->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1647,7 +1680,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_1, matchJetId_1);
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
       h_trg400->fill(event);
-      h_lumi_Trig400->fill(event);
+      // h_lumi_Trig400->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1655,7 +1688,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
 	}
       }
-
     }
     if(pass_trigger450){
       matchJetId_0_last = matchJetId_0;
@@ -1666,7 +1698,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_1, matchJetId_1);
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
       h_trg450->fill(event);
-      h_lumi_Trig450->fill(event);
+      // h_lumi_Trig450->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1674,7 +1706,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
 	}
       }
-
     }
     if(pass_trigger500){
       matchJetId_0_last = matchJetId_0;
@@ -1685,7 +1716,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       event.set(tt_matchJetId_1, matchJetId_1);
       if(debug) cout<<"AnalysisModule_SiJetTrg matchJetId0: "<<matchJetId_0<<endl;
       h_trg500->fill(event);
-      h_lumi_Trig500->fill(event);
+      // h_lumi_Trig500->fill(event);
       if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	  cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
@@ -1693,7 +1724,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
 	}
       }
-
     }
       sel.SetEvent(event);
 
@@ -1710,10 +1740,10 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     if (event.get(tt_alpha) < 0.3) {
       h_sel->fill(event);
-      h_lumi_sel->fill(event);
+      // h_lumi_sel->fill(event);
     }
     h_final->fill(event);
-    h_lumi_final->fill(event);
+    // h_lumi_final->fill(event);
 
     event.set(tt_Nmuon,event.muons->size());
     if(event.muons->size()>0)  
@@ -1786,11 +1816,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     	}
     	idx_j++;
       }
-
       //only consider jets that could be matched to a genparticle, these shall take the partons flavor by definition
-
-
-      // flavor-quantities
 
       if(debug && event.genjets->size() <2) cout << "WARNING: GENjets size < 2" << endl;
 

@@ -45,7 +45,6 @@ constexpr static float s_n_Pv_xy = 2.0;
 */
 constexpr static int n_pt_bins = 9;
 
-
 /*
 /// HF thresholds Used for the 2015 DATA (AN-15-254)
 constexpr static float s_Pt_Ave60HF_cut   = 77;
@@ -93,6 +92,13 @@ constexpr static float s_Pt_Ave300HF_cut  = 426;
  constexpr static float d_Pt_Ave320_cut  = 346;
  constexpr static float d_Pt_Ave400_cut  = 426;
  constexpr static float d_Pt_Ave500_cut  = 525;
+
+//2017
+//from Si triggers
+constexpr static int trg_vals_Si[10]  = {40,60,80,140,200,260,320,400,450,500};
+
+//from Di triggersint trg_val
+constexpr static int trg_vals_Di[9]  = {40,60,80,140,200,260,320,400,500};
 
 //shifted bins up for assym dip checks 
  // constexpr static float s_Pt_AveMC_cut   = 90;

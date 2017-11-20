@@ -15,6 +15,7 @@
 #include <TH2D.h>
 
 #include <vector>
+#include <stdexcept>
 
 using namespace std;
 namespace uhh2bacon {
@@ -68,10 +69,17 @@ Selection::Selection(uhh2::Context & ctx) :
   h_map = (TH2D*) cut_map->Get("h2jet");
   h_map->SetDirectory(0);
   cut_map->Close();
-  }
+ }
 
- diJetTrg  = (ctx.get("Trigger_Single") == "false");
-
+ try{
+   diJetTrg  = (ctx.get("Trigger_Single") == "false");
+ }
+ catch(const runtime_error& error){
+   cout<<"Got runtime error while looking for setting Trigger_Single"<<endl;
+   cout << error.what() << "\n";
+   cout<<"continue with diJetTrg settings, only relevant if jet trgObj matching is ised"<<endl;
+   diJetTrg = true;
+ } 
  // //DEBUG
  // cout<<"\n!!!!!!!! selection diJetTrg "<<diJetTrg<<endl<<endl;
 
@@ -395,3 +403,8 @@ Selection::~Selection()
 }
 
 }
+
+
+// Haikus are easy
+// But sometimes they don't make sense
+// Refrigerator
