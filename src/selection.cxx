@@ -171,7 +171,19 @@ bool Selection::PtMC(uhh2::Event& evt)
       // cout<<"get out with -1"<<endl;
       return -1;
     }
-    
+
+    //DEBUG: pt order check!!!
+    // float _spt=10000.;
+    // for(unsigned int i = 0;i< event->get(handle_sw).size() ;i++){
+    //   if(_spt<event->get(handle_sw).at(jetid).pt()){
+    // 	cout<<"!!!! wrong pt ordering in trg obj !!!!!!";	
+    // 	return -20;
+    // 	throw runtime_error(" wrong pt ordering in trg obj");
+    //   }
+    //   _spt =event->get(handle_sw).at(jetid).pt();
+    // }
+    // cout<<"trg obj was pt ordered\n";
+
     eta = event->get(handle_sw).at(jetid).eta();
     // cout<<"got eta"<<endl; 
     phi = event->get(handle_sw).at(jetid).phi();     

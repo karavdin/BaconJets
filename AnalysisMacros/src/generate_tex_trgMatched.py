@@ -15,13 +15,13 @@ if len(sys.argv) > 1:
 
 img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/"
 if output_name.find("controlplotsBCD") > -1:
-    img_path_base_2 = img_path_base_2 + "RunBCD_trgMatchingWOldThresh"
+    img_path_base_2 = img_path_base_2 + "RunBCD_trgMatchingWOldThresh_2"
 elif output_name.find("controlplotsBC") > -1:
-    img_path_base_2 = img_path_base_2 + "RunBC_trgMatchingWOldThresh"
+    img_path_base_2 = img_path_base_2 + "RunBC_trgMatchingWOldThresh_2"
 elif output_name.find("controlplotsC") > -1:
-    img_path_base_2 = img_path_base_2 + "RunC_trgMatchingWOldThresh"
+    img_path_base_2 = img_path_base_2 + "RunC_trgMatchingWOldThresh_2"
 elif output_name.find("controlplotsB") > -1:
-    img_path_base_2 = img_path_base_2 + "RunB_trgMatchingWOldThresh"
+    img_path_base_2 = img_path_base_2 + "RunB_trgMatchingWOldThresh_2"
 elif output_name.find("controlplotsD") > -1:
     img_path_base_2 = img_path_base_2 + "RunD"
 else:
@@ -33,10 +33,10 @@ if not os.path.isdir(img_path_base_2):
     raise RuntimeError("Path %s does not exist" % img_path_base_2)
 
 img_path_base = img_path_base_2 + "control/"
-img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunB_trgMatchingWOldThresh/plots/control/"
-img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunC_trgMatchingWOldThresh/plots/control/"
-img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunB_trgMatchingWOldThresh/plots/"
-img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunC_trgMatchingWOldThresh/plots/"
+img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunB_trgMatchingWOldThresh_2/plots/control/"
+img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunC_trgMatchingWOldThresh_2/plots/control/"
+img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunB_trgMatchingWOldThresh_2/plots/"
+img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunC_trgMatchingWOldThresh_2/plots/"
 
 etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
         2.172, 2.322, 2.500, 2.650, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191]

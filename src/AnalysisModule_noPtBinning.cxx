@@ -980,8 +980,6 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     int n_jets_afterCleaner = event.jets->size();
     //discard events if not all jets fulfill JetID instead of just discarding single jets
     if (n_jets_beforeCleaner != n_jets_afterCleaner) return false;
-    sort_by_pt<Jet>(*event.jets);
-    //h_cleaner->fill(event);
 
     h_afterCleaner->fill(event);
 
@@ -1015,8 +1013,6 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 
     //Apply JER to all jet collections
     if(jetER_smearer.get()) jetER_smearer->process(event);
-    sort_by_pt<Jet>(*event.jets);
-
 
     h_afterJER->fill(event); 
 
@@ -1191,14 +1187,14 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 	    if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
 	      cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
 	      if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
-	      if(jetid_1_last != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) jetid_1 = jetid_1_last;
+	      if( ( jetid_1_last != jetid_0 && jetid_1 != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) || ( jetid_1 == jetid_0 )  ) jetid_1 = jetid_1_last;
 	    }
-	  }
+      	  }
 	  jetid_2 = -10;
 	  if(jet_n>2){	   
 	    jetid_2 = sel.FindMatchingJet(2,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
 	    if(jetid_2_last != -10){
-	      if(jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) jetid_2 = jetid_2_last;
+	      if( ( jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2 != jetid_0 && jetid_2 != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) || (jetid_2 == jetid_0 || jetid_2 == jetid_1) ) jetid_2 = jetid_2_last;
 	    }
 	  }
 	}
@@ -1214,11 +1210,10 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     if(jetid_1>=jet_n) throw invalid_argument("matched id of jet 1 is not in jet vector");   
     
  //Calculate pt_ave
-   sort_by_pt<Jet>(*event.jets);
-    Jet* jet1 = &event.jets->at(jetid_0);// leading jet
-    Jet* jet2 = &event.jets->at(jetid_1);// sub-leading jet
-    float jet1_pt = jet1->pt(); float jet2_pt = jet2->pt();
-    float pt_ave = (jet1_pt + jet2_pt)/2.;
+   Jet* jet1 = &event.jets->at(jetid_0);// leading jet
+   Jet* jet2 = &event.jets->at(jetid_1);// sub-leading jet
+   float jet1_pt = jet1->pt(); float jet2_pt = jet2->pt();
+   float pt_ave = (jet1_pt + jet2_pt)/2.;
 
 //###############################  Declare Probe and Barrel Jet  ###############################
 
@@ -1460,7 +1455,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 	  if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;
 	    if(matchJetId_0_last < matchJetId_0 && matchJetId_0_last >= 0) matchJetId_0 = matchJetId_0_last;
-	    if(matchJetId_1_last != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) matchJetId_1 = matchJetId_1_last;
+	    if( ( matchJetId_1_last != matchJetId_0 && matchJetId_1 != matchJetId_0 && matchJetId_1_last < matchJetId_1 && matchJetId_1_last >= 0 ) || ( matchJetId_1 == matchJetId_0 ) ) matchJetId_1 = matchJetId_1_last;
 	  }
 	}
       }
