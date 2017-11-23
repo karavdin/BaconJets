@@ -169,7 +169,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     uhh2bacon::Selection sel;
 
     bool debug;
-    bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, trigger_singlemuon, ts, onlyBtB;
+  bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, trigger_singlemuon, ts, onlyBtB, do_tojm;
     double lumiweight;
     string jetLabel;
     TString dataset_version, JEC_Version;
@@ -229,7 +229,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     ts  = (ctx.get("Trigger_Single") == "true"); //if true use single jet trigger, if false di jet trigger
     onlyBtB = (ctx.get("Only_BtB") == "true");
     if(debug) cout<<"onlyBtb is "<<onlyBtB<<endl;
-
+    do_tojm = (ctx.get("Do_TOJM") == "true");
     
     if(!isMC){
     const std::string& triggerSiMu = ctx.get("triggerSiMu", "NULL");
@@ -1205,15 +1205,15 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     float jet_0_pt_off_last = 100000;
     float jet_1_pt_off_last = 100000;    
     if(event.isRealData){
+      if(do_tojm){
+	jetid_0 = -10;
+	jetid_1 = -10;
+	jetid_2 = -10;
 
-      jetid_0 = -10;
-      jetid_1 = -10;
-      jetid_2 = -10;
-
-      jetid_0_last = -10;
-      jetid_1_last = -10;
-      jetid_2_last = -10;   
-          
+	jetid_0_last = -10;
+	jetid_1_last = -10;
+	jetid_2_last = -10;   
+      }
       sel.SetEvent(event);
       
       bool passes_Si[10] = {pass_trigger40,pass_trigger60,pass_trigger80,pass_trigger140,pass_trigger200,pass_trigger260,pass_trigger320,pass_trigger400,pass_trigger450,pass_trigger500};
@@ -1222,40 +1222,43 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 
       for(int i = 0; i<n_trg; i++){
 	if(ts ? passes_Si[i] : passes_Di[i]){
-	  jetid_0_last = jetid_0;
-	  jetid_1_last = jetid_1;
-	  jetid_2_last = jetid_2;
-	  jet_0_pt_off_last = jet_0_pt_off;
-	  jet_1_pt_off_last = jet_1_pt_off;
+	  if(do_tojm){
+	    jetid_0_last = jetid_0;
+	    jetid_1_last = jetid_1;
+	    jetid_2_last = jetid_2;
+	    jet_0_pt_off_last = jet_0_pt_off;
+	    jet_1_pt_off_last = jet_1_pt_off;
 	  
-	  jetid_0 = sel.FindMatchingJet(0,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
-	  jetid_1 = sel.FindMatchingJet(1,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
-
+	    jetid_0 = sel.FindMatchingJet(0,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
+	    jetid_1 = sel.FindMatchingJet(1,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
+	  }
 	  if(debug) cout<<"after FindMatchingJet\n";
 	  
 	  if(jetid_0>=0) jet_0_pt_off = event.get(handle_triggers[i]).at(0).pt();
 	  if(jetid_1>=0) jet_1_pt_off = event.get(handle_triggers[i]).at(1).pt();
-	  
-	  if(jetid_0_last != -10 || jetid_1_last!= -10){
-	    if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
-	      cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
-	      if(jetid_0_last < jetid_0 && jetid_0_last >= 0){
-		jetid_0 = jetid_0_last;
-		jet_0_pt_off = jet_0_pt_off_last;
-	      }
-	      if( ( jetid_1_last != jetid_0 && jetid_1 != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) || ( jetid_1 == jetid_0 )  ){
-		jetid_1 = jetid_1_last;
-		jet_1_pt_off = jet_1_pt_off_last;		
+
+	  if(do_tojm){
+	    if(jetid_0_last != -10 || jetid_1_last!= -10){
+	      if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
+		cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
+		if(jetid_0_last < jetid_0 && jetid_0_last >= 0){
+		  jetid_0 = jetid_0_last;
+		  jet_0_pt_off = jet_0_pt_off_last;
+		}
+		if( ( jetid_1_last != jetid_0 && jetid_1 != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) || ( jetid_1 == jetid_0 )  ){
+		  jetid_1 = jetid_1_last;
+		  jet_1_pt_off = jet_1_pt_off_last;		
+		}
 	      }
 	    }
-      	  }
-	  jetid_2 = -10;
-	  if(jet_n>2){	   
-	    jetid_2 = sel.FindMatchingJet(2,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
-	    if(jetid_2_last != -10){
-	      if( ( jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2 != jetid_0 && jetid_2 != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) || (jetid_2 == jetid_0 || jetid_2 == jetid_1) ) jetid_2 = jetid_2_last;
+	    jetid_2 = -10;
+	    if(jet_n>2){	   
+	      jetid_2 = sel.FindMatchingJet(2,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
+	      if(jetid_2_last != -10){
+		if( ( jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2 != jetid_0 && jetid_2 != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) || (jetid_2 == jetid_0 || jetid_2 == jetid_1) ) jetid_2 = jetid_2_last;
+	      }
 	    }
-	  }  
+	  }
 	}
       }
       
@@ -1279,6 +1282,9 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
    float jet1_pt_onoff_Resp =  jet1_pt / jet_0_pt_off;
    float jet2_pt_onoff_Resp =  jet2_pt / jet_1_pt_off;   
 
+   event.set(tt_jet1_pt_onoff_Resp,jet1_pt_onoff_Resp);
+   event.set(tt_jet2_pt_onoff_Resp,jet2_pt_onoff_Resp); 
+   
    if(onlyBtB){
      //turn jet2 around and check dR to jet1
      float eta1 = jet1->eta();

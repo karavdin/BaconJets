@@ -25,6 +25,7 @@
 <!ENTITY TRIGGER_SINGLEMUON_NAME  "Mu27"> <!--Trigger Flag -->
 
 <!ENTITY ONLY_BACK_TO_BACK "false" >
+<!ENTITY DO_TRG_OBJ_JET_MATCHING "true" >
 
 <!ENTITY USE_SINGLE_TRIGGER "true" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
@@ -47,7 +48,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17BC_deriveThresholds_noDiJetCut_wMultTrgCheck_wOnOffResp_2"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17BC_deriveThresholds_noDiJetCut_wMultTrgCheck_wOnOffResp_3"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -163,7 +164,8 @@
 	<Item Name="Trigger_SingleMuon"        Value="&TRIGGER_SINGLEMUON;"/>
 
 	<Item Name="Trigger_Single"        Value="&USE_SINGLE_TRIGGER;"/>	
-	<Item Name="Only_BtB"        Value="&ONLY_BACK_TO_BACK;"/>
+	<Item Name="Only_BtB"               Value="&ONLY_BACK_TO_BACK;"/>
+	<Item Name="Do_TOJM"          Value="&DO_TRG_OBJ_JET_MATCHING;"/>
         <Item Name="AnalysisModule" Value="AnalysisModule_noPtBinning" /> 
 
         </UserConfig>

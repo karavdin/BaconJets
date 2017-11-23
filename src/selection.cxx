@@ -130,7 +130,7 @@ bool Selection::PtMC(uhh2::Event& evt)
   int Selection::FindMatchingJet(unsigned int jetid, unsigned int trigger_th){
     assert(event);
 
-    float dR_min=0.3;
+    float dR_min=0.2;
     
     float eta = 1000;
     float phi = 1000;
@@ -195,15 +195,16 @@ bool Selection::PtMC(uhh2::Event& evt)
     unsigned int jetid_new = -2;
 
     float dR = 1000.;
+    float dR_min_ = dR_min;
     for(unsigned int i = 0 ; i < njets ; i++){
       //DEBUG
       // cout<<i<<endl;
       float deta = eta - event->jets->at(i).eta();
       float dphi =  TVector2::Phi_mpi_pi(phi - event->jets->at(i).phi());
       dR = TMath::Sqrt( deta*deta+dphi*dphi );
-      if(dR < dR_min){
+      if(dR < dR_min_){
+	dR_min_ = dR;
 	jetid_new = i;
-	break;
       }
     }
     
