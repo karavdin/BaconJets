@@ -1,6 +1,6 @@
-file_name=controlplotsBC_trgM_17Nov
+file_name=controlplotsBC_trgM_21Nov
 if [ "$#" = "1" ]
-   then file_name=controlplots${1}_trgM_17Nov
+   then file_name=controlplots${1}_trgM_21Nov
 fi
 rm ${file_name}.tex
 py_out=$(./generate_tex_trgMatched.py "$file_name")
