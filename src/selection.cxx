@@ -126,7 +126,7 @@ bool Selection::PtMC(uhh2::Event& evt)
   return true;
 }
 
-  //still in testing
+
   int Selection::FindMatchingJet(unsigned int jetid, unsigned int trigger_th){
     assert(event);
 

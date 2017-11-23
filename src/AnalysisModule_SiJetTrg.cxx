@@ -930,24 +930,31 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     
 //################################  Apply JER and MET  #########################################
 
-
     //Apply JER to all jet collections
     if(jetER_smearer.get()) jetER_smearer->process(event);
-    // sort_by_pt<Jet>(*event.jets);
-
-
     h_afterJER->fill(event); 
 
     //correct MET only AFTER smearing the jets
     if(apply_global){
       jet_corrector->correct_met(event);
     }
-
     h_afterMET->fill(event); 
-
-   
 //##############################################################################################
 
+    int jetid_0 = 0;
+    int jetid_1 = 1;
+    int jetid_2 = 2;
+
+    int jetid_0_last = 0;
+    int jetid_1_last = 1;
+    int jetid_2_last = 2;   
+  
+ //Calculate pt_ave
+   Jet* jet1 = &event.jets->at(0);// leading jet
+   Jet* jet2 = &event.jets->at(1);// sub-leading jet
+   float jet1_pt = jet1->pt();
+   float jet2_pt = jet2->pt();
+   float pt_ave = (jet1_pt + jet2_pt)/2.;    
     
 ////###############################################  Trigger  ##################################
  
@@ -994,23 +1001,17 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
         pass_minBias = (minBias_sel->passes(event));
 
       if(ts){
-	pass_trigger40 = (trigger40_sel->passes(event));
-	pass_trigger60 = (trigger60_sel->passes(event));
-	pass_trigger80 = (trigger80_sel->passes(event));
-	pass_trigger140 = (trigger140_sel->passes(event)); 
-	pass_trigger200 = (trigger200_sel->passes(event)); 
-	pass_trigger260 = (trigger260_sel->passes(event)); 
-	pass_trigger320 = (trigger320_sel->passes(event)); 
-	pass_trigger400 = (trigger400_sel->passes(event)); 
-	pass_trigger450 = (trigger450_sel->passes(event));
-	pass_trigger500 = (trigger500_sel->passes(event));
+	pass_trigger40 = (pass_trigger40 && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);
+	pass_trigger60 = (pass_trigger60 && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2]);
+	pass_trigger80 = (pass_trigger80 && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]); 
+	pass_trigger140 = (pass_trigger140 && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]);
+	pass_trigger200 = (pass_trigger200 && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]);
+	pass_trigger260 = (pass_trigger260 && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]); 
+	pass_trigger320 = (pass_trigger320 && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]); 
+	pass_trigger400 = (pass_trigger400 && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]);
+	pass_trigger450 = (pass_trigger450 && pt_ave>trg_thresh[8] && pt_ave<trg_thresh[9]);
+	pass_trigger500 = (pass_trigger500 && pt_ave>trg_thresh[9]);
       }
-
- //Count Events passed Trigger
-      
-      if(pass_minBias){ n_trig++; minBias = 1;}
- 
-      //HLT Selection
 
       pass_trigger = pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
     
@@ -1023,87 +1024,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(!pass_trigger){
 	return false;
       }
-    }
-
-    h_afterTriggerData->fill(event);
-//##############################################################################################
-
-    int jetid_0 = 0;
-    int jetid_1 = 1;
-    int jetid_2 = 2;
-
-    int jetid_0_last = 0;
-    int jetid_1_last = 1;
-    int jetid_2_last = 2;   
-    
-    //FIXME check for multiple passes as below!!!
-    
-    if(event.isRealData){
-
-      jetid_0 = -10;
-      jetid_1 = -10;
-      jetid_2 = -10;
-
-      jetid_0_last =  -10;
-      jetid_1_last =  -10;
-      jetid_2_last =  -10;   
-          
-      sel.SetEvent(event);
-
-      bool passes_Si[10] = {pass_trigger40,pass_trigger60,pass_trigger80,pass_trigger140,pass_trigger200,pass_trigger260,pass_trigger320,pass_trigger400,pass_trigger450,pass_trigger500};
-       int n_trg = 10;
-
-      for(int i = 0; i<n_trg; i++){
-	if(passes_Si[i]){
-	  jetid_0 = sel.FindMatchingJet(0, trg_vals_Si[i]);
-	  jetid_1 = sel.FindMatchingJet(1, trg_vals_Si[i]);
-	  if(jetid_0_last != -10 || jetid_1_last!= -10){
-	    if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
-	      cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
-	      if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
-	      if( ( jetid_1_last != jetid_0 && jetid_1 != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) || ( jetid_1 == jetid_0 ) ) jetid_1 = jetid_1_last;
-	    }
-	  }
-	  jetid_2 = -10;
-	  if(jet_n>2){	   
-	    jetid_2 = sel.FindMatchingJet(2, trg_vals_Si[i]);
-	    if(jetid_2_last != -10){
-	      if( ( jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) ||  (jetid_2 == jetid_0 || jetid_2 == jetid_1) ) jetid_2 = jetid_2_last;
-	    }
-	  }
-	}
-      }
-      
-    }
-
-    if(jetid_0 < 0 || jetid_1 < 0){
-      return false;
-    }
-
-    if(jetid_0>=jet_n) throw invalid_argument("matched id of jet 0 is not in jet vector");
-    if(jetid_1>=jet_n) throw invalid_argument("matched id of jet 1 is not in jet vector");   
-    
- //Calculate pt_ave
-   // sort_by_pt<Jet>(*event.jets);
-   Jet* jet1 = &event.jets->at(jetid_0);// leading jet
-   Jet* jet2 = &event.jets->at(jetid_1);// sub-leading jet
-   float jet1_pt = jet1->pt();
-   float jet2_pt = jet2->pt();
-   float pt_ave = (jet1_pt + jet2_pt)/2.;
-
-    if(event.isRealData){
-      //update trigger passes by the thresholds
-      pass_trigger40 = (pass_trigger40 && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);
-      pass_trigger60 = (pass_trigger60 && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2]);
-      pass_trigger80 = (pass_trigger80 && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]); 
-      pass_trigger140 = (pass_trigger140 && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]);
-      pass_trigger200 = (pass_trigger200 && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]);
-      pass_trigger260 = (pass_trigger260 && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]); 
-      pass_trigger320 = (pass_trigger320 && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]); 
-      pass_trigger400 = (pass_trigger400 && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]);
-      pass_trigger450 = (pass_trigger450 && pt_ave>trg_thresh[8] && pt_ave<trg_thresh[9]);
-      pass_trigger500 = (pass_trigger500 && pt_ave>trg_thresh[9]);
-    
+        //Count Events passed Trigger
+      if(pass_minBias){ n_trig++; minBias = 1;}
       if(pass_trigger40){ n_trig++; trigger40 = 1;}
       if(pass_trigger60){ n_trig++; trigger60 = 1;}
       if(pass_trigger80){ n_trig++; trigger80 = 1;}
@@ -1114,25 +1036,21 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(pass_trigger400){ n_trig++; trigger400 = 1;}
       if(pass_trigger500){ n_trig++; trigger500 = 1;}
       if(pass_trigger450){ n_trig++; trigger450 = 1;}
-
-      pass_trigger = pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
-
-      if(!pass_trigger) return false;
-    }
       
-//###############################  Declare Probe and Barrel Jet  ###############################
+    }
 
-    Jet* jet_probe = jet1; Jet* jet_barrel = jet2;
+    h_afterTriggerData->fill(event);
+
+//###############################  Declare Probe and Barrel Jet  ###############################
+    
+    Jet* jet_probe = jet1;
+    Jet* jet_barrel = jet2;
     if ((fabs(jet1->eta())<s_eta_barr)&&(fabs(jet2->eta())<s_eta_barr)) {
       int ran = rand();
-      int numb = ran % 2 + 1;
-      if(numb==1){
+      int numb = ran % 2;
+      if(numb==0){
 	jet_probe = jet2;
 	jet_barrel = jet1;
-      }
-      if(numb==2){
-	jet_probe = jet1;
-	jet_barrel = jet2;
       }
     } 
     else if ((fabs(jet1->eta())<s_eta_barr)||(fabs(jet2->eta())<s_eta_barr)){
@@ -1192,9 +1110,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     double dR_jet3_probejet = -1;
 
    float jet3_pt = 0; float jet3_ptRaw = 0;
-    if(jet_n>2 && jetid_2 >= 0){
-      if(jetid_2>=jet_n) throw invalid_argument("matched id of jet 2 is not in jet vector");     
-      Jet* jet3 = &event.jets->at(jetid_2);
+    if(jet_n>2){
+      Jet* jet3 = &event.jets->at(2);
       jet3_pt = jet3->pt();
       auto factor_raw3 = jet3->JEC_factor_raw();
       jet3_ptRaw = jet3_pt*factor_raw3;

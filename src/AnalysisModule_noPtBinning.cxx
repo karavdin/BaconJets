@@ -4,6 +4,7 @@
 
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
+#include "UHH2/core/include/GenericEvent.h"
 #include "UHH2/core/include/EventHelper.h"
 #include "UHH2/core/include/Jet.h"
 #include "UHH2/core/include/Utils.h"
@@ -29,6 +30,7 @@
 #include "Riostream.h"
 #include "TFile.h"
 #include "TTree.h"
+#include "TVector2.h"
 
 #include <stdexcept>
 
@@ -81,7 +83,6 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     std::unique_ptr<uhh2::Selection> triggerDi320_sel;
     std::unique_ptr<uhh2::Selection> triggerDi400_sel;
     std::unique_ptr<uhh2::Selection> triggerDi500_sel;
-
    
     //// Data/MC scale factors
     std::unique_ptr<uhh2::AnalysisModule> pileupSF;
@@ -95,8 +96,15 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Event::Handle<float> tt_probejet_chEmEF; Event::Handle<float> tt_probejet_chHadEF; 
     Event::Handle<float> tt_probejet_photonEF; Event::Handle<float> tt_probejet_muonEF; 
 
-    Event::Handle<float> tt_jet1_pt;     Event::Handle<float> tt_jet2_pt;     Event::Handle<float> tt_jet3_pt;
-    Event::Handle<float> tt_jet1_ptRaw;  Event::Handle<float> tt_jet2_ptRaw;  Event::Handle<float> tt_jet3_ptRaw;
+    Event::Handle<float> tt_jet1_pt;
+    Event::Handle<float> tt_jet2_pt;
+    Event::Handle<float> tt_jet3_pt;
+    Event::Handle<float> tt_jet1_ptRaw;
+    Event::Handle<float> tt_jet2_ptRaw;
+    Event::Handle<float> tt_jet3_ptRaw;
+    Event::Handle<float> tt_jet1_pt_onoff_Resp;
+    Event::Handle<float> tt_jet2_pt_onoff_Resp;
+  
     Event::Handle<int> tt_nvertices;
     Event::Handle<float> tt_probejet_eta;  Event::Handle<float> tt_probejet_phi; Event::Handle<float> tt_probejet_pt; Event::Handle<float> tt_probejet_ptRaw;
     Event::Handle<float> tt_barreljet_eta;  Event::Handle<float> tt_barreljet_phi; Event::Handle<float> tt_barreljet_pt; Event::Handle<float> tt_barreljet_ptRaw;
@@ -147,6 +155,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Event::Handle<int> tt_triggerDi320;
     Event::Handle<int> tt_triggerDi400;
     Event::Handle<int> tt_triggerDi500;
+
+   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_triggers[10];
   
     std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
   std::unique_ptr<JECAnalysisHists> h_trgSiMu, h_minBias ,h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg450,h_trg500;
@@ -159,7 +169,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     uhh2bacon::Selection sel;
 
     bool debug;
-  bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, trigger_singlemuon, ts;
+    bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, trigger_singlemuon, ts, onlyBtB;
     double lumiweight;
     string jetLabel;
     TString dataset_version, JEC_Version;
@@ -181,8 +191,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
   AnalysisModule_noPtBinning::AnalysisModule_noPtBinning(uhh2::Context & ctx) :
 		  sel(ctx)
   {
-
-    
+    debug = false;
+ 
     for(auto & kv : ctx.get_all()){
       cout << " " << kv.first << " = " << kv.second << endl;
     }
@@ -217,6 +227,9 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     trigger_singlemuon  = (ctx.get("Trigger_SingleMuon") == "true");
 
     ts  = (ctx.get("Trigger_Single") == "true"); //if true use single jet trigger, if false di jet trigger
+    onlyBtB = (ctx.get("Only_BtB") == "true");
+    if(debug) cout<<"onlyBtb is "<<onlyBtB<<endl;
+
     
     if(!isMC){
     const std::string& triggerSiMu = ctx.get("triggerSiMu", "NULL");
@@ -242,8 +255,33 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     const std::string& triggerDi260 = ctx.get("triggerDi260", "NULL");
     const std::string& triggerDi320 = ctx.get("triggerDi320", "NULL");
     const std::string& triggerDi400 = ctx.get("triggerDi400", "NULL");
-    const std::string& triggerDi500 = ctx.get("triggerDi500", "NULL");   
+    const std::string& triggerDi500 = ctx.get("triggerDi500", "NULL");
 
+
+    if(ts){
+      handle_triggers[0] = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet40" );
+      handle_triggers[1] = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet60" );
+      handle_triggers[2] = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet80" );
+      handle_triggers[3] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet140" );
+      handle_triggers[4] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet200" );
+      handle_triggers[5] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet260" );
+      handle_triggers[6] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet320" );
+      handle_triggers[7] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
+      handle_triggers[8] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet450" );
+      handle_triggers[9] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+    }
+    else{
+      handle_triggers[0]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve40" );
+      handle_triggers[1]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60" );
+      handle_triggers[2]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80" );
+      handle_triggers[3] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve140" );
+      handle_triggers[4] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve200" );
+      handle_triggers[5] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve260" );
+      handle_triggers[6] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve320" );
+      handle_triggers[7] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve400" );
+      handle_triggers[8] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve500" );
+    }
+        
       if(triggerSiMu != "NULL") triggerSiMu_sel.reset(new TriggerSelection(triggerSiMu));
       else triggerSiMu_sel.reset(new uhh2::AndSelection(ctx));
 
@@ -678,6 +716,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     tt_jet1_ptGen = ctx.declare_event_output<float>("jet1_ptGen");
     tt_jet2_ptGen = ctx.declare_event_output<float>("jet2_ptGen");
     tt_jet3_ptGen = ctx.declare_event_output<float>("jet3_ptGen");
+    tt_jet1_pt_onoff_Resp = ctx.declare_event_output<float>("jet1_pt_onoff_Resp");
+    tt_jet2_pt_onoff_Resp = ctx.declare_event_output<float>("jet2_pt_onoff_Resp");
 
     tt_probejet_neutEmEF = ctx.declare_event_output<float>("probejet_neutEmEF");
     tt_probejet_neutHadEF = ctx.declare_event_output<float>("probejet_neutHadEF");
@@ -840,8 +880,6 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
     
-    debug = false;
- 
     n_evt = 0;
     TString name_weights = ctx.get("MC_Weights_Path");
     apply_weights = (ctx.get("Apply_Weights") == "true" && isMC);
@@ -1140,7 +1178,6 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 
       if(debug){
 	cout << "before triggers: " << endl;
-	cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
       }
       h_beforeTriggerData->fill(event);
 
@@ -1163,15 +1200,19 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     
     //FIXME check for multiple passes as below!!!
     
+    float jet_0_pt_off = 100000;
+    float jet_1_pt_off = 100000;
+    float jet_0_pt_off_last = 100000;
+    float jet_1_pt_off_last = 100000;    
     if(event.isRealData){
 
       jetid_0 = -10;
       jetid_1 = -10;
       jetid_2 = -10;
 
-      jetid_0_last =  -10;
-      jetid_1_last =  -10;
-      jetid_2_last =  -10;   
+      jetid_0_last = -10;
+      jetid_1_last = -10;
+      jetid_2_last = -10;   
           
       sel.SetEvent(event);
       
@@ -1181,13 +1222,31 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 
       for(int i = 0; i<n_trg; i++){
 	if(ts ? passes_Si[i] : passes_Di[i]){
+	  jetid_0_last = jetid_0;
+	  jetid_1_last = jetid_1;
+	  jetid_2_last = jetid_2;
+	  jet_0_pt_off_last = jet_0_pt_off;
+	  jet_1_pt_off_last = jet_1_pt_off;
+	  
 	  jetid_0 = sel.FindMatchingJet(0,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
 	  jetid_1 = sel.FindMatchingJet(1,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
+
+	  if(debug) cout<<"after FindMatchingJet\n";
+	  
+	  if(jetid_0>=0) jet_0_pt_off = event.get(handle_triggers[i]).at(0).pt();
+	  if(jetid_1>=0) jet_1_pt_off = event.get(handle_triggers[i]).at(1).pt();
+	  
 	  if(jetid_0_last != -10 || jetid_1_last!= -10){
 	    if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
 	      cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
-	      if(jetid_0_last < jetid_0 && jetid_0_last >= 0) jetid_0 = jetid_0_last;
-	      if( ( jetid_1_last != jetid_0 && jetid_1 != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) || ( jetid_1 == jetid_0 )  ) jetid_1 = jetid_1_last;
+	      if(jetid_0_last < jetid_0 && jetid_0_last >= 0){
+		jetid_0 = jetid_0_last;
+		jet_0_pt_off = jet_0_pt_off_last;
+	      }
+	      if( ( jetid_1_last != jetid_0 && jetid_1 != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) || ( jetid_1 == jetid_0 )  ){
+		jetid_1 = jetid_1_last;
+		jet_1_pt_off = jet_1_pt_off_last;		
+	      }
 	    }
       	  }
 	  jetid_2 = -10;
@@ -1196,7 +1255,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 	    if(jetid_2_last != -10){
 	      if( ( jetid_2_last != jetid_0 && jetid_2_last != jetid_1 && jetid_2 != jetid_0 && jetid_2 != jetid_1 && jetid_2_last < jetid_2 && jetid_2_last >= 0 ) || (jetid_2 == jetid_0 || jetid_2 == jetid_1) ) jetid_2 = jetid_2_last;
 	    }
-	  }
+	  }  
 	}
       }
       
@@ -1215,6 +1274,27 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
    float jet1_pt = jet1->pt(); float jet2_pt = jet2->pt();
    float pt_ave = (jet1_pt + jet2_pt)/2.;
 
+   if(debug) cout<<"after pt_ave calculation\n";
+   
+   float jet1_pt_onoff_Resp =  jet1_pt / jet_0_pt_off;
+   float jet2_pt_onoff_Resp =  jet2_pt / jet_1_pt_off;   
+
+   if(onlyBtB){
+     //turn jet2 around and check dR to jet1
+     float eta1 = jet1->eta();
+     float eta2 = -1.*jet2->eta();
+     float phi1 = jet1->phi();
+     float phi2 = TVector2::Phi_mpi_pi(jet2->phi()+3.14159265358979f);
+     
+     float deta = eta1 - eta2;
+     float dphi =  TVector2::Phi_mpi_pi(phi1 - phi2);
+     float dR = TMath::Sqrt( deta*deta + dphi*dphi );
+
+     if(debug) cout<<"in BtB if with dR "<<dR<<endl;
+     
+     if(dR>0.4) return false;
+   }
+   
 //###############################  Declare Probe and Barrel Jet  ###############################
 
     Jet* jet_probe = jet1; Jet* jet_barrel = jet2;
@@ -1240,7 +1320,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 	jet_barrel = jet2;
       }
     }
-
+    
 //##############################################################################################
 
     //read or calculated values for dijet events
@@ -1330,6 +1410,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     event.set(tt_jet1_ptGen,genjet1_pt);
     event.set(tt_jet2_ptGen,genjet2_pt);
     event.set(tt_jet3_ptGen,genjet3_pt);
+    event.set(tt_jet1_pt_onoff_Resp,jet1_pt_onoff_Resp);
+    event.set(tt_jet2_pt_onoff_Resp,jet2_pt_onoff_Resp);   
     event.set(tt_nvertices,nvertices);
 
     event.set(tt_probejet_neutEmEF,jet_probe->neutralEmEnergyFraction());

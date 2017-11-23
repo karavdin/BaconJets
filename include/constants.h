@@ -69,17 +69,31 @@ constexpr static float s_Pt_Ave300HF_cut  = 426;
 
 //2017
 //from Si triggers
- constexpr static float s_Pt_AveMC_cut   = 40;
- constexpr static float s_Pt_Ave40_cut   = 40;
- constexpr static float s_Pt_Ave60_cut   = 62;
- constexpr static float s_Pt_Ave80_cut   = 85;
- constexpr static float s_Pt_Ave140_cut  = 153;
- constexpr static float s_Pt_Ave200_cut  = 222;
- constexpr static float s_Pt_Ave260_cut  = 290;
- constexpr static float s_Pt_Ave320_cut  = 359;
- constexpr static float s_Pt_Ave400_cut  = 443;
- constexpr static float s_Pt_Ave450_cut  = 486; 
- constexpr static float s_Pt_Ave500_cut  = 536;
+ // constexpr static float s_Pt_AveMC_cut   = 40;
+ // constexpr static float s_Pt_Ave40_cut   = 40;
+ // constexpr static float s_Pt_Ave60_cut   = 62;
+ // constexpr static float s_Pt_Ave80_cut   = 85;
+ // constexpr static float s_Pt_Ave140_cut  = 153;
+ // constexpr static float s_Pt_Ave200_cut  = 222;
+ // constexpr static float s_Pt_Ave260_cut  = 290;
+ // constexpr static float s_Pt_Ave320_cut  = 359;
+ // constexpr static float s_Pt_Ave400_cut  = 443;
+ // constexpr static float s_Pt_Ave450_cut  = 486;
+ // constexpr static float s_Pt_Ave500_cut  = 536;
+
+//2017
+//from Si triggers w trg Obj matching
+ constexpr static float s_Pt_AveMC_cut   = 40 ;
+ constexpr static float s_Pt_Ave40_cut   = 70 ;
+ constexpr static float s_Pt_Ave60_cut   = 93 ;
+ constexpr static float s_Pt_Ave80_cut   = 124;
+ constexpr static float s_Pt_Ave140_cut  = 200;
+ constexpr static float s_Pt_Ave200_cut  = 272;
+ constexpr static float s_Pt_Ave260_cut  = 306;
+ constexpr static float s_Pt_Ave320_cut  = 376;
+ constexpr static float s_Pt_Ave400_cut  = 432;
+ constexpr static float s_Pt_Ave450_cut  = 481;
+ constexpr static float s_Pt_Ave500_cut  = 533;
 
 //from Di triggers
  constexpr static float d_Pt_AveMC_cut   =  51;
