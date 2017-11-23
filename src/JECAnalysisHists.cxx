@@ -48,7 +48,10 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
 
     book<TH1F>("pt_3","p_{T} jet 3",100,0,600);
     book<TH1F>("eta_3","#eta jet 3",100,-5,5);
-
+    
+    book<TH1F>("pt_1_onoff_Resp","p_{T,on} / p_{T,off} jet 1",100,0,5);
+    book<TH1F>("pt_2_onoff_Resp","p_{T,on} / p_{T,off} jet 2",100,0,5);
+     
     book<TH1F>("ptRaw_barrel","p^{Raw}_{T} barrel jet; p_{T}^{Raw,barrel} (GeV)",100,0,600);
     book<TH1F>("ptRaw_probe","p^{Raw}_{T} probe jet; p_{T}^{Raw,probe} (GeV)",100,0,600);
     book<TH1F>("pt_barrel","p_{T} barrel jet; p_{T}^{barrel} (GeV)",100,0,600);
@@ -83,6 +86,8 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     tt_jet1_ptRaw = ctx.get_handle<float>("jet1_ptRaw");
     tt_jet2_ptRaw = ctx.get_handle<float>("jet2_ptRaw");
     tt_jet3_ptRaw = ctx.get_handle<float>("jet3_ptRaw");
+    tt_jet1_pt = ctx.get_handle<float>("jet1_pt_onoff_Resp");
+    tt_jet2_pt = ctx.get_handle<float>("jet2_pt_onoff_Resp");    
     tt_nvertices = ctx.get_handle<int>("nvertices");
     tt_probejet_eta = ctx.get_handle<float>("probejet_eta");
     tt_probejet_phi = ctx.get_handle<float>("probejet_phi");
