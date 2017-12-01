@@ -15,13 +15,13 @@ if len(sys.argv) > 1:
 
 img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/"
 if output_name.find("controlplotsBCD") > -1:
-    img_path_base_2 = img_path_base_2 + "RunBCD_trgMatchingWOldThresh_3"
+    img_path_base_2 = img_path_base_2 + "RunBCD_5"
 elif output_name.find("controlplotsBC") > -1:
-    img_path_base_2 = img_path_base_2 + "RunBC_trgMatchingWOldThresh_3"
+    img_path_base_2 = img_path_base_2 + "RunBC_5"
 elif output_name.find("controlplotsC") > -1:
-    img_path_base_2 = img_path_base_2 + "RunC_trgMatchingWOldThresh_3"
+    img_path_base_2 = img_path_base_2 + "RunC_5"
 elif output_name.find("controlplotsB") > -1:
-    img_path_base_2 = img_path_base_2 + "RunB_trgMatchingWOldThresh_3"
+    img_path_base_2 = img_path_base_2 + "RunB_5"
 elif output_name.find("controlplotsD") > -1:
     img_path_base_2 = img_path_base_2 + "RunD"
 else:
@@ -33,19 +33,38 @@ if not os.path.isdir(img_path_base_2):
     raise RuntimeError("Path %s does not exist" % img_path_base_2)
 
 img_path_base = img_path_base_2 + "control/"
-img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunB_trgMatchingWOldThresh_3/plots/control/"
-img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunC_trgMatchingWOldThresh_3/plots/control/"
-img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunB_trgMatchingWOldThresh_3/plots/"
-img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunC_trgMatchingWOldThresh_3/plots/"
+img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunB_5/plots/control/"
+img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunC_5/plots/control/"
+img_path_baseMain_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunB_5/plots/"
+img_path_baseMain_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunC_5/plots/"
 
 etas = [0.000, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.930,
         2.172, 2.322, 2.500, 2.650, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191]
 
+etas_full = [-5.191, -3.839, -3.489, -3.139, -2.964, -2.853, -2.65, -2.5, -2.322, -2.172, -1.93, -1.653, -1.479, -1.305, -1.044, -0.783, -
+             0.522, -0.261, 0, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.93, 2.172, 2.322, 2.5, 2.65, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191]
+
 etas_str = ["00", "0261", "0522", "0783", "1044", "1305", "1479", "1653", "193",
             "2172", "2322", "25", "2650", "2853", "2964", "3139", "3489", "3839", "5191"]
 
-pt_str_full = ["40", "62", "85", "153", "222", "290",
-               "359", "443", "486", "536", "1000", "2000"]
+etas_str_full = ["-5191", "-3839", "-3489", "-3139", "-2964", "-2853", "-265", "-25", "-2322", "-2172", "-193", "-1653", "-1479", "-1305", "-1044", "-0783", "-0522",
+                 "-0261", "00", "0261", "0522", "0783", "1044", "1305", "1479", "1653", "193", "2172", "2322", "25", "2650", "2853", "2964", "3139", "3489", "3839", "5191"]
+
+# pt_str_full = ["40", "62", "85", "153", "222", "290",
+#                "359", "443", "486", "536", "1000", "2000"]
+
+pt_str_full = ["61",
+               "90",
+               "116",
+               "199",
+               "266",
+               "301",
+               "372",
+               "432",
+               "481",
+               "528",
+               "1000",
+               "2000"]
 
 pt_str = pt_str_full[1:];
 
@@ -557,27 +576,27 @@ for i, eta in enumerate(etas[:-1]):
 
 #################### Asymmetry singled out #########################
 
-for i, eta in enumerate(etas[:-1]):
+for i, eta in enumerate(etas_full[:-1]):
     frames_list.append(
-        "\\begin{frame}{Asymmetry Run B, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+        "\\begin{frame}{Asymmetry Run B, Eta Bin " + str(eta) + " - " + str(etas_full[i + 1]) + "}\n")
     for j, pt in enumerate(pt_str_full[:-1]):
         if j and not j % 5:
             frames_list[-1] += "\\newline\n\n"
         frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_B +\
-            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str_full[i] +\
+            "_" + etas_str_full[i + 1] + "_pt_" + pt_str_full[j] +\
             "_" + pt_str_full[j + 1] + ".pdf}\n"
     frames_list[-1] += "\end{frame}\n\n"
 
-for i, eta in enumerate(etas[:-1]):
+for i, eta in enumerate(etas_full[:-1]):
     frames_list.append(
-        "\\begin{frame}{Asymmetry Run C, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+        "\\begin{frame}{Asymmetry Run C, Eta Bin " + str(eta) + " - " + str(etas_full[i + 1]) + "}\n")
     for j, pt in enumerate(pt_str_full[:-1]):
         if j and not j % 5:
             frames_list[-1] += "\\newline\n\n"
         frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_C +\
-            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str_full[i] +\
+            "_" + etas_str_full[i + 1] + "_pt_" + pt_str_full[j] +\
             "_" + pt_str_full[j + 1] + ".pdf}\n"
     frames_list[-1] += "\end{frame}\n\n"
 

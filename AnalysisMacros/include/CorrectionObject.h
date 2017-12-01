@@ -100,8 +100,11 @@ using namespace std;
     void FullCycle_CorrectFormulae_eta();
     void MatchingPlots();
     void Lumi_Plots();
-    void JetMatching_Plots();  
-    void AdditionalAsymmetryPlots();
+    void JetMatching_Plots();
+    void OnOffResp_Plots();
+    void JetMatching_PlotsDi();
+    void OnOffResp_PlotsDi();
+    void AdditionalAsymmetryPlots(bool eta_abs = true);
     void triggerExclusivityCheck();
     
 static bool make_path(std::string path_name){
