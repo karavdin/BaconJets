@@ -21,6 +21,7 @@
 <!ENTITY TRIGGER_CENTRAL     "true">  <!--Trigger Flag -->
 <!ENTITY TRIGGER_FWD         "false"> <!--Trigger Flag -->
 
+<!ENTITY ONLY_BACK_TO_BACK "false" >
 <!ENTITY USE_SINGLE_TRIGGER "true" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
 <!ENTITY QCDPt50to80_pythia8_AK4CHS           SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3_EGReg/MC_QCD_Pt_50to80_EGReg_chsMET.xml">
@@ -55,7 +56,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Run17BC_trgMatchingWOldThresh_ptBinned_4"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Run17BC_ptBinned_5"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -213,7 +214,8 @@
 	<Item Name="Trigger_Central"    Value="&TRIGGER_CENTRAL;"/>
 	<Item Name="Trigger_FWD"        Value="&TRIGGER_FWD;"/>
 	
-	<Item Name="Trigger_Single"        Value="&USE_SINGLE_TRIGGER;"/>
+	<Item Name="Trigger_Single"        Value="&USE_SINGLE_TRIGGER;"/>	
+	<Item Name="Only_BtB"               Value="&ONLY_BACK_TO_BACK;"/>
 	
 	<!-- always apply MET smearing -->
 

@@ -86,6 +86,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     Event::Handle<float> tt_jet1_pt;     Event::Handle<float> tt_jet2_pt;     Event::Handle<float> tt_jet3_pt;
     Event::Handle<float> tt_jet1_ptRaw;  Event::Handle<float> tt_jet2_ptRaw;  Event::Handle<float> tt_jet3_ptRaw;
+  Event::Handle<float> tt_jet1_pt_onoff_Resp;     Event::Handle<float> tt_jet2_pt_onoff_Resp;
     Event::Handle<int> tt_nvertices;
     Event::Handle<float> tt_probejet_eta;  Event::Handle<float> tt_probejet_phi; Event::Handle<float> tt_probejet_pt; Event::Handle<float> tt_probejet_ptRaw;
     Event::Handle<float> tt_barreljet_eta;  Event::Handle<float> tt_barreljet_phi; Event::Handle<float> tt_barreljet_pt; Event::Handle<float> tt_barreljet_ptRaw;
@@ -136,7 +137,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     uhh2bacon::Selection sel;
 
     bool debug;
-  bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts;
+  bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB;
     double lumiweight;
     string jetLabel;
     TString dataset_version, JEC_Version;
@@ -193,7 +194,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     ts  = (ctx.get("Trigger_Single") == "true"); //if true use single jet trigger, if false di jet trigger TODO collapse the SiJet and DiJEt AnalysisModules into one?
     // ts = true;
-    
+    onlyBtB = (ctx.get("Only_BtB") == "true");
+    if(debug) cout<<"onlyBtb is "<<onlyBtB<<endl;
+        
     if(!isMC){
     const std::string& triggerSiMu = ctx.get("triggerSiMu", "NULL");
 
@@ -625,6 +628,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     tt_jet2_ptGen = ctx.declare_event_output<float>("jet2_ptGen");
     tt_jet3_ptGen = ctx.declare_event_output<float>("jet3_ptGen");
 
+    tt_jet1_pt_onoff_Resp = ctx.declare_event_output<float>("jet1_pt_onoff_Resp");
+    tt_jet2_pt_onoff_Resp = ctx.declare_event_output<float>("jet2_pt_onoff_Resp");
+
     tt_probejet_neutEmEF = ctx.declare_event_output<float>("probejet_neutEmEF");
     tt_probejet_neutHadEF = ctx.declare_event_output<float>("probejet_neutHadEF");
     tt_probejet_chEmEF = ctx.declare_event_output<float>("probejet_chEmEF");
@@ -1041,6 +1047,22 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     h_afterTriggerData->fill(event);
 
+    if(onlyBtB){
+     //turn jet2 around and check dR to jet1
+     float eta1 = jet1->eta();
+     float eta2 = -1.*jet2->eta();
+     float phi1 = jet1->phi();
+     float phi2 = TVector2::Phi_mpi_pi(jet2->phi()+3.14159265358979f);
+     
+     float deta = eta1 - eta2;
+     float dphi =  TVector2::Phi_mpi_pi(phi1 - phi2);
+     float dR = TMath::Sqrt( deta*deta + dphi*dphi );
+
+     if(debug) cout<<"in BtB if with dR "<<dR<<endl;
+     
+     if(dR>0.4) return false;
+   }
+
 //###############################  Declare Probe and Barrel Jet  ###############################
     
     Jet* jet_probe = jet1;
@@ -1138,6 +1160,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
    h_afterUnflat->fill(event);
     
     int flavor = 0;
+    float onoffDummy =0.;
     
  //fill that containers!
     double pu_pthat = -1;
@@ -1154,6 +1177,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     event.set(tt_jet1_ptGen,genjet1_pt);
     event.set(tt_jet2_ptGen,genjet2_pt);
     event.set(tt_jet3_ptGen,genjet3_pt);
+    event.set(tt_jet1_pt_onoff_Resp,onoffDummy);
+    event.set(tt_jet2_pt_onoff_Resp,onoffDummy);
     event.set(tt_nvertices,nvertices);
 
     event.set(tt_probejet_neutEmEF,jet_probe->neutralEmEnergyFraction());
@@ -1208,7 +1233,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     sel.SetEvent(event);
     
-//##################################################   Advanced Selections   ##################################################################
+//##################################################   Advanced Selections   ###################
     //good primary vertex
     int nGoodVts = sel.goodPVertex();
 
@@ -1255,7 +1280,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     }
 
 //Advanced Selection: DiJet Events
-    // if(!sel.DiJetAdvanced(event)) return false;   
+    if(!sel.DiJetAdvanced(event)) return false;   
     h_dijet->fill(event);
     h_lumi_dijet->fill(event);
     h_match->fill(event);
@@ -1280,16 +1305,16 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     float matchJetId_0_last = -10.;
     float matchJetId_1_last = -10.;
 
-    bool passes_Si[10] = {pass_trigger40,pass_trigger60,pass_trigger80,pass_trigger140,pass_trigger200,pass_trigger260,pass_trigger320,pass_trigger400,pass_trigger450,pass_trigger500};
-    unique_ptr<JECAnalysisHists>* h_trgSi[10] = {&h_trg40, &h_trg60, &h_trg80, &h_trg140, &h_trg200,&h_trg260,&h_trg320,&h_trg400,&h_trg450,&h_trg500};
+    bool passes_Di[9] = {pass_trigger40,pass_trigger60,pass_trigger80,pass_trigger140,pass_trigger200,pass_trigger260,pass_trigger320,pass_trigger400,pass_trigger500};
+    unique_ptr<JECAnalysisHists>* h_trgSi[9] = {&h_trg40, &h_trg60, &h_trg80, &h_trg140, &h_trg200,&h_trg260,&h_trg320,&h_trg400,&h_trg500};
     // unique_ptr< LuminosityHists>* h_lumiSi[10] =  {&h_lumi_Trig40, &h_lumi_Trig60, &h_lumi_Trig80, &h_lumi_Trig140, &h_lumi_Trig200, &h_lumi_Trig260, &h_lumi_Trig320, &h_lumi_Trig400,&h_lumi_Trig450, &h_lumi_Trig500};
 
-    for(int i = 0; i<10; i++){
-      if(passes_Si[i]){
+    for(int i = 0; i<9; i++){
+      if(passes_Di[i]){
 	matchJetId_0_last = matchJetId_0;
 	matchJetId_1_last = matchJetId_1;
-	matchJetId_0 = sel.FindMatchingJet(0,trg_vals_Si[i]);
-	matchJetId_1 = sel.FindMatchingJet(1,trg_vals_Si[i]);
+	matchJetId_0 = sel.FindMatchingJet(0,trg_vals_Di[i]);
+	matchJetId_1 = sel.FindMatchingJet(1,trg_vals_Di[i]);
 	event.set(tt_matchJetId_0, matchJetId_0);
 	event.set(tt_matchJetId_1, matchJetId_1);
 	if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
@@ -1309,7 +1334,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     event.set(tt_matchJetId_1, matchJetId_1);
     sel.SetEvent(event);
 
-    if(debug) cout<<"AnalysisModule_SiJetTrg after matching  matchJetId0: "<<matchJetId_0<<endl;
     }//Data
     else{    
       if(debug){

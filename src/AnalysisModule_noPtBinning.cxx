@@ -1200,10 +1200,10 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     
     //FIXME check for multiple passes as below!!!
     
-    float jet_0_pt_off = 100000;
-    float jet_1_pt_off = 100000;
-    float jet_0_pt_off_last = 100000;
-    float jet_1_pt_off_last = 100000;    
+    float jet_0_pt_on = 100000;
+    float jet_1_pt_on = 100000;
+    float jet_0_pt_on_last = 100000;
+    float jet_1_pt_on_last = 100000;    
     if(event.isRealData){
       if(do_tojm){
 	jetid_0 = -10;
@@ -1226,16 +1226,16 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 	    jetid_0_last = jetid_0;
 	    jetid_1_last = jetid_1;
 	    jetid_2_last = jetid_2;
-	    jet_0_pt_off_last = jet_0_pt_off;
-	    jet_1_pt_off_last = jet_1_pt_off;
+	    jet_0_pt_on_last = jet_0_pt_on;
+	    jet_1_pt_on_last = jet_1_pt_on;
 	  
 	    jetid_0 = sel.FindMatchingJet(0,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
 	    jetid_1 = sel.FindMatchingJet(1,ts ? trg_vals_Si[i] : trg_vals_Di[i]);
 	  }
 	  if(debug) cout<<"after FindMatchingJet\n";
 	  
-	  if(jetid_0>=0) jet_0_pt_off = event.get(handle_triggers[i]).at(0).pt();
-	  if(jetid_1>=0) jet_1_pt_off = event.get(handle_triggers[i]).at(1).pt();
+	  if(jetid_0>=0) jet_0_pt_on = event.get(handle_triggers[i]).at(0).pt();
+	  if(jetid_1>=0) jet_1_pt_on = event.get(handle_triggers[i]).at(1).pt();
 
 	  if(do_tojm){
 	    if(jetid_0_last != -10 || jetid_1_last!= -10){
@@ -1243,11 +1243,11 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 		cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
 		if(jetid_0_last < jetid_0 && jetid_0_last >= 0){
 		  jetid_0 = jetid_0_last;
-		  jet_0_pt_off = jet_0_pt_off_last;
+		  jet_0_pt_on = jet_0_pt_on_last;
 		}
 		if( ( jetid_1_last != jetid_0 && jetid_1 != jetid_0 && jetid_1_last < jetid_1 && jetid_1_last >= 0 ) || ( jetid_1 == jetid_0 )  ){
 		  jetid_1 = jetid_1_last;
-		  jet_1_pt_off = jet_1_pt_off_last;		
+		  jet_1_pt_on = jet_1_pt_on_last;		
 		}
 	      }
 	    }
@@ -1279,8 +1279,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 
    if(debug) cout<<"after pt_ave calculation\n";
    
-   float jet1_pt_onoff_Resp =  jet1_pt / jet_0_pt_off;
-   float jet2_pt_onoff_Resp =  jet2_pt / jet_1_pt_off;   
+  float jet1_pt_onoff_Resp =  jet1_pt / jet_0_pt_on;
+   float jet2_pt_onoff_Resp =  jet2_pt / jet_1_pt_on;   
 
    event.set(tt_jet1_pt_onoff_Resp,jet1_pt_onoff_Resp);
    event.set(tt_jet2_pt_onoff_Resp,jet2_pt_onoff_Resp); 
@@ -1526,8 +1526,11 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     unique_ptr<JECAnalysisHists>* h_trgSi[10] = {&h_trg40, &h_trg60, &h_trg80, &h_trg140, &h_trg200,&h_trg260,&h_trg320,&h_trg400,&h_trg450,&h_trg500};
     unique_ptr<JECAnalysisHists>* h_trgDi[9] =  {&h_trgDi40, &h_trgDi60, &h_trgDi80, &h_trgDi140, &h_trgDi200,&h_trgDi260,&h_trgDi320,&h_trgDi400,&h_trgDi500}; 
     unique_ptr< LuminosityHists>* h_lumiSi[10] =  {&h_lumi_Trig40, &h_lumi_Trig60, &h_lumi_Trig80, &h_lumi_Trig140, &h_lumi_Trig200, &h_lumi_Trig260, &h_lumi_Trig320, &h_lumi_Trig400,&h_lumi_Trig450, &h_lumi_Trig500};
-   unique_ptr< LuminosityHists>* h_lumiDi[9] = {&h_lumi_TrigDi40, &h_lumi_TrigDi60, &h_lumi_TrigDi80, &h_lumi_TrigDi140, &h_lumi_TrigDi200, &h_lumi_TrigDi260, &h_lumi_TrigDi320, &h_lumi_TrigDi400, &h_lumi_TrigDi500};  
-
+   unique_ptr< LuminosityHists>* h_lumiDi[9] = {&h_lumi_TrigDi40, &h_lumi_TrigDi60, &h_lumi_TrigDi80, &h_lumi_TrigDi140, &h_lumi_TrigDi200, &h_lumi_TrigDi260, &h_lumi_TrigDi320, &h_lumi_TrigDi400, &h_lumi_TrigDi500};
+   
+    float jet_0_pt_on = 100000;
+    float jet_1_pt_on = 100000;
+    
     for(int i = 0; i<10; i++){
       if(passes_Si[i]){
 	matchJetId_0_last = matchJetId_0;
@@ -1536,6 +1539,14 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 	matchJetId_1 = sel.FindMatchingJet(1,trg_vals_Si[i]);
 	event.set(tt_matchJetId_0, matchJetId_0);
 	event.set(tt_matchJetId_1, matchJetId_1);
+	if(ts){
+	  if(jetid_0>=0) jet_0_pt_on = event.get(handle_triggers[i]).at(0).pt();
+	  if(jetid_1>=0) jet_1_pt_on = event.get(handle_triggers[i]).at(1).pt();
+	  float jet1_pt_onoff_Resp =  jet1_pt / jet_0_pt_on;
+	  float jet2_pt_onoff_Resp =  jet2_pt / jet_1_pt_on;  
+	  event.set(tt_jet1_pt_onoff_Resp, jet1_pt_onoff_Resp);
+	  event.set(tt_jet2_pt_onoff_Resp, jet2_pt_onoff_Resp);
+	}
 	if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
 	(*(h_trgSi[i]))->fill(event);
 	(*(h_lumiSi[i]))->fill(event);
@@ -1557,6 +1568,14 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 	matchJetId_1 = sel.FindMatchingJet(1,trg_vals_Di[i]);
 	event.set(tt_matchJetId_0, matchJetId_0);
 	event.set(tt_matchJetId_1, matchJetId_1);
+	if(!ts){
+	  if(jetid_0>=0) jet_0_pt_on = event.get(handle_triggers[i]).at(0).pt();
+	  if(jetid_1>=0) jet_1_pt_on = event.get(handle_triggers[i]).at(1).pt();
+	  float jet1_pt_onoff_Resp =  jet1_pt / jet_0_pt_on;
+	  float jet2_pt_onoff_Resp =  jet2_pt / jet_1_pt_on;  
+	  event.set(tt_jet1_pt_onoff_Resp, jet1_pt_onoff_Resp);
+	  event.set(tt_jet2_pt_onoff_Resp, jet2_pt_onoff_Resp);
+	}
 	if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
 	(*(h_trgDi[i]))->fill(event);
 	(*(h_lumiDi[i]))->fill(event);
