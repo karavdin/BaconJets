@@ -29,13 +29,15 @@
 
 <!ENTITY USE_SINGLE_TRIGGER "false" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
-<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_94X_v1/">
+<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/">
 
-<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunC_17Nov17_v1.xml">
+<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunC_17Nov17_v1.xml">
 
-<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunD_17Nov17_v1.xml">
+<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunD_17Nov17_v1.xml">
 
-<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunE_17Nov17_v1.xml">
+<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunE_17Nov17_v1.xml">
+
+<!ENTITY DATA_RunF_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunF_17Nov17_v1.xml">
 
 
 <!ENTITY DATA_RunB_promptReco_2017_SingleMuon SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_SingleMuon_Run2017B_PromptReco.xml">
@@ -67,24 +69,30 @@
 <!--           <OutputTree Name="AnalysisTree"/> -->
 <!-- </InputData> -->
 
-<!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_promptReco_2017" Cacheable="&CACHEABLE;"> -->
+<!-- <InputData Lumi="96264601" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_promptReco_2017" Cacheable="&CACHEABLE;"> -->
 <!--           &DATA_RunC_promptReco_2017; -->
 <!--           <InputTree Name="AnalysisTree"/> -->
 <!--           <OutputTree Name="AnalysisTree"/> -->
 <!-- </InputData> -->
 
-<InputData Lumi="46145204" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;">
-          &DATA_RunD_promptReco_2017;
+<!-- <InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
+<!--           &DATA_RunD_promptReco_2017; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!-- </InputData> -->
+
+<!-- <InputData Lumi="76958681" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
+<!--           &DATA_RunE_promptReco_2017; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!-- </InputData> -->
+
+
+<InputData Lumi="" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_17Nov17_2017" Cacheable="&CACHEABLE;">
+          &DATA_RunF_promptReco_2017;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
 </InputData>
-
-<InputData Lumi="89633796" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;">
-          &DATA_RunE_promptReco_2017;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-</InputData>
-
 
 <!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_promptReco_2017_SingleMuon" Cacheable="&CACHEABLE;"> -->
 <!--           &DATA_RunB_promptReco_2017_SingleMuon; -->
@@ -182,7 +190,9 @@
 	<Item Name="Trigger_Single"        Value="&USE_SINGLE_TRIGGER;"/>	
 	<Item Name="Only_BtB"               Value="&ONLY_BACK_TO_BACK;"/>
 	<Item Name="Do_TOJM"          Value="&DO_TRG_OBJ_JET_MATCHING;"/>
-        <Item Name="AnalysisModule" Value="AnalysisModule_noPtBinning" /> 
+        <Item Name="AnalysisModule" Value="AnalysisModule_noPtBinning" />
+	
+        <Item Name="Debug" Value="false" />	
 
         </UserConfig>
     </Cycle>

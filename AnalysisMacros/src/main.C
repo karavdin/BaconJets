@@ -36,12 +36,15 @@ static void show_usage(std::string name)
 	      << "\t-OORPd\t\tPlot on/off jet pt response  jet for the dijet trg.\n"     
 	      << "\t-TEC\t\tCheck if the trigger are really exclusive.\n"
  	      << "\t-BC\t\tUse the older BC directory instead of the BCD directory.\n"
-       	      << "\t-D\t\tUse the D directory instead of the BCD directory.\n"     
+       	      << "\t-D\t\tUse the D directory instead of the BCD directory.\n"
+       	      << "\t-E\t\tUse the E directory instead of the BCD directory.\n"
+       	      << "\t-F\t\tUse the F directory instead of the BCD directory.\n"      
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
+      	      << "\t-useHF\t\tIncludes the HF trigger.\n"
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
       	      <<"\t--input\t\tPath to the input data, if none is given following is used:\n"
-	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/2017PromptReco/Residuals/Run17BCD_Data <_mode> /Run17 <run> _Data <_dname> .root\n\tThe completion script assumes the same file structure."	    
+	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/17Nov2017/Residuals/Run17BCD_Data <_mode> /Run17 <run><_dname> .root\n\tThe completion script assumes the same file structure."	    
               << std::endl;
 }
 
@@ -66,7 +69,7 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
-  std::vector<std::string> argl = {"-FP" , "-FPeta", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D" , "-LP", "-MP", "-OORP" , "-MPd", "-OORPd" , "-aAP", "-aAPef", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix"}; 
+  std::vector<std::string> argl = {"-FP" , "-FPeta", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D", "-E", "-F" , "-LP", "-MP", "-OORP" , "-MPd", "-OORPd" , "-aAP", "-aAPef", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix", "-useHF"}; 
   TString run_nr = "B";
   TString dataname_end = "";
   TString outSuf = "";
@@ -92,7 +95,10 @@ int main(int argc,char *argv[]){
   bool do_addAsymPlotsef = false;  
   bool do_triggerEx = false;
   bool use_BC = false;
-  bool use_D = false; 
+  bool use_D = false;
+  bool use_E = false;
+  bool use_F = false;
+  bool useHF = false;
   TString input_path_="";
   double asym_cut = 0.;
   for (int i = 1; i < argc; ++i) {
@@ -128,7 +134,10 @@ int main(int argc,char *argv[]){
 	  }
 	  else if(arg=="-TEC"){
 	    do_triggerEx=true;
-	  }	    	  
+	  }
+	  else if(arg=="-useHF"){
+	    useHF=true;
+	  }	  
 	  else if(arg=="-derThreshSi"){
 	    do_deriveThresholdsSi=true;
 	  }
@@ -169,6 +178,12 @@ int main(int argc,char *argv[]){
 	  }
 	  else if(arg=="-D"){
 	    use_D=true;
+	  }
+	  else if(arg=="-E"){
+	    use_E=true;
+	  }
+	  else if(arg=="-F"){
+	    use_F=true;
 	  }	  
 	  else if(arg[1]=='-'){
 	    if(arg=="--mode"){
@@ -218,15 +233,17 @@ int main(int argc,char *argv[]){
     input_path=input_path_;
   }
   else{
-      input_path  = "/nfs/dust/cms/user/"+(string)getenv("USER")+"/forBaconJets/2017PromptReco/Residuals/Run17";
+      input_path  = "/nfs/dust/cms/user/"+(string)getenv("USER")+"/forBaconJets/17Nov2017/Residuals/Run17";
       if(use_BC) input_path+="BC";
-      else if(use_D) input_path+="D";
-      else input_path+="BCD";
+      if(use_D) input_path+="D";
+      if(use_E) input_path+="E";
+      if(use_F) input_path+="F";      
+      if(not(use_BC or use_D or use_E or use_F)) input_path+="BCD";
   // if(muonCrosscheck) input_path+="D";
   input_path+="_Data";
   if(mode!="") input_path+="_";
-  input_path+=mode + "/Run17";
-  input_path+= run_nr + "_Data";
+  input_path+=mode + "/Run";
+  input_path+= run_nr;
   if(muonCrosscheck) input_path +="_"+ muonTriggerName;
   if(dataname_end!="") input_path+="_";
   input_path += dataname_end + ".root";
@@ -254,8 +271,8 @@ int main(int argc,char *argv[]){
     if(do_deriveThresholdsSi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet();
     if(do_deriveThresholdsSi_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet(true);
 
-    if(do_deriveThresholdsDi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_DiJet();
-    if(do_deriveThresholdsDi_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_DiJet(true);    
+    if(do_deriveThresholdsDi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_DiJet(false,useHF);
+    if(do_deriveThresholdsDi_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_DiJet(true,useHF);    
  
     if(muonCrosscheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet();
     
@@ -285,7 +302,7 @@ int main(int argc,char *argv[]){
     if(do_matchtrg_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetMatching_Plots();
     if(do_oor_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].OnOffResp_Plots();
    if(do_matchtrg_plotdi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetMatching_PlotsDi();
-    if(do_oor_plotdi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].OnOffResp_PlotsDi();
+    if(do_oor_plotdi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].OnOffResp_PlotsDi(useHF);
     if(do_addAsymPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].AdditionalAsymmetryPlots();
     if(do_addAsymPlotsef) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].AdditionalAsymmetryPlots(false);
     if(do_triggerEx) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].triggerExclusivityCheck();

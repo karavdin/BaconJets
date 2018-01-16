@@ -31,7 +31,7 @@
 
 using namespace std;
 
-void CorrectionObject::OnOffResp_PlotsDi(){
+void CorrectionObject::OnOffResp_PlotsDi(bool useHF){
   cout << "--------------- Starting OnOffResp_PlotsDi() ---------------" << endl << endl;
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/onoffresp/");
   TStyle* m_gStyle = new TStyle();
@@ -49,6 +49,9 @@ void CorrectionObject::OnOffResp_PlotsDi(){
      
   int n_trigger = n_triggerDi;
   vector<int> triggerVal(triggerValDi, triggerValDi + sizeof(triggerValDi) / sizeof(triggerValDi[0]));
+
+  int n_trigger_HF = n_triggerDi_HF;
+  vector<int> triggerVal_HF(triggerValDi_HF, triggerValDi_HF + sizeof(triggerValDi_HF) / sizeof(triggerValDi_HF[0]));
   
   // fill the histos for pt average in bins of eta
   TH1D* trg_data0[n_trigger];
@@ -56,16 +59,22 @@ void CorrectionObject::OnOffResp_PlotsDi(){
   
   int countPt = 0;
   TString namehist = "trg_";
-
-  TString dirNames[n_trigger];
+  
+  int n_trigger_for =  useHF  ? (n_trigger + n_trigger_HF) : n_trigger ;
+  TString dirNames[n_trigger_for];
   for(int i = 0; i<n_trigger; i++){
     dirNames[i] = TString("HLT_DiPFJetAve") + to_string(triggerVal[i]); 
+  }
+  if(useHF){
+    for(int i = 0; i<n_trigger_HF; i++){
+      dirNames[n_trigger + i] = TString("HLT_DiPFJetAve") + to_string(triggerVal_HF[i]) + TString("ForHFJEC"); 
+    }
   }
 
   TString var1 = "pt_1_onoff_Resp";
   TString var2 = "pt_2_onoff_Resp";  
-    
-  for(int i=0; i<n_trigger; i++){
+
+  for(int i=0; i<n_trigger_for ; i++){
     TString dirName = dirNames[i];
   
     TH1D* hist;

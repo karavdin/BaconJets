@@ -76,7 +76,7 @@ using namespace std;
     void ControlPlots(bool forEverySingleTrigger = false);
     void Derive_Thresholds_SiMuCrosscheck(TString siMu_dirName_);
     void Derive_Thresholds_SiJet(bool pt_check = false);
-    void Derive_Thresholds_DiJet(bool pt_check = false);    
+    void Derive_Thresholds_DiJet(bool pt_check = false, bool useHF = false);    
     void kFSR();
     void kFSR_CorrectFormulae();
     void kFSR_CorrectFormulae_eta();
@@ -103,7 +103,7 @@ using namespace std;
     void JetMatching_Plots();
     void OnOffResp_Plots();
     void JetMatching_PlotsDi();
-    void OnOffResp_PlotsDi();
+    void OnOffResp_PlotsDi(bool useHF = true);
     void AdditionalAsymmetryPlots(bool eta_abs = true);
     void triggerExclusivityCheck();
     
