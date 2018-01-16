@@ -41,7 +41,9 @@ class Selection {
     TH2D* h_map;
 
   bool diJetTrg;
-
+  bool central;
+  bool fwd;
+  
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger40;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger60;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger80;
@@ -52,7 +54,14 @@ class Selection {
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger400;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger450;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger500;
-
+  
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger60_HF;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger80_HF;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger100_HF;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger160_HF;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger220_HF;
+  uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger300_HF;
+  
     public:
     Selection(uhh2::Context & ctx);
     ~Selection();
@@ -74,7 +83,7 @@ class Selection {
     //jetmatching, find the jet in the event that corresponds to the jetid-th jet in the trigger object of the trigger with threshold trigger_th
   //returns -1 if the triggerobject does not contain less than jetid jets
   //returns -2 if no jet is matched within dR
-  int FindMatchingJet(unsigned int jetid, unsigned int trigger_th);
+  int FindMatchingJet(unsigned int jetid, unsigned int trigger_th, bool use_fwd = false);
 };
 
 }

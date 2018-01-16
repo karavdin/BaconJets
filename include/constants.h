@@ -113,6 +113,8 @@ constexpr static int trg_vals_Si[10]  = {40,60,80,140,200,260,320,400,450,500};
 
 //from Di triggersint trg_val
 constexpr static int trg_vals_Di[9]  = {40,60,80,140,200,260,320,400,500};
+constexpr static int trg_vals_Di_HF[6]  = {60,80,100,160,220,300};
+constexpr static int trg_vals_Di_plusHF[15]  = {40,60,80,140,200,260,320,400,500,60,80,100,160,220,300};
 
 //shifted bins up for assym dip checks 
  // constexpr static float s_Pt_AveMC_cut   = 90;
