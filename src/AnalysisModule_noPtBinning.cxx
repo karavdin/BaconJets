@@ -1298,6 +1298,9 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	cout << "before triggers: " << endl;
       }
       h_beforeTriggerData->fill(event);
+      if(debug){
+	cout << "after  before triggers check" << endl;
+      }      
 
       if(!pass_trigger){
 	return false;
@@ -1341,13 +1344,17 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       int n_trg = ts ? 10 : 0;
       if(!ts && trigger_central) n_trg += 9;
       if(!ts && trigger_fwd) n_trg += 6;
-				    
+
+      if(debug) cout<<"before the trigger check loop"<<endl;
+      
       for(int i = 0; i<n_trg; i++){
+	if(debug) cout<<i<<endl;
 	bool i_passed = false;
 	if(ts) i_passed = passes_Si[i];
-	if(trigger_central && !trigger_fwd) i_passed = passes_Di[i];
-	if(!trigger_central && trigger_fwd) i_passed = passes_Di_HF[i];
-	if(trigger_central && trigger_fwd) i_passed = passes_Di_plusHF[i];	
+	if(trigger_central && !trigger_fwd && !ts) i_passed = passes_Di[i];
+	if(!trigger_central && trigger_fwd && !ts) i_passed = passes_Di_HF[i];
+	if(trigger_central && trigger_fwd && !ts) i_passed = passes_Di_plusHF[i];
+	if(debug) cout<<" "<<i_passed<<endl;
 	if(i_passed){
 	  if(do_tojm){
 	    jetid_0_last = jetid_0;
@@ -1359,12 +1366,12 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    int trg_val = 0;
 	    bool fwd = false;
 	    if(ts) trg_val=trg_vals_Si[i];
-	    if(trigger_central && !trigger_fwd) trg_val = trg_vals_Di[i];
-	    if(!trigger_central && trigger_fwd){
+	    if(trigger_central && !trigger_fwd && !ts) trg_val = trg_vals_Di[i];
+	    if(!trigger_central && trigger_fwd && !ts){
 	      trg_val = trg_vals_Di_HF[i];
 	      fwd=true;
 	    }
-	    if(trigger_central && trigger_fwd){
+	    if(trigger_central && trigger_fwd && !ts){
 	      trg_val = trg_vals_Di_plusHF[i];
 	      fwd=i>8;
 	    }
@@ -1397,12 +1404,12 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	      int trg_val = 0;
 	      bool fwd = false;
 	      if(ts) trg_val=trg_vals_Si[i];
-	      if(trigger_central && !trigger_fwd) trg_val = trg_vals_Di[i];
-	      if(!trigger_central && trigger_fwd){
+	      if(trigger_central && !trigger_fwd && !ts) trg_val = trg_vals_Di[i];
+	      if(!trigger_central && trigger_fwd && !ts){
 		trg_val = trg_vals_Di_HF[i];
 		fwd=true;
 	      }
-	      if(trigger_central && trigger_fwd){
+	      if(trigger_central && trigger_fwd && !ts){
 		trg_val = trg_vals_Di_plusHF[i];
 		fwd=i>8;
 	      }

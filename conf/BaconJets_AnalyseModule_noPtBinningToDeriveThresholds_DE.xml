@@ -6,7 +6,7 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17E_Data_DeriveThresholds_noDiJCut/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DE_plusMC_Data_DeriveThresholds_noDiJCut/">
 
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Summer16_03Feb2017_V3"> <!--TODO keep in mind that this is old, why V3 and not V4??? -->
@@ -29,20 +29,16 @@
 
 <!ENTITY USE_SINGLE_TRIGGER "false" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
-<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/">
+<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/">
 
-<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunC_17Nov17_v1.xml">
+<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunC_17Nov17_v1.xml">
 
-<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunD_17Nov17_v1.xml">
+<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunD_17Nov17_v1.xml">
 
-<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunE_17Nov17_v1.xml">
+<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunE_17Nov17_v1.xml">
 
 
-<!ENTITY DATA_RunB_promptReco_2017_SingleMuon SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_SingleMuon_Run2017B_PromptReco.xml">
-
-<!ENTITY DATA_RunC_promptReco_2017_SingleMuon SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_SingleMuon_Run2017C_PromtReco_v1.xml">
-
-<!ENTITY DATA_RunD_promptReco_2017_SingleMuon SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/RunII_92X_v1/DATA_SingleMuon_Run2017D_PromtReco_v1.xml">
+<!ENTITY QCDPt15to7000              SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_2_7_patch1/src/UHH2/common/datasets/MC_94X_v1/QCD_Pt-15to7000.xml">
 
 
 ]>
@@ -50,7 +46,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17E_deriveThresholds_noDiJetCut_wOnOffResp"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17DE_plusMC_deriveThresholds_noDiJetCut_wOnOffResp"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -73,11 +69,11 @@
 <!--           <OutputTree Name="AnalysisTree"/> -->
 <!-- </InputData> -->
 
-<!-- <InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
-<!--           &DATA_RunD_promptReco_2017; -->
-<!--           <InputTree Name="AnalysisTree"/> -->
-<!--           <OutputTree Name="AnalysisTree"/> -->
-<!-- </InputData> -->
+<InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;">
+          &DATA_RunD_promptReco_2017;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+</InputData>
 
 <InputData Lumi="76958681" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunE_promptReco_2017;
@@ -104,6 +100,12 @@
 <!--           <OutputTree Name="AnalysisTree"/> -->
 <!-- </InputData> -->
 
+
+<InputData Lumi="87502230" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000" Cacheable="&CACHEABLE;">
+          &QCDPt15to7000;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
 
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
