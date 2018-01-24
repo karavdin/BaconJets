@@ -95,17 +95,29 @@ constexpr static float s_Pt_Ave300HF_cut  = 426;
  constexpr static float s_Pt_Ave450_cut  = 481;
  constexpr static float s_Pt_Ave500_cut  = 528;
 
-//from Di triggers
+//from Di triggers 92X
+ // constexpr static float d_Pt_AveMC_cut   =  51;
+ // constexpr static float d_Pt_Ave40_cut   =  51;
+ // constexpr static float d_Pt_Ave60_cut   =  74;
+ // constexpr static float d_Pt_Ave80_cut   =  96;
+ // constexpr static float d_Pt_Ave140_cut  = 148;
+ // constexpr static float d_Pt_Ave200_cut  = 214;
+ // constexpr static float d_Pt_Ave260_cut  = 285;
+ // constexpr static float d_Pt_Ave320_cut  = 346;
+ // constexpr static float d_Pt_Ave400_cut  = 426;
+ // constexpr static float d_Pt_Ave500_cut  = 525;
+
+//from Di triggers 94X 17Nov2017
  constexpr static float d_Pt_AveMC_cut   =  51;
- constexpr static float d_Pt_Ave40_cut   =  51;
- constexpr static float d_Pt_Ave60_cut   =  74;
- constexpr static float d_Pt_Ave80_cut   =  96;
- constexpr static float d_Pt_Ave140_cut  = 148;
- constexpr static float d_Pt_Ave200_cut  = 214;
- constexpr static float d_Pt_Ave260_cut  = 285;
- constexpr static float d_Pt_Ave320_cut  = 346;
- constexpr static float d_Pt_Ave400_cut  = 426;
- constexpr static float d_Pt_Ave500_cut  = 525;
+ constexpr static float d_Pt_Ave40_cut   =  71;
+ constexpr static float d_Pt_Ave60_cut   =  85;
+ constexpr static float d_Pt_Ave80_cut   =  99;
+ constexpr static float d_Pt_Ave140_cut  = 175;
+ constexpr static float d_Pt_Ave200_cut  = 306;
+ constexpr static float d_Pt_Ave260_cut  = 372;
+ constexpr static float d_Pt_Ave320_cut  = 434;
+ constexpr static float d_Pt_Ave400_cut  = 520;
+ constexpr static float d_Pt_Ave500_cut  = 648;
 
 //2017
 //from Si triggers
@@ -130,12 +142,20 @@ constexpr static int trg_vals_Di_plusHF[15]  = {40,60,80,140,200,260,320,400,500
  // constexpr static float s_Pt_Ave500_cut  = 586;
 
 // 2016
-constexpr static float s_Pt_Ave60HF_cut   = 100;
-constexpr static float s_Pt_Ave80HF_cut   = 126;
-constexpr static float s_Pt_Ave100HF_cut  = 152;
-constexpr static float s_Pt_Ave160HF_cut  = 250;
-constexpr static float s_Pt_Ave220HF_cut  = 319;
-constexpr static float s_Pt_Ave300HF_cut  = 433;
+// constexpr static float s_Pt_Ave60HF_cut   = 100;
+// constexpr static float s_Pt_Ave80HF_cut   = 126;
+// constexpr static float s_Pt_Ave100HF_cut  = 152;
+// constexpr static float s_Pt_Ave160HF_cut  = 250;
+// constexpr static float s_Pt_Ave220HF_cut  = 319;
+// constexpr static float s_Pt_Ave300HF_cut  = 433;
+
+// 2017 94X 17Nov2017
+constexpr static float s_Pt_Ave60HF_cut   = 71;
+constexpr static float s_Pt_Ave80HF_cut   = 91;
+constexpr static float s_Pt_Ave100HF_cut  = 111;
+constexpr static float s_Pt_Ave160HF_cut  = 173;
+constexpr static float s_Pt_Ave220HF_cut  = 236;
+constexpr static float s_Pt_Ave300HF_cut  = 317;
 
 //Runnumbers for applying different corrections
 constexpr static int s_runnr_BCD     = 276811; //up to this one, including this one
@@ -146,7 +166,7 @@ constexpr static int s_runnr_FlateG  = 280385; //up to this one, including this 
 //Lumi recorded by different triggers in pb-1
 // constexpr static float s_lumi_cent_40 = 0.101;
 // constexpr static float s_lumi_cent_60 = 1.704;
-// constexpr static float s_lumi_cent_80 = 4.203;
+''// constexpr static float s_lumi_cent_80 = 4.203;
 // constexpr static float s_lumi_cent_140 = 27.769;
 // constexpr static float s_lumi_cent_200 = 139.732;
 // constexpr static float s_lumi_cent_260 = 521.863;

@@ -38,6 +38,7 @@ static void show_usage(std::string name)
  	      << "\t-BC\t\tUse the older BC directory instead of the BCD directory.\n"
        	      << "\t-D\t\tUse the D directory instead of the BCD directory.\n"
        	      << "\t-E\t\tUse the E directory instead of the BCD directory.\n"
+	      << "\t-DE\t\tUse the E directory instead of the BCD directory.\n"
        	      << "\t-F\t\tUse the F directory instead of the BCD directory.\n"      
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
       	      << "\t-useHF\t\tIncludes the HF trigger.\n"
@@ -69,7 +70,7 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
-  std::vector<std::string> argl = {"-FP" , "-FPeta", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D", "-E", "-F" , "-LP", "-MP", "-OORP" , "-MPd", "-OORPd" , "-aAP", "-aAPef", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix", "-useHF"}; 
+  std::vector<std::string> argl = {"-FP" , "-FPeta", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D", "-E","-DE", "-F" , "-LP", "-MP", "-OORP" , "-MPd", "-OORPd" , "-aAP", "-aAPef", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix", "-useHF"}; 
   TString run_nr = "B";
   TString dataname_end = "";
   TString outSuf = "";
@@ -97,6 +98,7 @@ int main(int argc,char *argv[]){
   bool use_BC = false;
   bool use_D = false;
   bool use_E = false;
+  bool use_DE = false;  
   bool use_F = false;
   bool useHF = false;
   TString input_path_="";
@@ -182,6 +184,9 @@ int main(int argc,char *argv[]){
 	  else if(arg=="-E"){
 	    use_E=true;
 	  }
+	  else if(arg=="-DE"){
+	    use_DE=true;
+	  }
 	  else if(arg=="-F"){
 	    use_F=true;
 	  }	  
@@ -237,8 +242,9 @@ int main(int argc,char *argv[]){
       if(use_BC) input_path+="BC";
       if(use_D) input_path+="D";
       if(use_E) input_path+="E";
+      if(use_DE) input_path+="DE";      
       if(use_F) input_path+="F";      
-      if(not(use_BC or use_D or use_E or use_F)) input_path+="BCD";
+      if(not(use_BC or use_D or use_E or use_DE or use_F)) input_path+="BCD";
   // if(muonCrosscheck) input_path+="D";
   input_path+="_Data";
   if(mode!="") input_path+="_";

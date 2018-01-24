@@ -279,13 +279,13 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check, bool useHF){
   double thresholds09_errUp[n_trigger-1];
   double thresholds_errDown[n_trigger-1];
   double thresholds09_errDown[n_trigger-1];
-  // double fitrange_up[n_trigger-1] = {50, 50, 50, 60, 60, 70 , 90, 60, 80};
-  // double fitrange_down[n_trigger-1] = {-10, -10, -30, -30, -30, -30 , -30, -10, 0}; 
+  double fitrange_up[n_trigger-1] = {0, 0, 0, 0, 0, 0, 0, 0};
+  double fitrange_down[n_trigger-1] = {0, 0, 0, 150, 100, 80, 0, 400}; 
   for(int i=0; i<n_trigger-1; i++){
     TString fitname = "fit";
     fitname +=  to_string(triggerVal[i+1]); 
-    func[i] = new TF1(fitname,SmoothFit,triggerVal[i]-20,
-		      triggerVal[i+1]+200,3);
+    func[i] = new TF1(fitname,SmoothFit,triggerVal[i]-20 + fitrange_down[i],
+		      triggerVal[i+1]+200 +fitrange_up[i] ,3);
     func[i]->SetParameters(triggerVal[i+1], 40., 1.);
     func[i]->SetParNames("p0", "p1", "N");
     ptave_data_eff[i]->Fit(func[i],"R");
@@ -462,13 +462,13 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check, bool useHF){
   double thresholds09_errUp_HF[n_trigger_HF-1];
   double thresholds_errDown_HF[n_trigger_HF-1];
   double thresholds09_errDown_HF[n_trigger_HF-1];
-  // double fitrange_up_HF[n_trigger_HF-1] = {50, 50, 50, 60, 60, 70 , 90, 60, 80};
-  // double fitrange_down_HF[n_trigger_HF-1] = {-10, -10, -30, -30, -30, -30 , -30, -10, 0}; 
+  double fitrange_up_HF[n_trigger_HF-1] = {-50, 0, 0, 0, -140};
+  double fitrange_down_HF[n_trigger_HF-1] = {-20, 0, 0, 0, 0}; 
   for(int i=0; i<n_trigger_HF-1; i++){
     TString fitname = "fit";
     fitname +=  to_string(triggerVal_HF[i+1]); 
-    func_HF[i] = new TF1(fitname,SmoothFit,triggerVal_HF[i]-20,
-		      triggerVal_HF[i+1]+200,3);
+    func_HF[i] = new TF1(fitname,SmoothFit,triggerVal_HF[i]-20 +fitrange_down_HF[i] ,
+		      triggerVal_HF[i+1]+200 +fitrange_up_HF[i],3);
     func_HF[i]->SetParameters(triggerVal_HF[i+1], 40., 1.);
     func_HF[i]->SetParNames("p0", "p1", "N");
     ptave_data_eff_HF[i]->Fit(func_HF[i],"R");
@@ -562,7 +562,7 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check, bool useHF){
   cout << "Draw plots to "<<CorrectionObject::_outpath+"plots/thresholds" << endl;
 
   ofstream myfile;
-  myfile.open (CorrectionObject::_outpath+"plots/thresholds/"+"/thresholds.txt",ios::trunc);
+  myfile.open (CorrectionObject::_outpath+"plots/thresholds/"+"/thresholds_HF.txt",ios::trunc);
   myfile << "trigger  old  \t  0.90 \t  0.95  \n";
   for(int i=0; i<n_trigger_HF; i++){
     myfile<< std::fixed << std::setprecision(2) << triggerVal_HF[i]<< " \t " << pt_bins_HF[i]<< " \t "<< all_thresholds09_HF[i]<< " \t "<< all_thresholds_HF[i] << " \n"; 

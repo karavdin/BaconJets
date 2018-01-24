@@ -43,60 +43,52 @@ const int n_pt = 12;
 // 			       "1000",
 // 			       "2000"};
 
-// // //TODO keep this in check with BaconJets/include/constants.h
-
-// const double pt_bins[n_pt]       = {40 ,
-// 				    62 ,
-// 				    85 ,
-// 				    153,
-// 				    222,
-// 				    290,
-// 				    359,
-// 				    443,
-// 				    486,
-// 				    536,
-// 				    1000,
-// 				    2000};
-
-
-// //for Si derived trigger
-// const TString pt_range[n_pt]= {"61",
-// 			       "90",
-// 			       "116",
-// 			       "199",
-// 			       "266",
-// 			       "301",
-// 			       "372",
-// 			       "432",
-// 			       "481",
-// 			       "528",
-// 			       "1000",
-// 			       "2000"};
-
-// // //TODO keep this in check with BaconJets/include/constants.h
-
-// const double pt_bins[n_pt]       = {61 ,
-// 				    90 ,
-// 				    116,
-// 				    199,
-// 				    266,
-// 				    301,
-// 				    372,
-// 				    432,
-// 				    481,
-// 				    528,
-// 				    1000,
-// 				    2000};
 
 
 
 //for Di derived triggers
-const double pt_bins[n_pt] = {51, 51, 74, 96, 148, 214, 285, 346, 426, 525, 1000, 2000};
-const TString pt_range[n_pt]= {"51", "51", "74", "96", "148", "214", "285", "346", "426", "525", "1000", "2000"};
+// const double pt_bins[n_pt] = {51, 51, 74, 96, 148, 214, 285, 346, 426, 525, 1000, 2000};
+// const TString pt_range[n_pt]= {"51", "51", "74", "96", "148", "214", "285", "346", "426", "525", "1000", "2000"};
 
 
-const double pt_bins_HF[n_pt] = {60,80,100,160,220,300, 1000, 2000};
-const TString pt_range_HF[n_pt]= {"60","80","100","160","220","300", "1000", "2000"};
+//for Di derived triggers 94X 17Nov2017
+
+const double pt_bins[n_pt] = {
+  51,
+  71,
+  85,
+  99,
+  175,
+  306,
+  372,
+  434,
+  520,
+  648,1000,2000};
+
+const TString pt_range[n_pt]={
+  "51",
+  "71",
+  "85",
+  "99",
+  "175",
+  "306",
+  "372",
+  "434",
+  "520",
+  "648","1000","2000"};
+
+
+//for Di derived triggers 94X 17Nov2017
+
+const double pt_bins_HF[n_pt] = {
+  71,91,111,173,236,317,1000,2000};
+
+const TString pt_range_HF[n_pt]={
+  "71","91","111","173","236","317","1000","2000"};
+
+
+// const double pt_bins_HF[n_pt] = {60,80,100,160,220,300, 1000, 2000};
+// const TString pt_range_HF[n_pt]= {"60","80","100","160","220","300", "1000", "2000"};
 
 // di from back to back with trg matching
 // 	 50.02 

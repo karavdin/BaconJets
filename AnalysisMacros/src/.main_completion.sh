@@ -4,7 +4,7 @@ _main()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--help --mode --dname --run -FP -FPeta -MP -OORP -MPd -OORPd -FCP -tCP -lFCP -aFCP -derThreshSi -derThreshSi_ptCheck -derThreshDi -derThreshDi_ptCheck -BC -D -E -F -LP -aAP -aAPef -TEC -mu --muTrg --asym_cut --input --outSuffix -useHF"
+    opts="--help --mode --dname --run -FP -FPeta -MP -OORP -MPd -OORPd -FCP -tCP -lFCP -aFCP -derThreshSi -derThreshSi_ptCheck -derThreshDi -derThreshDi_ptCheck -BC -D -E -DE -F -LP -aAP -aAPef -TEC -mu --muTrg --asym_cut --input --outSuffix -useHF"
 
     case "${prev}" in
 	--run)
