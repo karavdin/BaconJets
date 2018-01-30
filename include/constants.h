@@ -83,16 +83,29 @@ constexpr static float s_Pt_Ave300HF_cut  = 426;
 
 //2017
 //from Si triggers w trg Obj matching
- constexpr static float s_Pt_AveMC_cut   = 40 ;
- constexpr static float s_Pt_Ave40_cut   = 61 ;
- constexpr static float s_Pt_Ave60_cut   = 90 ;
- constexpr static float s_Pt_Ave80_cut   = 116;
- constexpr static float s_Pt_Ave140_cut  = 199;
- constexpr static float s_Pt_Ave200_cut  = 266;
- constexpr static float s_Pt_Ave260_cut  = 301;
- constexpr static float s_Pt_Ave320_cut  = 372;
- constexpr static float s_Pt_Ave400_cut  = 432;
- constexpr static float s_Pt_Ave450_cut  = 481;
+ // constexpr static float s_Pt_AveMC_cut   = 40 ;
+ // constexpr static float s_Pt_Ave40_cut   = 61 ;
+ // constexpr static float s_Pt_Ave60_cut   = 90 ;
+ // constexpr static float s_Pt_Ave80_cut   = 116;
+ // constexpr static float s_Pt_Ave140_cut  = 199;
+ // constexpr static float s_Pt_Ave200_cut  = 266;
+ // constexpr static float s_Pt_Ave260_cut  = 301;
+ // constexpr static float s_Pt_Ave320_cut  = 372;
+ // constexpr static float s_Pt_Ave400_cut  = 432;
+ // constexpr static float s_Pt_Ave450_cut  = 481;
+ // constexpr static float s_Pt_Ave500_cut  = 528;
+
+//from 94X Run D
+ constexpr static float s_Pt_AveMC_cut   = 40;
+ constexpr static float s_Pt_Ave40_cut   = 75;
+ constexpr static float s_Pt_Ave60_cut   = 94;
+ constexpr static float s_Pt_Ave80_cut   = 114;
+ constexpr static float s_Pt_Ave140_cut  = 191;
+ constexpr static float s_Pt_Ave200_cut  = 254;
+ constexpr static float s_Pt_Ave260_cut  = 327;
+ constexpr static float s_Pt_Ave320_cut  = 394;
+ constexpr static float s_Pt_Ave400_cut  = 473;
+ constexpr static float s_Pt_Ave450_cut  = 503;
  constexpr static float s_Pt_Ave500_cut  = 528;
 
 //from Di triggers 92X
@@ -166,7 +179,7 @@ constexpr static int s_runnr_FlateG  = 280385; //up to this one, including this 
 //Lumi recorded by different triggers in pb-1
 // constexpr static float s_lumi_cent_40 = 0.101;
 // constexpr static float s_lumi_cent_60 = 1.704;
-''// constexpr static float s_lumi_cent_80 = 4.203;
+// constexpr static float s_lumi_cent_80 = 4.203;
 // constexpr static float s_lumi_cent_140 = 27.769;
 // constexpr static float s_lumi_cent_200 = 139.732;
 // constexpr static float s_lumi_cent_260 = 521.863;

@@ -107,7 +107,7 @@
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
       <Item Name="GenParticleCollection"   Value="GenParticles"/>
-      <Item Name="ElectronCollection"      Value="slimmedElectronsUSER"/> <!-- change depending on 2016 MC or 17 data!!! or ntuplewriter version XD -->
+      <Item Name="ElectronCollection"      Value="slimmedElectrons"/> <!-- change depending on 2016 MC or 17 data!!! or ntuplewriter version XD -->
       <Item Name="MuonCollection"          Value="slimmedMuons"/>
       <Item Name="TauCollection"           Value="slimmedTaus"/>
       <!-- AK4CHS -->
@@ -183,7 +183,7 @@
 	<Item Name="Do_TOJM"          Value="&DO_TRG_OBJ_JET_MATCHING;"/>
         <Item Name="AnalysisModule" Value="AnalysisModule_noPtBinning" />
 	
-        <Item Name="Debug" Value="false" />	
+        <Item Name="Debug" Value="true" />	
 
         </UserConfig>
     </Cycle>

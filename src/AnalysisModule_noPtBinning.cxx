@@ -236,10 +236,10 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
 
 //Lepton cleaner
-   const     MuonId muoSR(AndId<Muon>    (PtEtaCut  (15, 2.4), MuonIDTight()));
-   const ElectronId eleSR(AndId<Electron>(PtEtaSCCut(15, 2.4), ElectronID_MVAGeneralPurpose_Spring16_tight));
-   muoSR_cleaner.reset(new     MuonCleaner(muoSR));
-   eleSR_cleaner.reset(new ElectronCleaner(eleSR)); 
+    const     MuonId muoSR(AndId<Muon>    (MuonID(Muon::CutBasedIdTight),PtEtaCut  (15, 2.4)));
+    const ElectronId eleSR(AndId<Electron>(ElectronID_PHYS14_25ns_tight , PtEtaSCCut(15, 2.4)));
+    muoSR_cleaner.reset(new     MuonCleaner(muoSR));
+    eleSR_cleaner.reset(new ElectronCleaner(eleSR)); 
 
 //#############################################  Trigger  #########################################################
     trigger_central = (ctx.get("Trigger_Central") == "true");

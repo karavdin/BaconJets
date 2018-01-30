@@ -168,7 +168,12 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
   AnalysisModule_DiJetTrg::AnalysisModule_DiJetTrg(uhh2::Context & ctx) :
     sel(ctx)
   {
-
+    try{
+      debug = ctx.get("Debug") == "true";
+    }
+    catch(const runtime_error& error){
+      debug = false;
+    }
     
     for(auto & kv : ctx.get_all()){
       cout << " " << kv.first << " = " << kv.second << endl;
@@ -192,8 +197,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
 
 //Lepton cleaner
-   const     MuonId muoSR(AndId<Muon>    (PtEtaCut  (15, 2.4), MuonIDTight()));
-   const ElectronId eleSR(AndId<Electron>(PtEtaSCCut(15, 2.4), ElectronID_MVAGeneralPurpose_Spring16_tight));
+    const     MuonId muoSR(AndId<Muon>    (MuonID(Muon::CutBasedIdTight),PtEtaCut  (15, 2.4)));
+    const ElectronId eleSR(AndId<Electron>(ElectronID_PHYS14_25ns_tight , PtEtaSCCut(15, 2.4)));  
    muoSR_cleaner.reset(new     MuonCleaner(muoSR));
    eleSR_cleaner.reset(new ElectronCleaner(eleSR)); 
 
@@ -784,9 +789,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
-    
-    debug = false;
-
+   
     n_evt = 0;
     TString name_weights = ctx.get("MC_Weights_Path");
     apply_weights = (ctx.get("Apply_Weights") == "true" && isMC);
@@ -1108,6 +1111,7 @@ if(debug){
 
     if(event.isRealData){
       float pt_ave_ = pt_ave;
+      float probejet_eta = jet1->eta(); 
       pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);
       pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2]);
       pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]); 

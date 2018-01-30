@@ -7,6 +7,7 @@
 #include "UHH2/core/include/EventHelper.h"
 #include "UHH2/core/include/Jet.h"
 #include "UHH2/core/include/Utils.h"
+#include "UHH2/core/include/Selection.h"
 #include "../include/JECAnalysisHists.h"
 #include "../include/JECCrossCheckHists.h"
 #include "../include/JECRunnumberHists.h"
@@ -20,6 +21,10 @@
 #include <UHH2/common/include/MuonIds.h> 
 #include <UHH2/common/include/ElectronIds.h>
 #include "UHH2/common/include/PrintingModules.h"
+#include "UHH2/common/include/ObjectIdUtils.h"
+#include "UHH2/common/include/JetIds.h"
+#include "UHH2/common/include/ElectronIds.h"
+#include "UHH2/common/include/NSelections.h"
 
 #include "UHH2/BaconJets/include/selection.h"
 #include "UHH2/BaconJets/include/constants.h"
@@ -50,8 +55,10 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
   // cleaners
    std::unique_ptr<JetLeptonCleaner> jetleptoncleaner, JLC_BCD, JLC_EFearly, JLC_FlateG, JLC_H;
    std::unique_ptr<JetCleaner> jetcleaner;
-   std::unique_ptr<MuonCleaner>     muoSR_cleaner;   
-   std::unique_ptr<ElectronCleaner> eleSR_cleaner;    
+   // std::unique_ptr<AnalysisModule>     muoSR_cleaner;   
+   std::unique_ptr<AnalysisModule> eleSR_cleaner;
+
+  std::vector<std::unique_ptr<AnalysisModule>> lep_cleaner;  
 
     // selections
     std::unique_ptr<uhh2::Selection> lumi_sel;
@@ -159,7 +166,12 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
   AnalysisModule_SiJetTrg::AnalysisModule_SiJetTrg(uhh2::Context & ctx) :
 		  sel(ctx)
   {
-
+    try{
+      debug = ctx.get("Debug") == "true";
+    }
+    catch(const runtime_error& error){
+      debug = false;
+    }
     
     for(auto & kv : ctx.get_all()){
       cout << " " << kv.first << " = " << kv.second << endl;
@@ -181,12 +193,14 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     Jet_PFID = JetPFID(JetPFID::WP_LOOSE);
     //Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
-
+    
 //Lepton cleaner
-   const     MuonId muoSR(AndId<Muon>    (PtEtaCut  (15, 2.4), MuonIDTight()));
-   const ElectronId eleSR(AndId<Electron>(PtEtaSCCut(15, 2.4), ElectronID_MVAGeneralPurpose_Spring16_tight));
-   muoSR_cleaner.reset(new     MuonCleaner(muoSR));
-   eleSR_cleaner.reset(new ElectronCleaner(eleSR)); 
+    MuonId muoSR;
+    muoSR = AndId<Muon>(MuonID(Muon::CutBasedIdTight),PtEtaCut  (15.0, 2.4));
+    const ElectronId eleSR(AndId<Electron>(ElectronID_PHYS14_25ns_tight , PtEtaSCCut(15.0, 2.4)));
+   // muoSR_cleaner.reset(new     MuonCleaner(muoSR));
+    lep_cleaner.emplace_back(new     MuonCleaner(muoSR));
+    eleSR_cleaner.reset(new ElectronCleaner(eleSR)); 
 
 //#############################################  Trigger  #########################################################
     trigger_central = (ctx.get("Trigger_Central") == "true");
@@ -761,8 +775,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
      
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
-    
-    debug = false;
  
     n_evt = 0;
     TString name_weights = ctx.get("MC_Weights_Path");
@@ -839,11 +851,17 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       cout << endl << "++++++++++ NEW EVENT +++++++++" << endl << endl;
       cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
     }
+    if(debug) cout<<"before first fill\n";   
     //Dump Input
     h_input->fill(event);
 
     //LEPTON selection
-    muoSR_cleaner->process(event);
+
+    if(debug) cout<<"before muon cleaning\n";
+    lep_cleaner.back()->process(event);
+    // muoSR_cleaner->process(event);
+    if(debug) cout<<"after muon cleaning\n";
+        
     sort_by_pt<Muon>(*event.muons); 
     if(debug) std::cout<<"#muons = "<<event.muons->size()<<std::endl;
 
