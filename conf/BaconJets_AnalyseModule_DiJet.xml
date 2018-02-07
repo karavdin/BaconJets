@@ -6,10 +6,10 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DE_Data_test/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17D_Data_woHOTVR_woXCON_test/">
 
 <!ENTITY b_closuretest       "false">
-<!ENTITY jec_version         "Summer16_03Feb2017_V3">
+<!ENTITY jec_version         "Fall17_17Nov2017_V3">
 <!ENTITY APPLY_WEIGHTS       "false">
 <!ENTITY WEIGHT_PATH         "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup_ForWeights/"> <!-- Change Weight-Path: CENTRAL/FWD -->
 <!ENTITY Cut_PATH            "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/EtaPhiCut/">
@@ -50,7 +50,7 @@
 
 <!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunC_17Nov17_v1.xml">
 
-<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunD_17Nov17_v1.xml">
+<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunD_17Nov2017.xml">
 
 <!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunE_17Nov17_v1.xml">
 
@@ -146,24 +146,25 @@
           <OutputTree Name="AnalysisTree"/>
 </InputData>
 
-<InputData Lumi="76958681" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;">
-          &DATA_RunE_promptReco_2017;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-</InputData>
+<!-- <InputData Lumi="76958681" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
+<!--           &DATA_RunE_promptReco_2017; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!-- </InputData> -->
 
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
       <Item Name="GenParticleCollection"   Value="GenParticles"/>
-      <Item Name="ElectronCollection"      Value="slimmedElectrons"/> <!-- change depending on 2016 MC or 17 data!!! -->
-      <Item Name="MuonCollection"          Value="slimmedMuons"/>
+      <Item Name="ElectronCollection"      Value="slimmedElectronsUSER"/> <!-- change depending on 2016 MC or 17 data!!! -->
+      <Item Name="MuonCollection"          Value="slimmedMuonsUSER"/>
       <Item Name="TauCollection"           Value="slimmedTaus"/>
       <!-- AK4CHS -->
       <Item Name="JetCollection"           Value="slimmedJets"/>
       <Item Name="JetLabel"                Value="AK4CHS"/> 
       <Item Name="GenJetCollection"        Value="slimmedGenJets"/>
-      <Item Name="METName"                 Value="slMETsCHS"/>
-     
+      <!-- <Item Name="METName"                 Value="slMETsCHS"/> -->
+      <Item Name="METName"                 Value="slimmedMETs"/>
+      
       <!-- <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/data/Cert_13TeV_2017_HCAL_DCS_GOOD_11Jul.root"/> -->
 
        <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/data/Cert_294927-304507_13TeV_PromptReco_Collisions17_JSON.root"/>
@@ -230,7 +231,9 @@
 	  <!-- <Item Name="userEventFormat" Value="false" /> -->
             <!-- the class name of the AnalysisModule subclasses to run: -->
             <Item Name="AnalysisModule" Value="AnalysisModule_DiJetTrg" /> 
-	<!--    <Item Name="MCreweight" Value="false" /> -->  
+	    <!--    <Item Name="MCreweight" Value="false" /> -->
+
+        <Item Name="Debug" Value="true" />	    
 
         </UserConfig>
     </Cycle>

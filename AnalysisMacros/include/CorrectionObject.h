@@ -75,8 +75,9 @@ using namespace std;
     //Main functions for calculating L2 residuals, defined in CorrectionObject.cc
     void ControlPlots(bool forEverySingleTrigger = false);
     void Derive_Thresholds_SiMuCrosscheck(TString siMu_dirName_);
-    void Derive_Thresholds_SiJet(bool pt_check = false);
-    void Derive_Thresholds_DiJet(bool pt_check = false, bool useHF = false);    
+    void Derive_Thresholds_SiJet(bool pt_check = false, bool useHF = false);
+    void Derive_Thresholds_DiJet(bool pt_check = false, bool useHF = false);
+    void NPVtoEtaPlots();
     void kFSR();
     void kFSR_CorrectFormulae();
     void kFSR_CorrectFormulae_eta();

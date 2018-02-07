@@ -25,6 +25,7 @@ static void show_usage(std::string name)
 	      << "\t-aFCP\t\tRun final control plots and plot all data asymetrie histograms seperaty.\n"
 	      << "\t-aAP\t\tDo asymmetry plots for all abs(eta) and pt bins sepertely.\n"
       	      << "\t-aAPef\t\tDo asymmetry plots for all eta and pt bins sepertely.\n"
+      	      << "\t-NPVEta\t\tDo eta to NPV plots.\n"      
     	      << "\t-derThreshSi\t\tDerive the trigger thresholds for single jet trigger.\n"
       	      << "\t-derThreshSi_ptCheck\t\tDerive the trigger efficiency distributions for the jet 1 and 2 pt as crosscheck for single jet trigger.\n"
 	      << "\t-derThreshDi\t\tDerive the trigger thresholds for di jet trigger.\n"
@@ -70,9 +71,9 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
-  std::vector<std::string> argl = {"-FP" , "-FPeta", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D", "-E","-DE", "-F" , "-LP", "-MP", "-OORP" , "-MPd", "-OORPd" , "-aAP", "-aAPef", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix", "-useHF"}; 
+  std::vector<std::string> argl = {"-FP" , "-FPeta", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D", "-E","-DE", "-F" , "-LP", "-MP", "-OORP" , "-MPd", "-OORPd" , "-aAP", "-aAPef", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix", "-useHF", "-NPVEta"}; 
   TString run_nr = "B";
-  TString dataname_end = "";
+  TString dataname_end = "17Nov17_2017";
   TString outSuf = "";
   bool muonCrosscheck = false;
   TString muonTriggerName = "HLT_Mu17";
@@ -95,6 +96,7 @@ int main(int argc,char *argv[]){
   bool do_addAsymPlots = false;
   bool do_addAsymPlotsef = false;  
   bool do_triggerEx = false;
+  bool do_NPVEtaPlot = false;
   bool use_BC = false;
   bool use_D = false;
   bool use_E = false;
@@ -130,6 +132,9 @@ int main(int argc,char *argv[]){
 	  }
 	  else if(arg=="-lFCP"){
 	    do_lumiControlPlots=true;
+	  }
+	  else if(arg=="-NPVEta"){
+	    do_NPVEtaPlot=true;
 	  }
 	  else if(arg=="-aFCP"){
 	    do_asymControlPlots=true;
@@ -218,7 +223,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -230,7 +235,7 @@ int main(int argc,char *argv[]){
   TString collection    = "AK4CHS";
 
   cout<<"Run Nr.: "<<run_nr<<endl;
-  // cout<<dataname_end<<mode<<endl;
+  cout<<dataname_end<<mode<<endl;
   if(muonCrosscheck) cout<<"Doing single muon crosscheck plots"<<endl;
 
   TString input_path;
@@ -286,7 +291,9 @@ int main(int argc,char *argv[]){
     
     if(asym_cut) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(asym_cut);
 
-    if(do_asymControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,true);  
+    if(do_asymControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,true);
+
+      if(do_NPVEtaPlot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].NPVtoEtaPlots();  
     
     if(do_lumiControlPlots){
       if(run_nr=="B"){

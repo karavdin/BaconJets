@@ -279,8 +279,8 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check, bool useHF){
   double thresholds09_errUp[n_trigger-1];
   double thresholds_errDown[n_trigger-1];
   double thresholds09_errDown[n_trigger-1];
-  double fitrange_up[n_trigger-1] = {0, 0, 0, 0, 0, 0, 0, 0};
-  double fitrange_down[n_trigger-1] = {0, 0, 0, 150, 100, 80, 0, 400}; 
+  double fitrange_up[n_trigger-1] = {0, -100, 300, 0, 0, 0, 0, 0};
+  double fitrange_down[n_trigger-1] = {0, 0, -50, 150, 100, 80, 0, 400}; 
   for(int i=0; i<n_trigger-1; i++){
     TString fitname = "fit";
     fitname +=  to_string(triggerVal[i+1]); 
@@ -462,7 +462,7 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check, bool useHF){
   double thresholds09_errUp_HF[n_trigger_HF-1];
   double thresholds_errDown_HF[n_trigger_HF-1];
   double thresholds09_errDown_HF[n_trigger_HF-1];
-  double fitrange_up_HF[n_trigger_HF-1] = {-50, 0, 0, 0, -140};
+  double fitrange_up_HF[n_trigger_HF-1] = {-100, 0,-150, 0, -140};
   double fitrange_down_HF[n_trigger_HF-1] = {-20, 0, 0, 0, 0}; 
   for(int i=0; i<n_trigger_HF-1; i++){
     TString fitname = "fit";

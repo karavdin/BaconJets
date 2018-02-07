@@ -38,7 +38,9 @@ img_path_base = img_path_base_2 + "control/"
 img_path_base_B = img_path_base
 img_path_baseMain_B = img_path_base_2
 
-img_path_base_th = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17D_Data_DeriveThresholds_noDiJCut/RunDE_17Nov17/plots/thresholds/"
+img_path_base_th_D = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17D_Data_DeriveThresholds_noDiJCut/RunD_17Nov17/plots/thresholds_di/"
+
+img_path_base_th_E = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17E_Data_DeriveThresholds_noDiJCut/RunE_17Nov17/plots/thresholds_di/"
 
 # img_path_base_B = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunB_5/plots/control/"
 # img_path_base_C = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17BC_Data/RunC_5/plots/control/"
@@ -76,7 +78,8 @@ pt_str_full = ["51",
 pt_str = pt_str_full[1:];
 
 trigger_val = ["40", "60", "80", "140",
-               "200", "260", "320", "400", "450", "500"]
+               "200", "260", "320", "400",  # "450",
+               "500"]
 
 pic_bases = [  # "alpha_pythia8",
     "A_NormDistribution_DATA_pythia8",
@@ -277,40 +280,46 @@ frames_list[-1] += "\end{frame}\n\n"
 
 ################ thresholds #########################
 
-# frames_list.append(
-#     "\\begin{frame}{Single PF Jet Trigger Thresholds RunBC}\n")
-# frames_list[-1] += """
-# \\begin{tabular}{|c|c|c|}
-#   \hline
-#   trigger path & 0.95 threshold & threshold 2016 [GeV] \\\\\hline
-#  HLT\_PFJet40\_v* & 40 & 51 \\\\ \hline
-#  HLT\_PFJet60\_v* & 62 & 73 \\\\ \hline
-#  HLT\_PFJet80\_v* & 85 & 95\\\\ \hline
-#   HLT\_PFJet140\_v* & 153 & 129\\\\ \hline
-#  HLT\_PFJet200\_v* & 222 & 163\\\\ \hline
-#  HLT\_PFJet260\_v* & 290 & 230\\\\ \hline
-#  HLT\_PFJet320\_v* & 359 & 299\\\\ \hline
-#  HLT\_PFJet400\_v* & 443 & 365\\\\ \hline
-#   HLT\_PFJet450\_v* & 486 & 453\\\\ \hline
-#   HLT\_PFJet500\_v* & 536 & 566\\\\ \hline
-# \end{tabular}
-# thresholds were derived without the jet matching
-# """
-# frames_list[-1] += "\end{frame}\n\n"
+frames_list.append(
+    "\\begin{frame}{PF DiJet Trigger Thresholds 0.95}\n")
+frames_list[-1] += """
+\\begin{tabular}{|c|c|c|c|}
+  \hline
+  trigger path & run D & run E & pre legacy 16 \\\\\hline
+  HLT\_DiPFJet40\_v*             & 73.41  & 72.54   & 51 \\\\ \hline
+  HLT\_DiPFJet60\_v*             & 84.79  & 85.08   & 73 \\\\ \hline
+  HLT\_DiPFJet80\_v*             & 96.18  & 97.63   & 95 \\\\ \hline
+  HLT\_DiPFJet140\_v*            & 179.57 & 176.62  & 129\\\\ \hline
+  HLT\_DiPFJet200\_v*            & 302.32 & 309.44  & 163\\\\ \hline
+  HLT\_DiPFJet260\_v*            & 367.86 & 375.42  & 230\\\\ \hline
+  HLT\_DiPFJet320\_v*            & 433.32 & 434.08  & 299\\\\ \hline
+  HLT\_DiPFJet400\_v*            & 516.88 & 522.25  & 365\\\\ \hline
+  HLT\_DiPFJet500\_v*            & 643.71 & 650.89  & 566\\\\ \hline
+  HLT\_DiPFJetAve60\_HFJEC\_v*  &  73.41   &  73.41   & \\\\ \hline
+  HLT\_DiPFJetAve80\_HFJEC\_v*  &  90.93   &  90.93   & \\\\ \hline
+  HLT\_DiPFJetAve100\_HFJEC\_v* &  110.76  &  110.76  & \\\\ \hline
+  HLT\_DiPFJetAve160\_HFJEC\_v* &  174.01  &  174.01  & \\\\ \hline
+  HLT\_DiPFJetAve220\_HFJEC\_v* &  235.59  &  235.59  & \\\\ \hline
+  HLT\_DiPFJetAve300\_HFJEC\_v* &  315.46  &  315.46  & \\\\ \hline
+  
+\end{tabular}
+ thresholds were derived without the jet matching
+"""
+frames_list[-1] += "\end{frame}\n\n"
 
 
 frames_list.append(
-    "\\begin{frame}{DiJet Trigger Thresholds Run DE}\n")
-frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N(\\text{low trg} \&\& \\text{high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\nThe plateaus are not at one cause of different prescales of the different triggers.\n\\newline\n"
+    "\\begin{frame}{DiJet Trigger Thresholds Run D}\n")
+frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N( \\text{high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\nThe plateaus are not at one cause of different prescales of the different triggers.\n\\newline\n"
 
-for i, th in enumerate(trigger_val[4:]):
+for i, th in enumerate(trigger_val[1:]):
     if i and not i % 4:
         frames_list[-1] += "\t\\newline\n\n"
     if not i == 4:
         frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
         frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
         frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
-                           img_path_base_th + "HLT_DiPFJetAve"
+                           img_path_base_th_D + "HLT_DiPFJetAve"
         frames_list[-1] += th
         frames_list[-1] += ".pdf}\n"
         frames_list[-1] += "\end{minipage}\n"
@@ -318,10 +327,35 @@ for i, th in enumerate(trigger_val[4:]):
 frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
 frames_list[-1] += "\t\\tiny extrapolation\n \\newline\n"
 frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
-                   img_path_base_th + "extrapolateLowestTrigger.pdf}\n"
+                   img_path_base_th_D + "extrapolateLowestTrigger.pdf}\n"
 frames_list[-1] += "\end{minipage}\n"
 
 frames_list[-1] += "\end{frame}\n\n"
+
+frames_list.append(
+    "\\begin{frame}{DiJet Trigger Thresholds Run E}\n")
+frames_list[-1] += "\t\scriptsize shown is $\\varepsilon = \\frac{N( \\text{high trg})}{N(\\text{low trg})}$, dotted (full) line marks 0.9 (0.95) of plateau\n\t\\newline\nThe plateaus are not at one cause of different prescales of the different triggers.\n\\newline\n"
+
+for i, th in enumerate(trigger_val[1:]):
+    if i and not i % 4:
+        frames_list[-1] += "\t\\newline\n\n"
+    if not i == 4:
+        frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
+        frames_list[-1] += "\t\\tiny HLT " + th + "\n \\newline\n"
+        frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+                           img_path_base_th_E + "HLT_DiPFJetAve"
+        frames_list[-1] += th
+        frames_list[-1] += ".pdf}\n"
+        frames_list[-1] += "\end{minipage}\n"
+
+frames_list[-1] += "\\begin{minipage}{0.24\\textwidth}\n"
+frames_list[-1] += "\t\\tiny extrapolation\n \\newline\n"
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+                   img_path_base_th_E + "extrapolateLowestTrigger.pdf}\n"
+frames_list[-1] += "\end{minipage}\n"
+
+frames_list[-1] += "\end{frame}\n\n"
+
 
 ########## Asym Examples ##########
 

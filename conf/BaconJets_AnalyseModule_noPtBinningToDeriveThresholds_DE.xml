@@ -9,7 +9,7 @@
 <!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DE_plusMC_Data_DeriveThresholds_noDiJCut/">
 
 <!ENTITY b_closuretest       "false">
-<!ENTITY jec_version         "Summer16_03Feb2017_V3"> <!--TODO keep in mind that this is old, why V3 and not V4??? -->
+<!ENTITY jec_version         "Fall17_17Fall2017_V3"> 
 <!ENTITY APPLY_WEIGHTS       "false">
 <!ENTITY WEIGHT_PATH         "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup_ForWeights/"> <!-- Change Weight-Path: CENTRAL/FWD -->
 <!ENTITY Cut_PATH            "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/EtaPhiCut/">

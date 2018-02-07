@@ -43,10 +43,12 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
   protected:
     // correctors
     std::unique_ptr<JetCorrector> jet_corrector, jet_corrector_BCD, jet_corrector_EFearly, jet_corrector_FlateG, jet_corrector_H;
+    std::unique_ptr<JetCorrector>   jet_corrector_B, jet_corrector_C, jet_corrector_D, jet_corrector_E, jet_corrector_F;
     std::unique_ptr<GenericJetResolutionSmearer> jetER_smearer; 
 
 // cleaners
    std::unique_ptr<JetLeptonCleaner> jetleptoncleaner, JLC_BCD, JLC_EFearly, JLC_FlateG, JLC_H;
+  std::unique_ptr<JetLeptonCleaner>  JLC_B, JLC_C, JLC_D, JLC_E, JLC_F;
    std::unique_ptr<JetCleaner> jetcleaner;
    std::unique_ptr<MuonCleaner>     muoSR_cleaner;   
    std::unique_ptr<ElectronCleaner> eleSR_cleaner;    
@@ -271,11 +273,15 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     JEC_Version = ctx.get("JEC_Version");
 
     split_JEC_MC   = false; //Different MC corrections only existed for Spring16_25ns_V8* 
-    split_JEC_DATA = false; //TODO check the JEC!!!
+    split_JEC_DATA = true; //TODO check the JEC!!!
+
+    if(debug) std::cout<<"isMC: "<<isMC<<"  split_JEC_MC: "<<split_JEC_MC<<"  split_JEC_DATA: "<<split_JEC_DATA <<"   ClosureTest: "<<ClosureTest<<std::endl;
     
-    //std::vector<std::string> JEC_corr_noRes, JEC_corr_noRes_BCD, JEC_corr_noRes_E, JEC_corr_noRes_Fearly, JEC_corr_noRes_FlateGH; 
     std::vector<std::string> JEC_corr,       JEC_corr_BCD,       JEC_corr_EFearly,       JEC_corr_FlateG,       JEC_corr_H,      JEC_corr_MC_FlateGH;
     std::vector<std::string> JEC_corr_L1RC,  JEC_corr_BCD_L1RC,  JEC_corr_EFearly_L1RC,  JEC_corr_FlateG_L1RC,  JEC_corr_H_L1RC, JEC_corr_MC_FlateGH_L1RC;
+    std::vector<std::string> JEC_corr_B, JEC_corr_C, JEC_corr_D, JEC_corr_E, JEC_corr_F;
+    std::vector<std::string> JEC_corr_B_L1RC, JEC_corr_C_L1RC, JEC_corr_D_L1RC, JEC_corr_E_L1RC, JEC_corr_F_L1RC;     
+
     if(isMC){
       //for MC
       if(jetLabel == "AK4CHS"){
@@ -330,6 +336,10 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    cout << "This is MC, JECs used are: ";
 	    for(unsigned int i=0; i<JEC_corr.size(); i++) cout << JEC_corr[i] << ", ";
 	    cout << endl;
+	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V3"){
+	    JEC_corr               = JERFiles::Fall17_17Nov2017_V3_L123_AK4PFchs_MC;
+	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V3_L1RC_AK4PFchs_MC;	    
 	  }
 
 	  else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
@@ -461,6 +471,20 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V6_H_L123_noRes_AK4PFchs_DATA;
 	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V6_H_L1RC_AK4PFchs_DATA;
 	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V3"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V3_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V3_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V3_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V3_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V3_F_L123_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V3_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V3_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V3_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V3_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V3_F_L1RC_AK4PFchs_DATA; 
+	  }	 
+	 
 	  else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
@@ -536,6 +560,19 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V6_H_L1RC_AK4PFchs_DATA;
 	    cout << "JEC for DATA: Summer16_03Feb2017_V6_BCD/EFearly/FlateG/H_L123_AK4PFchs_DATA;" << endl;
 	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V3"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V3_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V3_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V3_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V3_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V3_F_L123_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V3_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V3_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V3_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V3_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V3_F_L1RC_AK4PFchs_DATA; 
+	  }	 
 
 	 else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
@@ -586,14 +623,16 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	//DATA
 	if(!isMC){
 	  if(split_JEC_DATA){
-	    jet_corrector_BCD.reset(new JetCorrector(ctx, JEC_corr_BCD, JEC_corr_BCD_L1RC));
-	    jet_corrector_EFearly.reset(new JetCorrector(ctx, JEC_corr_EFearly, JEC_corr_EFearly_L1RC));
-	    jet_corrector_FlateG.reset(new JetCorrector(ctx, JEC_corr_FlateG, JEC_corr_FlateG_L1RC));
-	    jet_corrector_H.reset(new JetCorrector(ctx, JEC_corr_H, JEC_corr_H_L1RC));
-	    JLC_BCD.reset(new JetLeptonCleaner(ctx, JEC_corr_BCD));
-	    JLC_EFearly.reset(new JetLeptonCleaner(ctx, JEC_corr_EFearly));
-	    JLC_FlateG.reset(new JetLeptonCleaner(ctx, JEC_corr_FlateG));
-	    JLC_H.reset(new JetLeptonCleaner(ctx, JEC_corr_H));
+	    jet_corrector_B.reset(new JetCorrector(ctx, JEC_corr_B, JEC_corr_B_L1RC));
+	    JLC_B.reset(new JetLeptonCleaner(ctx, JEC_corr_B));
+	    jet_corrector_C.reset(new JetCorrector(ctx, JEC_corr_C, JEC_corr_C_L1RC));
+	    JLC_C.reset(new JetLeptonCleaner(ctx, JEC_corr_C));
+	    jet_corrector_D.reset(new JetCorrector(ctx, JEC_corr_D, JEC_corr_D_L1RC));
+	    JLC_D.reset(new JetLeptonCleaner(ctx, JEC_corr_D));
+	    jet_corrector_E.reset(new JetCorrector(ctx, JEC_corr_E, JEC_corr_E_L1RC));
+	    JLC_E.reset(new JetLeptonCleaner(ctx, JEC_corr_E));
+	    jet_corrector_F.reset(new JetCorrector(ctx, JEC_corr_F, JEC_corr_F_L1RC));
+	    JLC_F.reset(new JetLeptonCleaner(ctx, JEC_corr_F));	  
 	  }
 	  else{
 	    jet_corrector.reset(new JetCorrector(ctx, JEC_corr, JEC_corr_L1RC));
@@ -628,7 +667,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	else if(JEC_Version == "Summer16_03Feb2017_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", true, JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Summer16_03Feb2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", true, JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Summer16_03Feb2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", true, JERSmearing::SF_13TeV_2016_03Feb2017));
-	else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified.");
+	else cout << "In AnalysisModule_noPtBinning.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
      
     //output
@@ -983,18 +1022,104 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
   
 //####################  Select and Apply proper JEC-Versions for every Run ##################
 
-    bool apply_global = true;
-
-    h_beforeJEC->fill(event);
-
-    if (event.electrons->size()!=0 || event.muons->size()!=0)   jetleptoncleaner->process(event);
-
-    jet_corrector->process(event);
+ 
+    bool apply_global = false;
     
+    // bool apply_BCD = false;
+    // bool apply_EFearly = false;
+    // bool apply_FlateG = false;
+    // bool apply_H = false;
+
+    bool apply_B = false;
+    bool apply_C = false;
+    bool apply_D = false;
+    bool apply_E = false;
+    bool apply_F = false;
+
+
+    //residuals
+    if(!isMC){
+      //DATA
+      if(split_JEC_DATA){ 
+	//split JEC
+	if(event.run <= s_runnr_B)         apply_B = true;
+	else if(event.run <= s_runnr_C)         apply_C = true;
+	else if(event.run <= s_runnr_D)         apply_D = true;
+	else if(event.run <= s_runnr_E)         apply_E = true;
+	else if(event.run <= s_runnr_F)         apply_F = true;	
+	else throw runtime_error("AnalysisModule: run number not covered by if-statements in process-routine.");
+      }
+      else{
+	//not split JEC
+	apply_global = true;
+      }
+    }
+      
+    else if(isMC){
+      //MC
+      if(split_JEC_MC){
+	//split JEC
+	// if(dataset_version.Contains("RunBCD"))          apply_BCD = true;
+	// else if(dataset_version.Contains("RunEFearly")) apply_EFearly = true;
+	// else if(dataset_version.Contains("RunFlateG"))  apply_FlateG = true;
+	// else if(dataset_version.Contains("RunH"))       apply_H = true;
+	// else
+	  throw runtime_error("AnalysisModule split_JEC_MC not implemented or run number not covered by if-statements in process-routine.");
+      }      
+      else{
+	//not split JEC
+	apply_global = true;
+      }
+    }
+    
+
+    // if(apply_BCD+apply_EFearly+apply_FlateG+apply_H+apply_global != 1) throw runtime_error("In TestModule.cxx: Sum of apply_* when applying JECs is not == 1. Fix this.");
+
+    
+    h_beforeJEC->fill(event);
+    if(debug) std::cout <<" before jetleptoncleaner  "<<std::endl;
+    if(debug) std::cout <<"jetlepton cleaner is at "<<(jetleptoncleaner==0)<<std::endl;    
+    // if(debug) std::cout <<jetleptoncleaner<<std::endl;
+    
+    std::cout<< std::flush;
+    
+    if(debug) std::cout <<" before jet corrector "<<std::endl;
+
+    
+    if(apply_B){
+      JLC_B->process(event);
+      jet_corrector_B->process(event);
+    }
+    if(apply_C){
+      JLC_C->process(event);
+      jet_corrector_C->process(event);
+    }
+    if(apply_D){
+    if(debug) std::cout <<" in apply D jet corrector "<<std::endl;    
+      JLC_D->process(event);
+    if(debug) std::cout <<" after D JLC "<<std::endl;       
+      jet_corrector_D->process(event);
+    }
+    if(apply_E){
+      JLC_E->process(event);
+      jet_corrector_E->process(event);
+    }
+    if(apply_F){
+      JLC_F->process(event);
+      jet_corrector_F->process(event);
+    }     
+    if(apply_global){
+      jetleptoncleaner->process(event);
+      jet_corrector->process(event);
+}
+ 
+   
+
+    //DEBUG
     if(debug){
       std::cout <<" after jetleptoncleaner  "<<std::endl;
     }
-    
+      
     h_afterJEC->fill(event);
 
 //#############################################################################################################
@@ -1114,12 +1239,12 @@ if(debug){
       float probejet_eta = jet1->eta(); 
       pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);
       pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2]);
-      pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]); 
-      pass_trigger140 = (trigger140_sel->passes(event) && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]); 
-      pass_trigger200 = (trigger200_sel->passes(event) && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]); 
-      pass_trigger260 = (trigger260_sel->passes(event) && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]);
-      pass_trigger320 = (trigger320_sel->passes(event) && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]);
-      pass_trigger400 = (trigger400_sel->passes(event) && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]);
+      pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]&& abs(probejet_eta) < 2.853); 
+      pass_trigger140 = (trigger140_sel->passes(event) && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]&& abs(probejet_eta) < 2.853); 
+      pass_trigger200 = (trigger200_sel->passes(event) && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]&& abs(probejet_eta) < 2.853); 
+      pass_trigger260 = (trigger260_sel->passes(event) && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]&& abs(probejet_eta) < 2.853);
+      pass_trigger320 = (trigger320_sel->passes(event) && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]&& abs(probejet_eta) < 2.853);
+      pass_trigger400 = (trigger400_sel->passes(event) && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]&& abs(probejet_eta) < 2.853);
       pass_trigger500 = (trigger500_sel->passes(event) && pt_ave>trg_thresh[8]);
       
 //FWD Trigger

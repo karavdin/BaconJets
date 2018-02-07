@@ -1,6 +1,6 @@
 file_name=controlplotsBC_trgM_01Dec
 if [ "$#" = "1" ]
-   then file_name=controlplots${1}_trgM_23Jan
+   then file_name=controlplots${1}_trgM_31Jan
 fi
 rm ${file_name}.tex
 py_out=$(./generate_tex.py "$file_name")
