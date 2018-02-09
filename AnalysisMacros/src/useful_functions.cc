@@ -1,6 +1,6 @@
+
 #include "../include/useful_functions.h"
 #include <TMath.h>
-
 using namespace std;
 
 //Calculate ratio between MC and DATA
@@ -24,7 +24,7 @@ pair<double,double> GetValueAndError(TH1D *hin){
   //  res.first = -1; res.second = -1;
   //  if(hin->GetEntries()>30){
   //  if(hin->GetEntries()>50){
-  if(hin->GetEntries()>100){
+  if(hin->GetEntries()>100){  
     res.first = hin->GetMean();
     // GetMeanError calculates the uncertainty on the mean value, arising due to limited statistics in the sample. We dont care for the width itself, only the uncertainty on the predicted mean is relevant.
     res.second = hin->GetMeanError();
@@ -56,6 +56,38 @@ pair<double,double> GetValueAndError(TH1D *hin){
   return res;
 }
 
+//Clean points not filled due to low statistics
+TGraphErrors* BuildRatio(TGraphErrors* input, double ave, double err_ave){
+
+  double* Yval = input->GetY();
+  double* YvalError = input->GetEY();
+  double* Xval = input->GetX();
+  double* XvalError = input->GetEX();
+  int count=0;
+  vector<double> Xnew,Ynew,Xerrornew,Yerrornew;
+  for(int i=0;i<input->GetN();i++){
+    count++;
+    Xnew.push_back(Xval[i]);
+    Ynew.push_back(Yval[i]/ave);
+    Xerrornew.push_back(XvalError[i]);
+    Yerrornew.push_back(Yval[i]*TMath::Hypot(YvalError[i]/Yval[i],err_ave/ave));
+  }
+  const int NnewSize =  count;
+  double Xnew_m[NnewSize],Ynew_m[NnewSize],Xerrornew_m[NnewSize],Yerrornew_m[NnewSize]; //because silly ROOT doesn't know how to treat vectors
+  for(int i=0;i<NnewSize;i++){
+    Xnew_m[i] = Xnew[i];
+    Ynew_m[i] = Ynew[i];
+    Xerrornew_m[i] = Xerrornew[i];
+    Yerrornew_m[i] = Yerrornew[i];
+  }
+  
+  TGraphErrors* output = new TGraphErrors(count,Xnew_m,Ynew_m,Xerrornew_m,Yerrornew_m);
+  if(input->GetN()!=output->GetN()) cout<<"Number of points in input: "<<input->GetN()<<" in output: "<<output->GetN()<<endl;
+  return output;
+}
+
+
+
 
 //Clean points not filled due to low statistics
 TGraphErrors* CleanEmptyPoints(TGraphErrors* input){
@@ -67,10 +99,9 @@ TGraphErrors* CleanEmptyPoints(TGraphErrors* input){
   int count=0;
   vector<double> Xnew,Ynew,Xerrornew,Yerrornew;
   for(int i=0;i<input->GetN();i++){
-    //cout << "Yval[" << i << "] = " << Yval[i] <<" +/- "<<YvalError[i]<< endl;
-    //cleaning stuff:
-     if(YvalError[i]<0.0001 || Yval[i]==0 ) continue;
-    if(Yval[i]==0 ) continue;
+    //cout << "Yval[" << i << "] = " << Yval[i] <<" ± "<<YvalError[i]<< endl;
+    if(YvalError[i]<1e-4 || Yval[i]==0) continue;
+    //    if(Yval[i]==0 ) continue;
        count++;
       Xnew.push_back(Xval[i]);       
       Ynew.push_back(Yval[i]);
@@ -93,6 +124,22 @@ TGraphErrors* CleanEmptyPoints(TGraphErrors* input){
   return output;
 }
 
+// source: https://en.wikipedia.org/wiki/Propagation_of_uncertainty
+double ErrorPropagation_AB(pair<double,double> Ap, pair<double,double> Bp){//f= AB, returns error on f assuming gaussian propagation of the errors and no correlation
+  double A = Ap.first; double sig_A = Ap.second;
+  double B = Bp.first; double sig_B = Bp.second;
+  double sig_f = A*B*TMath::Hypot(sig_A/A,sig_B/B);
+  return sig_f;
+}
+
+// source: https://en.wikipedia.org/wiki/Propagation_of_uncertainty
+double ErrorPropagation_AoverB(pair<double,double> Ap, pair<double,double> Bp){//f= A/B, returns error on f assuming gaussian propagation of the errors and no correlation
+  double A = Ap.first; double sig_A = Ap.second;
+  double B = Bp.first; double sig_B = Bp.second;
+  double sig_f = A*TMath::Hypot(sig_A/A,sig_B/B)/B;
+  //  cout<<"A = "<<A<<" sig_A = "<<sig_A<<" B = "<<B<<" sig_B = "<<sig_B<<" sig_f = "<<sig_f<<endl;
+  return sig_f;
+}
 
 
 //Get hist for variable from tree with particular selection 
@@ -111,5 +158,4 @@ Double_t SmoothFit(Double_t *v, Double_t *par){
   }
 
   return fitval;
-  
 }

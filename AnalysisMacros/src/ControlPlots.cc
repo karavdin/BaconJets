@@ -19,10 +19,10 @@ void CorrectionObject::ControlPlots(bool forEverySingleTrigger){
   gStyle->SetOptFit(0);
   gStyle->SetOptStat(0);
 
-  TString dirNames[11] = {"Selection", "HLT_PFJet40", "HLT_PFJet60", "HLT_PFJet80","HLT_PFJet140","HLT_PFJet200","HLT_PFJet260","HLT_PFJet320","HLT_PFJet400","HLT_PFJet450","HLT_PFJet500"};
+  TString dirNames[16] = {"Selection", "HLT_PFJet40", "HLT_PFJet60", "HLT_PFJet80","HLT_PFJet140","HLT_PFJet200","HLT_PFJet260","HLT_PFJet320","HLT_PFJet400","HLT_PFJet500", "HLT_DiPFJetAve60_HFJEC", "HLT_DiPFJetAve80_HFJEC", "HLT_DiPFJetAve100_HFJEC", "HLT_DiPFJetAve160_HFJEC", "HLT_DiPFJetAve220_HFJEC", "HLT_DiPFJetAve300_HFJEC"};
 
   int loop_inter = 1;
-  if(forEverySingleTrigger) loop_inter=11;
+  if(forEverySingleTrigger) loop_inter=16;
   
   for(int i = 0; i<loop_inter ; i++){
 
@@ -315,8 +315,19 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   if(use_mc)    mpf_vs_etaProbe_MC->Draw("colz");						    
   
   f->Print(SavePlots + "_ResponsesVsEta.pdf");
+  
+  TCanvas* fpeprobe = new TCanvas();    
+  TH2F *phi_vs_etaProbe_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/phi_vs_etaProbe");
+  phi_vs_etaProbe_DATA->SetTitle(DATAtitle);
+  phi_vs_etaProbe_DATA->Draw("colz");
+  fpeprobe->Print(SavePlots + "_PhiVsEtaProbe.pdf");
 
-
+ 
+  TCanvas* fpe = new TCanvas();    
+  TH2F *phi_vs_eta_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/phi_vs_etaAll");
+  phi_vs_eta_DATA->SetTitle(DATAtitle);
+  phi_vs_eta_DATA->Draw("colz");
+  fpe->Print(SavePlots + "_PhiVsEtaAll.pdf");
 
   TCanvas* g = new TCanvas();
   TH2F *pt_ave_vs_etaProbe_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/pt_ave_vs_etaProbe");

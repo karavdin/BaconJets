@@ -128,6 +128,11 @@ Selection::Selection(uhh2::Context & ctx) :
      handle_trigger220_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve220ForHFJEC" );
      handle_trigger300_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve300ForHFJEC" );
 
+
+     
+    bool no_genp = true;
+    if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;
+     
      
    }
  }
@@ -293,7 +298,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     if (fabs((event->get(tt_jet2_pt) - event->get(tt_jet1_pt)) / (event->get(tt_jet2_pt) + event->get(tt_jet1_pt))) > s_asymm) return false;
 
     //(pTgen1 < 1.5*pThat || pTreco1 < 1.5* pTgen1)
-    if(!event->isRealData){
+    if(!event->isRealData && !no_genp){
       if(event->genjets->size() < 1) return false;
       if(!(event->genjets->at(0).pt() < 1.5*event->genInfo->binningValues()[0] || event->jets->at(0).pt() < 1.5*event->genjets->at(0).pt())) return false;
     }
@@ -366,7 +371,9 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
   bool Selection::PUpthat(uhh2::Event& evt)
   {
     assert(event);
-  
+
+   if(no_genp) return false;
+    
    double  pt_hat = event->genInfo->binningValues()[0];
    double  PU_pt_hat = event->genInfo->PU_pT_hat_max();
   

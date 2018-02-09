@@ -76,7 +76,8 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     book<TH2D>("pt_ave_vs_etaProbe","pt ave vs #eta probe jet; #eta probe; pT_{ave}, GeV",100,-5.2,5.2,200,0,1000);
     book<TH2D>("dPhi_vs_alpha","#Delta #Phi vs #alpha; #alpha; #Delta #Phi",150,0,3,200,-M_PI,4);
 
-
+    book<TH2D>("phi_vs_etaProbe","#phi vs. #eta probe jet; #eta probe; #phi probe",100,-5,5,100,-M_PI,M_PI);
+    book<TH2D>("phi_vs_etaAll","#phi vs. #eta all jet; #eta; #phi",100,-5,5,100,-M_PI,M_PI);
 
     tt_gen_pthat  = ctx.get_handle<float>("gen_pthat");
     tt_gen_weight = ctx.get_handle<float>("gen_weight");
@@ -122,8 +123,13 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
   double weight = ev.weight;
   const int njets = ev.jets->size();
   hist("N_jets")->Fill(njets, weight);
+  try{
   if(!ev.isRealData)hist("pt_hat")->Fill(ev.get(tt_gen_pthat),weight);
-    
+    }
+  catch(const std::runtime_error& error){
+	  std::cout<<"Problem with gen in JECAnalysishists.cxx"<<std::endl;
+	  std::cout<<error.what();
+  }
   for (int i=0; i<njets; i++){
     Jet* jets = &ev.jets->at(i);
     hist("pt")->Fill(jets->pt(), weight);
@@ -139,6 +145,8 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
     hist("matchJetId_0")->Fill(ev.get(tt_matchJetId_0), weight);
     hist("matchJetId_1")->Fill(ev.get(tt_matchJetId_1), weight);			       
     hist("weight_histo")->Fill(weight, 1);
+    
+    ((TH2D*)hist("phi_vs_etaAll"))->Fill(jets->eta(),jets->phi(),weight);
   }
   
   hist("N_PV")->Fill(ev.get(tt_nvertices), weight);
@@ -151,7 +159,14 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
   Jet* jet2 = &ev.jets->at(1);
   hist("pt_2")->Fill(jet2->pt(), weight);
   hist("eta_2")->Fill(jet2->eta(), weight);
-  float ratio_pt = (ev.get(tt_pt_ave) - ev.get(tt_gen_pthat))/ev.get(tt_gen_pthat);
+  // float ratio_pt = 0.;
+  try{ 
+     float ratio_pt = (ev.get(tt_pt_ave) - ev.get(tt_gen_pthat))/ev.get(tt_gen_pthat);
+  }
+  catch(const std::runtime_error& error){
+	  std::cout<<"Problem with gen in JECAnalysishists.cxx"<<std::endl;
+	  std::cout<<error.what();
+  }  
   hist("pt_ave")          ->Fill(ev.get(tt_pt_ave), weight);
   hist("pt_ave_pthat")   ->Fill(ev.get(tt_pt_ave), weight);
   hist("pt_ave_rebin") ->Fill(ev.get(tt_pt_ave), weight);
@@ -172,6 +187,8 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
   ((TH2D*)hist("r_rel_vs_etaProbe"))->Fill(ev.get(tt_probejet_eta),ev.get(tt_rel_r),weight);
   float pt_ave = (0.5*(ev.get(tt_jet1_pt) + ev.get(tt_jet2_pt)));
   ((TH2D*)hist("pt_ave_vs_etaProbe"))->Fill(ev.get(tt_probejet_eta),pt_ave,weight);
+
+  ((TH2D*)hist("phi_vs_etaProbe"))->Fill(ev.get(tt_probejet_eta),ev.get(tt_probejet_phi),weight);
 
   double deltaPhi = std::abs(TVector2::Phi_mpi_pi(jet1->phi() - jet2->phi()));
   ((TH2D*)hist("dPhi_vs_alpha"))->Fill(ev.get(tt_alpha),deltaPhi, weight);

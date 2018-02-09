@@ -11,6 +11,7 @@
 #include "../include/JECAnalysisHists.h"
 #include "../include/JECCrossCheckHists.h"
 #include "../include/JECRunnumberHists.h"
+#include "../include/LumiHists.h"
 
 #include <UHH2/common/include/MCWeight.h>
 #include "UHH2/common/include/JetCorrections.h"
@@ -24,6 +25,8 @@
 
 #include "UHH2/BaconJets/include/selection.h"
 #include "UHH2/BaconJets/include/constants.h"
+
+#include "UHH2/BaconJets/include/LumiHists.h"
 
 #include "TClonesArray.h"
 #include "TString.h"
@@ -99,6 +102,8 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     std::unique_ptr<uhh2::Selection> trigger160_HFJEC_sel;
     std::unique_ptr<uhh2::Selection> trigger220_HFJEC_sel;
     std::unique_ptr<uhh2::Selection> trigger300_HFJEC_sel;
+  
+    std::unique_ptr<LumiHists> h_monitoring_final;
   
     //// Data/MC scale factors
     std::unique_ptr<uhh2::AnalysisModule> pileupSF;
@@ -508,6 +513,11 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    JEC_corr               = JERFiles::Fall17_17Nov2017_V3_L123_AK4PFchs_MC;
 	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V3_L1RC_AK4PFchs_MC;	    
 	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V4"){
+	    JEC_corr               = JERFiles::Fall17_17Nov2017_V4_L123_AK4PFchs_MC;
+	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V4_L1RC_AK4PFchs_MC;	    
+	  }
+	  
 	  else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
 	}
 	//closure
@@ -648,6 +658,19 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V3_D_L1RC_AK4PFchs_DATA;
 	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V3_E_L1RC_AK4PFchs_DATA;
 	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V3_F_L1RC_AK4PFchs_DATA; 
+	  }	 
+	  else if(JEC_Version == "Fall17_17Nov2017_V4"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V4_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V4_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V4_F_L123_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V4_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V4_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V4_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
 	  }	 
 	  else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
@@ -1035,7 +1058,9 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_lumi_TrigHF100.reset(new LuminosityHists(ctx,"Lumi_TrigHF100")); 
     h_lumi_TrigHF160.reset(new LuminosityHists(ctx,"Lumi_TrigHF160")); 
     h_lumi_TrigHF220.reset(new LuminosityHists(ctx,"Lumi_TrigHF220")); 
-    h_lumi_TrigHF300.reset(new LuminosityHists(ctx,"Lumi_TrigHF300")); 
+    h_lumi_TrigHF300.reset(new LuminosityHists(ctx,"Lumi_TrigHF300"));
+
+    h_monitoring_final.reset(new LumiHists(ctx, "Monitoring_Final"));
 
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
@@ -2113,6 +2138,8 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_final->fill(event);
     h_lumi_final->fill(event);
 
+    h_monitoring_final->fill(event);
+    
     event.set(tt_Nmuon,event.muons->size());
     if(event.muons->size()>0)  
       event.set(tt_muon_pt,event.muons->at(0).pt());

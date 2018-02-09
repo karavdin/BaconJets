@@ -44,6 +44,8 @@ class Selection {
   bool central;
   bool fwd;
   
+  bool no_genp;
+  
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger40;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger60;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger80;

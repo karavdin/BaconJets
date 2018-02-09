@@ -35,7 +35,7 @@ void CorrectionObject::NPVtoEtaPlots(){
   for(int k=0; k<n_pt-1; k++){
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
       TString name = name1  + pt_name; 
-      hdata[k] = new TH2D(name,"",nResponseBins ,-3.4,-3.4,nResponseBins/10, 0, 60);
+      hdata[k] = new TH2D(name,"",nResponseBins ,-3.4,-3.4,60, 0, 60);
       count++;
     }
 
@@ -88,7 +88,7 @@ void CorrectionObject::NPVtoEtaPlots(){
 
     
     for(int j=0; j<n_pt-1; j++){
-      TCanvas* cFullA_nvert = new TCanvas();
+      TCanvas* cFullA_nvert = new TCanvas("c1","c1",800,600);
       // tdrCanvas(cFullA_nvert,"cFullA_nvert",h,4,10,kSquare,CorrectionObject::_lumitag);
       TH2D* htemp_rel_data_nvert;
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -97,8 +97,8 @@ void CorrectionObject::NPVtoEtaPlots(){
       TString name_rel_data = "hist_data_NPVtoEta_"+pt_name;
       htemp_rel_data_nvert = (TH2D*)f_rel_data_nvert->Get(name_rel_data);
       htemp_rel_data_nvert->Draw("E");
-      htemp_rel_data_nvert->GetXaxis()->SetTitle("eta");
-      htemp_rel_data_nvert->GetYaxis()->SetTitle("n vertices");
+      htemp_rel_data_nvert->GetXaxis()->SetTitle("#eta");
+      htemp_rel_data_nvert->GetYaxis()->SetTitle("n primary vertices");
       htemp_rel_data_nvert->GetZaxis()->SetTitle("Entries per Bin");      
       htemp_rel_data_nvert->GetXaxis()->SetLimits(-3.4,3.4);
       htemp_rel_data_nvert->Draw("COLZ");		

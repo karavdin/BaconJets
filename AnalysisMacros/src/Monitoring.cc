@@ -23,10 +23,11 @@
 
 using namespace std;
 
-const int n_input = 3;
-const int Fit_range[n_input+1] = {0, 12600, 19300, 35000};
+const int n_input = 1;
+const int Fit_range[n_input+1] = {14500, 19000};
 
-const TString Name_range[n_input] = {"BCD", "EFearly", "FlateGH"};
+// const TString Name_range[n_input] = {"B", "C", "D", "E", "F"};
+const TString Name_range[n_input] = {"D",};
 
 void Save_2D_Plot(TH2D* hist, TString Method, TString Runnr, TString input_path){
 
@@ -54,7 +55,7 @@ void Save_2D_Plot(TH2D* hist, TString Method, TString Runnr, TString input_path)
 
   tex->DrawLatex(0.2,0.92,Method);
   tex_lumi->DrawLatex(0.53,0.92,"Run"+Runnr+" (13TeV)");
-  p1->SaveAs(input_path+"/Monitoring/"+Method+"_"+Runnr+".pdf");
+  p1->SaveAs(input_path + "/"+Method+"_"+Runnr+".pdf");
   delete p1;
 }
 
@@ -64,22 +65,25 @@ void Save_2D_Plot(TH2D* hist, TString Method, TString Runnr, TString input_path)
 void CorrectionObject::Monitoring(){
   cout << "--------------- Starting Monitoring() ---------------" << endl << endl;
 
+
+  CorrectionObject::make_path(std::string((_outpath + "plots/control/Monitoring/").Data()));
+  
   TFile* f_monitoring[n_input];
 
-  TH2D *hist_A[n_input][n_eta_control-1][n_pt-1];
-  TProfile *pr_A[n_input][n_eta_control-1][n_pt-1];
+  TH2D *hist_A[n_input][n_eta_full-1][n_pt-1];
+  TProfile *pr_A[n_input][n_eta_full-1][n_pt-1];
 
-  TGraphErrors *rel_res[n_input][n_eta_control-1][n_pt-1];
-  TGraphErrors *mpf_res[n_input][n_eta_control-1][n_pt-1];
+  TGraphErrors *rel_res[n_input][n_eta_full-1][n_pt-1];
+  TGraphErrors *mpf_res[n_input][n_eta_full-1][n_pt-1];
 
-  TGraphErrors *rel_ratio[n_input][n_eta_control-1][n_pt-1];
-  TGraphErrors *mpf_ratio[n_input][n_eta_control-1][n_pt-1];
+  TGraphErrors *rel_ratio[n_input][n_eta_full-1][n_pt-1];
+  TGraphErrors *mpf_ratio[n_input][n_eta_full-1][n_pt-1];
 
-  TF1 *Fit_rel[n_input][n_eta_control-1][n_pt-1];
-  TF1 *Fit_mpf[n_input][n_eta_control-1][n_pt-1];
+  TF1 *Fit_rel[n_input][n_eta_full-1][n_pt-1];
+  TF1 *Fit_mpf[n_input][n_eta_full-1][n_pt-1];
  
-  TH2D *hist_B[n_input][n_eta_control-1][n_pt-1];
-  TProfile *pr_B[n_input][n_eta_control-1][n_pt-1];
+  TH2D *hist_B[n_input][n_eta_full-1][n_pt-1];
+  TProfile *pr_B[n_input][n_eta_full-1][n_pt-1];
 
   TH2D *chi2_rel_fit[n_input];
   TH2D *param_rel_fit[n_input];
@@ -91,25 +95,24 @@ void CorrectionObject::Monitoring(){
 
   for(int i=0; i<n_input; i++){
     cout<<"Read in File: "<<endl;
-    cout<<CorrectionObject::_input_path+"uhh2.AnalysisModuleRunner.DATA.DATA_Run"+Name_range[i]+"_AK4CHS.root"<<endl;
+    cout<<CorrectionObject::_input_path<<endl;
 
-    f_monitoring[i] = new TFile(CorrectionObject::_input_path+"/uhh2.AnalysisModuleRunner.DATA.DATA_Run"+Name_range[i]+"_AK4CHS.root");
+    f_monitoring[i] = new TFile(CorrectionObject::_input_path);
     cout<<"Create Hist"<<endl;
-    for(int j=0; j<n_eta_control-1; j++){
+    for(int j=0; j<n_eta_full-1; j++){
       for(int k=0; k<n_pt-1; k++){
-        hist_A[i][j][k]    = (TH2D*)f_monitoring[i]    ->Get("Monitoring_Final/hist_data_A_eta_"+eta_range2_control[j]+"_"+eta_range2_control[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]);
+        hist_A[i][j][k]    = (TH2D*)f_monitoring[i]->Get("Monitoring_Final/hist_data_A_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]);
 	pr_A[i][j][k]      = (TProfile*)hist_A[i][j][k] ->ProfileX(Form("prof_A_%i_%d_%d",i,j,k));
-        
-	hist_B[i][j][k]    = (TH2D*)f_monitoring[i]    ->Get("Monitoring_Final/hist_data_B_eta_"+eta_range2_control[j]+"_"+eta_range2_control[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]);
+	hist_B[i][j][k]    = (TH2D*)f_monitoring[i]    ->Get("Monitoring_Final/hist_data_B_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]);
 	pr_B[i][j][k]      = (TProfile*)hist_B[i][j][k] ->ProfileX(Form("prof_B_%i_%d_%d",i,j,k));
       }
     }
     
-    chi2_mpf_fit[i]  = new TH2D("chi2_mpf_fit",""+Name_range[i],n_eta_control-1, eta_bins_control, n_pt-1, pt_bins);
-    param_mpf_fit[i] = new TH2D("param_mpf_fit",""+Name_range[i],n_eta_control-1, eta_bins_control, n_pt-1, pt_bins);
+    chi2_mpf_fit[i]  = new TH2D("chi2_mpf_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-1, pt_bins);
+    param_mpf_fit[i] = new TH2D("param_mpf_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-1, pt_bins);
 
-    chi2_rel_fit[i]  = new TH2D("chi2_rel_fit",""+Name_range[i],n_eta_control-1, eta_bins_control, n_pt-1, pt_bins);
-    param_rel_fit[i] = new TH2D("param_rel_fit",""+Name_range[i],n_eta_control-1, eta_bins_control, n_pt-1, pt_bins);
+    chi2_rel_fit[i]  = new TH2D("chi2_rel_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-1, pt_bins);
+    param_rel_fit[i] = new TH2D("param_rel_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-1, pt_bins);
 
     cout<<"Finish Load Hists"<<endl;
 
@@ -119,11 +122,11 @@ void CorrectionObject::Monitoring(){
     double bin_width = 0; 
     bin_width = pr_B[i][1][1]->GetXaxis()->GetBinWidth(1);
     
-    double res_rel[n_eta_control-1][n_pt-1][n_lumi-1];
-    double res_mpf[n_eta_control-1][n_pt-1][n_lumi-1];
+    double res_rel[n_eta_full-1][n_pt-1][n_lumi-1];
+    double res_mpf[n_eta_full-1][n_pt-1][n_lumi-1];
     
-    double err_res_rel[n_eta_control-1][n_pt-1][n_lumi-1];
-    double err_res_mpf[n_eta_control-1][n_pt-1][n_lumi-1];
+    double err_res_rel[n_eta_full-1][n_pt-1][n_lumi-1];
+    double err_res_mpf[n_eta_full-1][n_pt-1][n_lumi-1];
     
     double xbin_tgraph[n_lumi],zero[n_lumi];
     double xbin = 0;
@@ -133,7 +136,7 @@ void CorrectionObject::Monitoring(){
       zero[i] = 0;
     }
 
-    for(int j=0; j<n_eta_control-1; j++){
+    for(int j=0; j<n_eta_full-1; j++){
       for(int k=0; k<n_pt-1; k++){
 	for(int l =0; l<n_lumi; l++){
 	  
@@ -158,11 +161,11 @@ void CorrectionObject::Monitoring(){
 	mpf_res[i][j][k]= new TGraphErrors(n_lumi, xbin_tgraph, res_mpf[j][k], zero, err_res_mpf[j][k]);
 	mpf_res[i][j][k]= (TGraphErrors*)CleanEmptyPoints(mpf_res[i][j][k]);
 
-	Fit_rel[i][j][k] = new TF1("Fit_Rel_"+Name_range[i]+"_"+eta_range2_control[j]+"_"+eta_range2_control[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1],"pol0", Fit_range[i] ,Fit_range[i+1]);
-	Fit_mpf[i][j][k] = new TF1("Fit_MPF_"+Name_range[i]+"_"+eta_range2_control[j]+"_"+eta_range2_control[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1],"pol0", Fit_range[i] ,Fit_range[i+1]);
+	Fit_rel[i][j][k] = new TF1("Fit_Rel_"+Name_range[i]+"_"+eta_range2_full[j]+"_"+eta_range2_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1],"pol0", Fit_range[i] ,Fit_range[i+1]);
+	Fit_mpf[i][j][k] = new TF1("Fit_MPF_"+Name_range[i]+"_"+eta_range2_full[j]+"_"+eta_range2_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1],"pol0", Fit_range[i] ,Fit_range[i+1]);
 	
-	rel_res[i][j][k] ->Fit("Fit_Rel_"+Name_range[i]+"_"+eta_range2_control[j]+"_"+eta_range2_control[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1],"","",Fit_range[i], Fit_range[i+1]);
-	mpf_res[i][j][k] ->Fit("Fit_MPF_"+Name_range[i]+"_"+eta_range2_control[j]+"_"+eta_range2_control[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1],"","",Fit_range[i], Fit_range[i+1]);
+	rel_res[i][j][k] ->Fit("Fit_Rel_"+Name_range[i]+"_"+eta_range2_full[j]+"_"+eta_range2_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1],"","",Fit_range[i], Fit_range[i+1]);
+	mpf_res[i][j][k] ->Fit("Fit_MPF_"+Name_range[i]+"_"+eta_range2_full[j]+"_"+eta_range2_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1],"","",Fit_range[i], Fit_range[i+1]);
 
 	rel_ratio[i][j][k] = (TGraphErrors*)BuildRatio(rel_res[i][j][k], Fit_rel[i][j][k]->GetParameter(0),Fit_rel[i][j][k]->GetParError(0));
 	mpf_ratio[i][j][k] = (TGraphErrors*)BuildRatio(mpf_res[i][j][k], Fit_mpf[i][j][k]->GetParameter(0),Fit_mpf[i][j][k]->GetParError(0));
@@ -180,11 +183,11 @@ void CorrectionObject::Monitoring(){
 	param_rel_fit[i]->SetBinContent(j+1, k+1, Fit_rel[i][j][k]->GetParameter(0));	
       }
     }
-    Save_2D_Plot(chi2_mpf_fit[i], "MPF_Chi2", Name_range[i], CorrectionObject::_input_path);
-    Save_2D_Plot(chi2_rel_fit[i], "Rel_Chi2", Name_range[i], CorrectionObject::_input_path);
+    Save_2D_Plot(chi2_mpf_fit[i], "MPF_Chi2", Name_range[i], CorrectionObject::_outpath + "plots/control/Monitoring");
+    Save_2D_Plot(chi2_rel_fit[i], "Rel_Chi2", Name_range[i], CorrectionObject::_outpath + "plots/control/Monitoring");
 
-    Save_2D_Plot(param_mpf_fit[i], "MPF_Param", Name_range[i], CorrectionObject::_input_path);
-    Save_2D_Plot(param_rel_fit[i], "Rel_Param", Name_range[i], CorrectionObject::_input_path);
+    Save_2D_Plot(param_mpf_fit[i], "MPF_Param", Name_range[i], CorrectionObject::_outpath + "plots/control/Monitoring");
+    Save_2D_Plot(param_rel_fit[i], "Rel_Param", Name_range[i], CorrectionObject::_outpath + "plots/control/Monitoring");
   }
 
   cout<<"Setup canvas and draw several TGraphs"<<endl;
@@ -219,7 +222,7 @@ void CorrectionObject::Monitoring(){
   tex1->SetTextFont(42);
   tex1->SetTextSize(0.036); 
 
-  for(int j=0; j<n_eta_control-1; j++){
+  for(int j=0; j<n_eta_full-1; j++){
     for(int k=0; k<n_pt-1; k++){
  
       //dummy for tdrCanvas 
@@ -258,7 +261,7 @@ void CorrectionObject::Monitoring(){
       leg_rel_res->SetFillStyle(1001);
       leg_rel_res->SetLineColor(1);
       leg_rel_res->SetTextFont(42);
-      leg_rel_res->SetHeader("Rel Response, "+eta_range_control[j]+"#leq#eta<"+eta_range_control[j+1]); //+", #alpha<"+s_blpha_cut
+      leg_rel_res->SetHeader("Rel Response, "+eta_range_full[j]+"#leq#eta<"+eta_range_full[j+1]); //+", #alpha<"+s_blpha_cut
  
       for(int i = 0; i<n_input; i++){
 	rel_res[i][j][k]->SetMarkerStyle(2);
@@ -312,7 +315,7 @@ void CorrectionObject::Monitoring(){
       }
       c3->Update();
       
-      c3->SaveAs(CorrectionObject::_input_path+"/Monitoring/Rel_res_" + CorrectionObject::_generator_tag + "_eta_"+eta_range2_control[j]+"_"+eta_range2_control[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]+".pdf");
+      c3->SaveAs(CorrectionObject::_outpath + "plots/control/Monitoring/Rel_res_" + CorrectionObject::_generator_tag + "_eta_"+eta_range2_full[j]+"_"+eta_range2_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]+".pdf");
       delete c3;
 
 
@@ -336,7 +339,7 @@ void CorrectionObject::Monitoring(){
       leg_mpf_res->SetFillStyle(1001);
       leg_mpf_res->SetLineColor(1);
       leg_mpf_res->SetTextFont(42);
-      leg_mpf_res->SetHeader("MPF Response, "+eta_range_control[j]+"#leq#eta<"+eta_range_control[j+1]); //+", #alpha<"+s_blpha_cut
+      leg_mpf_res->SetHeader("MPF Response, "+eta_range_full[j]+"#leq#eta<"+eta_range_full[j+1]); //+", #alpha<"+s_blpha_cut
  
       for(int i = 0; i<n_input; i++){
 	mpf_res[i][j][k]->SetMarkerStyle(2);
@@ -389,7 +392,7 @@ void CorrectionObject::Monitoring(){
       }
       c4->Update();
       
-      c4->SaveAs(CorrectionObject::_input_path+"/Monitoring/MPF_res_" + CorrectionObject::_generator_tag + "_eta_"+eta_range2_control[j]+"_"+eta_range2_control[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]+".pdf");
+      c4->SaveAs(CorrectionObject::_outpath + "plots/control/Monitoring/MPF_res_" + CorrectionObject::_generator_tag + "_eta_"+eta_range2_full[j]+"_"+eta_range2_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]+".pdf");
       delete c4;
     }
   }
