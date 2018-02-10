@@ -23,11 +23,11 @@
 
 using namespace std;
 
-const int n_input = 1;
-const int Fit_range[n_input+1] = {14500, 19000};
+const int n_input = 2;
+const int Fit_range[n_input+1] = {14500, 18900,25000};
 
 // const TString Name_range[n_input] = {"B", "C", "D", "E", "F"};
-const TString Name_range[n_input] = {"D",};
+const TString Name_range[n_input] = {"D","E"};
 
 void Save_2D_Plot(TH2D* hist, TString Method, TString Runnr, TString input_path){
 

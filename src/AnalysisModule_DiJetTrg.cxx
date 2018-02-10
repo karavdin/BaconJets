@@ -1010,15 +1010,19 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     //LEPTON selection
     muoSR_cleaner->process(event);
     sort_by_pt<Muon>(*event.muons); 
-    if(debug )std::cout<<"#muons = "<<event.muons->size()<<std::endl;
+    // if(debug )std::cout<<"#muons = "<<event.muons->size()<<std::endl;
 
     eleSR_cleaner->process(event);
     sort_by_pt<Electron>(*event.electrons);
-    if(debug) std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
+    // if(debug) std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
 
     if (event.electrons->size()>0 || event.muons->size()>0) return false; //TEST lepton cleaning
- 
+
+    if(debug) cout<<"no leptons in the event";
+    
     h_runnr_input->fill(event);
+
+    // cout<<"0\n";
 
     /* CMS-certified luminosity sections */
     if(event.isRealData){
@@ -1067,16 +1071,16 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     //discard events if not all jets fulfill JetID instead of just discarding single jets
     if (n_jets_beforeCleaner != n_jets_afterCleaner) return false;
 
-    cout<<"1\n";
+    // cout<<"1\n";
     
-    h_afterCleaner->fill(event);
-    cout<<"2\n";
+    if(!isMC) h_afterCleaner->fill(event);
+    // cout<<"2\n";
     const int jet_n = event.jets->size();
-        cout<<"3\n";
+        // cout<<"3\n";
     if(jet_n<2) return false;
-        cout<<"4\n";
+        // cout<<"4\n";
     h_2jets->fill(event);
-        cout<<"5\n";
+        // cout<<"5\n";
 //###########################################################################################
   
 //####################  Select and Apply proper JEC-Versions for every Run ##################
@@ -1235,6 +1239,7 @@ if(debug){
     int jetid_2_last = 2;  
  
  //Calculate pt_ave
+    if(debug) cout<<"calc pt_ave\n";
     Jet* jet1 = &event.jets->at(0);// leading jet
     Jet* jet2 = &event.jets->at(1);// sub-leading jet
     float jet1_pt = jet1->pt(); float jet2_pt = jet2->pt();
@@ -1292,6 +1297,7 @@ if(debug){
 
     double trgHF_thresh[6] = {s_Pt_Ave60HF_cut,s_Pt_Ave80HF_cut,s_Pt_Ave100HF_cut,s_Pt_Ave160HF_cut,s_Pt_Ave220HF_cut,s_Pt_Ave300HF_cut};
 
+    if(debug) cout<<"before trigger pass checks\n";
     if(event.isRealData){
       float pt_ave_ = pt_ave;
       float probejet_eta = jet1->eta(); 
@@ -1372,6 +1378,8 @@ if(debug){
     
 //###############################  Declare Probe and Barrel Jet  ################################
 
+    if(debug) cout<<"Declare Probe and Barrel Jet\n";
+    
     Jet* jet_probe = jet1;
     Jet* jet_barrel = jet2;
     if ((fabs(jet1->eta())<s_eta_barr)&&(fabs(jet2->eta())<s_eta_barr)) {
@@ -1401,6 +1409,8 @@ if(debug){
     }
 //###############################################################################################
 
+    if(debug) cout<<"read or calculated values for dijet events\n";
+    
     //read or calculated values for dijet events
     float gen_pthat = 0; //pt hat (from QCD simulation)
     float gen_weight = 0;
@@ -1438,6 +1448,8 @@ if(debug){
     float barreljet_ptRaw = barreljet_pt*factor_raw_barrel;
 
 //##########################  Get third Jet for alpha, asymmetry calculation  ###################
+  if(debug) cout<<"Get third Jet for alpha, asymmetry calculation\n";
+    
     float jet3_pt = 0; float jet3_ptRaw = 0;
     if(jet_n>2){
       Jet* jet3 = &event.jets->at(2);
@@ -1461,20 +1473,24 @@ if(debug){
 //###############################################################################################
 
 //########Split Samples into FWD/CENTRAL for old flat MC samples  only ##########################
-    h_beforeFlatFwd->fill(event);
-
-    //separate flat and fwd samples at |eta| = 2.853
-    if(dataset_version.Contains("_Fwd") && fabs(probejet_eta) < 2.853 && isMC) return false;
-    if((dataset_version.Contains("_Flat")) && fabs(probejet_eta) >= 2.853 && isMC) return false;
+    if(debug) cout<<"#Split Samples into FWD/CENTRAL for old flat MC samples  only\n";
     
-    h_afterFlatFwd->fill(event);
+    // h_beforeFlatFwd->fill(event);
+
+   //  //separate flat and fwd samples at |eta| = 2.853
+   //  if(dataset_version.Contains("_Fwd") && fabs(probejet_eta) < 2.853 && isMC) return false;
+   //  if((dataset_version.Contains("_Flat")) && fabs(probejet_eta) >= 2.853 && isMC) return false;
+    
+   //  h_afterFlatFwd->fill(event);
 
 
-   h_afterUnflat->fill(event);
+   // h_afterUnflat->fill(event);
     
     int flavor = 0;
 
     float onoffDummy =0.;   
+
+    if(debug) cout<<"before the event.set wall\n";
     
  //fill the containers
     double pu_pthat = -1;
@@ -1574,11 +1590,12 @@ if(debug){
     }
 
     if(!sel.DiJet()) return false;
+    if(debug)       cout << "after 'dijet selection' : " << endl;
     h_nocuts->fill(event);
     h_lumi_nocuts->fill(event);
 
 //Pu_pt_hat/pt_hat Selection
-    if(!event.isRealData){
+    if(!event.isRealData && !no_genp){
       if(!sel.PUpthat(event)) return false;
     }
     h_nocuts->fill(event);
@@ -1586,6 +1603,8 @@ if(debug){
 
     //MET/pt - Cut
     if(apply_METoverPt_cut && event.get(tt_MET)/(event.get(tt_jets_pt)+event.get(tt_barreljet_pt)+event.get(tt_probejet_pt))>0.2) return false; //skip events with large MET contribution  
+
+    if(debug)       cout << "after MET/pt cut : " << endl;
 
     //PhiEta Region cleaning
     if(apply_EtaPhi_cut && !sel.EtaPhiCleaning(event)) return false; 
@@ -1814,17 +1833,17 @@ if(debug){
       //response of leading jet
       //find corresponding genjet
       int idx_corresponding_genjet = -1;
+      double response_jet1 = -1;
       if(!no_genp){
 	for(unsigned int i=0; i< genjets_n ; i++){
 	if((&idx_jet_matching_genjet[i])==0) idx_jet_matching_genjet[i] = 1;
 	if(debug) cout << idx_jet_matching_genjet[i] << endl;
 	if(idx_jet_matching_genjet[i] == 0) idx_corresponding_genjet = i;
-      }
-      double response_jet1 = -1;
+        }      
       if(idx_corresponding_genjet < (int)genjets_n && idx_corresponding_genjet != -1) response_jet1 = event.jets->at(0).pt() / event.genjets->at(idx_corresponding_genjet).pt();
+      }      
       event.set(tt_response_leadingjet,response_jet1);  
 
-      }
     } //isMC
 
     else{
@@ -1834,7 +1853,7 @@ if(debug){
       event.set(tt_responseProbejet,-1);  
       event.set(tt_flavorLeadingjet,-1);  
       event.set(tt_flavorSubleadingjet,-1);  
-      event.set(tt_response_leadingjet,-1.); 
+      event.set(tt_response_leadingjet,-1.);  
       event.set(tt_probejet_ptgen,-1.);  
       event.set(tt_barreljet_ptgen,-1);   
     }

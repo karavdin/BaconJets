@@ -35,7 +35,7 @@ void CorrectionObject::NPVtoEtaPlots(){
   for(int k=0; k<n_pt-1; k++){
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
       TString name = name1  + pt_name; 
-      hdata[k] = new TH2D(name,"",nResponseBins ,-3.4,-3.4,60, 0, 60);
+      hdata[k] = new TH2D(name,"",nResponseBins ,-3.4,-3.4,70, 0, 70);
       count++;
     }
 
@@ -101,6 +101,7 @@ void CorrectionObject::NPVtoEtaPlots(){
       htemp_rel_data_nvert->GetYaxis()->SetTitle("n primary vertices");
       htemp_rel_data_nvert->GetZaxis()->SetTitle("Entries per Bin");      
       htemp_rel_data_nvert->GetXaxis()->SetLimits(-3.4,3.4);
+      htemp_rel_data_nvert->GetYaxis()->SetLimits(0,70);
       htemp_rel_data_nvert->Draw("COLZ");		
       tex->DrawLatex(0.47,0.85,"Data, ");
       tex->DrawLatex(0.54,0.8,legname);		

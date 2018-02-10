@@ -266,7 +266,9 @@ int main(int argc,char *argv[]){
   }
   
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
-  TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/2017PromptReco/Residuals/Run17B_MC16/QCDFlat16.root";
+  TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_noGen_woHOTVR_woXCON_JEC_V4/QCD_noGen_test.root";
+  
   TString outpath_postfix = (dataname_end!="") ? "_" : "";
   outpath_postfix  +=  dataname_end;
   if(outSuf!="") outpath_postfix += "_";
