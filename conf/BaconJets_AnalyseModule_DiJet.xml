@@ -162,7 +162,7 @@
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
       <!-- <Item Name="GenParticleCollection"   Value="GenParticles"/> -->
-      <Item Name="GenParticleCollection"   Value="slimmedJets"/><!-- bullshit for MC with missing GenParticles -->
+<!--      <Item Name="GenParticleCollection"   Value="slimmedJets"/> --> <!-- bullshit for MC with missing GenParticles -->
       <Item Name="ElectronCollection"      Value="slimmedElectronsUSER"/> <!-- change depending on 2016 MC or 17 data!!! -->
       <Item Name="MuonCollection"          Value="slimmedMuonsUSER"/>
       <Item Name="TauCollection"           Value="slimmedTaus"/>
