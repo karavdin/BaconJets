@@ -6,7 +6,7 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_noGen_woHOTVR_woXCON_JEC_V4/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2ResTest">
 
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Fall17_17Nov2017_V4">
@@ -15,7 +15,7 @@
 <!ENTITY Cut_PATH            "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/EtaPhiCut/">
 
 <!ENTITY APPLY_METoverPTcut  "false">  <!--Apply MET Cut-->
-<!ENTITY APPLY_EtaPhi_cut    "true">   <!--Apply Eta Phi cleaning during ECAL problems -->
+<!ENTITY APPLY_EtaPhi_cut    "false">   <!--Apply Eta Phi cleaning during ECAL problems -->
 <!ENTITY APPLY_LUMIWEIGHTS   "false"> 
 <!ENTITY APPLY_UNFLATTENING  "false">
 <!ENTITY TRIGGER_CENTRAL     "true">  <!--Trigger Flag -->
@@ -55,14 +55,14 @@
 <!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunE_17Nov2017.xml">
 
 
-<!ENTITY QCDPt15to7000 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/MC_94X_v1/QCD_Pt-15to7000.xml">
+<!ENTITY QCDPt15to7000 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_9_4_2/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/MC_QCD_Flat2017_pythia8.xml">
 
 ]>
 
 
 <!--
-<ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_QCD_noGen_JEC_V4"/>
+<ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="/nfs/dust/cms/user/karavdia/JERC/workdir_Fall17_17Nov_V4_2/"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -164,13 +164,13 @@
       <!-- <Item Name="GenParticleCollection"   Value="GenParticles"/> -->
       <Item Name="GenParticleCollection"   Value="slimmedJets"/><!-- bullshit for MC with missing GenParticles -->
       <Item Name="ElectronCollection"      Value="slimmedElectronsUSER"/> <!-- change depending on 2016 MC or 17 data!!! -->
-      <Item Name="MuonCollection"          Value="slimmedMuons"/>
+      <Item Name="MuonCollection"          Value="slimmedMuonsUSER"/>
       <Item Name="TauCollection"           Value="slimmedTaus"/>
       <!-- AK4CHS -->
       <Item Name="JetCollection"           Value="slimmedJets"/>
       <Item Name="JetLabel"                Value="AK4CHS"/> 
       <!-- <Item Name="GenJetCollection"        Value="slimmedGenJets"/> -->
-      <Item Name="GenJetCollection"        Value="slimmedJets"/>    <!-- bullshit for MC with missing GenParticles -->
+      <Item Name="GenJetCollection"        Value="slimmedGenJets"/>    <!-- bullshit for MC with missing GenParticles -->
       <!-- <Item Name="METName"                 Value="slMETsCHS"/> -->
       <Item Name="METName"                 Value="slimmedMETs"/>
       
@@ -191,7 +191,8 @@
       <Item Name="lumihists_lumi_per_bin" Value="50."/>
 
 
-      <Item Name="use_sframe_weight" Value="true"/>  <!--false-->
+<!--      <Item Name="use_sframe_weight" Value="true"/> -->  <!--false-->
+      <Item Name="use_sframe_weight" Value="false"/>
 
       <Item Name="trigger40" Value="HLT_DiPFJetAve40_v*"/>
       <Item Name="trigger60" Value="HLT_DiPFJetAve60_v*"/>

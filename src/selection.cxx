@@ -86,56 +86,53 @@ Selection::Selection(uhh2::Context & ctx) :
  } 
  // //DEBUG
  // cout<<"\n!!!!!!!! selection diJetTrg "<<diJetTrg<<endl<<endl;
-
- if(!diJetTrg){
- handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet40" );
- handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet60" );
- handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet80" );
- handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet140" );
- handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet200" );
- handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet260" );
- handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet320" );
- handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
- handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet450" );
- handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
- //dummies
- handle_trigger60_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
- handle_trigger80_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
- handle_trigger100_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
- handle_trigger160_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
- handle_trigger220_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
- handle_trigger300_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
- }
- else{
-   if(central){
-     handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve40" );
-     handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60" );
-     handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80" );
-     handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve140" );
-     handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve200" );
-     handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve260" );
-     handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve320" );
-     handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve400" );
-     handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve500" );
-     //as dummy
-     handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
+bool isMC = (ctx.get("dataset_type") == "MC"); 
+ if (!isMC){
+   if(!diJetTrg){
+     handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet40" );
+     handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet60" );
+     handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet80" );
+     handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet140" );
+     handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet200" );
+     handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet260" );
+     handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet320" );
+     handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
+     handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet450" );
+     handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+     //dummies
+     handle_trigger60_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+     handle_trigger80_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+     handle_trigger100_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+     handle_trigger160_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+     handle_trigger220_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+     handle_trigger300_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
    }
-   if(fwd){
-     handle_trigger60_HF = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60ForHFJEC" );
-     handle_trigger80_HF = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80ForHFJEC" );
-     handle_trigger100_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve100ForHFJEC" );
-     handle_trigger160_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve160ForHFJEC" );     
-     handle_trigger220_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve220ForHFJEC" );
-     handle_trigger300_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve300ForHFJEC" );
-
-
-     
-    bool no_genp = true;
-    if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;
-     
-     
+   else{
+     if(central){
+       handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve40" );
+       handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60" );
+       handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80" );
+       handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve140" );
+       handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve200" );
+       handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve260" );
+       handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve320" );
+       handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve400" );
+       handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve500" );
+       //as dummy
+       handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
+     }
+     if(fwd){
+       handle_trigger60_HF = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60ForHFJEC" );
+       handle_trigger80_HF = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80ForHFJEC" );
+       handle_trigger100_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve100ForHFJEC" );
+       handle_trigger160_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve160ForHFJEC" );     
+       handle_trigger220_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve220ForHFJEC" );
+       handle_trigger300_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve300ForHFJEC" );     
+     }
    }
  }
+ bool no_genp = true;
+ if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;   
 }
 
 void Selection::SetEvent(uhh2::Event& evt)

@@ -509,10 +509,6 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    for(unsigned int i=0; i<JEC_corr.size(); i++) cout << JEC_corr[i] << ", ";
 	    cout << endl;
 	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V3"){
-	    JEC_corr               = JERFiles::Fall17_17Nov2017_V3_L123_AK4PFchs_MC;
-	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V3_L1RC_AK4PFchs_MC;	    
-	  }
 	  else if(JEC_Version == "Fall17_17Nov2017_V4"){
 	    JEC_corr               = JERFiles::Fall17_17Nov2017_V4_L123_AK4PFchs_MC;
 	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V4_L1RC_AK4PFchs_MC;	    
@@ -646,19 +642,6 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V6_H_L123_noRes_AK4PFchs_DATA;
 	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V6_H_L1RC_AK4PFchs_DATA;
 	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V3"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V3_B_L123_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V3_C_L123_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V3_D_L123_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V3_E_L123_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V3_F_L123_AK4PFchs_DATA;
-	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V3_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V3_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V3_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V3_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V3_F_L1RC_AK4PFchs_DATA; 
-	  }	 
 	  else if(JEC_Version == "Fall17_17Nov2017_V4"){
 	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
 	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
@@ -837,11 +820,11 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     
 //JER Smearing for corresponding JEC-Version
       if(isMC){
-	if(JEC_Version == "Summer16_23Sep2016_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", true, JERSmearing::SF_13TeV_2016_03Feb2017)); 
-	else if(JEC_Version == "Summer16_03Feb2017_V3") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", true, JERSmearing::SF_13TeV_2016_03Feb2017)); 
-	else if(JEC_Version == "Summer16_03Feb2017_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", true, JERSmearing::SF_13TeV_2016_03Feb2017));
-	else if(JEC_Version == "Summer16_03Feb2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", true, JERSmearing::SF_13TeV_2016_03Feb2017));
-	else if(JEC_Version == "Summer16_03Feb2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", true, JERSmearing::SF_13TeV_2016_03Feb2017));
+	if(JEC_Version == "Summer16_23Sep2016_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017)); 
+	else if(JEC_Version == "Summer16_03Feb2017_V3") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017)); 
+	else if(JEC_Version == "Summer16_03Feb2017_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
+	else if(JEC_Version == "Summer16_03Feb2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
+	else if(JEC_Version == "Summer16_03Feb2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else cout << "In AnalysisModule_noPtBinning.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
      
