@@ -1387,11 +1387,14 @@ if(debug){
     float gen_weight = 0;
     if(!event.isRealData){
       gen_weight = event.weight;
-      if(!no_genp) gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph
+      //      if(!no_genp) 
+      gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph
     }
     float nvertices = event.pvs->size(); 
     float nPU = 0 ;//todo for data?
-    if(!event.isRealData && !no_genp) nPU = event.genInfo->pileup_TrueNumInteractions();
+    //    if(!event.isRealData && !no_genp) 
+    if(!event.isRealData) 
+      nPU = event.genInfo->pileup_TrueNumInteractions();
 
 
     float genjet1_pt = 0;
@@ -1465,7 +1468,9 @@ if(debug){
     
  //fill the containers
     double pu_pthat = -1;
-    if(!event.isRealData && !no_genp) pu_pthat = event.genInfo->PU_pT_hat_max();
+    //    if(!event.isRealData && !no_genp) pu_pthat = event.genInfo->PU_pT_hat_max();
+    if(!event.isRealData) pu_pthat = event.genInfo->PU_pT_hat_max();
+    if(debug) std::cout<<"pu_pthat = "<<pu_pthat<<" gen_pthat = "<<gen_pthat<<std::endl;
     event.set(tt_matchJetId_0,-10.);
     event.set(tt_matchJetId_1,-10.);
     
@@ -1566,11 +1571,13 @@ if(debug){
     h_lumi_nocuts->fill(event);
 
 //Pu_pt_hat/pt_hat Selection
-    if(!event.isRealData && !no_genp){
+    //  if(!event.isRealData && !no_genp){
+    if(!event.isRealData){
       if(!sel.PUpthat(event)) return false;
     }
-    h_nocuts->fill(event);
-    h_lumi_nocuts->fill(event);
+    if(debug) cout<<"After PUpthat! "<<endl;
+    // h_nocuts->fill(event);
+    // h_lumi_nocuts->fill(event);
 
     //MET/pt - Cut
     if(apply_METoverPt_cut && event.get(tt_MET)/(event.get(tt_jets_pt)+event.get(tt_barreljet_pt)+event.get(tt_probejet_pt))>0.2) return false; //skip events with large MET contribution  

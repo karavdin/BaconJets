@@ -369,7 +369,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
   {
     assert(event);
 
-   if(no_genp) return false;
+    //   if(no_genp) return false;
     
    double  pt_hat = event->genInfo->binningValues()[0];
    double  PU_pt_hat = event->genInfo->PU_pT_hat_max();
