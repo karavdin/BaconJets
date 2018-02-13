@@ -36,17 +36,17 @@ void CorrectionObject::ControlPlots(bool forEverySingleTrigger){
   TString SavePlots = CorrectionObject::_outpath + "plots/control/ControlPlots_" + dirName + "_" + CorrectionObject::_generator_tag;
  CorrectionObject::make_path(std::string((_outpath + "plots/control/").Data()));
 
-  /* ++++++++++++++++ Collect all histograms ++++++++++++++++ */
+ cout<<"++++++++++++++++ Collect all histograms ++++++++++++++++\n";
   TH1F* pt_jet1_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/pt_1");
-  TH1F*pt_jet2_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/pt_2");
-  TH1F*pt_jet3_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/pt_3");
-  TH1F*pt_jet1_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/pt_1");
-  TH1F*pt_jet2_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/pt_2");
-  TH1F*pt_jet3_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/pt_3");
-  TH1F*eta_jet1_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/eta_1");
-  TH1F*eta_jet2_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/eta_2");
-  TH1F*eta_jet1_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/eta_1");
-  TH1F*eta_jet2_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/eta_2");
+  TH1F* pt_jet2_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/pt_2");
+  TH1F* pt_jet3_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/pt_3");
+  TH1F* pt_jet1_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/pt_1");
+  TH1F* pt_jet2_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/pt_2");
+  TH1F* pt_jet3_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/pt_3");
+  TH1F* eta_jet1_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/eta_1");
+  TH1F* eta_jet2_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/eta_2");
+  TH1F* eta_jet1_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/eta_1");
+  TH1F* eta_jet2_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/eta_2");
   TH1F *Njets_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/N_jets");
   TH1F *Njets_MC = (TH1F*)CorrectionObject::_MCFile->Get(dirName+"/N_jets");
   TH1F *pt_ave_DATA = (TH1F*)CorrectionObject::_DATAFile->Get(dirName+"/pt_ave");
@@ -80,7 +80,7 @@ void CorrectionObject::ControlPlots(bool forEverySingleTrigger){
     use_mc=false;
   }
 
-  /* +++++++++++++++++++++ Plot extremely nice histograms ++++++++++++++++++++++++++++ */
+  cout<<"+++++++++++++++++++++ Plot extremely nice histograms ++++++++++++++++++++++++++++\n";
   TCanvas* a = new TCanvas();
   a->Divide(3,2);
 
@@ -321,7 +321,6 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   phi_vs_etaProbe_DATA->SetTitle(DATAtitle);
   phi_vs_etaProbe_DATA->Draw("colz");
   fpeprobe->Print(SavePlots + "_PhiVsEtaProbe.pdf");
-
  
   TCanvas* fpe = new TCanvas();    
   TH2F *phi_vs_eta_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/phi_vs_etaAll");
@@ -329,6 +328,14 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   phi_vs_eta_DATA->Draw("colz");
   fpe->Print(SavePlots + "_PhiVsEtaAll.pdf");
 
+    TCanvas* fpec = new TCanvas();    
+    TH2F *phi_vs_etaC_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/phi_vs_etaAllCut30");
+    if(phi_vs_etaC_DATA!=NULL){
+      phi_vs_etaC_DATA->SetTitle(DATAtitle);
+      phi_vs_etaC_DATA->Draw("colz");
+      fpec->Print(SavePlots + "_PhiVsEtaAllCut30.pdf");
+  }
+  
   TCanvas* g = new TCanvas();
   TH2F *pt_ave_vs_etaProbe_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/pt_ave_vs_etaProbe");
   TH2F *pt_ave_vs_etaProbe_MC = (TH2F*)CorrectionObject::_MCFile->Get(dirName+"/pt_ave_vs_etaProbe");

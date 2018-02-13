@@ -1268,27 +1268,28 @@ if(debug){
 
     double trgHF_thresh[6] = {s_Pt_Ave60HF_cut,s_Pt_Ave80HF_cut,s_Pt_Ave100HF_cut,s_Pt_Ave160HF_cut,s_Pt_Ave220HF_cut,s_Pt_Ave300HF_cut};
 
+    // 2.853
     if(debug) cout<<"before trigger pass checks\n";
     if(event.isRealData){
       float pt_ave_ = pt_ave;
       float probejet_eta = jet1->eta(); 
-      pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);
-      pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2]);
-      pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]&& abs(probejet_eta) < 2.853); 
-      pass_trigger140 = (trigger140_sel->passes(event) && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]&& abs(probejet_eta) < 2.853); 
-      pass_trigger200 = (trigger200_sel->passes(event) && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]&& abs(probejet_eta) < 2.853); 
-      pass_trigger260 = (trigger260_sel->passes(event) && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]&& abs(probejet_eta) < 2.853);
-      pass_trigger320 = (trigger320_sel->passes(event) && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]&& abs(probejet_eta) < 2.853);
-      pass_trigger400 = (trigger400_sel->passes(event) && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]&& abs(probejet_eta) < 2.853);
-      pass_trigger500 = (trigger500_sel->passes(event) && pt_ave>trg_thresh[8]);
+      pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1] < (trigger_fwd ? 2.65 : 100.));
+      pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2] < (trigger_fwd ? 2.65 : 100.));
+      pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]&& abs(probejet_eta) < (trigger_fwd ? 2.65 : 100.)); 
+      pass_trigger140 = (trigger140_sel->passes(event) && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]&& abs(probejet_eta) < (trigger_fwd ? 2.65 : 100.)); 
+      pass_trigger200 = (trigger200_sel->passes(event) && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]&& abs(probejet_eta) < (trigger_fwd ? 2.65 : 100.)); 
+      pass_trigger260 = (trigger260_sel->passes(event) && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]&& abs(probejet_eta) < (trigger_fwd ? 2.65 : 100.));
+      pass_trigger320 = (trigger320_sel->passes(event) && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]&& abs(probejet_eta) < (trigger_fwd ? 2.65 : 100.));
+      pass_trigger400 = (trigger400_sel->passes(event) && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]&& abs(probejet_eta) < (trigger_fwd ? 2.65 : 100.));
+      pass_trigger500 = (trigger500_sel->passes(event) && pt_ave>trg_thresh[8]&& abs(probejet_eta) < (trigger_fwd ? 2.65 : 100.));
       
 //FWD Trigger
-      pass_trigger60_HFJEC = (trigger60_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[0]   && pt_ave<trgHF_thresh[1] && abs(probejet_eta) > 2.853 );
-      pass_trigger80_HFJEC = (trigger80_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[1]   && pt_ave<trgHF_thresh[2] && abs(probejet_eta) > 2.853 );
-      pass_trigger100_HFJEC = (trigger100_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[2] && pt_ave<trgHF_thresh[3] && abs(probejet_eta) > 2.853 );
-      pass_trigger160_HFJEC = (trigger160_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[3] && pt_ave<trgHF_thresh[4] && abs(probejet_eta) > 2.853 );
-      pass_trigger220_HFJEC = (trigger220_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[4] && pt_ave<trgHF_thresh[5] && abs(probejet_eta) > 2.853 );
-      pass_trigger300_HFJEC = (trigger300_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[5] && abs(probejet_eta) > 2.853 );      
+      pass_trigger60_HFJEC = (trigger60_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[0]   && pt_ave<trgHF_thresh[1] && abs(probejet_eta) >  (trigger_central ? 2.65 : 0.) );
+      pass_trigger80_HFJEC = (trigger80_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[1]   && pt_ave<trgHF_thresh[2] && abs(probejet_eta) >  (trigger_central ? 2.65 : 0.) );
+      pass_trigger100_HFJEC = (trigger100_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[2] && pt_ave<trgHF_thresh[3] && abs(probejet_eta) >  (trigger_central ? 2.65 : 0.) );
+      pass_trigger160_HFJEC = (trigger160_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[3] && pt_ave<trgHF_thresh[4] && abs(probejet_eta) >  (trigger_central ? 2.65 : 0.) );
+      pass_trigger220_HFJEC = (trigger220_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[4] && pt_ave<trgHF_thresh[5] && abs(probejet_eta) >  (trigger_central ? 2.65 : 0.) );
+      pass_trigger300_HFJEC = (trigger300_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[5] && abs(probejet_eta) >  (trigger_central ? 2.65 : 0.) );      
 
 
       //cout << "Number of triggers that fired: " << n_trig << endl;
@@ -1296,9 +1297,9 @@ if(debug){
       //HLT Selection
       bool pass_trigger = false;
 
-      if(trigger_central) pass_trigger = (pass_trigger || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500);
+      if(trigger_central && ( abs(probejet_eta) < (trigger_fwd ? 2.65 : 100.))) pass_trigger = (pass_trigger || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500);
 
-      if(trigger_fwd) pass_trigger = (pass_trigger || pass_trigger60_HFJEC || pass_trigger80_HFJEC || pass_trigger100_HFJEC || pass_trigger160_HFJEC || pass_trigger220_HFJEC || pass_trigger300_HFJEC);
+      if(trigger_fwd &&( abs(probejet_eta) >  (trigger_central ? 2.65 : 0.)) ) pass_trigger = (pass_trigger || pass_trigger60_HFJEC || pass_trigger80_HFJEC || pass_trigger100_HFJEC || pass_trigger160_HFJEC || pass_trigger220_HFJEC || pass_trigger300_HFJEC);
   
       if(debug){
 	cout << "before triggers: " << endl;
@@ -1350,15 +1351,27 @@ if(debug){
 //###############################  Declare Probe and Barrel Jet  ################################
 
     if(debug) cout<<"Declare Probe and Barrel Jet\n";
+
+    
     
     Jet* jet_probe = jet1;
     Jet* jet_barrel = jet2;
+    int ran = rand();
+    int numb = ran % 2;
+    if(numb==0){
+	jet_probe = jet2;
+	jet_barrel = jet1;
+    }    
     if ((fabs(jet1->eta())<s_eta_barr)&&(fabs(jet2->eta())<s_eta_barr)) {
-      int ran = rand();
-      int numb = ran % 2;
+      ran = rand();
+      numb = ran % 2;
       if(numb==0){
 	jet_probe = jet2;
 	jet_barrel = jet1;
+      }
+      else{
+	jet_probe = jet1;
+	jet_barrel = jet2;	
       }
     } 
     else if ((fabs(jet1->eta())<s_eta_barr)||(fabs(jet2->eta())<s_eta_barr)){

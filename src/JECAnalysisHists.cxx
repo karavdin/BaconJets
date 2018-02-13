@@ -79,6 +79,8 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     book<TH2D>("phi_vs_etaProbe","#phi vs. #eta probe jet; #eta probe; #phi probe",100,-5,5,100,-M_PI,M_PI);
     book<TH2D>("phi_vs_etaAll","#phi vs. #eta all jet; #eta; #phi",100,-5,5,100,-M_PI,M_PI);
 
+    book<TH2D>("phi_vs_etaAllCut30","#phi vs. #eta all jet, cut at Pt > 30GeV; #eta; #phi",100,-6,6,100,-M_PI,M_PI);   
+
     tt_gen_pthat  = ctx.get_handle<float>("gen_pthat");
     tt_gen_weight = ctx.get_handle<float>("gen_weight");
     tt_jet1_pt = ctx.get_handle<float>("jet1_pt");
@@ -147,6 +149,9 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
     hist("weight_histo")->Fill(weight, 1);
     
     ((TH2D*)hist("phi_vs_etaAll"))->Fill(jets->eta(),jets->phi(),weight);
+
+    if(jets->pt()>30) ((TH2D*)hist("phi_vs_etaAllCut30"))->Fill(jets->eta(),jets->phi(),weight);
+
   }
   
   hist("N_PV")->Fill(ev.get(tt_nvertices), weight);

@@ -101,8 +101,8 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
       //FIXME differentiate between 2016 (5.8 fb^{-1}) and 2017
       else if(_runnr == "C") _lumitag      = "RunC  TODO fb^{-1}";
       else if(_runnr == "D") _lumitag      = "RunD  TODO fb^{-1}";
-      else if(_runnr == "E") _lumitag      = "RunE  4.1 fb^{-1}";
-      else if(_runnr == "F") _lumitag      = "RunF  3.2 fb^{-1}";
+      else if(_runnr == "E") _lumitag      = "RunE  TODO fb^{-1}";
+      else if(_runnr == "F") _lumitag      = "RunF  TODO fb^{-1}";
       else if(_runnr == "G") _lumitag      = "RunG  7.6 fb^{-1}";
       else if(_runnr == "Fearly") _lumitag = "RunFearly  2.7 fb^{-1}";
       else if(_runnr == "EFearly") _lumitag = "RunEFearly  6.8 fb^{-1}";

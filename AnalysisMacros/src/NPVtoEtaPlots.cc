@@ -35,7 +35,7 @@ void CorrectionObject::NPVtoEtaPlots(){
   for(int k=0; k<n_pt-1; k++){
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
       TString name = name1  + pt_name; 
-      hdata[k] = new TH2D(name,"",nResponseBins ,-3.4,-3.4,70, 0, 70);
+      hdata[k] = new TH2D(name,"",nResponseBins ,-3.4,-3.4,70, -0.1, 69.9);
       count++;
     }
 
