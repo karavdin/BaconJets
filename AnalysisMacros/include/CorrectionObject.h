@@ -95,6 +95,7 @@ using namespace std;
     void InputForGlobalFit_eta_0_13();
     void FinalControlPlots();
     void FinalControlPlots_CorrectFormulae(double abs_asymmetry_cut=0.,bool plot_full_A =false, int lumi_bin=-1); //if the double is 0. the cut wont be applied, if the lumi_bin is set on a value <0 no lumi_bin selectin is done
+    void JetEnergyFractions(double abs_asymmetry_cut=0., bool create_dir=true, bool phi_binned=false);
     void FinalControlPlots_CorrectFormulae_eta();
     void CalculateMCWeights();
     void CalculateMCWeights_TriggerThresholds(bool CentralTriggers);

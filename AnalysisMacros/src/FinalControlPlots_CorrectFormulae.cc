@@ -1512,9 +1512,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     h->GetYaxis()->SetRangeUser(0,1.2*maximum3);
     hdata_alpha[i]->SetMarkerColor(kBlack);
     hdata_alpha[i]->SetMarkerStyle(20);
-    hdata_alpha[i]->Draw("SAME P");
+    hdata_alpha[i]->DrawNormalized("SAME P");
     hmc_alpha[i]->SetLineColor(kBlue);
-    hmc_alpha[i]->Draw("HIST SAME");
+    hmc_alpha[i]->DrawNormalized("HIST SAME");
     leg3.AddEntry(hdata_alpha[i], "DATA");
     leg3.AddEntry(hmc_alpha[i], "MC");
     leg3.Draw();

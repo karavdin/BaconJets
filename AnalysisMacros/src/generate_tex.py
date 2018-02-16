@@ -13,7 +13,7 @@ output_name = "controlplots_defaultName.tex"
 if len(sys.argv) > 1:
     output_name = sys.argv[1] + ".tex"
 
-img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DE_Data_woHOTVR_woXCON_JEC_V4_woEPC/RunD_17Nov17_2017"
+img_path_base_2 = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DE_Data_woHOTVR_woXCON_JEC_V4_wCHSMET_nxtProbeJ_noJetID/RunD_17Nov17_2017"
 img_path_base_2 = img_path_base_2 + "/plots/"
 
 if not os.path.isdir(img_path_base_2):
@@ -23,8 +23,9 @@ img_path_base = img_path_base_2 + "control/"
 img_path_base_D = img_path_base
 img_path_baseMain_D = img_path_base_2
 
-img_path_baseMain_E = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DE_Data_woHOTVR_woXCON_JEC_V4_woEPC/RunE_17Nov17_2017/plots/"
+img_path_baseMain_E = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DE_Data_woHOTVR_woXCON_JEC_V4_wCHSMET_nxtProbeJ/RunE_17Nov17_2017/plots/"
 img_path_base_E = img_path_baseMain_E + "control/"
+
 
 img_path_base_fwd_D = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DE_Data_woHOTVR_woXCON_JEC_V4_woEPC_fwdOnly//RunD_17Nov17_2017/plots/control/"
 
@@ -120,6 +121,22 @@ pic_bases = [  # "alpha_pythia8",
     # # "probejet_neutHadEF_MC_pythia8",
     # "probejet_photonEF_DATA_pythia8",
     # # "probejet_photonEF_MC_pythia8",
+]
+
+pic_bases_EF = [
+    "probejet_phi_DATA_pythia8",
+    "probejet_chEmEF_DATA_pythia8",
+    # "probejet_chEmEF_MC_pythia8",
+    "probejet_chHadEF_DATA_pythia8",
+    # "probejet_chHadEF_MC_pythia8",
+    "probejet_muonEF_DATA_pythia8",
+    # "probejet_muonEF_MC_pythia8",
+    "probejet_neutEmEF_DATA_pythia8",
+    # "probejet_neutEmEF_MC_pythia8",
+    "probejet_neutHadEF_DATA_pythia8",
+    # "probejet_neutHadEF_MC_pythia8",
+    "probejet_photonEF_DATA_pythia8",
+    # "probejet_photonEF_MC_pythia8",
 ]
 
 pic_bases_MC = [  # "alpha_pythia8",
@@ -244,8 +261,8 @@ frames_list.append(
 
 # #################### Asymmetry singled out #########################
 
-for i, eta in enumerate(etas[12:14]):
-    i = i + 12
+for i, eta in enumerate(etas[11:15]):
+    i = i + 11
     frames_list.append(
         "\\begin{frame}{Asymmetry Run D, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
     for j, pt in enumerate(pt_str_full[:-1]):
@@ -257,113 +274,6 @@ for i, eta in enumerate(etas[12:14]):
             "_" + pt_str_full[j + 1] + ".pdf}\n"
     frames_list[-1] += "\end{frame}\n\n"
 
-for i, eta in enumerate(etas[12:14]):
-    i = i + 12
-    frames_list.append(
-        "\\begin{frame}{Asymmetry Run D central trigger, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-    for j, pt in enumerate(pt_str_full[:-1]):
-        if j and not j % 5:
-            frames_list[-1] += "\\newline\n\n"
-        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_central_D +\
-            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-            "_" + pt_str_full[j + 1] + ".pdf}\n"
-    frames_list[-1] += "\end{frame}\n\n"
-
-for i, eta in enumerate(etas[12:14]):
-    i = i + 12
-    frames_list.append(
-        "\\begin{frame}{Asymmetry Run D fwd trigger, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-    for j, pt in enumerate(pt_str_full[:-1]):
-        if j and not j % 5:
-            frames_list[-1] += "\\newline\n\n"
-        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_fwd_D +\
-            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-            "_" + pt_str_full[j + 1] + ".pdf}\n"
-    frames_list[-1] += "\end{frame}\n\n"
-
-# for i, eta in enumerate(etas[11:14]):
-#     i = i + 11
-#     frames_list.append(
-#         "\\begin{frame}{Asymmetry Run D 2.65, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-#     for j, pt in enumerate(pt_str_full[:-1]):
-#         if j and not j % 5:
-#             frames_list[-1] += "\\newline\n\n"
-#         frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_test_D +\
-#             "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-#             "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-#             "_" + pt_str_full[j + 1] + ".pdf}\n"
-#     frames_list[-1] += "\end{frame}\n\n"
-
-for i, eta in enumerate(etas[11:14]):
-    i = i + 11
-    frames_list.append(
-        "\\begin{frame}{Asymmetry Run D centr fwd exclusive (2.65), Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-    for j, pt in enumerate(pt_str_full[:-1]):
-        if j and not j % 5:
-            frames_list[-1] += "\\newline\n\n"
-        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_TE_D +\
-            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-            "_" + pt_str_full[j + 1] + ".pdf}\n"
-    frames_list[-1] += "\end{frame}\n\n"
-
-for i, eta in enumerate(etas[11:14]):
-    i = i + 11
-    frames_list.append(
-        "\\begin{frame}{Asymmetry Run D centr fwd excl2 woJetID (2.65), Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-    for j, pt in enumerate(pt_str_full[:-1]):
-        if j and not j % 5:
-            frames_list[-1] += "\\newline\n\n"
-        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_TE2_D +\
-            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-            "_" + pt_str_full[j + 1] + ".pdf}\n"
-    frames_list[-1] += "\end{frame}\n\n"
-
-for i, eta in enumerate(etas[12:14]):
-    i = i + 12
-    frames_list.append(
-        "\\begin{frame}{Asymmetry Run E, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-    for j, pt in enumerate(pt_str_full[:-1]):
-        if j and not j % 5:
-            frames_list[-1] += "\\newline\n\n"
-        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_E +\
-            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-            "_" + pt_str_full[j + 1] + ".pdf}\n"
-    frames_list[-1] += "\end{frame}\n\n"
-
-
-for i, eta in enumerate(etas[12:14]):
-    i = i + 12
-    frames_list.append(
-        "\\begin{frame}{Asymmetry Run E central trigger, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-    for j, pt in enumerate(pt_str_full[:-1]):
-        if j and not j % 5:
-            frames_list[-1] += "\\newline\n\n"
-        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_central_E +\
-            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-            "_" + pt_str_full[j + 1] + ".pdf}\n"
-    frames_list[-1] += "\end{frame}\n\n"
-
-
-for i, eta in enumerate(etas[12:14]):
-    i = i + 12
-    frames_list.append(
-        "\\begin{frame}{Asymmetry Run E fwd trigger, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-    for j, pt in enumerate(pt_str_full[:-1]):
-        if j and not j % 5:
-            frames_list[-1] += "\\newline\n\n"
-        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_fwd_E +\
-            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-            "_" + pt_str_full[j + 1] + ".pdf}\n"
-    frames_list[-1] += "\end{frame}\n\n"
-
-
 ################## phi vs eta ################
 
 frames_list.append("\\begin{frame}{occupancy all jets Run D}\n")
@@ -374,7 +284,8 @@ frames_list[-1] += "\end{frame}\n\n"
 
 frames_list.append(
     "\\begin{frame}{occupancy probe jets Run D}\n")
-frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + img_path_base_D
+frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
+    img_path_base_D
 frames_list[-1] += "ControlPlots_Selection_pythia8_PhiVsEtaProbe.pdf}\n"
 frames_list[-1] += "\end{frame}\n\n"
 
@@ -392,6 +303,22 @@ frames_list[-1] += "\t\includegraphics[width=\\textwidth]{" + \
     img_path_base_E
 frames_list[-1] += "ControlPlots_Selection_pythia8_PhiVsEtaProbe.pdf}\n"
 frames_list[-1] += "\end{frame}\n\n"
+
+
+for i, eta in enumerate(etas[11:16]):
+    i = i + 11
+    frames_list.append(
+        "\\begin{frame}{Run D, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+
+    for j, pic_base in enumerate(pic_bases_EF):
+        if j and not j % 4:
+            frames_list[-1] += "\\newline\n\n"
+        frames_list[-1] += "\t\includegraphics[width=0.20\\textwidth]{" + img_path_baseMain_D + "control/" +\
+            pic_base + "_eta_" + etas_str[i] +\
+            "_" + etas_str[i + 1] + ".pdf}\n"
+
+    frames_list[-1] += "\end{frame}\n\n"
+
 
 ################## NPV vs eta ################
 
@@ -422,7 +349,7 @@ frames_list[-1] += "\end{frame}\n\n"
 
 
 frames_list.append(
-    "\\begin{frame}{L2Res with 2017 Run D}\n")
+    "\\begin{frame}{L2Res with 2017 Run D}\n MPF cant be trusted\n\t\\newline\n")
 for i, spic in enumerate(first_pics):
     if i and not i % 3:
         frames_list[-1] += "\\newline\n\n"
@@ -436,7 +363,49 @@ for i, spic in enumerate(first_pics):
 frames_list[-1] += "\end{frame}\n\n"
 
 frames_list.append(
-    "\\begin{frame}{L2Res with 2017 Run E}\n")
+    "\\begin{frame}{L2Res with 2017 Run D}\n Underlying plots eta 2.6 to 3.5")
+frames_list[-1] += "\end{frame}\n\n"
+
+for i, eta in enumerate(etas[10:15]):
+    i = i + 10
+    frames_list.append(
+        "\\begin{frame}{Asymmetry Run D, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+    for j, pt in enumerate(pt_str_full[:-1]):
+        if j and not j % 5:
+            frames_list[-1] += "\\newline\n\n"
+        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_D +\
+            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+            "_" + pt_str_full[j + 1] + ".pdf}\n"
+    frames_list[-1] += "\end{frame}\n\n"
+
+    frames_list.append(
+        "\\begin{frame}{Run D, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+
+    for j, pic_base in enumerate(pic_bases[:2]):
+        frames_list[-1] += "\t\includegraphics[width=0.25\\textwidth]{" + img_path_baseMain_D + "control/" +\
+            pic_base + "_eta_" + etas_str[i] +\
+            "_" + etas_str[i + 1] + ".pdf}\n"
+
+    frames_list[-1] += "\t Pt: \includegraphics[width=0.25\\textwidth]{" + img_path_baseMain_D +\
+        "kFSR_Pt" + "_eta_" + etas_str[i] +\
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\\newline\n\n"
+
+    frames_list[-1] += "\t\includegraphics[width=0.25\\textwidth]{" + img_path_baseMain_D +\
+        "kFSR_Pt_pythia8" + "_eta_" + etas_str[i] +\
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\t MPF: \includegraphics[width=0.25\\textwidth]{" + img_path_baseMain_D +\
+        "kFSR_MPF" + "_eta_" + etas_str[i] +\
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\t\includegraphics[width=0.25\\textwidth]{" + img_path_baseMain_D +\
+        "kFSR_MPF_pythia8" + "_eta_" + etas_str[i] +\
+        "_" + etas_str[i + 1] + ".pdf}\n"
+    frames_list[-1] += "\end{frame}\n\n"
+
+
+frames_list.append(
+    "\\begin{frame}{L2Res with 2017 Run E}\n without CHS MET!\n\t\\newline\n")
 for i, spic in enumerate(first_pics):
     if i and not i % 3:
         frames_list[-1] += "\\newline\n\n"
@@ -894,80 +863,30 @@ for i, eta in enumerate(etas[:-1]):
 
 # # #################### Asymmetry singled out #########################
 
-# for i, eta in enumerate(etas[:-1]):
-#     frames_list.append(
-#         "\\begin{frame}{Asymmetry Run D, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-#     for j, pt in enumerate(pt_str_full[:-1]):
-#         if j and not j % 5:
-#             frames_list[-1] += "\\newline\n\n"
-#         frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_D +\
-#             "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-#             "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-#             "_" + pt_str_full[j + 1] + ".pdf}\n"
-#     frames_list[-1] += "\end{frame}\n\n"
+for i, eta in enumerate(etas[:-1]):
+    frames_list.append(
+        "\\begin{frame}{Asymmetry Run D, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+    for j, pt in enumerate(pt_str_full[:-1]):
+        if j and not j % 5:
+            frames_list[-1] += "\\newline\n\n"
+        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_D +\
+            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+            "_" + pt_str_full[j + 1] + ".pdf}\n"
+    frames_list[-1] += "\end{frame}\n\n"
 
 
-# for i, eta in enumerate(etas[:-1]):
-#     frames_list.append(
-#         "\\begin{frame}{Asymmetry Run E, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-#     for j, pt in enumerate(pt_str_full[:-1]):
-#         if j and not j % 5:
-#             frames_list[-1] += "\\newline\n\n"
-#         frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_E +\
-#             "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-#             "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-#             "_" + pt_str_full[j + 1] + ".pdf}\n"
-#     frames_list[-1] += "\end{frame}\n\n"
-
-
-# for i, eta in enumerate(etas[:-1]):
-#     frames_list.append(
-#         "\\begin{frame}{Asymmetry Run D central trigger, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-#     for j, pt in enumerate(pt_str_full[:-1]):
-#         if j and not j % 5:
-#             frames_list[-1] += "\\newline\n\n"
-#         frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_central_D +\
-#             "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-#             "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-#             "_" + pt_str_full[j + 1] + ".pdf}\n"
-#     frames_list[-1] += "\end{frame}\n\n"
-
-# for i, eta in enumerate(etas[:-1]):
-#     frames_list.append(
-#         "\\begin{frame}{Asymmetry Run E central trigger, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-#     for j, pt in enumerate(pt_str_full[:-1]):
-#         if j and not j % 5:
-#             frames_list[-1] += "\\newline\n\n"
-#         frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_central_E +\
-#             "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-#             "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-#             "_" + pt_str_full[j + 1] + ".pdf}\n"
-#     frames_list[-1] += "\end{frame}\n\n"
-
-
-# for i, eta in enumerate(etas[:-1]):
-#     frames_list.append(
-#         "\\begin{frame}{Asymmetry Run D fwd trigger, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-#     for j, pt in enumerate(pt_str_full[:-1]):
-#         if j and not j % 5:
-#             frames_list[-1] += "\\newline\n\n"
-#         frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_fwd_D +\
-#             "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-#             "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-#             "_" + pt_str_full[j + 1] + ".pdf}\n"
-#     frames_list[-1] += "\end{frame}\n\n"
-
-# for i, eta in enumerate(etas[:-1]):
-#     frames_list.append(
-#         "\\begin{frame}{Asymmetry Run E fwd trigger, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
-#     for j, pt in enumerate(pt_str_full[:-1]):
-#         if j and not j % 5:
-#             frames_list[-1] += "\\newline\n\n"
-#         frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_fwd_E +\
-#             "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
-#             "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
-#             "_" + pt_str_full[j + 1] + ".pdf}\n"
-#     frames_list[-1] += "\end{frame}\n\n"
+for i, eta in enumerate(etas[:-1]):
+    frames_list.append(
+        "\\begin{frame}{Asymmetry Run E, Eta Bin " + str(eta) + " - " + str(etas[i + 1]) + "}\n")
+    for j, pt in enumerate(pt_str_full[:-1]):
+        if j and not j % 5:
+            frames_list[-1] += "\\newline\n\n"
+        frames_list[-1] += "\t\includegraphics[width=0.19\\textwidth]{" + img_path_base_E +\
+            "fullAsym/A_DATA_pythia8" + "_eta_" + etas_str[i] +\
+            "_" + etas_str[i + 1] + "_pt_" + pt_str_full[j] +\
+            "_" + pt_str_full[j + 1] + ".pdf}\n"
+    frames_list[-1] += "\end{frame}\n\n"
 
 #################### Put everything together #########################
 

@@ -81,10 +81,14 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 
     std::unique_ptr<uhh2::Selection> trigger60_fwd_sel;
     std::unique_ptr<uhh2::Selection> trigger80_fwd_sel;
-    std::unique_ptr<uhh2::Selection> trigger100_fwd_sel;
-    std::unique_ptr<uhh2::Selection> trigger160_fwd_sel;
-    std::unique_ptr<uhh2::Selection> trigger220_fwd_sel;
-    std::unique_ptr<uhh2::Selection> trigger300_fwd_sel; 
+    std::unique_ptr<uhh2::Selection> trigger140_fwd_sel;
+    std::unique_ptr<uhh2::Selection> trigger200_fwd_sel;
+    std::unique_ptr<uhh2::Selection> trigger260_fwd_sel;
+    std::unique_ptr<uhh2::Selection> trigger320_fwd_sel;
+
+    std::unique_ptr<uhh2::Selection> trigger400_fwd_sel;
+    std::unique_ptr<uhh2::Selection> trigger450_fwd_sel;
+    std::unique_ptr<uhh2::Selection> trigger500_fwd_sel;  
 
     std::unique_ptr<uhh2::Selection> triggerDi40_sel;
     std::unique_ptr<uhh2::Selection> triggerDi60_sel;
@@ -169,10 +173,15 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
   
     Event::Handle<int> tt_trigger60_fwd;
     Event::Handle<int> tt_trigger80_fwd;
-    Event::Handle<int> tt_trigger100_fwd;
-    Event::Handle<int> tt_trigger160_fwd;
-    Event::Handle<int> tt_trigger220_fwd;
-    Event::Handle<int> tt_trigger300_fwd;
+    Event::Handle<int> tt_trigger140_fwd;
+    Event::Handle<int> tt_trigger200_fwd;
+    Event::Handle<int> tt_trigger260_fwd;
+    Event::Handle<int> tt_trigger320_fwd;
+
+    Event::Handle<int> tt_trigger400_fwd;
+    Event::Handle<int> tt_trigger450_fwd;
+    Event::Handle<int> tt_trigger500_fwd;
+  
   
     Event::Handle<int> tt_triggerDi40;
     Event::Handle<int> tt_triggerDi60;
@@ -191,16 +200,16 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Event::Handle<int> tt_trigger220_HF;
     Event::Handle<int> tt_trigger300_HF;
   
-   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_triggers[15];
+   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_triggers[18];
   
     std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
   std::unique_ptr<JECAnalysisHists> h_trgSiMu, h_minBias ,h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg450,h_trg500;
-   std::unique_ptr<JECAnalysisHists> h_trgfwd60, h_trgfwd80,h_trgfwd100, h_trgfwd160,h_trgfwd220, h_trgfwd300;   
+   std::unique_ptr<JECAnalysisHists> h_trgfwd60, h_trgfwd80,h_trgfwd140, h_trgfwd200,h_trgfwd260, h_trgfwd320, h_trgfwd400, h_trgfwd450, h_trgfwd500;   
    std::unique_ptr<JECAnalysisHists> h_trgDi40, h_trgDi60, h_trgDi80, h_trgDi140, h_trgDi200,h_trgDi260,h_trgDi320,h_trgDi400,h_trgDi500;
    std::unique_ptr<JECAnalysisHists> h_trgHF60, h_trgHF80,h_trgHF100, h_trgHF160,h_trgHF220, h_trgHF300; 
     std::unique_ptr<LuminosityHists> h_lumi_nocuts, h_lumi_sel, h_lumi_dijet, h_lumi_match, h_lumi_final;    
   std::unique_ptr<LuminosityHists> h_lumi_TrigSiMu, h_lumi_minBias ,h_lumi_Trig40, h_lumi_Trig60, h_lumi_Trig80, h_lumi_Trig140, h_lumi_Trig200, h_lumi_Trig260, h_lumi_Trig320, h_lumi_Trig400,h_lumi_Trig450, h_lumi_Trig500;
-  std::unique_ptr<LuminosityHists> h_lumi_Trigfwd60, h_lumi_Trigfwd80, h_lumi_Trigfwd100, h_lumi_Trigfwd160, h_lumi_Trigfwd220, h_lumi_Trigfwd300;
+  std::unique_ptr<LuminosityHists> h_lumi_Trigfwd60, h_lumi_Trigfwd80, h_lumi_Trigfwd140, h_lumi_Trigfwd200, h_lumi_Trigfwd260, h_lumi_Trigfwd320, h_lumi_Trigfwd400, h_lumi_Trigfwd450, h_lumi_Trigfwd500;
   
   std::unique_ptr<LuminosityHists> h_lumi_TrigDi40, h_lumi_TrigDi60, h_lumi_TrigDi80, h_lumi_TrigDi140, h_lumi_TrigDi200, h_lumi_TrigDi260, h_lumi_TrigDi320, h_lumi_TrigDi400, h_lumi_TrigDi500;
   std::unique_ptr<LuminosityHists> h_lumi_TrigHF60, h_lumi_TrigHF80, h_lumi_TrigHF100, h_lumi_TrigHF160, h_lumi_TrigHF220, h_lumi_TrigHF300;
@@ -297,10 +306,14 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 
     const std::string& trigger60_fwd = ctx.get("trigger60_fwd", "NULL");
     const std::string& trigger80_fwd = ctx.get("trigger80_fwd", "NULL");
-    const std::string& trigger100_fwd = ctx.get("trigger100_fwd", "NULL");
-    const std::string& trigger160_fwd = ctx.get("trigger160_fwd", "NULL");
-    const std::string& trigger220_fwd = ctx.get("trigger220_fwd", "NULL");
-    const std::string& trigger300_fwd = ctx.get("trigger300_fwd", "NULL");
+    const std::string& trigger140_fwd = ctx.get("trigger140_fwd", "NULL");
+    const std::string& trigger200_fwd = ctx.get("trigger200_fwd", "NULL");
+    const std::string& trigger260_fwd = ctx.get("trigger260_fwd", "NULL");
+    const std::string& trigger320_fwd = ctx.get("trigger320_fwd", "NULL");
+    
+    const std::string& trigger400_fwd = ctx.get("trigger400_fwd", "NULL");
+    const std::string& trigger450_fwd = ctx.get("trigger450_fwd", "NULL");
+    const std::string& trigger500_fwd = ctx.get("trigger500_fwd", "NULL");
     
     const std::string& triggerDi40 = ctx.get("triggerDi40", "NULL");
     const std::string& triggerDi60 = ctx.get("triggerDi60", "NULL");
@@ -332,7 +345,20 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
       handle_triggers[7] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
       handle_triggers[8] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet450" );
       handle_triggers[9] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
-      k = 10;      
+      k = 10;
+      if(trigger_fwd){
+	if(trigger_fwd){
+	  handle_triggers[0+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFFwdJet60" );
+	  handle_triggers[1+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFFwdJet80" );
+	  handle_triggers[2+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFFwdJet140" );
+	  handle_triggers[3+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet200" );
+	  handle_triggers[4+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet260" );
+	  handle_triggers[5+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet320");
+	  handle_triggers[5+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet400");
+	  handle_triggers[5+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet450");
+	  handle_triggers[5+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet500");
+	  
+      }
     }
     else{
       if(trigger_central){
@@ -347,14 +373,14 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
 	handle_triggers[8] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve500" );
 	k = 9;
       }
-    }
-    if(trigger_fwd){
+      if(trigger_fwd){
 	handle_triggers[0+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60ForHFJEC" );
 	handle_triggers[1+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80ForHFJEC" );
 	handle_triggers[2+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve100ForHFJEC" );
 	handle_triggers[3+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve160ForHFJEC" );
 	handle_triggers[4+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve220ForHFJEC" );
 	handle_triggers[5+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve300ForHFJEC");
+    }
     }
       
       
@@ -391,14 +417,20 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
       else trigger60_fwd_sel.reset(new uhh2::AndSelection(ctx));
       if(trigger80_fwd != "NULL" and ts) trigger80_fwd_sel.reset(new TriggerSelection(trigger80_fwd));
       else trigger80_fwd_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger100_fwd != "NULL" and ts) trigger100_fwd_sel.reset(new TriggerSelection(trigger100_fwd));
-      else trigger100_fwd_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger160_fwd != "NULL" and ts) trigger160_fwd_sel.reset(new TriggerSelection(trigger160_fwd));
-      else trigger160_fwd_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger220_fwd != "NULL" and ts) trigger220_fwd_sel.reset(new TriggerSelection(trigger220_fwd));
-      else trigger220_fwd_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger300_fwd != "NULL" and ts) trigger300_fwd_sel.reset(new TriggerSelection(trigger300_fwd));
-else trigger300_fwd_sel.reset(new uhh2::AndSelection(ctx));
+      if(trigger140_fwd != "NULL" and ts) trigger140_fwd_sel.reset(new TriggerSelection(trigger140_fwd));
+      else trigger140_fwd_sel.reset(new uhh2::AndSelection(ctx));
+      if(trigger200_fwd != "NULL" and ts) trigger200_fwd_sel.reset(new TriggerSelection(trigger200_fwd));
+      else trigger200_fwd_sel.reset(new uhh2::AndSelection(ctx));
+      if(trigger260_fwd != "NULL" and ts) trigger260_fwd_sel.reset(new TriggerSelection(trigger260_fwd));
+      else trigger260_fwd_sel.reset(new uhh2::AndSelection(ctx));
+      if(trigger320_fwd != "NULL" and ts) trigger320_fwd_sel.reset(new TriggerSelection(trigger320_fwd));
+else trigger320_fwd_sel.reset(new uhh2::AndSelection(ctx));
+      if(trigger400_fwd != "NULL" and ts) trigger400_fwd_sel.reset(new TriggerSelection(trigger400_fwd));
+else trigger400_fwd_sel.reset(new uhh2::AndSelection(ctx));
+      if(trigger450_fwd != "NULL" and ts) trigger450_fwd_sel.reset(new TriggerSelection(trigger450_fwd));
+else trigger450_fwd_sel.reset(new uhh2::AndSelection(ctx));
+      if(trigger500_fwd != "NULL" and ts) trigger500_fwd_sel.reset(new TriggerSelection(trigger500_fwd));
+else trigger500_fwd_sel.reset(new uhh2::AndSelection(ctx));
       
           
       if(triggerDi40 != "NULL" and not ts) triggerDi40_sel.reset(new TriggerSelection(triggerDi40));
@@ -435,7 +467,8 @@ else trigger300_fwd_sel.reset(new uhh2::AndSelection(ctx));
 else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       
     }
-
+    }
+    
     //new
     jetLabel = ctx.get("JetLabel");
     dataset_version = ctx.get("dataset_version");
@@ -653,7 +686,10 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V4_C_L1RC_AK4PFchs_DATA;
 	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V4_D_L1RC_AK4PFchs_DATA;
 	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA;
+
+	    if(debug) cout<<"set JEC cor to Fall17_17Nov2017_V4 values\n";
+	    
 	  }	 
 	  else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
@@ -730,11 +766,26 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V6_H_L1RC_AK4PFchs_DATA;
 	    cout << "JEC for DATA: Summer16_03Feb2017_V6_BCD/EFearly/FlateG/H_L123_AK4PFchs_DATA;" << endl;
 	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V4"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V4_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V4_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V4_F_L123_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V4_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V4_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V4_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
+	  }
 
 	 else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }
     }
+
+    if(debug) cout<<"after JEC cor selection without closure test\n";
       
       //Only for closure test
       if(ClosureTest){
@@ -827,7 +878,10 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	else if(JEC_Version == "Summer16_03Feb2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else cout << "In AnalysisModule_noPtBinning.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
-     
+
+
+      if(debug) cout<<"before output declarations\n";
+      
     //output
     ctx.undeclare_all_event_output();   
     // //pileup (define it after undeclaring all other variables to keep the weights in the output)
@@ -916,10 +970,14 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     
     tt_trigger60_fwd = ctx.declare_event_output<int>("trigger60_fwd");
     tt_trigger80_fwd = ctx.declare_event_output<int>("trigger80_fwd");
-    tt_trigger100_fwd = ctx.declare_event_output<int>("trigger100_fwd");
-    tt_trigger160_fwd = ctx.declare_event_output<int>("trigger160_fwd");
-    tt_trigger220_fwd = ctx.declare_event_output<int>("trigger220_fwd");
-    tt_trigger300_fwd = ctx.declare_event_output<int>("trigger300_fwd");    
+    tt_trigger140_fwd = ctx.declare_event_output<int>("trigger140_fwd");
+    tt_trigger200_fwd = ctx.declare_event_output<int>("trigger200_fwd");
+    tt_trigger260_fwd = ctx.declare_event_output<int>("trigger260_fwd");
+    tt_trigger320_fwd = ctx.declare_event_output<int>("trigger320_fwd");
+    tt_trigger400_fwd = ctx.declare_event_output<int>("trigger400_fwd");
+    tt_trigger450_fwd = ctx.declare_event_output<int>("trigger450_fwd");
+    tt_trigger500_fwd = ctx.declare_event_output<int>("trigger500_fwd");
+    
 
     tt_triggerDi40 = ctx.declare_event_output<int>("triggerDi40");
     tt_triggerDi60 = ctx.declare_event_output<int>("triggerDi60");
@@ -941,6 +999,8 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     tt_dR_jet3_barreljet = ctx.declare_event_output<float>("dR_jet3_barreljet");
     tt_dR_jet3_probejet = ctx.declare_event_output<float>("dR_jet3_probejet");
 
+    if(debug) cout<<"after declarations before resets\n";
+    
     h_runnr_input.reset(new JECRunnumberHists(ctx,"Runnr_input"));
     h_input.reset(new JECCrossCheckHists(ctx,"CrossCheck_input"));
     h_lumisel.reset(new JECCrossCheckHists(ctx,"CrossCheck_lumisel"));
@@ -959,18 +1019,17 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_afterLumiReweight.reset(new JECCrossCheckHists(ctx,"CrossCheck_afterLumiReweight"));
     h_afterUnflat.reset(new JECCrossCheckHists(ctx,"CrossCheck_afterUnflat"));
     h_afternVts.reset(new JECCrossCheckHists(ctx,"CrossCheck_afternVts"));
-    h_nocuts.reset(new JECAnalysisHists(ctx,"NoCuts"));
+    // h_nocuts.reset(new JECAnalysisHists(ctx,"NoCuts"));
     h_dijet.reset(new JECAnalysisHists(ctx,"diJet"));
     h_match.reset(new JECAnalysisHists(ctx,"JetMatching"));
     h_sel.reset(new JECAnalysisHists(ctx,"Selection"));
     h_final.reset(new JECAnalysisHists(ctx,"Final"));
-   
+
     //Single Jet Trigger Studies
     
     h_trgSiMu.reset(new JECAnalysisHists(ctx,ctx.get("triggerSiMu_DirName", "NULL")));
     
     h_minBias.reset(new JECAnalysisHists(ctx,"HLT_minBias"));
-    
     h_trg40.reset(new JECAnalysisHists(ctx,"HLT_PFJet40"));
     h_trg60.reset(new JECAnalysisHists(ctx,"HLT_PFJet60"));
     h_trg80.reset(new JECAnalysisHists(ctx,"HLT_PFJet80"));
@@ -981,13 +1040,15 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_trg400.reset(new JECAnalysisHists(ctx,"HLT_PFJet400"));
     h_trg450.reset(new JECAnalysisHists(ctx,"HLT_PFJet450"));
     h_trg500.reset(new JECAnalysisHists(ctx,"HLT_PFJet500"));
-    
     h_trgfwd60.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet60"));
     h_trgfwd80.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet80"));
-    h_trgfwd100.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet100"));
-    h_trgfwd160.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet160"));
-    h_trgfwd220.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet220"));
-    h_trgfwd300.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet300"));
+    h_trgfwd140.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet140"));
+    h_trgfwd200.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet200"));
+    h_trgfwd260.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet260"));
+    h_trgfwd320.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet320"));
+    h_trgfwd400.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet400"));
+    h_trgfwd450.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet450"));
+    h_trgfwd500.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet500"));
     
     h_trgDi40.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve40"));   
     h_trgDi60.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve60"));
@@ -998,14 +1059,12 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_trgDi320.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve320"));
     h_trgDi400.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve400"));
     h_trgDi500.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve500"));
-    
     h_trgHF60.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve60ForHFJEC"));
     h_trgHF80.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve80ForHFJEC"));
     h_trgHF100.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve100ForHFJEC"));
     h_trgHF160.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve160ForHFJEC"));
     h_trgHF220.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve220ForHFJEC"));
     h_trgHF300.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve300ForHFJEC"));
-
     h_lumi_nocuts.reset(new LuminosityHists(ctx,"Lumi_noCuts"));  
     h_lumi_sel.reset(new LuminosityHists(ctx,"Lumi_Selection"));
     h_lumi_dijet.reset(new LuminosityHists(ctx,"Lumi_diJet"));
@@ -1013,7 +1072,6 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_lumi_final.reset(new LuminosityHists(ctx,"Lumi_Final"));
 
     h_lumi_TrigSiMu.reset(new LuminosityHists(ctx,"Lumi_TrigSiMu"));   
-
     h_lumi_Trig40.reset(new LuminosityHists(ctx,"Lumi_minBias"));      
     h_lumi_Trig40.reset(new LuminosityHists(ctx,"Lumi_Trig40"));  
     h_lumi_Trig60.reset(new LuminosityHists(ctx,"Lumi_Trig60")); 
@@ -1025,7 +1083,6 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_lumi_Trig400.reset(new LuminosityHists(ctx,"Lumi_Trig400")); 
     h_lumi_Trig450.reset(new LuminosityHists(ctx,"Lumi_Trig450"));
     h_lumi_Trig500.reset(new LuminosityHists(ctx,"Lumi_Trig500"));
-
     h_lumi_TrigDi40.reset(new LuminosityHists(ctx,"Lumi_TrigDi40"));  
     h_lumi_TrigDi60.reset(new LuminosityHists(ctx,"Lumi_TrigDi60")); 
     h_lumi_TrigDi80.reset(new LuminosityHists(ctx,"Lumi_TrigDi80")); 
@@ -1042,11 +1099,12 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_lumi_TrigHF160.reset(new LuminosityHists(ctx,"Lumi_TrigHF160")); 
     h_lumi_TrigHF220.reset(new LuminosityHists(ctx,"Lumi_TrigHF220")); 
     h_lumi_TrigHF300.reset(new LuminosityHists(ctx,"Lumi_TrigHF300"));
-
     h_monitoring_final.reset(new LumiHists(ctx, "Monitoring_Final"));
 
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
+
+    if(debug) cout<<"after resets\n";
     
     n_evt = 0;
     TString name_weights = ctx.get("MC_Weights_Path");
@@ -1132,11 +1190,11 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     //LEPTON selection
     muoSR_cleaner->process(event);
     sort_by_pt<Muon>(*event.muons); 
-    if(debug) std::cout<<"#muons = "<<event.muons->size()<<std::endl;
+    // if(debug) std::cout<<"#muons = "<<event.muons->size()<<std::endl;
 
     eleSR_cleaner->process(event);
     sort_by_pt<Electron>(*event.electrons);
-    if(debug)  std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
+    // if(debug)  std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
 
     if(!trigger_singlemuon)  if (event.electrons->size()>0 || event.muons->size()>0) return false; //TEST lepton cleaning, no lepton cleaning for the muon trigger x-check 
 
@@ -1318,7 +1376,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 
 
     Jet* jet1 = &event.jets->at(0);// leading jet
-    
+    Jet* jet2 = &event.jets->at(1);// sub-leading jet
 ////###############################################  Trigger  ##################################
  
     int triggerSiMu  = 0;
@@ -1337,10 +1395,14 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 
     int trigger60_fwd_  = 0;
     int trigger80_fwd_  = 0;
-    int trigger100_fwd_ = 0;
-    int trigger160_fwd_ = 0;
-    int trigger220_fwd_ = 0;
-    int trigger300_fwd_ = 0;    
+    int trigger140_fwd_ = 0;
+    int trigger200_fwd_ = 0;
+    int trigger260_fwd_ = 0;
+    int trigger320_fwd_ = 0;
+    int trigger400_fwd_ = 0;
+    int trigger450_fwd_ = 0;
+    int trigger500_fwd_ = 0;
+    
     
     int triggerDi40  = 0;
     int triggerDi60  = 0;
@@ -1366,8 +1428,11 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     bool pass_trigger320=false; bool pass_trigger400=false; bool pass_trigger450=false;  bool pass_trigger500=false;
     
     bool pass_trigger60_fwd=false; bool pass_trigger80_fwd=false;
-    bool pass_trigger100_fwd=false; bool pass_trigger160_fwd=false;
-    bool pass_trigger220_fwd=false; bool pass_trigger300_fwd=false;
+    bool pass_trigger140_fwd=false; bool pass_trigger200_fwd=false;
+    bool pass_trigger260_fwd=false; bool pass_trigger320_fwd=false;
+    bool pass_trigger400_fwd=false; bool pass_trigger450_fwd=false;
+    bool pass_trigger500_fwd=false;
+     
     
     bool pass_triggerDi40=false; bool pass_triggerDi60=false; bool pass_triggerDi80=false;
     bool pass_triggerDi140=false; bool pass_triggerDi200=false; bool pass_triggerDi260=false;
@@ -1377,8 +1442,40 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     bool pass_trigger100_HFJEC=false; bool pass_trigger160_HFJEC=false;
     bool pass_trigger220_HFJEC=false; bool pass_trigger300_HFJEC=false;
 
+    Jet* jet_probe = jet1;
+    Jet* jet_barrel = jet2;
+    int ran = rand();
+    int numb = ran % 2;
+    if(numb==0){
+	jet_probe = jet2;
+	jet_barrel = jet1;
+    }    
+    if ((fabs(jet1->eta())<s_eta_barr)&&(fabs(jet2->eta())<s_eta_barr)) {
+      ran = rand();
+      numb = ran % 2;
+      if(numb==0){
+	jet_probe = jet2;
+	jet_barrel = jet1;
+      }
+      else{
+	jet_probe = jet1;
+	jet_barrel = jet2;	
+      }
+    } 
+    else if ((fabs(jet1->eta())<s_eta_barr)||(fabs(jet2->eta())<s_eta_barr)){
+      if(fabs(jet1->eta())<s_eta_barr){
+	jet_probe = jet2;
+	jet_barrel = jet1;
+      }
+      else{
+	jet_probe = jet1;
+	jet_barrel = jet2;
+      }
+    }
+    
+
     if(event.isRealData){
-      float probejet_eta = jet1->eta(); 
+      float probejet_eta = jet_probe->eta(); 
       // cout << " =================== " << endl;
       // cout << "Available triggers: " << endl;
       // for(const auto & tname : event.get_current_triggernames()){
@@ -1392,24 +1489,27 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       pass_minBias = (minBias_sel->passes(event));
 
       if(ts){
-	pass_trigger40 = (trigger40_sel->passes(event)  );
-	pass_trigger60 = (trigger60_sel->passes(event)   );
-	pass_trigger80 = (trigger80_sel->passes(event)   && abs(probejet_eta) < 2.853 );
-	pass_trigger140 = (trigger140_sel->passes(event) && abs(probejet_eta) < 2.853 ); 
-	pass_trigger200 = (trigger200_sel->passes(event) && abs(probejet_eta) < 2.853 ); 
-	pass_trigger260 = (trigger260_sel->passes(event) && abs(probejet_eta) < 2.853 ); 
-	pass_trigger320 = (trigger320_sel->passes(event) && abs(probejet_eta) < 2.853 ); 
-	pass_trigger400 = (trigger400_sel->passes(event) && abs(probejet_eta) < 2.853 ); 
-	pass_trigger450 = (trigger450_sel->passes(event) && abs(probejet_eta) < 2.853 );
-	pass_trigger500 = (trigger500_sel->passes(event) && abs(probejet_eta) < 2.853 );
+	pass_trigger40 = (trigger40_sel->passes(event)  && (abs(probejet_eta) < 2.65) );
+	pass_trigger60 = (trigger60_sel->passes(event)  && (abs(probejet_eta) < 2.65)  );
+	pass_trigger80 = (trigger80_sel->passes(event)   && (abs(probejet_eta) < 2.65) );
+	pass_trigger140 = (trigger140_sel->passes(event) && (abs(probejet_eta) < 2.65) ); 
+	pass_trigger200 = (trigger200_sel->passes(event) && (abs(probejet_eta) < 2.65) ); 
+	pass_trigger260 = (trigger260_sel->passes(event) && (abs(probejet_eta) < 2.65) ); 
+	pass_trigger320 = (trigger320_sel->passes(event) && (abs(probejet_eta) < 2.65) ); 
+	pass_trigger400 = (trigger400_sel->passes(event) && (abs(probejet_eta) < 2.65) ); 
+	pass_trigger450 = (trigger450_sel->passes(event) && (abs(probejet_eta) < 2.65) );
+	pass_trigger500 = (trigger500_sel->passes(event) && (abs(probejet_eta) < 2.65) );
 
 	if(trigger_fwd){
-	  pass_trigger60_fwd = (trigger60_fwd_sel->passes(event)  && abs(probejet_eta) > 2.853 );
-	  pass_trigger80_fwd = (trigger80_fwd_sel->passes(event)  && abs(probejet_eta) > 2.853 );
-	  pass_trigger100_fwd = (trigger100_fwd_sel->passes(event)&& abs(probejet_eta) > 2.853 );
-	  pass_trigger160_fwd = (trigger160_fwd_sel->passes(event)&& abs(probejet_eta) > 2.853 );
-	  pass_trigger220_fwd = (trigger220_fwd_sel->passes(event)&& abs(probejet_eta) > 2.853 );
-	  pass_trigger300_fwd = (trigger300_fwd_sel->passes(event)&& abs(probejet_eta) > 2.853 );
+	  pass_trigger60_fwd = (trigger60_fwd_sel->passes(event)  && (abs(probejet_eta) > 2.65) );
+	  pass_trigger80_fwd = (trigger80_fwd_sel->passes(event)  && (abs(probejet_eta) > 2.65) );
+	  pass_trigger140_fwd = (trigger140_fwd_sel->passes(event)&& (abs(probejet_eta) > 2.65) );
+	  pass_trigger200_fwd = (trigger200_fwd_sel->passes(event)&& (abs(probejet_eta) > 2.65) );
+	  pass_trigger260_fwd = (trigger260_fwd_sel->passes(event)&& (abs(probejet_eta) > 2.65) );
+	  pass_trigger320_fwd = (trigger320_fwd_sel->passes(event)&& (abs(probejet_eta) > 2.65) );
+	  pass_trigger400_fwd = (trigger400_fwd_sel->passes(event)&& (abs(probejet_eta) > 2.65) );
+	  pass_trigger450_fwd = (trigger450_fwd_sel->passes(event)&& (abs(probejet_eta) > 2.65) );
+	  pass_trigger500_fwd = (trigger500_fwd_sel->passes(event)&& (abs(probejet_eta) > 2.65) );
 	}
 	
       }
@@ -1417,21 +1517,21 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	if(trigger_central){
 	  pass_triggerDi40 = (triggerDi40_sel->passes(event)  );
 	  pass_triggerDi60 = (triggerDi60_sel->passes(event) ) ;
-	  pass_triggerDi80 = (triggerDi80_sel->passes(event)   && abs(probejet_eta) < 2.853);
-	  pass_triggerDi140 = (triggerDi140_sel->passes(event) && abs(probejet_eta) < 2.853); 
-	  pass_triggerDi200 = (triggerDi200_sel->passes(event) && abs(probejet_eta) < 2.853); 
-	  pass_triggerDi260 = (triggerDi260_sel->passes(event) && abs(probejet_eta) < 2.853); 
-	  pass_triggerDi320 = (triggerDi320_sel->passes(event) && abs(probejet_eta) < 2.853); 
-	  pass_triggerDi400 = (triggerDi400_sel->passes(event) && abs(probejet_eta) < 2.853); 
-	  pass_triggerDi500 = (triggerDi500_sel->passes(event) && abs(probejet_eta) < 2.853);
+	  pass_triggerDi80 = (triggerDi80_sel->passes(event)   && (abs(probejet_eta) < 2.65));
+	  pass_triggerDi140 = (triggerDi140_sel->passes(event) && (abs(probejet_eta) < 2.65)); 
+	  pass_triggerDi200 = (triggerDi200_sel->passes(event) && (abs(probejet_eta) < 2.65)); 
+	  pass_triggerDi260 = (triggerDi260_sel->passes(event) && (abs(probejet_eta) < 2.65)); 
+	  pass_triggerDi320 = (triggerDi320_sel->passes(event) && (abs(probejet_eta) < 2.65)); 
+	  pass_triggerDi400 = (triggerDi400_sel->passes(event) && (abs(probejet_eta) < 2.65)); 
+	  pass_triggerDi500 = (triggerDi500_sel->passes(event) && (abs(probejet_eta) < 2.65));
 	}
 	if(trigger_fwd){
-	  pass_trigger60_HFJEC = (trigger60_HFJEC_sel->passes(event)  && abs(probejet_eta) > 2.853);
-	  pass_trigger80_HFJEC = (trigger80_HFJEC_sel->passes(event)  && abs(probejet_eta) > 2.853);
-	  pass_trigger100_HFJEC = (trigger100_HFJEC_sel->passes(event)&& abs(probejet_eta) > 2.853);
-	  pass_trigger160_HFJEC = (trigger160_HFJEC_sel->passes(event)&& abs(probejet_eta) > 2.853);
-	  pass_trigger220_HFJEC = (trigger220_HFJEC_sel->passes(event)&& abs(probejet_eta) > 2.853);
-	  pass_trigger300_HFJEC = (trigger300_HFJEC_sel->passes(event)&& abs(probejet_eta) > 2.853);
+	  pass_trigger60_HFJEC = (trigger60_HFJEC_sel->passes(event)  && (abs(probejet_eta) > 2.65));
+	  pass_trigger80_HFJEC = (trigger80_HFJEC_sel->passes(event)  && (abs(probejet_eta) > 2.65));
+	  pass_trigger100_HFJEC = (trigger100_HFJEC_sel->passes(event)&& (abs(probejet_eta) > 2.65));
+	  pass_trigger160_HFJEC = (trigger160_HFJEC_sel->passes(event)&& (abs(probejet_eta) > 2.65));
+	  pass_trigger220_HFJEC = (trigger220_HFJEC_sel->passes(event)&& (abs(probejet_eta) > 2.65));
+	  pass_trigger300_HFJEC = (trigger300_HFJEC_sel->passes(event)&& (abs(probejet_eta) > 2.65));
 	}
       }
 
@@ -1454,10 +1554,13 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 
       if(pass_trigger60_fwd){ n_trig++; trigger60_fwd_ = 1;}
       if(pass_trigger80_fwd){ n_trig++; trigger80_fwd_ = 1;}
-      if(pass_trigger100_fwd){ n_trig++; trigger100_fwd_ = 1;}
-      if(pass_trigger160_fwd){ n_trig++; trigger160_fwd_ = 1;}
-      if(pass_trigger220_fwd){ n_trig++; trigger220_fwd_ = 1;}
-      if(pass_trigger300_fwd){ n_trig++; trigger300_fwd_ = 1;}
+      if(pass_trigger140_fwd){ n_trig++; trigger140_fwd_ = 1;}
+      if(pass_trigger200_fwd){ n_trig++; trigger200_fwd_ = 1;}
+      if(pass_trigger260_fwd){ n_trig++; trigger260_fwd_ = 1;}
+      if(pass_trigger320_fwd){ n_trig++; trigger320_fwd_ = 1;}
+      if(pass_trigger400_fwd){ n_trig++; trigger400_fwd_ = 1;}
+      if(pass_trigger450_fwd){ n_trig++; trigger450_fwd_ = 1;}
+      if(pass_trigger500_fwd){ n_trig++; trigger500_fwd_ = 1;}
       
       if(pass_triggerDi40){ n_trig++; triggerDi40 = 1;}
       if(pass_triggerDi60){ n_trig++; triggerDi60 = 1;}
@@ -1484,7 +1587,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       }
       else{
 	bool pass_sng_trg = pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
-	bool pass_si_trg_fwd =  pass_trigger60_fwd || pass_trigger80_fwd || pass_trigger100_fwd || pass_trigger160_fwd || pass_trigger220_fwd || pass_trigger300_fwd;	
+	bool pass_si_trg_fwd =  pass_trigger60_fwd || pass_trigger80_fwd || pass_trigger140_fwd || pass_trigger200_fwd || pass_trigger260_fwd || pass_trigger320_fwd || pass_trigger400_fwd || pass_trigger450_fwd || pass_trigger500_fwd;	
 	bool pass_di_trg_center = pass_minBias || pass_triggerDi40 || pass_triggerDi60 || pass_triggerDi80 || pass_triggerDi140 || pass_triggerDi200  || pass_triggerDi260 || pass_triggerDi320 || pass_triggerDi400 ||  pass_triggerDi500;
 	bool pass_di_trg_HF =  pass_trigger60_HFJEC || pass_trigger80_HFJEC || pass_trigger100_HFJEC || pass_trigger160_HFJEC || pass_trigger220_HFJEC || pass_trigger300_HFJEC;
 
@@ -1548,8 +1651,8 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       
       bool passes_Si[10] = {pass_trigger40,pass_trigger60,pass_trigger80,pass_trigger140,pass_trigger200,pass_trigger260,pass_trigger320,pass_trigger400,pass_trigger450,pass_trigger500};
       
-      bool passes_Si_fwd[6] = {pass_trigger60_fwd , pass_trigger80_fwd , pass_trigger100_fwd , pass_trigger160_fwd , pass_trigger220_fwd , pass_trigger300_fwd};
-      bool passes_Si_plusfwd[16] = {pass_trigger40,pass_trigger60,pass_trigger80,pass_trigger140,pass_trigger200,pass_trigger260,pass_trigger320,pass_trigger400,pass_trigger450, pass_trigger500,pass_trigger60_fwd , pass_trigger80_fwd , pass_trigger100_fwd , pass_trigger160_fwd , pass_trigger220_fwd , pass_trigger300_fwd};
+      bool passes_Si_fwd[9] = {pass_trigger60_fwd , pass_trigger80_fwd , pass_trigger140_fwd , pass_trigger200_fwd , pass_trigger260_fwd , pass_trigger320_fwd , pass_trigger400_fwd , pass_trigger450_fwd , pass_trigger500_fwd};
+      bool passes_Si_plusfwd[19] = {pass_trigger40,pass_trigger60,pass_trigger80,pass_trigger140,pass_trigger200,pass_trigger260,pass_trigger320,pass_trigger400,pass_trigger450, pass_trigger500,pass_trigger60_fwd , pass_trigger80_fwd , pass_trigger140_fwd , pass_trigger200_fwd , pass_trigger260_fwd , pass_trigger320_fwd , pass_trigger400_fwd , pass_trigger450_fwd , pass_trigger500_fwd};
       
       bool passes_Di[9] = {pass_triggerDi40,pass_triggerDi60,pass_triggerDi80,pass_triggerDi140,pass_triggerDi200,pass_triggerDi260,pass_triggerDi320,pass_triggerDi400,pass_triggerDi500};
       bool passes_Di_HF[6] = {pass_trigger60_HFJEC , pass_trigger80_HFJEC , pass_trigger100_HFJEC , pass_trigger160_HFJEC , pass_trigger220_HFJEC , pass_trigger300_HFJEC};
@@ -1557,6 +1660,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       int n_trg = ts ? 10 : 0;
       if(!ts && trigger_central) n_trg += 9;
       if(trigger_fwd) n_trg += 6;
+      if(trigger_fwd && ts) n_trg += 3;
 
       if(debug) cout<<"before the trigger check loop"<<endl;
       
@@ -1569,8 +1673,10 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	else if(!trigger_central && trigger_fwd && !ts) i_passed = passes_Di_HF[i];
 	else if(trigger_central && trigger_fwd && !ts) i_passed = passes_Di_plusHF[i];
 	if(debug) cout<<" "<<i_passed<<endl;
+	bool fwd = false;	
 	if(i_passed){
-	  if(do_tojm){
+	  if(do_tojm){ //TODO at the moment no jet matching for ts fwd
+	    if(debug) cout<<"in jet matching"<<endl;	    
 	    jetid_0_last = jetid_0;
 	    jetid_1_last = jetid_1;
 	    jetid_2_last = jetid_2;
@@ -1578,9 +1684,9 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    jet_1_pt_on_last = jet_1_pt_on;
 	    
 	    int trg_val = 0;
-	    bool fwd = false;
 	    if(ts && !trigger_fwd) trg_val=trg_vals_Si[i];
 	    else if(ts && trigger_fwd){
+	      if(debug) cout<<"ts and trg fwd"<<endl;	      
 	      trg_val=trg_vals_Si_plusfwd[i];
 	      fwd=i>9;
 	    }	    
@@ -1593,9 +1699,10 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	      trg_val = trg_vals_Di_plusHF[i];
 	      fwd=i>8;
 	    }
-	    
-	    jetid_0 = sel.FindMatchingJet(0,trg_val,fwd);
-	    jetid_1 = sel.FindMatchingJet(1,trg_val,fwd);
+	    if(debug) cout<<"before FindMatchingJet\n";
+	    if(!(ts&&fwd)){ //TODO at the moment no jet matching for ts fwd
+	      jetid_0 = sel.FindMatchingJet(0,trg_val,fwd);
+	      jetid_1 = sel.FindMatchingJet(1,trg_val,fwd);}
 	  }
 	  if(debug) cout<<"after FindMatchingJet\n";
 	  
@@ -1608,7 +1715,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 
 	  if(debug) cout<<"after get(handle_triggers[i] 1)\n";	  
 
-	  if(do_tojm){
+	  if(do_tojm && !(ts&&fwd) ){ //TODO at the moment no jet matching for ts fwd
 	    if(jetid_0_last != -10 || jetid_1_last!= -10){
 	      if(jetid_0 != jetid_0_last || jetid_1 != jetid_1_last){
 		cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<jetid_0<<" instead of "<<jetid_0_last<<", jet id 1 was matched to "<<jetid_1<<" instead of "<<jetid_1_last<<endl;
@@ -1661,8 +1768,6 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     if(jetid_1>=jet_n) throw invalid_argument("matched id of jet 1 is not in jet vector");   
     
  //Calculate pt_ave
-   jet1 = &event.jets->at(jetid_0);// leading jet
-   Jet* jet2 = &event.jets->at(jetid_1);// sub-leading jet
    float jet1_pt = jet1->pt(); float jet2_pt = jet2->pt();
    float pt_ave = (jet1_pt + jet2_pt)/2.;
 
@@ -1690,31 +1795,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
      if(dR>0.4) return false;
    }
    
-//###############################  Declare Probe and Barrel Jet  ###############################
 
-    Jet* jet_probe = jet1; Jet* jet_barrel = jet2;
-    if ((fabs(jet1->eta())<s_eta_barr)&&(fabs(jet2->eta())<s_eta_barr)) {
-      int ran = rand();
-      int numb = ran % 2 + 1;
-      if(numb==1){
-	jet_probe = jet2;
-	jet_barrel = jet1;
-      }
-      if(numb==2){
-	jet_probe = jet1;
-	jet_barrel = jet2;
-      }
-    } 
-    else if ((fabs(jet1->eta())<s_eta_barr)||(fabs(jet2->eta())<s_eta_barr)){
-      if(fabs(jet1->eta())<s_eta_barr){
-	jet_probe = jet2;
-	jet_barrel = jet1;
-      }
-      else{
-	jet_probe = jet1;
-	jet_barrel = jet2;
-      }
-    }
     
 //##############################################################################################
 
@@ -1863,10 +1944,13 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 
     event.set(tt_trigger60_fwd, trigger60_fwd_);
     event.set(tt_trigger80_fwd, trigger80_fwd_);
-    event.set(tt_trigger100_fwd, trigger100_fwd_);
-    event.set(tt_trigger160_fwd, trigger160_fwd_);
-    event.set(tt_trigger220_fwd, trigger220_fwd_);
-    event.set(tt_trigger300_fwd, trigger300_fwd_);
+    event.set(tt_trigger140_fwd, trigger140_fwd_);
+    event.set(tt_trigger200_fwd, trigger200_fwd_);
+    event.set(tt_trigger260_fwd, trigger260_fwd_);
+    event.set(tt_trigger320_fwd, trigger320_fwd_);
+    event.set(tt_trigger400_fwd, trigger400_fwd_);
+    event.set(tt_trigger450_fwd, trigger450_fwd_);
+    event.set(tt_trigger500_fwd, trigger500_fwd_);
     
     event.set(tt_triggerDi40, triggerDi40);
     event.set(tt_triggerDi60, triggerDi60);
@@ -1925,19 +2009,19 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
       
     bool passes_Si[10] = {pass_trigger40,pass_trigger60,pass_trigger80,pass_trigger140,pass_trigger200,pass_trigger260,pass_trigger320,pass_trigger400,pass_trigger450,pass_trigger500};
-     bool passes_Si_fwd[6] = {pass_trigger60_fwd, pass_trigger80_fwd, pass_trigger100_fwd, pass_trigger160_fwd, pass_trigger220_fwd, pass_trigger300_fwd};
+     bool passes_Si_fwd[9] = {pass_trigger60_fwd, pass_trigger80_fwd, pass_trigger140_fwd, pass_trigger200_fwd, pass_trigger260_fwd, pass_trigger320_fwd, pass_trigger400_fwd, pass_trigger450_fwd, pass_trigger500_fwd};
      
     bool passes_Di[9] = {pass_triggerDi40,pass_triggerDi60,pass_triggerDi80,pass_triggerDi140,pass_triggerDi200,pass_triggerDi260,pass_triggerDi320,pass_triggerDi400,pass_triggerDi500};
     bool passes_Di_HF[6] = {pass_trigger60_HFJEC, pass_trigger80_HFJEC, pass_trigger100_HFJEC, pass_trigger160_HFJEC, pass_trigger220_HFJEC, pass_trigger300_HFJEC};
     
     unique_ptr<JECAnalysisHists>* h_trgSi[10] = {&h_trg40, &h_trg60, &h_trg80, &h_trg140, &h_trg200,&h_trg260,&h_trg320,&h_trg400,&h_trg450,&h_trg500};
-     unique_ptr<JECAnalysisHists>* h_trgSi_fwd[6] =  {&h_trgfwd60, &h_trgfwd80, &h_trgfwd100, &h_trgfwd160,&h_trgfwd220,&h_trgfwd300};
+     unique_ptr<JECAnalysisHists>* h_trgSi_fwd[9] =  {&h_trgfwd60, &h_trgfwd80, &h_trgfwd140, &h_trgfwd200,&h_trgfwd260,&h_trgfwd320,&h_trgfwd400,&h_trgfwd450,&h_trgfwd500};
      
     unique_ptr<JECAnalysisHists>* h_trgDi[9] =  {&h_trgDi40, &h_trgDi60, &h_trgDi80, &h_trgDi140, &h_trgDi200,&h_trgDi260,&h_trgDi320,&h_trgDi400,&h_trgDi500};
      unique_ptr<JECAnalysisHists>* h_trgDi_HF[6] =  {&h_trgHF60, &h_trgHF80, &h_trgHF100, &h_trgHF160,&h_trgHF220,&h_trgHF300};
      
     unique_ptr< LuminosityHists>* h_lumiSi[10] =  {&h_lumi_Trig40, &h_lumi_Trig60, &h_lumi_Trig80, &h_lumi_Trig140, &h_lumi_Trig200, &h_lumi_Trig260, &h_lumi_Trig320, &h_lumi_Trig400,&h_lumi_Trig450, &h_lumi_Trig500};
-    unique_ptr< LuminosityHists>* h_lumiSi_fwd[6] = {&h_lumi_Trigfwd60, &h_lumi_Trigfwd80, &h_lumi_Trigfwd100, &h_lumi_Trigfwd160, &h_lumi_Trigfwd220, &h_lumi_Trigfwd300};
+    unique_ptr< LuminosityHists>* h_lumiSi_fwd[9] = {&h_lumi_Trigfwd60, &h_lumi_Trigfwd80, &h_lumi_Trigfwd140, &h_lumi_Trigfwd200, &h_lumi_Trigfwd260, &h_lumi_Trigfwd320, &h_lumi_Trigfwd400, &h_lumi_Trigfwd450, &h_lumi_Trigfwd500};
     
    unique_ptr< LuminosityHists>* h_lumiDi[9] = {&h_lumi_TrigDi40, &h_lumi_TrigDi60, &h_lumi_TrigDi80, &h_lumi_TrigDi140, &h_lumi_TrigDi200, &h_lumi_TrigDi260, &h_lumi_TrigDi320, &h_lumi_TrigDi400, &h_lumi_TrigDi500};
     unique_ptr< LuminosityHists>* h_lumiDi_HF[6] = {&h_lumi_TrigHF60, &h_lumi_TrigHF80, &h_lumi_TrigHF100, &h_lumi_TrigHF160, &h_lumi_TrigHF220, &h_lumi_TrigHF300};  
@@ -1974,7 +2058,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       }
     }
     
-    for(int i = 0; i<6; i++){
+    for(int i = 0; i<9; i++){
       if(passes_Si_fwd[i]){
 	matchJetId_0_last = matchJetId_0;
 	matchJetId_1_last = matchJetId_1;
@@ -2081,15 +2165,15 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 //DiJet-Events
 
     // if(!sel.DiJet()) return false;
-    h_nocuts->fill(event);
+    // h_nocuts->fill(event);
     h_lumi_nocuts->fill(event);
 
 //Pu_pt_hat/pt_hat Selection
     if(!event.isRealData){
       if(!sel.PUpthat(event)) return false;
     }
-    h_nocuts->fill(event);
-    h_lumi_nocuts->fill(event);
+    // h_nocuts->fill(event);
+    // h_lumi_nocuts->fill(event);
 
     //MET/pt - Cut
     if(apply_METoverPt_cut && event.get(tt_MET)/(event.get(tt_jets_pt)+event.get(tt_barreljet_pt)+event.get(tt_probejet_pt))>0.2) return false; //skip events with large MET contribution  

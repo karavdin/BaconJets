@@ -319,20 +319,20 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   TCanvas* fpeprobe = new TCanvas();    
   TH2F *phi_vs_etaProbe_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/phi_vs_etaProbe");
   phi_vs_etaProbe_DATA->SetTitle(DATAtitle);
-  phi_vs_etaProbe_DATA->Draw("colz");
+  phi_vs_etaProbe_DATA->DrawNormalized("colz");
   fpeprobe->Print(SavePlots + "_PhiVsEtaProbe.pdf");
  
   TCanvas* fpe = new TCanvas();    
   TH2F *phi_vs_eta_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/phi_vs_etaAll");
   phi_vs_eta_DATA->SetTitle(DATAtitle);
-  phi_vs_eta_DATA->Draw("colz");
+  phi_vs_eta_DATA->DrawNormalized("colz");
   fpe->Print(SavePlots + "_PhiVsEtaAll.pdf");
 
     TCanvas* fpec = new TCanvas();    
     TH2F *phi_vs_etaC_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/phi_vs_etaAllCut30");
     if(phi_vs_etaC_DATA!=NULL){
       phi_vs_etaC_DATA->SetTitle(DATAtitle);
-      phi_vs_etaC_DATA->Draw("colz");
+      phi_vs_etaC_DATA->DrawNormalized("colz");
       fpec->Print(SavePlots + "_PhiVsEtaAllCut30.pdf");
   }
   

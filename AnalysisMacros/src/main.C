@@ -23,6 +23,7 @@ static void show_usage(std::string name)
 	      << "\t-tCP\t\tRun control plots of the jet pt, eta and count for all trigger separately.\n"
       	      << "\t-lFCP\t\tRun final control plots for all lumi bins separately.\n"
 	      << "\t-aFCP\t\tRun final control plots and plot all data asymetrie histograms seperaty.\n"
+      	      << "\t-JEF\t\tDo Jet energy fractions plots.\n"
 	      << "\t-aAP\t\tDo asymmetry plots for all abs(eta) and pt bins sepertely.\n"
       	      << "\t-aAPef\t\tDo asymmetry plots for all eta and pt bins sepertely.\n"
 	      <<"\t-mon\t\tDo Monitoring Plots.\n"
@@ -72,7 +73,42 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
-  std::vector<std::string> argl = {"-FP" , "-FPeta", "-FCP", "-tCP", "-lFCP", "-aFCP", "-derThreshSi", "-derThreshSi_ptCheck",  "-derThreshDi", "-derThreshDi_ptCheck", "-BC", "-D", "-E","-DE", "-F" , "-LP", "-MP", "-OORP" , "-MPd", "-OORPd" , "-aAP", "-aAPef", "-TEC", "-mu", "--mode", "--dname", "--run", "--muTrg", "--asym_cut" "--input", "--outSuffix", "-useHF", "-NPVEta", "-mon"}; 
+  std::vector<std::string> argl = {"-FP" ,
+				   "-FPeta",
+				   "-FCP",
+				   "-tCP",
+				   "-lFCP",
+				   "-aFCP",
+				   "-derThreshSi",
+				   "-derThreshSi_ptCheck",
+				   "-derThreshDi",
+				   "-derThreshDi_ptCheck",
+				   "-BC",
+				   "-D",
+				   "-E",
+				   "-DE",
+				   "-F" ,
+				   "-LP",
+				   "-MP",
+				   "-OORP" ,
+				   "-MPd",
+				   "-OORPd" ,
+				   "-aAP",
+				   "-aAPef",
+				   "-TEC",
+				   "-mu",
+				   "--mode",
+				   "--dname",
+				   "--run",
+				   "--muTrg",
+				   "--asym_cut" ,
+				   "-JEF",
+				   "--input",
+				   "--outSuffix",
+				   "-useHF",
+				   "-NPVEta",
+				   "-mon"};
+  
   TString run_nr = "B";
   TString dataname_end = "17Nov17_2017";
   TString outSuf = "";
@@ -98,6 +134,7 @@ int main(int argc,char *argv[]){
   bool do_addAsymPlotsef = false;  
   bool do_triggerEx = false;
   bool do_NPVEtaPlot = false;
+  bool do_JEF = false;
   bool use_BC = false;
   bool use_D = false;
   bool use_E = false;
@@ -111,14 +148,14 @@ int main(int argc,char *argv[]){
         std::string arg = argv[i];
 	if(arg=="-h"||arg=="--help"){
 	  show_usage(argv[0]);
-	  return 0;
+	  // return 0;
 	  }
 
 	if(arg[0]=='-'){
 	  if(std::find(argl.begin(), argl.end(), arg) == argl.end()){
 	    cout<<"Unknown option "<<arg<<endl;
 	    show_usage(argv[0]);
-	    return 0;	    
+	    // return 0;	    
 	  } 
 	  else if(arg=="-FP"){
 	       do_fullPlots=true;
@@ -144,6 +181,9 @@ int main(int argc,char *argv[]){
 	  else if(arg=="-TEC"){
 	    do_triggerEx=true;
 	  }
+	  else if(arg=="-JEF"){
+	    do_JEF=true;
+	  }	  
 	  else if(arg=="-useHF"){
 	    useHF=true;
 	  }	  
@@ -228,7 +268,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -266,7 +306,7 @@ int main(int argc,char *argv[]){
   }
   
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
-  TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2ResTest/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
+  TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2ResTest_PUpthat/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
   
   TString outpath_postfix = (dataname_end!="") ? "_" : "";
   outpath_postfix  +=  dataname_end;
@@ -281,12 +321,15 @@ int main(int argc,char *argv[]){
     cout << "testobject is " << Objects[0] << endl;
 
     if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
+    if(do_fullPlots or do_JEF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetEnergyFractions();
+
+    
     if(do_fullPlotsef) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();    
     if(do_trgControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
     
 
-    if(do_deriveThresholdsSi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet();
-    if(do_deriveThresholdsSi_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet(true);
+    if(do_deriveThresholdsSi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet(false,useHF);
+    if(do_deriveThresholdsSi_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet(true,useHF);
 
     if(do_deriveThresholdsDi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_DiJet(false,useHF);
     if(do_deriveThresholdsDi_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_DiJet(true,useHF);    

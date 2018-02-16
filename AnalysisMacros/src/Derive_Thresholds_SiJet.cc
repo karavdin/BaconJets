@@ -38,8 +38,8 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   int n_trigger = n_triggerSi;
   vector<int> triggerVal(triggerValSi, triggerValSi + sizeof(triggerValSi) / sizeof(triggerValSi[0]));
 
-  int n_trigger_HF = n_triggerDi_HF; 
-  vector<int> triggerVal_HF(triggerValDi_HF, triggerValDi_HF + sizeof(triggerValDi_HF) / sizeof(triggerValDi_HF[0]));  
+  int n_trigger_HF = n_triggerSi_HF; 
+  vector<int> triggerVal_HF(triggerValSi_HF, triggerValSi_HF + sizeof(triggerValSi_HF) / sizeof(triggerValSi_HF[0]));  
   
   TH1D *hdata_pt_ave[trg_nr-1];
   TH1D *hdata_pt_ave_wNext[trg_nr-1];
@@ -94,12 +94,16 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   TTreeReaderValue<int> trg450(myReader_DATA, "trigger450");
   TTreeReaderValue<int> trg500(myReader_DATA, "trigger500");
 
-   TTreeReaderValue<int> trg60_HF(myReader_DATA, "trigger60_fwd");
+  TTreeReaderValue<int> trg60_HF(myReader_DATA, "trigger60_fwd");
   TTreeReaderValue<int> trg80_HF(myReader_DATA, "trigger80_fwd");
-  TTreeReaderValue<int> trg100_HF(myReader_DATA, "trigger100_fwd");  
-  TTreeReaderValue<int> trg160_HF(myReader_DATA, "trigger160_fwd");
-  TTreeReaderValue<int> trg220_HF(myReader_DATA, "trigger220_fwd");
-  TTreeReaderValue<int> trg300_HF(myReader_DATA, "trigger300_fwd"); 
+  TTreeReaderValue<int> trg140_HF(myReader_DATA, "trigger140_fwd");  
+  TTreeReaderValue<int> trg200_HF(myReader_DATA, "trigger200_fwd");
+  TTreeReaderValue<int> trg260_HF(myReader_DATA, "trigger260_fwd");
+  TTreeReaderValue<int> trg320_HF(myReader_DATA, "trigger320_fwd");
+  TTreeReaderValue<int> trg400_HF(myReader_DATA, "trigger400_fwd");
+  TTreeReaderValue<int> trg450_HF(myReader_DATA, "trigger450_fwd");
+  TTreeReaderValue<int> trg500_HF(myReader_DATA, "trigger500_fwd");
+  
   
   TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
@@ -110,14 +114,14 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
 
   TTreeReaderValue<int> trg_arr[trg_nr] = {trg40,trg60,trg80,trg140,trg200,trg260,trg320,trg400,trg450,trg500};
 
-   TTreeReaderValue<int> trg_arr_HF[n_trigger_HF] = {trg60_HF,trg80_HF,trg100_HF,trg160_HF,trg220_HF,trg300_HF}; 
+   TTreeReaderValue<int> trg_arr_HF[n_trigger_HF] = {trg60_HF,trg80_HF,trg140_HF,trg200_HF,trg260_HF,trg320_HF,trg400_HF,trg450_HF,trg500_HF}; 
   
   int myCount = 0;
   int myCount_notX = 0;
   bool allExclusive = true;
   while (myReader_DATA.Next()) {
     bool exclusive = true;
-    exclusive = (*trg40)^(*trg60)^(*trg80)^(*trg140)^(*trg200)^(*trg260)^(*trg320)^(*trg400)^(*trg450)^(*trg500)^(useHF ? (*trg60_HF)^(*trg80_HF)^(*trg100_HF)^(*trg160_HF)^(*trg220_HF)^(*trg300_HF) : 0);
+    exclusive = (*trg40)^(*trg60)^(*trg80)^(*trg140)^(*trg200)^(*trg260)^(*trg320)^(*trg400)^(*trg450)^(*trg500)^(useHF ? (*trg60_HF)^(*trg80_HF)^(*trg140_HF)^(*trg200_HF)^(*trg260_HF)^(*trg320_HF)^(*trg400_HF)^(*trg450_HF)^(*trg500_HF) : 0);
     for(int j=0; j<trg_nr-1; j++){
       if(*(trg_arr[j])){
 	hdata_pt_ave[j]->Fill(*pt_ave_data);
@@ -461,7 +465,7 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   }
   cout<<endl;
   
-  const double triggerVal_noLow_HF[n_trigger_HF-1] = {80, 100, 160, 220, 300};
+  const double triggerVal_noLow_HF[n_trigger_HF-1] = {80,140,200,260,320,400,450,500};
   cout << "extrapolate the threshold of the lower trigger from "<< n_extrapol<<" fitted thresholds" << endl << endl;
     
   double extrapol_x_HF[n_extrapol];

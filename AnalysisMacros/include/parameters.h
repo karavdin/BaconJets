@@ -23,9 +23,11 @@ const double alpha_bins[n_alpha] = {0.050, 0.100, 0.150, 0.200, 0.250, 0.300, 0.
 const int n_triggerDi = 9;
 const int n_triggerDi_HF = 6;
 const int n_triggerSi = 10;
+const int n_triggerSi_HF = 9;
 const int triggerValSi[n_triggerSi] = {40, 60, 80, 140, 200, 260, 320, 400, 450, 500};
 const int triggerValDi[n_triggerDi] = {40, 60, 80, 140, 200, 260, 320, 400, 500};
 const int triggerValDi_HF[n_triggerDi_HF]  = {60,80,100,160,220,300};
+const int triggerValSi_HF[n_triggerSi_HF]  = {60,80,140,200,260,320,400,450,500};
 
 const int n_pt = 12;
 

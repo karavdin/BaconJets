@@ -1,4 +1,4 @@
-C#include "../include/parameters.h"
+#include "../include/parameters.h"
 #include "../include/useful_functions.h"
 #include "../include/CorrectionObject.h"
 #include "../include/tdrstyle_mod15.h"
@@ -21,13 +21,15 @@ C#include "../include/parameters.h"
 
 using namespace std;
 
-void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_dir ){
+// phi_binned not fully implemented yet
+void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_dir, bool phi_binned){
   cout << "--------------- Starting JetEnergyFractions() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
   if(create_dir) CorrectionObject::make_path(CorrectionObject::_outpath+"plots/");
   if(create_dir) CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/");
   if(create_dir) CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/EnergyFractions/");
+  if(create_dir) CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/EnergyFractionsPhiBinned/");
 
   //Set up histos 
   TH1D *hdata_probejet_neutEmEF[n_pt-1][n_eta-1]; //neutral EM energy fraction
@@ -46,6 +48,24 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
   TH1D *hmc_probejet_muonEF[n_pt-1][n_eta-1]; //muon hadron energy fraction
   TH1D *hmc_probejet_phi[n_pt-1][n_eta-1]; //phi
 
+
+  //Set up histos 
+  TH1D *hdata_probejet_neutEmEF_phi[n_pt-1][n_eta-1][10]; //neutral EM energy fraction
+  TH1D *hdata_probejet_neutHadEF_phi[n_pt-1][n_eta-1][10]; //neutral hadron energy fraction
+  TH1D *hdata_probejet_chEmEF_phi[n_pt-1][n_eta-1][10]; //charged EM energy fraction
+  TH1D *hdata_probejet_chHadEF_phi[n_pt-1][n_eta-1][10]; //charged hadron energy fraction
+  TH1D *hdata_probejet_photonEF_phi[n_pt-1][n_eta-1][10]; //photon energy fraction
+  TH1D *hdata_probejet_muonEF_phi[n_pt-1][n_eta-1][10]; //muon hadron energy fraction
+  TH1D *hdata_probejet_phi_phi[n_pt-1][n_eta-1][10]; //phi
+
+  TH1D *hmc_probejet_neutEmEF_phi[n_pt-1][n_eta-1][10]; //neutral EM energy fraction
+  TH1D *hmc_probejet_neutHadEF_phi[n_pt-1][n_eta-1][10]; //neutral hadron energy fraction
+  TH1D *hmc_probejet_chEmEF_phi[n_pt-1][n_eta-1][10]; //charged EM energy fraction
+  TH1D *hmc_probejet_chHadEF_phi[n_pt-1][n_eta-1][10]; //charged hadron energy fraction
+  TH1D *hmc_probejet_photonEF_phi[n_pt-1][n_eta-1][10]; //photon energy fraction
+  TH1D *hmc_probejet_muonEF_phi[n_pt-1][n_eta-1][10]; //muon hadron energy fraction
+  TH1D *hmc_probejet_phi_phi[n_pt-1][n_eta-1][10]; //phi
+  
   int count = 0;
 
   TString name9 = "hist_data_probejet_neutEmEF_";
@@ -69,40 +89,86 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
       TString name;
       name = name9  + eta_name + "_" + pt_name;
-      hdata_probejet_neutEmEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hdata_probejet_neutEmEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name10  + eta_name + "_" + pt_name;
-      hmc_probejet_neutEmEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hmc_probejet_neutEmEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name11 + eta_name + "_" + pt_name;
 
-      hdata_probejet_neutHadEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hdata_probejet_neutHadEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name12  + eta_name + "_" + pt_name;
-      hmc_probejet_neutHadEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hmc_probejet_neutHadEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name13 + eta_name + "_" + pt_name;
 
-      hdata_probejet_chEmEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hdata_probejet_chEmEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name14  + eta_name + "_" + pt_name;
-      hmc_probejet_chEmEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hmc_probejet_chEmEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name15  + eta_name + "_" + pt_name;
 
-      hdata_probejet_chHadEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hdata_probejet_chHadEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name16  + eta_name + "_" + pt_name;
-      hmc_probejet_chHadEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hmc_probejet_chHadEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name17  + eta_name + "_" + pt_name;
 
-      hdata_probejet_photonEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hdata_probejet_photonEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name18  + eta_name + "_" + pt_name;
-      hmc_probejet_photonEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hmc_probejet_photonEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name19  + eta_name + "_" + pt_name;
 
-      hdata_probejet_muonEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hdata_probejet_muonEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name20  + eta_name + "_" + pt_name;
-      hmc_probejet_muonEF [k][j] = new TH1D(name,"",50,0,1.1);
+      hmc_probejet_muonEF [k][j] = new TH1D(name,"",30,0,1.1);
       name = name21  + eta_name + "_" + pt_name;
 
-      hdata_probejet_phi [k][j] = new TH1D(name,"",50,-3.14,3.14);
+      hdata_probejet_phi [k][j] = new TH1D(name,"",30,-3.14,3.14);
       name = name22  + eta_name + "_" + pt_name;
-      hmc_probejet_phi [k][j] = new TH1D(name,"",50,-3.14,3.14);
+      hmc_probejet_phi [k][j] = new TH1D(name,"",30,-3.14,3.14);
 
+
+      if(phi_binned){
+	for(int l = 0; l<10; l++){
+	  double phi0 = -1.*M_PI;
+	  double phid = 2.*M_PI/10.;
+	  TString phi_name = "phi_";//+ string(l*phid+phi0) + "_" + string(l*phid+phid+phi0);
+	  
+	  name = name9  + eta_name + "_" + pt_name + "_" + phi_name;
+	  hdata_probejet_neutEmEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name10  + eta_name + "_" + pt_name + "_" + phi_name;
+	  hmc_probejet_neutEmEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name11 + eta_name + "_" + pt_name + "_" + phi_name;
+
+	  hdata_probejet_neutHadEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name12  + eta_name + "_" + pt_name + "_" + phi_name;
+	  hmc_probejet_neutHadEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name13 + eta_name + "_" + pt_name + "_" + phi_name;
+
+	  hdata_probejet_chEmEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name14  + eta_name + "_" + pt_name + "_" + phi_name;
+	  hmc_probejet_chEmEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name15  + eta_name + "_" + pt_name + "_" + phi_name;
+
+	  hdata_probejet_chHadEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name16  + eta_name + "_" + pt_name + "_" + phi_name;
+	  hmc_probejet_chHadEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name17  + eta_name + "_" + pt_name + "_" + phi_name;
+
+	  hdata_probejet_photonEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name18  + eta_name + "_" + pt_name + "_" + phi_name;
+	  hmc_probejet_photonEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name19  + eta_name + "_" + pt_name + "_" + phi_name;
+
+	  hdata_probejet_muonEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name20  + eta_name + "_" + pt_name + "_" + phi_name;
+	  hmc_probejet_muonEF_phi [k][j][l] = new TH1D(name,"",30,0,1.1);
+	  name = name21  + eta_name + "_" + pt_name + "_" + phi_name;
+
+	  hdata_probejet_phi_phi [k][j][l] = new TH1D(name,"",30,-3.14,3.14);
+	  name = name22  + eta_name + "_" + pt_name + "_" + phi_name;
+	  hmc_probejet_phi_phi [k][j][l] = new TH1D(name,"",30,-3.14,3.14);
+
+	}
+      }
+      
+      
       count++;
     }
   }
@@ -112,6 +178,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
   TTreeReader myReader_DATA("AnalysisTree", CorrectionObject::_DATAFile);
   TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
   TTreeReaderValue<Float_t> probejet_eta_data(myReader_DATA, "probejet_eta");
+  TTreeReaderValue<Float_t> probejet_phi_data(myReader_DATA, "probejet_phi");
   TTreeReaderValue<Float_t> probejet_pt_data(myReader_DATA, "probejet_pt");
   TTreeReaderValue<Float_t> barreljet_pt_data(myReader_DATA, "barreljet_pt");
   TTreeReaderValue<Float_t> alpha_data(myReader_DATA, "alpha");
@@ -129,7 +196,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
   TTreeReaderValue<Float_t> probejet_chHadEF_data(myReader_DATA, "probejet_chHadEF");
   TTreeReaderValue<Float_t> probejet_photonEF_data(myReader_DATA, "probejet_photonEF");
   TTreeReaderValue<Float_t> probejet_muonEF_data(myReader_DATA, "probejet_muonEF");
-  TTreeReaderValue<Float_t> probejet_phi_data(myReader_DATA, "probejet_phi");
+  // TTreeReaderValue<Float_t> probejet_phi_data(myReader_DATA, "probejet_phi");
   
   TTreeReaderValue<int> lumibin_data(myReader_DATA, "lumibin");
   

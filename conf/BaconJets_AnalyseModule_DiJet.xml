@@ -6,7 +6,7 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2ResTest">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_Flat_nxt">
 
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Fall17_17Nov2017_V4">
@@ -62,7 +62,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="/nfs/dust/cms/user/karavdia/JERC/workdir_Fall17_17Nov_V4_2/"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_QCDFlat_Fall17_17Nov_V4_2/"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->

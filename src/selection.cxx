@@ -131,7 +131,7 @@ bool isMC = (ctx.get("dataset_type") == "MC");
      }
    }
  }
- bool no_genp = true;
+ bool no_genp = false;
  if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;   
 }
 
