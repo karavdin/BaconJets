@@ -24,7 +24,7 @@ pair<double,double> GetValueAndError(TH1D *hin){
   //  res.first = -1; res.second = -1;
   //  if(hin->GetEntries()>30){
   //  if(hin->GetEntries()>50){
-  if(hin->GetEntries()>100){  
+  if(hin->GetEntries()>500){  
     res.first = hin->GetMean();
     // GetMeanError calculates the uncertainty on the mean value, arising due to limited statistics in the sample. We dont care for the width itself, only the uncertainty on the predicted mean is relevant.
     res.second = hin->GetMeanError();

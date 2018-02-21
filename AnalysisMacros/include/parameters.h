@@ -29,7 +29,9 @@ const int triggerValDi[n_triggerDi] = {40, 60, 80, 140, 200, 260, 320, 400, 500}
 const int triggerValDi_HF[n_triggerDi_HF]  = {60,80,100,160,220,300};
 const int triggerValSi_HF[n_triggerSi_HF]  = {60,80,140,200,260,320,400,450,500};
 
-const int n_pt = 12;
+// const int n_pt = 12;
+const int n_pt = 13;
+const int n_pt_Si = 13;
 
 // // //for Si derived trigger
 // const TString pt_range[n_pt]= {"40",
@@ -55,29 +57,68 @@ const int n_pt = 12;
 
 //for Di derived triggers 94X 17Nov2017
 
+// const double pt_bins[n_pt] = {
+//   51,
+//   73,
+//   85,
+//   97,
+//   179,
+//   307,
+//   370,
+//   434,
+//   520,
+//   649,1000,2000};
+
+// const TString pt_range[n_pt]={
+//   "51",
+//   "73",
+//   "85",
+//   "97",
+//   "179",
+//   "307",
+//   "370",
+//   "434",
+//   "520",
+//   "648","1000","2000"};
+
 const double pt_bins[n_pt] = {
-  51,
-  73,
-  85,
-  97,
-  179,
-  307,
-  370,
-  434,
-  520,
-  649,1000,2000};
+  40,
+  53 ,
+ 74  ,
+ 94  ,
+ 158 ,
+ 222 ,
+ 284 ,
+ 345 ,
+ 443 ,
+ 564 ,
+ 598 ,1000,2000};
 
 const TString pt_range[n_pt]={
-  "51",
-  "73",
-  "85",
-  "97",
-  "179",
-  "307",
-  "370",
-  "434",
-  "520",
-  "648","1000","2000"};
+  "40",
+  "53",
+  "74",
+  "94",
+  "158",
+  "222",
+  "284",
+  "345",
+  "443",
+  "564",
+  "598","1000","2000"};
+
+const double pt_bins_Si[n_pt_Si] = {
+  40,
+  53 ,
+ 74  ,
+ 94  ,
+ 158 ,
+ 222 ,
+ 284 ,
+ 345 ,
+ 443 ,
+ 564 ,
+  598 ,1000,2000};
 
 
 //for Di derived triggers 94X 17Nov2017

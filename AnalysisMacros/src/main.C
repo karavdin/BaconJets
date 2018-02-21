@@ -41,7 +41,8 @@ static void show_usage(std::string name)
  	      << "\t-BC\t\tUse the older BC directory instead of the BCD directory.\n"
        	      << "\t-D\t\tUse the D directory instead of the BCD directory.\n"
        	      << "\t-E\t\tUse the E directory instead of the BCD directory.\n"
-	      << "\t-DE\t\tUse the E directory instead of the BCD directory.\n"
+	      << "\t-DE\t\tUse the DE directory instead of the BCD directory.\n"
+	      << "\t-DEF\t\tUse the DEF directory instead of the BCD directory.\n"      
        	      << "\t-F\t\tUse the F directory instead of the BCD directory.\n"      
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
       	      << "\t-useHF\t\tIncludes the HF trigger.\n"
@@ -87,6 +88,7 @@ int main(int argc,char *argv[]){
 				   "-D",
 				   "-E",
 				   "-DE",
+				   "-DEF",
 				   "-F" ,
 				   "-LP",
 				   "-MP",
@@ -138,7 +140,8 @@ int main(int argc,char *argv[]){
   bool use_BC = false;
   bool use_D = false;
   bool use_E = false;
-  bool use_DE = false;  
+  bool use_DE = false; 
+  bool use_DEF = false;   
   bool use_F = false;
   bool useHF = false;
   bool do_mon = false;
@@ -237,6 +240,9 @@ int main(int argc,char *argv[]){
 	  else if(arg=="-DE"){
 	    use_DE=true;
 	  }
+	  else if(arg=="-DEF"){
+	    use_DEF=true;
+	  }
 	  else if(arg=="-F"){
 	    use_F=true;
 	  }	  
@@ -292,9 +298,10 @@ int main(int argc,char *argv[]){
       if(use_BC) input_path+="BC";
       if(use_D) input_path+="D";
       if(use_E) input_path+="E";
-      if(use_DE) input_path+="DE";      
+      if(use_DE) input_path+="DE";  
+      if(use_DEF) input_path+="DEF";     
       if(use_F) input_path+="F";      
-      if(not(use_BC or use_D or use_E or use_DE or use_F)) input_path+="BCD";
+      if(not(use_BC or use_D or use_E or use_DE or use_F or use_DEF)) input_path+="BCD";
   // if(muonCrosscheck) input_path+="D";
   input_path+="_Data";
   if(mode!="") input_path+="_";

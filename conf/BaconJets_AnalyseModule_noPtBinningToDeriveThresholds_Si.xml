@@ -6,7 +6,7 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17D_Data_woHOTVR_woXCON_JEC_V4_DeriveThresholds_SiTrg/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17D_Data_woHOTVR_woXCON_JEC_V4_DeriveThresholds_SiTrg_central/">
 
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Fall17_17Nov2017_V4"> 
@@ -19,17 +19,17 @@
 <!ENTITY APPLY_LUMIWEIGHTS   "false"> 
 <!ENTITY APPLY_UNFLATTENING  "false">
 <!ENTITY TRIGGER_CENTRAL     "true">  <!--Trigger Flag -->
-<!ENTITY TRIGGER_FWD         "true"> <!--Trigger Flag -->
+<!ENTITY TRIGGER_FWD         "false"> <!--Trigger Flag -->
 
 <!ENTITY TRIGGER_SINGLEMUON  "false"> <!--Trigger Flag -->
 <!ENTITY TRIGGER_SINGLEMUON_NAME  "Mu27"> <!--Trigger Flag -->
 
 <!ENTITY ONLY_BACK_TO_BACK "true" >
-<!ENTITY DO_TRG_OBJ_JET_MATCHING "true" >
+<!ENTITY DO_TRG_OBJ_JET_MATCHING "false" >
 
 <!ENTITY USE_SINGLE_TRIGGER "true" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
-<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunB_17Nov17_v1.xml">
+<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunB_17Nov2017_wCHSMETfixed.xml">
 
 <!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunC_17Nov17_v1.xml">
 
@@ -49,7 +49,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17D_deriveThresholds_SiTrg"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17D_deriveThresholds_SiTrg_central"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->

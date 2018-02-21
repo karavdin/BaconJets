@@ -200,7 +200,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Event::Handle<int> tt_trigger220_HF;
     Event::Handle<int> tt_trigger300_HF;
   
-   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_triggers[18];
+    uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_triggers[19];
   
     std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
   std::unique_ptr<JECAnalysisHists> h_trgSiMu, h_minBias ,h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg450,h_trg500;
@@ -347,16 +347,15 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
       handle_triggers[9] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
       k = 10;
       if(trigger_fwd){
-	if(trigger_fwd){
 	  handle_triggers[0+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFFwdJet60" );
 	  handle_triggers[1+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFFwdJet80" );
 	  handle_triggers[2+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFFwdJet140" );
 	  handle_triggers[3+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet200" );
 	  handle_triggers[4+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet260" );
 	  handle_triggers[5+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet320");
-	  handle_triggers[5+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet400");
-	  handle_triggers[5+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet450");
-	  handle_triggers[5+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet500");
+	  handle_triggers[6+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet400");
+	  handle_triggers[7+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet450");
+	  handle_triggers[8+k] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFFwdJet500");
 	  
       }
     }
@@ -384,7 +383,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     }
       
       
-    // }
+      // }
         
       if(triggerSiMu != "NULL") triggerSiMu_sel.reset(new TriggerSelection(triggerSiMu));
       else triggerSiMu_sel.reset(new uhh2::AndSelection(ctx));
@@ -467,7 +466,7 @@ else trigger500_fwd_sel.reset(new uhh2::AndSelection(ctx));
 else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       
     }
-    }
+    // }
     
     //new
     jetLabel = ctx.get("JetLabel");
@@ -1040,6 +1039,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_trg400.reset(new JECAnalysisHists(ctx,"HLT_PFJet400"));
     h_trg450.reset(new JECAnalysisHists(ctx,"HLT_PFJet450"));
     h_trg500.reset(new JECAnalysisHists(ctx,"HLT_PFJet500"));
+    
     h_trgfwd60.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet60"));
     h_trgfwd80.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet80"));
     h_trgfwd140.reset(new JECAnalysisHists(ctx,"HLT_PFFwdJet140"));
@@ -1059,12 +1059,14 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_trgDi320.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve320"));
     h_trgDi400.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve400"));
     h_trgDi500.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve500"));
+    
     h_trgHF60.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve60ForHFJEC"));
     h_trgHF80.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve80ForHFJEC"));
     h_trgHF100.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve100ForHFJEC"));
     h_trgHF160.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve160ForHFJEC"));
     h_trgHF220.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve220ForHFJEC"));
     h_trgHF300.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve300ForHFJEC"));
+    
     h_lumi_nocuts.reset(new LuminosityHists(ctx,"Lumi_noCuts"));  
     h_lumi_sel.reset(new LuminosityHists(ctx,"Lumi_Selection"));
     h_lumi_dijet.reset(new LuminosityHists(ctx,"Lumi_diJet"));
@@ -1587,7 +1589,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       }
       else{
 	bool pass_sng_trg = pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
-	bool pass_si_trg_fwd =  pass_trigger60_fwd || pass_trigger80_fwd || pass_trigger140_fwd || pass_trigger200_fwd || pass_trigger260_fwd || pass_trigger320_fwd || pass_trigger400_fwd || pass_trigger450_fwd || pass_trigger500_fwd;	
+	bool pass_si_trg_fwd =  pass_trigger60_fwd || pass_trigger80_fwd || pass_trigger140_fwd || pass_trigger200_fwd || pass_trigger260_fwd || pass_trigger320_fwd || pass_trigger400_fwd || pass_trigger450_fwd || pass_trigger500_fwd;
 	bool pass_di_trg_center = pass_minBias || pass_triggerDi40 || pass_triggerDi60 || pass_triggerDi80 || pass_triggerDi140 || pass_triggerDi200  || pass_triggerDi260 || pass_triggerDi320 || pass_triggerDi400 ||  pass_triggerDi500;
 	bool pass_di_trg_HF =  pass_trigger60_HFJEC || pass_trigger80_HFJEC || pass_trigger100_HFJEC || pass_trigger160_HFJEC || pass_trigger220_HFJEC || pass_trigger300_HFJEC;
 
@@ -1711,7 +1713,11 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    jet_0_pt_on = event.get(handle_triggers[i]).at(0).pt();
 	  }
 	  if(debug) cout<<"after get(handle_triggers[i] 0)\n";	  	  
-	  if(jetid_1>=0 && jet_n>1) jet_1_pt_on = event.get(handle_triggers[i]).at(1).pt();
+	  if(jetid_1>=0 && jet_n>1){
+	    if(event.get(handle_triggers[i]).size()>1) jet_1_pt_on = event.get(handle_triggers[i]).at(1).pt();
+	    else jet_1_pt_on = 10000.;
+							 
+	  }
 
 	  if(debug) cout<<"after get(handle_triggers[i] 1)\n";	  
 
@@ -1773,7 +1779,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 
    if(debug) cout<<"after pt_ave calculation\n";
    
-  float jet1_pt_onoff_Resp =  jet1_pt / jet_0_pt_on;
+   float jet1_pt_onoff_Resp =  jet1_pt / jet_0_pt_on;
    float jet2_pt_onoff_Resp =  jet2_pt / jet_1_pt_on;   
 
    event.set(tt_jet1_pt_onoff_Resp,jet1_pt_onoff_Resp);
@@ -2031,13 +2037,18 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     
     for(int i = 0; i<10; i++){
       if(passes_Si[i]){
+	cout<<"si central match jet id loop\n";
 	matchJetId_0_last = matchJetId_0;
 	matchJetId_1_last = matchJetId_1;
-	matchJetId_0 = sel.FindMatchingJet(0,trg_vals_Si[i]);
-	matchJetId_1 = sel.FindMatchingJet(1,trg_vals_Si[i]);
+	if(!ts){
+	  matchJetId_0 = sel.FindMatchingJet(0,trg_vals_Si[i]);
+	  matchJetId_1 = sel.FindMatchingJet(1,trg_vals_Si[i]);
+	}
+	// cout<<"1\n";
 	event.set(tt_matchJetId_0, matchJetId_0);
 	event.set(tt_matchJetId_1, matchJetId_1);
-	if(ts){
+	// cout<<"2\n";
+	if(!ts){
 	  if(jetid_0>=0) jet_0_pt_on = event.get(handle_triggers[i]).at(0).pt();
 	  if(jetid_1>=0) jet_1_pt_on = event.get(handle_triggers[i]).at(1).pt();
 	  float jet1_pt_onoff_Resp =  jet1_pt / jet_0_pt_on;
@@ -2060,10 +2071,13 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     
     for(int i = 0; i<9; i++){
       if(passes_Si_fwd[i]){
+	cout<<"si fwd match jet id loop\n";
 	matchJetId_0_last = matchJetId_0;
 	matchJetId_1_last = matchJetId_1;
-	matchJetId_0 = sel.FindMatchingJet(0,trg_vals_HF[i],true);
-	matchJetId_1 = sel.FindMatchingJet(1,trg_vals_HF[i],true);
+	if(!ts){ //FIXME si trg fwd has no working jet matching selection
+	  matchJetId_0 = sel.FindMatchingJet(0,trg_vals_Sifwd[i],true);
+	  matchJetId_1 = sel.FindMatchingJet(1,trg_vals_Sifwd[i],true);
+	}
 	event.set(tt_matchJetId_0, matchJetId_0);
 	event.set(tt_matchJetId_1, matchJetId_1);
 	if(!ts){
@@ -2078,7 +2092,9 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	}
 	if(debug) cout<<"AnalysisModule_noPtBinning matchJetId0: "<<matchJetId_0<<endl;
 	(*(h_trgSi_fwd[i]))->fill(event);
-	(*(h_lumiSi_fwd[i]))->fill(event);
+	if(debug) cout<<"after h_trgSi_fwd fill"<<endl;	
+	// (*(h_lumiSi_fwd[i]))->fill(event);
+	if(debug) cout<<"after h_lumiSi_fwd fill"<<endl;	
 	if(matchJetId_0_last!= -10. || matchJetId_1_last!= -10.){
 	  if(matchJetId_0 != matchJetId_0_last || matchJetId_1 != matchJetId_1_last){
 	    cout<<"new jet id differed for different trg.  jet id 0 was matched to "<<matchJetId_0<<" instead of "<<matchJetId_0_last<<", jet id 1 was matched to "<<matchJetId_1<<" instead of "<<matchJetId_1_last<<endl;

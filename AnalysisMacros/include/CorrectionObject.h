@@ -107,7 +107,7 @@ using namespace std;
     void OnOffResp_Plots();
     void JetMatching_PlotsDi();
     void OnOffResp_PlotsDi(bool useHF = true);
-    void AdditionalAsymmetryPlots(bool eta_abs = true);
+    void AdditionalAsymmetryPlots(bool eta_abs = true, bool si_trg=false);
     void triggerExclusivityCheck();
     
 static bool make_path(std::string path_name){

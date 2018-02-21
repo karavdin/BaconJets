@@ -252,7 +252,9 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 	 double err_rel_data = 2/(pow((1-pr_data_asymmetry[j][i]->GetBinContent(k+1)),2)) * pr_data_asymmetry[j][i]->GetBinError(k+1);
 
 	 //ratio of responses, again gaussian error propagation
-	 if(rel_data > 0) ratio_al_rel_r[k][j][i] = rel_mc/rel_data;
+	 if(rel_data > 0){
+	   ratio_al_rel_r[k][j][i] = rel_mc/rel_data;
+	     }
 	 else ratio_al_rel_r[k][j][i] = 0;
 	 err_ratio_al_rel_r[k][j][i] = sqrt(pow(1/rel_data*err_rel_mc,2) + pow(rel_mc/(rel_data*rel_data)*err_rel_data,2));
 	 if(mpf_data > 0) ratio_al_mpf_r[k][j][i] = mpf_mc/mpf_data;
@@ -343,7 +345,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
      pTgraph_mpf_r[j] = new TMultiGraph();
      for(int k=0; k<n_pt-1; k++){
       
-       if(pt_bins[k]<73) continue;
+       if(pt_bins[k]<53) continue;
        graph_rel_r[k][j] = new TGraphErrors(n_alpha,xbin_tgraph,ratio_al_rel_r[k][j],zero,err_ratio_al_rel_r[k][j]);
        graph_rel_r[k][j] = (TGraphErrors*)CleanEmptyPoints(graph_rel_r[k][j]);
 
@@ -745,7 +747,10 @@ void CorrectionObject::kFSR_CorrectFormulae(){
      pol1[j] = new TF1("pol1","pol1",0.14,0.36);  //TEST AK4
      pol1[j]->SetParameters(0,0);
 
-     if(!multigraph_mpf_empty[j]) pTgraph_mpf_r[j]->Fit(pol1[j],"R");
+     if(!multigraph_mpf_empty[j]){
+       pTgraph_mpf_r[j]->Fit(pol1[j],"R");
+       // std::cout<<"fitted pTgrapf_mpf\n";
+     }
      else{
        pol1[j]->SetParameters(1.03,-0.1);
        pol1[j]->SetParError(0,1);

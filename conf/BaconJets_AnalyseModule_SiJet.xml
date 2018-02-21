@@ -6,10 +6,10 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17D_Data/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17BCD_Data_SiTrg/">
 
 <!ENTITY b_closuretest       "false">
-<!ENTITY jec_version         "Summer16_03Feb2017_V3">
+<!ENTITY jec_version         "Fall17_17Nov2017_V4">
 <!ENTITY APPLY_WEIGHTS       "false">
 <!ENTITY WEIGHT_PATH         "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup_ForWeights/"> <!-- Change Weight-Path: CENTRAL/FWD -->
 <!ENTITY Cut_PATH            "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/EtaPhiCut/">
@@ -46,12 +46,11 @@
 <!ENTITY QCDPt3200toInf_pythia8_AK4CHS        SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3_EGReg/MC_QCD_Pt_3200toInf_EGReg_chsMET.xml">
 
 
+<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunB_17Nov2017_wCHSMETfixed.xml">
 
-<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/">
+<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunC_17Nov2017.xml">
 
-<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunC_17Nov17_v1.xml">
-
-<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunD_17Nov17_v1.xml">
+<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunD_17Nov2017_wCHSMETfixed.xml">
 
 
 <!ENTITY QCDPt15to7000 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/MC_94X_v1/QCD_Pt-15to7000.xml">
@@ -61,7 +60,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Run17D_ptBinned"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Run17BCD_SiTrg"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -139,17 +138,17 @@
 <!--           <OutputTree Name="AnalysisTree"/> -->
 <!--      </InputData> -->
 
-<!-- <InputData Lumi="62988012" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
-<!--           &DATA_RunB_promptReco_2017; -->
-<!--           <InputTree Name="AnalysisTree"/> -->
-<!--           <OutputTree Name="AnalysisTree"/> -->
-<!-- </InputData> -->
+<InputData Lumi="62988012" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_17Nov17_2017" Cacheable="&CACHEABLE;">
+          &DATA_RunB_promptReco_2017;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+</InputData>
 
-<!-- <InputData Lumi="96264601" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
-<!--           &DATA_RunC_promptReco_2017; -->
-<!--           <InputTree Name="AnalysisTree"/> -->
-<!--           <OutputTree Name="AnalysisTree"/> -->
-<!-- </InputData> -->
+<InputData Lumi="96264601" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_17Nov17_2017" Cacheable="&CACHEABLE;">
+          &DATA_RunC_promptReco_2017;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+</InputData>
 
 <InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunD_promptReco_2017;
@@ -161,14 +160,15 @@
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
       <Item Name="GenParticleCollection"   Value="GenParticles"/>
-      <Item Name="ElectronCollection"      Value="slimmedElectrons"/> <!-- change depending on 2016 MC or 17 data!!! -->
-      <Item Name="MuonCollection"          Value="slimmedMuons"/>
+      <Item Name="ElectronCollection"      Value="slimmedElectronsUSER"/> <!-- change depending on 2016 MC or 17 data!!! -->
+      <Item Name="MuonCollection"          Value="slimmedMuonsUSER"/>
       <Item Name="TauCollection"           Value="slimmedTaus"/>
       <!-- AK4CHS -->
       <Item Name="JetCollection"           Value="slimmedJets"/>
       <Item Name="JetLabel"                Value="AK4CHS"/> 
       <Item Name="GenJetCollection"        Value="slimmedGenJets"/>
-      <Item Name="METName"                 Value="slMETsCHS"/>
+      <!-- <Item Name="METName"                 Value="slMETsCHS"/> -->
+     <Item Name="METName"                 Value="slimmedMETs"/>     
      
       <!-- <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/data/Cert_13TeV_2017_HCAL_DCS_GOOD_11Jul.root"/> -->
 
@@ -197,9 +197,37 @@
       <Item Name="trigger260" Value="HLT_PFJet260_v*"/>
       <Item Name="trigger320" Value="HLT_PFJet320_v*"/>
       <Item Name="trigger400" Value="HLT_PFJet400_v*"/>
-      <Item Name="trigger400" Value="HLT_PFJet450_v*"/>     
+      <Item Name="trigger450" Value="HLT_PFJet450_v*"/>     
       <Item Name="trigger500" Value="HLT_PFJet500_v*"/>
 
+      <Item Name="trigger40_fwd" Value="HLT_PFJetFwd40_v*"/>     
+      <Item Name="trigger60_fwd" Value="HLT_PFJetFwd60_v*"/>
+      <Item Name="trigger80_fwd" Value="HLT_PFJetFwd80_v*"/>
+      <Item Name="trigger140_fwd" Value="HLT_PFJetFwd140_v*"/>
+      <Item Name="trigger200_fwd" Value="HLT_PFJetFwd200_v*"/>
+      <Item Name="trigger260_fwd" Value="HLT_PFJetFwd260_v*"/>
+      <Item Name="trigger320_fwd" Value="HLT_PFJetFwd320_v*"/>
+      
+      <Item Name="trigger400_fwd" Value="HLT_PFJetFwd400_v*"/>
+      <Item Name="trigger450_fwd" Value="HLT_PFJetFwd450_v*"/>
+      <Item Name="trigger500_fwd" Value="HLT_PFJetFwd500_v*"/>
+      
+      <Item Name="triggerDi40" Value="HLT_DiPFJetAve40_v*"/>
+      <Item Name="triggerDi60" Value="HLT_DiPFJetAve60_v*"/>
+      <Item Name="triggerDi80" Value="HLT_DiPFJetAve80_v*"/>
+      <Item Name="triggerDi140" Value="HLT_DiPFJetAve140_v*"/>
+      <Item Name="triggerDi200" Value="HLT_DiPFJetAve200_v*"/>
+      <Item Name="triggerDi260" Value="HLT_DiPFJetAve260_v*"/>
+      <Item Name="triggerDi320" Value="HLT_DiPFJetAve320_v*"/>
+      <Item Name="triggerDio400" Value="HLT_DiPFJetAve400_v*"/>
+      <Item Name="triggerDi500" Value="HLT_DiPFJetAve500_v*"/>
+
+      <Item Name="trigger60_HFJEC" Value="HLT_DiPFJetAve60_HFJEC_v*"/>
+      <Item Name="trigger80_HFJEC" Value="HLT_DiPFJetAve80_HFJEC_v*"/>
+      <Item Name="trigger100_HFJEC" Value="HLT_DiPFJetAve100_HFJEC_v*"/>
+      <Item Name="trigger160_HFJEC" Value="HLT_DiPFJetAve160_HFJEC_v*"/>
+      <Item Name="trigger220_HFJEC" Value="HLT_DiPFJetAve220_HFJEC_v*"/>
+      
 	<!-- Closure test? -->
 	<Item Name="ClosureTest" Value="&b_closuretest;"/>
 	<!--<Item Name="Split_JEC_DATA" Value="&b_splitjec_data;"/>
@@ -223,8 +251,6 @@
 	<Item Name="Trigger_Single"        Value="&USE_SINGLE_TRIGGER;"/>	
 	<Item Name="Only_BtB"               Value="&ONLY_BACK_TO_BACK;"/>
 
-        <Item Name="Debug" Value="true" />		
-	
 	<!-- always apply MET smearing -->
 
             <!-- tell AnalysisModuleRunner that we use a completely user-defined event format -->
@@ -234,6 +260,8 @@
             <Item Name="AnalysisModule" Value="AnalysisModule_SiJetTrg" /> 
 	<!--    <Item Name="MCreweight" Value="false" /> -->  
 
+        <Item Name="Debug" Value="false" />
+	
         </UserConfig>
     </Cycle>
 </JobConfiguration>

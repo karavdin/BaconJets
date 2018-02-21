@@ -84,6 +84,8 @@ void CorrectionObject::ControlPlots(bool forEverySingleTrigger){
   TCanvas* a = new TCanvas();
   a->Divide(3,2);
 
+  if(use_mc) cout<<"mc is used"<<endl;
+  
   a->cd(1);
   pt_jet1_DATA->SetMarkerStyle(20);
   pt_jet1_DATA->SetMarkerSize(0.5);
@@ -92,6 +94,7 @@ void CorrectionObject::ControlPlots(bool forEverySingleTrigger){
   pt_jet1_DATA->GetXaxis()->SetTitle("p_{T}, GeV");
   pt_jet1_DATA->Scale(1/pt_jet1_DATA->Integral());
 if(use_mc)     pt_jet1_DATA->GetYaxis()->SetRangeUser(0,0.1);
+ // cout<<pt_jet1_DATA<<endl;
   pt_jet1_DATA->Draw();
   pt_jet1_MC->SetMarkerStyle(22);
   pt_jet1_MC->SetMarkerSize(0.5);
@@ -119,6 +122,7 @@ if(use_mc)     pt_jet1_DATA->GetYaxis()->SetRangeUser(0,0.1);
   pt_jet2_DATA->GetXaxis()->SetTitle("p_{T}, GeV");
   pt_jet2_DATA->Scale(1/pt_jet2_DATA->Integral());
 if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
+ // cout<<pt_jet2_DATA<<endl;
   pt_jet2_DATA->Draw();
   pt_jet2_MC->SetMarkerStyle(22);
   pt_jet2_MC->SetMarkerSize(0.5);
@@ -135,6 +139,7 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   pt_jet3_DATA->GetXaxis()->SetTitle("p_{T}, GeV");
   pt_jet3_DATA->Scale(1/pt_jet3_DATA->Integral());
   if(use_mc)   pt_jet3_DATA->GetYaxis()->SetRangeUser(0,0.1);
+  // cout<<pt_jet3_DATA<<endl;
   pt_jet3_DATA->Draw();
   pt_jet3_MC->SetMarkerStyle(22);
   pt_jet3_MC->SetMarkerSize(0.5);
@@ -151,6 +156,7 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   eta_jet1_DATA->GetXaxis()->SetTitle("#eta");
   eta_jet1_DATA->Scale(1./eta_jet1_DATA->Integral());
   if(use_mc)   eta_jet1_DATA->GetYaxis()->SetRangeUser(0,0.04);
+  // cout<<eta_jet1_DATA<<endl;
   eta_jet1_DATA->Draw();
   eta_jet1_MC->SetMarkerStyle(22);
   eta_jet1_MC->SetMarkerSize(0.5);
@@ -167,6 +173,7 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   eta_jet2_DATA->GetXaxis()->SetTitle("#eta");
   eta_jet2_DATA->Scale(1./eta_jet2_DATA->Integral());
   if(use_mc)   eta_jet2_DATA->GetYaxis()->SetRangeUser(0,0.04);
+  // cout<<eta_jet2_DATA<<endl;
   eta_jet2_DATA->Draw();
   eta_jet2_MC->SetMarkerStyle(22);
   eta_jet2_MC->SetMarkerSize(0.5);
@@ -183,6 +190,7 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   Njets_DATA->GetXaxis()->SetTitle("Number of jets");
   Njets_DATA->Scale(1./Njets_DATA->Integral());
   if(use_mc)   Njets_DATA->GetYaxis()->SetRangeUser(0,0.1);
+  // cout<<Njets_DATA<<endl;
   Njets_DATA->Draw();
   Njets_MC->SetMarkerStyle(22);
   Njets_MC->SetMarkerSize(0.5);
@@ -192,8 +200,13 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   if(use_mc)    Njets_MC->Draw("same");
 
   cout << "Printing plots to " << SavePlots + "_jets.pdf" << endl;
-  a->Print(SavePlots + "_jets.pdf");
-
+    // cout<<"1\n";
+    // cout<<SavePlots<<endl;
+    // cout<<a<<endl;
+    // a->Draw();
+         // cout<<"1.2\n"; 
+    a->Print(SavePlots + "_jets.pdf","pdf");
+    // cout<<"1.5\n";
 
   TCanvas* b = new TCanvas();
   b->Divide(3,2);
@@ -243,6 +256,7 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   if(use_mc)    pt_ave_MC->Scale(1./pt_ave_MC->Integral());
   if(use_mc)    pt_ave_MC->Draw("same");
 
+    cout<<"2\n";
   b->cd(4);
   gPad->SetLogy();
   asym_DATA->SetMarkerStyle(20);
@@ -293,6 +307,7 @@ if(use_mc)     pt_jet2_DATA->GetYaxis()->SetRangeUser(0,0.1);
   b->Print(SavePlots + "_dijet.pdf");
 
 
+    cout<<"3\n";
 
   TCanvas* f = new TCanvas();
   TH2F *mpf_vs_etaProbe_DATA = (TH2F*)CorrectionObject::_DATAFile->Get(dirName+"/mpf_vs_etaProbe");

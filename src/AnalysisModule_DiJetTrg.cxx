@@ -1144,7 +1144,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     if(apply_global){
       jetleptoncleaner->process(event);
       jet_corrector->process(event);
-}
+    }
  
    
 
@@ -1267,7 +1267,6 @@ if(debug){
     };
 
     double trgHF_thresh[6] = {s_Pt_Ave60HF_cut,s_Pt_Ave80HF_cut,s_Pt_Ave100HF_cut,s_Pt_Ave160HF_cut,s_Pt_Ave220HF_cut,s_Pt_Ave300HF_cut};
-
     
     Jet* jet_probe = jet1;
     Jet* jet_barrel = jet2;

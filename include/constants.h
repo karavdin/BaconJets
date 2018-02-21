@@ -36,6 +36,34 @@ const TString pt_range[n_pt]={
   "520",
   "648","1000","2000"};
 
+const int n_pt_Si = 13;
+
+const double pt_bins_Si[n_pt_Si] = {
+  40,
+  53 ,
+ 74  ,
+ 94  ,
+ 158 ,
+ 222 ,
+ 284 ,
+ 345 ,
+ 443 ,
+ 564 ,
+ 598 ,1000,2000};
+
+const TString pt_range_Si[n_pt_Si]={
+  "40",
+  "53",
+  "74",
+  "94",
+  "158",
+  "222",
+  "284",
+  "345",
+  "443",
+  "564",
+  "598","1000","2000"};
+
 //19 bin edges, 18 actual bins
 constexpr static int n_eta = 19;
 static std::vector<double>   eta_range  =  {0, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.93, 2.172, 2.322, 2.5, 2.65, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191};
@@ -131,19 +159,19 @@ constexpr static float s_Pt_Ave300HF_cut  = 426;
  // constexpr static float s_Pt_Ave450_cut  = 481;
  // constexpr static float s_Pt_Ave500_cut  = 528;
 
-//from 94X Run D
- constexpr static float s_Pt_AveMC_cut   = 40;
- constexpr static float s_Pt_Ave40_cut   = 75;
- constexpr static float s_Pt_Ave60_cut   = 94;
- constexpr static float s_Pt_Ave80_cut   = 114;
- constexpr static float s_Pt_Ave140_cut  = 191;
- constexpr static float s_Pt_Ave200_cut  = 254;
- constexpr static float s_Pt_Ave260_cut  = 327;
- constexpr static float s_Pt_Ave320_cut  = 394;
- constexpr static float s_Pt_Ave400_cut  = 473;
- constexpr static float s_Pt_Ave450_cut  = 503;
- constexpr static float s_Pt_Ave500_cut  = 528;
-
+//from 94X Run D 17Nov2017
+ constexpr static float s_Pt_AveMC_cut   =40;
+ constexpr static float s_Pt_Ave40_cut   =53 ;
+ constexpr static float s_Pt_Ave60_cut   =74 ;
+ constexpr static float s_Pt_Ave80_cut   =94 ;
+ constexpr static float s_Pt_Ave140_cut  =158;
+ constexpr static float s_Pt_Ave200_cut  =222;
+ constexpr static float s_Pt_Ave260_cut  =284;
+ constexpr static float s_Pt_Ave320_cut  =345;
+ constexpr static float s_Pt_Ave400_cut  =443;
+ constexpr static float s_Pt_Ave450_cut  =564;
+ constexpr static float s_Pt_Ave500_cut  =598;
+         	 	 
 //from Di triggers 92X
  // constexpr static float d_Pt_AveMC_cut   =  51;
  // constexpr static float d_Pt_Ave40_cut   =  51;
@@ -171,6 +199,7 @@ constexpr static float s_Pt_Ave300HF_cut  = 426;
 //2017
 //from Si triggers
 constexpr static int trg_vals_Si[10]  = {40,60,80,140,200,260,320,400,450,500};
+constexpr static int trg_vals_Sifwd[9]  = {60,80,140,200,260,320,400,450,500};
 constexpr static int trg_vals_Si_plusfwd[19]  = {40,60,80,140,200,260,320,400,450,500,60,80,140,200,260,320,400,450,500};
 //from Di triggersint trg_val
 constexpr static int trg_vals_Di[9]  = {40,60,80,140,200,260,320,400,500};

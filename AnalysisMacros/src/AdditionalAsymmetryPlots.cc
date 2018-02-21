@@ -21,10 +21,17 @@
 
 using namespace std;
 
-void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs){
+void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   cout << "--------------- StartingAdditionalAsymmetryPlots() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
+  // const int n_pt_ = (si_trg ? n_pt_Si : n_pt );
+
+  // double pt_bins_[n_pt_]; = (si_trg ? pt_bins_Si : pt_bins);
+  // TString pt_range_[n_pt_]; = (si_trg ? pt_range_Si : pt_range);
+
+  // for(int i=0; i<n_pt_;i++)
+  
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/fullAsym/");
 
   //Table with number of events in each pT- and eta-bin

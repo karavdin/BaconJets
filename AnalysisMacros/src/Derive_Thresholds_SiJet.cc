@@ -78,6 +78,23 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
     hdata_pt_1_wNext[j]= new TH1D(name2_1,"",nResponseBins*3,0,j<7?600:1200);
     hdata_pt_2[j]= new TH1D(name_2,"",nResponseBins*3,0,j<7?600:1200);
     hdata_pt_2_wNext[j]= new TH1D(name2_2,"",nResponseBins*3,0,j<7?600:1200);
+
+    TString name_HF = "pt_ave_trg"+to_string(triggerVal_HF[j])+string("_HF");
+    TString name2_HF = "pt_ave_wNext_trg"+to_string(triggerVal_HF[j])+string("_HF");
+
+    hdata_pt_ave_HF[j]= new TH1D(name_HF,"",nResponseBins*6,0,j<7?600:1200);
+    hdata_pt_ave_wNext_HF[j]= new TH1D(name2_HF,"",nResponseBins*6,0,j<7?600:1200);
+
+
+    TString name_1_HF = "pt_1_trg"+to_string(triggerVal_HF[j])+"_HF";
+    TString name2_1_HF = "pt_1_wNext_trg"+to_string(triggerVal_HF[j])+"_HF";
+    TString name_2_HF = "pt_2_trg"+to_string(triggerVal_HF[j])+"_HF";
+    TString name2_2_HF = "pt_2_wNext_trg"+to_string(triggerVal_HF[j])+"_HF";
+      
+    hdata_pt_1_HF[j]= new TH1D(name_1_HF,"",nResponseBins*3,0,j<7?600:1200);
+    hdata_pt_1_wNext_HF[j]= new TH1D(name2_1_HF,"",nResponseBins*3,0,j<7?600:1200);
+    hdata_pt_2_HF[j]= new TH1D(name_2_HF,"",nResponseBins*3,0,j<7?600:1200);
+    hdata_pt_2_wNext_HF[j]= new TH1D(name2_2_HF,"",nResponseBins*3,0,j<7?600:1200);
     
   }
   
@@ -94,6 +111,8 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   TTreeReaderValue<int> trg450(myReader_DATA, "trigger450");
   TTreeReaderValue<int> trg500(myReader_DATA, "trigger500");
 
+  cout<<"after central readers\n";
+
   TTreeReaderValue<int> trg60_HF(myReader_DATA, "trigger60_fwd");
   TTreeReaderValue<int> trg80_HF(myReader_DATA, "trigger80_fwd");
   TTreeReaderValue<int> trg140_HF(myReader_DATA, "trigger140_fwd");  
@@ -103,7 +122,8 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   TTreeReaderValue<int> trg400_HF(myReader_DATA, "trigger400_fwd");
   TTreeReaderValue<int> trg450_HF(myReader_DATA, "trigger450_fwd");
   TTreeReaderValue<int> trg500_HF(myReader_DATA, "trigger500_fwd");
-  
+
+  cout<<"after fwd readers\n";  
   
   TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
@@ -124,7 +144,8 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
     exclusive = (*trg40)^(*trg60)^(*trg80)^(*trg140)^(*trg200)^(*trg260)^(*trg320)^(*trg400)^(*trg450)^(*trg500)^(useHF ? (*trg60_HF)^(*trg80_HF)^(*trg140_HF)^(*trg200_HF)^(*trg260_HF)^(*trg320_HF)^(*trg400_HF)^(*trg450_HF)^(*trg500_HF) : 0);
     for(int j=0; j<trg_nr-1; j++){
       if(*(trg_arr[j])){
-	hdata_pt_ave[j]->Fill(*pt_ave_data);
+	hdata_pt_ave[j]->Fill(*pt_ave_data);\
+	// cout<<"debug after pt ave fill for central trg\n";
 	if(pt_check){
 	  hdata_pt_1[j]->Fill(*pt_1_data);
 	  hdata_pt_2[j]->Fill(*pt_2_data);
@@ -141,21 +162,28 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
     }
 
     if(useHF){
+      // bool hftest = false;
       for(int j=0; j<n_trigger_HF-1; j++){
-	 //cout<<"debug 5.3\n";
-	if(*(trg_arr_HF[j])){
-	 //cout<<"debug 5.31\n";	  
+	 // cout<<"debug 5.3\n";
+	// hftest = hftest||*(trg_arr_HF[j]);
+       	if(*(trg_arr_HF[j])){
+	 // cout<<"debug 5.31\n";
+	 // cout<<(*(pt_ave_data))<<endl;
+	 // cout<<"debug 5.311\n";	
+	 
 	  hdata_pt_ave_HF[j]->Fill(*pt_ave_data);
-	  //cout<<"debug 5.32\n";
+	  // cout<<"debug 5.32\n";
 	  if(pt_check){
 	    hdata_pt_1_HF[j]->Fill(*pt_1_data);
 	    hdata_pt_2_HF[j]->Fill(*pt_2_data);
 	  }
 	}
 	if(*(trg_arr_HF[j+1])){
-	  	 //cout<<"debug 5.33\n";	
+	  	 // cout<<"debug 5.33\n";
+	 // cout<<(*(pt_ave_data))<<endl;
+	 // cout<<"debug 5.311\n";			 
 	  hdata_pt_ave_wNext_HF[j]->Fill(*pt_ave_data);
-	  	 //cout<<"debug 5.34\n";	
+	  	 // cout<<"debug 5.34\n";	
 	  if(pt_check){
 	    hdata_pt_1_wNext_HF[j]->Fill(*pt_1_data);
 	    hdata_pt_2_wNext_HF[j]->Fill(*pt_2_data);
@@ -163,6 +191,7 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
 	}
 	
       }
+      // cout<<"is there hf stuff found in the readers?  "<<hftest<<endl;
     }    
     
     myCount++;
@@ -212,8 +241,11 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   }
 
    if(useHF){
+     std::cout<<"\nstarted HF saving loop\n";
     for(int j=0; j<n_trigger_HF-1; j++){
+      std::cout<<j<<std::endl;
       hdata_pt_ave_wNext_HF[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJetAve"+to_string(triggerVal_HF[j])+"_HF_pt_ave_wNext"+".root");
+      if(j==0)  std::cout<<"after first HF save"<<std::endl;
       hdata_pt_ave_HF[j]->SaveAs(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_PFJetAve"+to_string(triggerVal_HF[j])+"_HF_pt_ave"+".root");
 
       hdata_pt_ave_wNext_HF[j]->Rebin(6);
@@ -417,12 +449,7 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   }
     
 
-
-
     if(useHF){
-
-
-
   cout << "fit the thresholds of HF" << endl << endl;
  
   bool use_for_extrapol_HF[n_trigger_HF-1];

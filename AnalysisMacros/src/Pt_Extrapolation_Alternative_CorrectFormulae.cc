@@ -40,6 +40,8 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
   TStyle* m_gStyle = new TStyle();
   m_gStyle->SetOptFit(000);
 
+  string output_header = "{ 1 JetEta 1 JetPt [2]*([3]*([4]+[5]*TMath::Log(max([0],min([1],x))))*1./([6]+[7]*100./3.*(TMath::Max(0.,1.03091-0.051154*pow(x,-0.154227))-TMath::Max(0.,1.03091-0.051154*TMath::Power(208.,-0.154227)))+[8]*0.021*(-1.+1./(1.+exp(-(TMath::Log(x)-5.030)/0.395))))) Correction L2Relative}";
+
   // fill the histos for pt average in bins of eta
   TH1D* ptave_data[n_eta-1];
   int countPt = 0;
@@ -613,13 +615,15 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
     //Be carefull with the fit range!
     kfsr_fit_mpf->SetLineColor(kRed+1);
     std::cout<<"!!! kFSR MPF fit !!!"<<std::endl;
-
+    std::cout<<hist_kfsr_mpf->GetEntries()<<std::endl;
+    
     if(!fit_fullrange && !fit_285) hist_kfsr_mpf->Fit("kfsr_fit_mpf","SR","",0,3.14);
     //   if(!fit_fullrange) hist_kfsr_mpf->Fit("kfsr_fit_mpf","SR","",0,2.4);
     else if(!fit_fullrange && fit_285) hist_kfsr_mpf->Fit("kfsr_fit_mpf","SR","",0,2.85);
     else hist_kfsr_mpf->Fit("kfsr_fit_mpf","SR","",0,5.19);
 
-    //Create a histogram to hold the confidence intervals                                                                                        
+    std::cout<<"Create a histogram to hold the confidence intervals\n";
+    
     hist_kfsr_fit_mpf = (TH1D*)hist_kfsr_mpf->Clone();
     (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hist_kfsr_fit_mpf);
     //Now the "hist_kfsr_fit" histogram has the fitted function values as the
@@ -679,22 +683,22 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
     
     
     ofstream output, output_loglin, uncerts, uncerts_loglin, output_hybrid, uncerts_hybrid;
-    output.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_MPF_FLAT_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
-    output_loglin.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_MPF_LOGLIN_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
-    uncerts.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_MPF_FLAT_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
-    uncerts_loglin.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_MPF_LOGLIN_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
+    output.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_MPF_FLAT_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
+    output_loglin.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_MPF_LOGLIN_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
+    uncerts.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_MPF_FLAT_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
+    uncerts_loglin.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_MPF_LOGLIN_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
 
-    output_hybrid.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_MPF_Hybrid_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
-    uncerts_hybrid.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_MPF_Hybrid_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
+    output_hybrid.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_MPF_Hybrid_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
+    uncerts_hybrid.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_MPF_Hybrid_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
 
 
-    output  << "{ 1 JetEta 1 JetPt [2]*([3]*([4]+[5]*TMath::Log(max([0],min([1],x))))*1./([6]+[7]*100./3.*(TMath::Max(0.,1.03091-0.051154*pow(x,-0.154227))-TMath::Max(0.,1.03091-0.051154*TMath::Power(208.,-0.154227)))+[8]*((-2.36997+0.413917*TMath::Log(x))/x-(-2.36997+0.413917*TMath::Log(208))/208))) Correction L2Relative}" << endl;
-    output_loglin  << "{ 1 JetEta 1 JetPt [2]*([3]*([4]+[5]*TMath::Log(max([0],min([1],x))))*1./([6]+[7]*100./3.*(TMath::Max(0.,1.03091-0.051154*pow(x,-0.154227))-TMath::Max(0.,1.03091-0.051154*TMath::Power(208.,-0.154227)))+[8]*((-2.36997+0.413917*TMath::Log(x))/x-(-2.36997+0.413917*TMath::Log(208))/208))) Correction L2Relative}" << endl;
+    output  << output_header  << endl;
+    output_loglin  <<output_header  << endl;
     uncerts << "{ 1 JetEta 1 JetPt [0] kFSR_err f0_err}" << endl;
     //uncerts_loglin << "{ 1 JetEta 1 JetPt [0] kFSR_err cov(0,0) cov(1,1) cov(0,1) }" << endl;
     uncerts_loglin << "{ 1 JetEta 1 JetPt sqrt(fabs([0]*[0]+[1]+[2]*log(x)*log(x)+2*[3]*log(x))) Correction L2Relative}" << endl;
 
-    output_hybrid  << "{ 1 JetEta 1 JetPt [2]*([3]*([4]+[5]*TMath::Log(max([0],min([1],x))))*1./([6]+[7]*100./3.*(TMath::Max(0.,1.03091-0.051154*pow(x,-0.154227))-TMath::Max(0.,1.03091-0.051154*TMath::Power(208.,-0.154227)))+[8]*((-2.36997+0.413917*TMath::Log(x))/x-(-2.36997+0.413917*TMath::Log(208))/208))) Correction L2Relative}" << endl;
+    output_hybrid  << output_header << endl;
     uncerts_hybrid << "{ 1 JetEta 1 JetPt Hybrid Method: Use const fit for 2.65 < |eta| < 3.1, else Log-lin}" << endl;
 
     //!!!Check if fit or hist values are used!!!
@@ -1046,22 +1050,21 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
     TH1D* Residual_const_DiJet_val = new TH1D("res_const_dijet_val","res_const_dijet_val", n_eta-1,eta_bins);
 
     ofstream output, output_loglin, uncerts, uncerts_loglin, output_hybrid, uncerts_hybrid ;
-    output.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_pT_FLAT_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
-    output_loglin.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_pT_LOGLIN_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
-    uncerts.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_pT_FLAT_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
-    uncerts_loglin.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_pT_LOGLIN_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
+    output.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_pT_FLAT_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
+    output_loglin.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_pT_LOGLIN_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
+    uncerts.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_pT_FLAT_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
+    uncerts_loglin.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_pT_LOGLIN_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
 
-    output_hybrid.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_pT_Hybrid_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
-    uncerts_hybrid.open(CorrectionObject::_outpath+"output/Summer16_03Feb2017_pT_Hybrid_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
+    output_hybrid.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_pT_Hybrid_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt");
+    uncerts_hybrid.open(CorrectionObject::_outpath+"output/Fall17_17Nov2017_pT_Hybrid_L2Residual_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".txt.STAT");
 
-
-    output  << "{ 1 JetEta 1 JetPt [2]*([3]*([4]+[5]*TMath::Log(max([0],min([1],x))))*1./([6]+[7]*100./3.*(TMath::Max(0.,1.03091-0.051154*pow(x,-0.154227))-TMath::Max(0.,1.03091-0.051154*TMath::Power(208.,-0.154227)))+[8]*((-2.36997+0.413917*TMath::Log(x))/x-(-2.36997+0.413917*TMath::Log(208))/208))) Correction L2Relative}" << endl;
-    output_loglin  << "{ 1 JetEta 1 JetPt [2]*([3]*([4]+[5]*TMath::Log(max([0],min([1],x))))*1./([6]+[7]*100./3.*(TMath::Max(0.,1.03091-0.051154*pow(x,-0.154227))-TMath::Max(0.,1.03091-0.051154*TMath::Power(208.,-0.154227)))+[8]*((-2.36997+0.413917*TMath::Log(x))/x-(-2.36997+0.413917*TMath::Log(208))/208))) Correction L2Relative}" << endl;
+    output  << output_header << endl;
+    output_loglin  << output_header << endl;
     uncerts << "{ 1 JetEta 1 JetPt [0] kFSR_err f0_err}" << endl;
     //uncerts_loglin << "{ 1 JetEta 1 JetPt [0] kFSR_err cov(0,0) cov(1,1) cov(0,1) }" << endl;
     uncerts_loglin << "{ 1 JetEta 1 JetPt sqrt(fabs([0]*[0]+[1]+[2]*log(x)*log(x)+2*[3]*log(x))) Correction L2Relative}" << endl;
 
-    output_hybrid  << "{ 1 JetEta 1 JetPt [2]*([3]*([4]+[5]*TMath::Log(max([0],min([1],x))))*1./([6]+[7]*100./3.*(TMath::Max(0.,1.03091-0.051154*pow(x,-0.154227))-TMath::Max(0.,1.03091-0.051154*TMath::Power(208.,-0.154227)))+[8]*((-2.36997+0.413917*TMath::Log(x))/x-(-2.36997+0.413917*TMath::Log(208))/208))) Correction L2Relative}" << endl;
+    output_hybrid  <<output_header  << endl;
     uncerts_hybrid << "{ 1 JetEta 1 JetPt Hybrid Method: Use const fit for 2.65 < |eta| < 3.1, else Log-lin}" << endl;
 
     for (int j=n_eta-1; j>0; --j){
