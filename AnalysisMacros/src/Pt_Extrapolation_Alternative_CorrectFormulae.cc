@@ -183,7 +183,7 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
   for(int j=0; j<n_eta-1; j++){
     for(int k=0; k<n_pt-1; k++){
       enough_entries[j][k] = false;
-      if(n_entries_mc[j][k] > 100 && n_entries_data[j][k] > 100) enough_entries[j][k] = true;
+      if(n_entries_mc[j][k] > 250 && n_entries_data[j][k] > 250) enough_entries[j][k] = true;
     }
   }
 
