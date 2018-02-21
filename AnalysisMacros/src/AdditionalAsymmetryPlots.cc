@@ -356,16 +356,20 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       TH1D* htemp_rel_data;
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
       TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+      TString evname = "Tot.Events = ";
+     
       TString name_rel_data = "hist_data_A_"+eta_name+"_"+pt_name;
       htemp_rel_data = (TH1D*)f_rel_data->Get(name_rel_data);
+      evname += htemp_rel_data->GetEntries();
       htemp_rel_data->Draw("E");
       htemp_rel_data->GetXaxis()->SetTitle("A");
       htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");
       htemp_rel_data->GetYaxis()->SetTitleOffset(1.5);
       htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
-      htemp_rel_data->Draw("E");		
+      htemp_rel_data->Draw("EP");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       tex->DrawLatex(0.54,0.8,legname);		
+      tex->DrawLatex(0.58,0.75,evname);		
       cFullA->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
       delete cFullA;
       delete htemp_rel_data;
