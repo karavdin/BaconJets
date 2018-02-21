@@ -8,18 +8,18 @@ _main()
 
     case "${prev}" in
 	--run)
-	    COMPREPLY=( $(compgen -W "B C D BC" -- ${cur}) )
+	    COMPREPLY=( $(compgen -W "B C D DE DEF BC" -- ${cur}) )
             return 0
             ;;
 	--mode)
 	    # COMPREPLY=( $(compgen -W "DeriveThresholds DeriveThresholds_noDiJCut DeriveThresholds_inclSiMu_noDiJCut" -- ${cur}) )
-	    local names=$(for x in `ls -1 /nfs/dust/cms/user/"$USER"/forBaconJets/17Nov2017/Residuals/ | grep Run17BC[D]*_Data`; do y=${x#Run17[BC]*_Data_}; echo ${y#*_Data}; done)
+	    local names=$(for x in `ls -1 /nfs/dust/cms/user/"$USER"/forBaconJets/17Nov2017/Residuals/ | grep Run17[B]*[C]*[D]*[E]*[F]*_Data`; do y=${x#*_Data}; echo ${y#_}; done)
 	    COMPREPLY=( $(compgen -W "${names}" -- ${cur}) )
             return 0
             ;;
 	--dname)
 	    # COMPREPLY=( $(compgen -W "newPtBinning wMu17 wIsoMu27 wIsoMu20" -- ${cur}) )
-	    local names=$(for x in `ls -1 /nfs/dust/cms/user/"$USER"/forBaconJets/17Nov2017/Residuals/Run17*/ | grep Run17.*.root`; do k=${x%.root}; y=${k#Run17[BCD]*_Data_}; echo ${y#*_Data}; done)
+	    local names=$(for x in `ls -1 /nfs/dust/cms/user/"$USER"/forBaconJets/17Nov2017/Residuals/Run17*/ | grep Run.*.root`; do k=${x%.root}; y=${k#Run17[B]*[C]*[D]*[E]*[F]*_17Nov17_2017_}; z=${y#*_17Nov17_2017}; j=${z#*_17Nov17}; echo ${j#_}; done)
 	    COMPREPLY=( $(compgen -W "${names}" -- ${cur}) )
             return 0
             ;;
