@@ -124,6 +124,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     Event::Handle<float> tt_jet1_pt;
     Event::Handle<float> tt_jet2_pt;
     Event::Handle<float> tt_jet3_pt;
+    Event::Handle<float> tt_jet3_eta;
     Event::Handle<float> tt_jet1_ptRaw;
     Event::Handle<float> tt_jet2_ptRaw;
     Event::Handle<float> tt_jet3_ptRaw;
@@ -894,6 +895,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     tt_jet1_pt = ctx.declare_event_output<float>("jet1_pt");
     tt_jet2_pt = ctx.declare_event_output<float>("jet2_pt");
     tt_jet3_pt = ctx.declare_event_output<float>("jet3_pt");
+    tt_jet3_eta = ctx.declare_event_output<float>("jet3_eta");
     tt_jet1_ptRaw = ctx.declare_event_output<float>("jet1_ptRaw");
     tt_jet2_ptRaw = ctx.declare_event_output<float>("jet2_ptRaw");
     tt_jet3_ptRaw = ctx.declare_event_output<float>("jet3_ptRaw");
@@ -1846,11 +1848,12 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     double dR_jet3_barreljet = -1;
     double dR_jet3_probejet = -1;
 
-   float jet3_pt = 0; float jet3_ptRaw = 0;
+   float jet3_pt = 0; float jet3_ptRaw = 0; float jet3_eta = 0;
     if(jet_n>2 && jetid_2 >= 0){
       if(jetid_2>=jet_n) throw invalid_argument("matched id of jet 2 is not in jet vector");     
       Jet* jet3 = &event.jets->at(jetid_2);
       jet3_pt = jet3->pt();
+      jet3_eta = jet3->eta();
       auto factor_raw3 = jet3->JEC_factor_raw();
       jet3_ptRaw = jet3_pt*factor_raw3;
       dR_jet3_barreljet = deltaR(*jet3, *jet_barrel);
@@ -1886,6 +1889,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     event.set(tt_jet1_pt,jet1_pt);
     event.set(tt_jet2_pt,jet2_pt);
     event.set(tt_jet3_pt,jet3_pt);
+    event.set(tt_jet3_eta,jet3_eta);
     event.set(tt_jet1_ptRaw,jet1_ptRaw);
     event.set(tt_jet2_ptRaw,jet2_ptRaw);
     event.set(tt_jet3_ptRaw,jet3_ptRaw);

@@ -30,7 +30,7 @@ const int triggerValDi_HF[n_triggerDi_HF]  = {60,80,100,160,220,300};
 const int triggerValSi_HF[n_triggerSi_HF]  = {60,80,140,200,260,320,400,450,500};
 
 const int n_pt = 12;
-/* const int n_pt = 13; */
+//const int n_pt = 13;
 const int n_pt_Si = 13;
 
 // // //for Si derived trigger
@@ -56,6 +56,8 @@ const int n_pt_Si = 13;
 
 
 //for Di derived triggers 94X 17Nov2017
+//DiJet triggers? -------------
+
 
 const double pt_bins[n_pt] = {
   51,
@@ -81,6 +83,23 @@ const TString pt_range[n_pt]={
   "520",
   "648","1000","2000"};
 
+
+//for Di derived triggers 94X 17Nov2017
+
+const double pt_bins_HF[n_pt] = {
+  73,
+  93,
+  113,
+  176,
+  239,
+  318,1000,2000};
+
+const TString pt_range_HF[n_pt]={
+  "73","93","113","176","239","318","1000","2000"};
+
+//DiJet triggers? -------------
+
+/* //SingleJet triggers? ------------- */
 /* const double pt_bins[n_pt] = { */
 /*   40, */
 /*   53 , */
@@ -107,6 +126,9 @@ const TString pt_range[n_pt]={
 /*   "564", */
 /*   "598","1000","2000"}; */
 
+/* // [END]SingleJet triggers? ------------- */
+
+
 const double pt_bins_Si[n_pt_Si] = {
   40,
   53 ,
@@ -121,18 +143,7 @@ const double pt_bins_Si[n_pt_Si] = {
   598 ,1000,2000};
 
 
-//for Di derived triggers 94X 17Nov2017
 
-const double pt_bins_HF[n_pt] = {
-  73,
-  93,
-  113,
-  176,
-  239,
-  318,1000,2000};
-
-const TString pt_range_HF[n_pt]={
-  "71","91","111","173","236","317","1000","2000"};
 
 
 // const double pt_bins_HF[n_pt] = {60,80,100,160,220,300, 1000, 2000};

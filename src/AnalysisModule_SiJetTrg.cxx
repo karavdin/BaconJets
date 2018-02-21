@@ -94,6 +94,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     Event::Handle<float> tt_probejet_photonEF; Event::Handle<float> tt_probejet_muonEF; 
 
     Event::Handle<float> tt_jet1_pt;     Event::Handle<float> tt_jet2_pt;     Event::Handle<float> tt_jet3_pt;
+  Event::Handle<float> tt_jet3_eta;
     Event::Handle<float> tt_jet1_ptRaw;  Event::Handle<float> tt_jet2_ptRaw;  Event::Handle<float> tt_jet3_ptRaw;
   Event::Handle<float> tt_jet1_pt_onoff_Resp;     Event::Handle<float> tt_jet2_pt_onoff_Resp;
     Event::Handle<int> tt_nvertices;
@@ -1095,7 +1096,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     //correct MET only AFTER smearing the jets
     if(apply_global){
-      jet_corrector->correct_met(event);
+      jet_corrector->correct_met(event,true);
     }
     h_afterMET->fill(event); 
 //##############################################################################################
@@ -1284,10 +1285,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     double dR_jet3_barreljet = -1;
     double dR_jet3_probejet = -1;
 
-   float jet3_pt = 0; float jet3_ptRaw = 0;
+   float jet3_pt = -1; float jet3_ptRaw = -1; float jet3_eta = -100;
     if(jet_n>2){
       Jet* jet3 = &event.jets->at(2);
       jet3_pt = jet3->pt();
+      jet3_eta = jet3->eta();
       auto factor_raw3 = jet3->JEC_factor_raw();
       jet3_ptRaw = jet3_pt*factor_raw3;
       dR_jet3_barreljet = deltaR(*jet3, *jet_barrel);
@@ -1324,6 +1326,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     event.set(tt_jet1_pt,jet1_pt);
     event.set(tt_jet2_pt,jet2_pt);
     event.set(tt_jet3_pt,jet3_pt);
+    event.set(tt_jet3_eta,jet3_eta);
     event.set(tt_jet1_ptRaw,jet1_ptRaw);
     event.set(tt_jet2_ptRaw,jet2_ptRaw);
     event.set(tt_jet3_ptRaw,jet3_ptRaw);
