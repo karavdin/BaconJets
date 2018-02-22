@@ -37,6 +37,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   //Table with number of events in each pT- and eta-bin
 
   TH1D *hdata_asymmetry[n_pt-1][(eta_abs ? n_eta : n_eta_full)  -1]; // A for data
+  TH1D *hdata_bsymmetry[n_pt-1][(eta_abs ? n_eta : n_eta_full)  -1]; // B for data
   TH2D *hdata_asymmetry_nvert[n_pt-1][(eta_abs ? n_eta : n_eta_full)-1]; // A for data
   TH2D *hdata_asymmetry_rho[n_pt-1][(eta_abs ? n_eta : n_eta_full)-1]; // A for data
 
@@ -47,7 +48,8 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   int count = 0;
   TString name1 = "hist_data_A_";
   TString name2 = "hist_data_";
- 
+  TString name3 = "hist_data_B_";
+
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
       TString eta_name = "eta_"+(eta_abs ? eta_range2 : eta_range2_full)[j]+"_"+(eta_abs ? eta_range2 : eta_range2_full)[j+1];
 
@@ -59,7 +61,10 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
 
       TString name = name1 + eta_name + "_" + pt_name; 
-      hdata_asymmetry[k][j] = new TH1D(name,"",3*nResponseBins, -1.2, 1.2);
+      hdata_asymmetry[k][j] = new TH1D(name,"",2*nResponseBins, -1.2, 1.2);
+      name = name3 + eta_name + "_" + pt_name; 
+      hdata_bsymmetry[k][j] = new TH1D(name,"",2*nResponseBins, -1.2, 1.2);
+
       name = name1+"nvert_" + eta_name + "_" + pt_name;      
       hdata_asymmetry_nvert[k][j] = new TH2D(name,"",nResponseBins/2, -1.2, 1.2,nResponseBins/10 ,0,60);
       name = name1+"rho_" + eta_name + "_" + pt_name;    
@@ -75,6 +80,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
   TTreeReaderValue<Float_t> alpha_data(myReader_DATA, "alpha");
   TTreeReaderValue<Float_t> asymmetry_data(myReader_DATA, "asymmetry");
+  TTreeReaderValue<Float_t> bsymmetry_data(myReader_DATA, "B");
   TTreeReaderValue<Float_t> probejet_eta_data(myReader_DATA, "probejet_eta");
   TTreeReaderValue<Float_t> probejet_pt_data(myReader_DATA, "probejet_pt");
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
@@ -103,6 +109,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 	  hdata_jet2_pt[j]->Fill(fabs(*jet2_pt_data),*weight_data);
 	  hdata_jet3_pt[j]->Fill(fabs(*jet3_pt_data),*weight_data);	  
 	  hdata_asymmetry[k][j]->Fill(*asymmetry_data,*weight_data);
+	  hdata_bsymmetry[k][j]->Fill(*bsymmetry_data,*weight_data);
 	  hdata_asymmetry_rho[k][j]->Fill(*asymmetry_data,*rho_data,*weight_data);
 	  hdata_asymmetry_nvert[k][j]->Fill(*asymmetry_data,*nvertices_data,*weight_data);
 	  myCount++;
@@ -118,6 +125,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
     for(int k=0; k<n_pt-1; k++){
       hdata_asymmetry[k][j]->Write();
+      hdata_bsymmetry[k][j]->Write();
     }
   }
   test_out_data_A->Close();
@@ -153,25 +161,26 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   
 
 
-  //R_MC and R_DATA overlaid in the same plot as a function of pT, in bins of |eta|
-  double val_rel_mc[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //value at pt,eta
-  double err_rel_mc[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //error of ratio at pt,eta
-  double val_mpf_mc[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //ratio at pt,eta
-  double err_mpf_mc[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //error of ratio at pt,eta
-  double val_rel_data[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //value at pt,eta
-  double err_rel_data[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //error of ratio at pt,eta
-  double val_mpf_data[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //ratio at pt,eta
-  double err_mpf_data[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //error of ratio at pt,eta
+  // //R_MC and R_DATA overlaid in the same plot as a function of pT, in bins of |eta|
+  // double val_rel_mc[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //value at pt,eta
+  // double err_rel_mc[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //error of ratio at pt,eta
+  // double val_mpf_mc[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //ratio at pt,eta
+  // double err_mpf_mc[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //error of ratio at pt,eta
+  // double val_rel_data[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //value at pt,eta
+  // double err_rel_data[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //error of ratio at pt,eta
+  // double val_mpf_data[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //ratio at pt,eta
+  // double err_mpf_data[(eta_abs ? n_eta : n_eta_full)-1][n_pt-1]; //error of ratio at pt,eta
 
-  for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
-    for(int j=0; j<n_pt-1; j++){
+  // for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
+  //   for(int j=0; j<n_pt-1; j++){
 
-      //get <A> and error on <A>
-      pair <double,double> A_data = GetValueAndError(hdata_asymmetry[j][i]);
-      //build MPF and pt_bal and their errors
+  //     //get <A> and error on <A>
+  //     pair <double,double> A_data = GetValueAndError(hdata_asymmetry[j][i]);
+  //     pair <double,double> B_data = GetValueAndError(hdata_bsymmetry[j][i]);
+  //     //build MPF and pt_bal and their errors
 
-    }
-  }
+  //   }
+  // }
 
   //dummy for tdrCanvas
   TH1D *h = new TH1D("h",";dummy;",41,0,5.191);
@@ -338,6 +347,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   }
  
   TFile* f_rel_data = new TFile(CorrectionObject::_outpath+"plots/control/A_1d_data_smaller_split"+".root","READ");
+  //  f_rel_data->Print();
   for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     TString eta_name = "eta_"+(eta_abs ? eta_range2 : eta_range2_full)[i]+"_"+(eta_abs ? eta_range2 : eta_range2_full)[i+1];
     
@@ -373,6 +383,29 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       cFullA->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
       delete cFullA;
       delete htemp_rel_data;
+
+      TCanvas* cFullB = new TCanvas();
+      tdrCanvas(cFullB,"cFullB",h,4,10,kSquare,CorrectionObject::_lumitag);
+      TH1D* htemp_mpf_data;
+      TString name_mpf_data = "hist_data_B_"+eta_name+"_"+pt_name;
+      htemp_mpf_data = (TH1D*)f_rel_data->Get(name_mpf_data);
+      evname += htemp_mpf_data->GetEntries();
+      htemp_mpf_data->Draw("E");
+      htemp_mpf_data->GetXaxis()->SetTitle("B");
+      htemp_mpf_data->GetYaxis()->SetTitle("Entries per Bin");
+      htemp_mpf_data->GetYaxis()->SetTitleOffset(1.5);
+      htemp_mpf_data->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_mpf_data->SetMarkerColor(kRed);
+      htemp_mpf_data->SetMarkerStyle(21);
+      htemp_mpf_data->Draw("EP");		
+      tex->DrawLatex(0.47,0.85,"Data, " + text);
+      tex->DrawLatex(0.54,0.8,legname);		
+      tex->DrawLatex(0.58,0.75,evname);		
+      cFullB->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/B_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
+    
+      delete cFullB;
+      delete htemp_mpf_data;
+
     }
   }
 
