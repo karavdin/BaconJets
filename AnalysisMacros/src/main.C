@@ -313,7 +313,8 @@ int main(int argc,char *argv[]){
   }
   
   TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
-  TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2ResTest_PUpthat/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
+  //  TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2ResTest_PUpthat/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
+  TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2Res_wMPF_CentralTriggersONLY/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
   
   TString outpath_postfix = (dataname_end!="") ? "_" : "";
   outpath_postfix  +=  dataname_end;
