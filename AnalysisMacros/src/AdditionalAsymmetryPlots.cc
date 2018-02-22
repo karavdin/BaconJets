@@ -61,9 +61,9 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
 
       TString name = name1 + eta_name + "_" + pt_name; 
-      hdata_asymmetry[k][j] = new TH1D(name,"",2*nResponseBins, -1.2, 1.2);
+      hdata_asymmetry[k][j] = new TH1D(name,"",nResponseBins, -1.2, 1.2);
       name = name3 + eta_name + "_" + pt_name; 
-      hdata_bsymmetry[k][j] = new TH1D(name,"",2*nResponseBins, -1.2, 1.2);
+      hdata_bsymmetry[k][j] = new TH1D(name,"",nResponseBins, -1.2, 1.2);
 
       name = name1+"nvert_" + eta_name + "_" + pt_name;      
       hdata_asymmetry_nvert[k][j] = new TH2D(name,"",nResponseBins/2, -1.2, 1.2,nResponseBins/10 ,0,60);
@@ -389,6 +389,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       TH1D* htemp_mpf_data;
       TString name_mpf_data = "hist_data_B_"+eta_name+"_"+pt_name;
       htemp_mpf_data = (TH1D*)f_rel_data->Get(name_mpf_data);
+      evname = "Tot.Events = ";
       evname += htemp_mpf_data->GetEntries();
       htemp_mpf_data->Draw("E");
       htemp_mpf_data->GetXaxis()->SetTitle("B");
