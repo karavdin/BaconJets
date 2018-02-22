@@ -1318,27 +1318,31 @@ if(debug){
       pass_trigger500 = (trigger500_sel->passes(event) && pt_ave>trg_thresh[8]&& (abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.)));
       
 //FWD Trigger
-      pass_trigger60_HFJEC = (trigger60_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[0]   && pt_ave<trgHF_thresh[1] &&( abs(probejet_eta) >  (trigger_central ? eta_cut : 0.) ));
-      pass_trigger80_HFJEC = (trigger80_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[1]   && pt_ave<trgHF_thresh[2] && (abs(probejet_eta) >  (trigger_central ? eta_cut : 0.)) );
-      pass_trigger100_HFJEC = (trigger100_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[2] && pt_ave<trgHF_thresh[3] &&( abs(probejet_eta) >  (trigger_central ? eta_cut : 0.) ));
-      pass_trigger160_HFJEC = (trigger160_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[3] && pt_ave<trgHF_thresh[4] && (abs(probejet_eta) >  (trigger_central ? eta_cut : 0.)) );
-      pass_trigger220_HFJEC = (trigger220_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[4] && pt_ave<trgHF_thresh[5] && (abs(probejet_eta) >  (trigger_central ? eta_cut : 0.)) );
-      pass_trigger300_HFJEC = (trigger300_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[5] && (abs(probejet_eta) >  (trigger_central ? eta_cut : 0.)) );      
+      pass_trigger60_HFJEC = (trigger_fwd && trigger60_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[0]   && pt_ave<trgHF_thresh[1] &&( abs(probejet_eta) >  eta_cut));
+      pass_trigger80_HFJEC = (trigger_fwd && trigger80_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[1]   && pt_ave<trgHF_thresh[2] && (abs(probejet_eta) >  eta_cut));
+      pass_trigger100_HFJEC = (trigger_fwd && trigger100_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[2] && pt_ave<trgHF_thresh[3] &&( abs(probejet_eta) >  eta_cut));
+      pass_trigger160_HFJEC = (trigger_fwd && trigger160_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[3] && pt_ave<trgHF_thresh[4] && (abs(probejet_eta) >  eta_cut));
+      pass_trigger220_HFJEC = (trigger_fwd && trigger220_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[4] && pt_ave<trgHF_thresh[5] && (abs(probejet_eta) >  eta_cut));
+      pass_trigger300_HFJEC = (trigger_fwd && trigger300_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[5] && (abs(probejet_eta) > eta_cut));      
 
 
       //cout << "Number of triggers that fired: " << n_trig << endl;
     
       //HLT Selection
       bool pass_trigger = false;
-      //cut at eta = 2.853, becuase HF triggers require forward jet with |eta|>2.7
-      //  if(abs(probejet_eta) < 2.853 ) pass_trigger = (pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500);
-      if(abs(probejet_eta) < eta_cut ) pass_trigger = (pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500); //TEST for CENTRAL triggers only
+      if(trigger_fwd){
+      if(abs(probejet_eta) < eta_cut ) pass_trigger = (pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500); 
       else  pass_trigger = (pass_trigger60_HFJEC || pass_trigger80_HFJEC || pass_trigger100_HFJEC || pass_trigger160_HFJEC || pass_trigger220_HFJEC || pass_trigger300_HFJEC);
-
-      // if(trigger_central && ( abs(probejet_eta) < (trigger_fwd ? 2.65 : 100.))) pass_trigger = (pass_trigger || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500);
-
-      // if(trigger_fwd &&( abs(probejet_eta) >  (trigger_central ? 2.65 : 0.)) ) pass_trigger = (pass_trigger || pass_trigger60_HFJEC || pass_trigger80_HFJEC || pass_trigger100_HFJEC || pass_trigger160_HFJEC || pass_trigger220_HFJEC || pass_trigger300_HFJEC);
-  
+      }
+      else{ //only central triggers
+	pass_trigger = (pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500); 
+      }
+      if(debug && pass_trigger){
+	cout<<"central dijet triggers: "<<endl;
+	cout<<pass_trigger40<<" "<<pass_trigger60<<" "<<pass_trigger80<<" "<<pass_trigger140<<" "<<pass_trigger200<<" "<<pass_trigger260<<" "<<pass_trigger320<<" "<<pass_trigger400<<" "<<pass_trigger500<<endl;
+	cout<<"HF dijet triggers: "<<endl;
+	cout<<pass_trigger60_HFJEC<<" "<<pass_trigger80_HFJEC<<" "<<pass_trigger100_HFJEC<<" "<<pass_trigger160_HFJEC<<" "<<pass_trigger220_HFJEC<<" "<<pass_trigger300_HFJEC<<endl;
+      }
       if(debug){
 	cout << "before triggers: " << endl;
 	cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
