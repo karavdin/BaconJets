@@ -29,8 +29,8 @@ const int triggerValDi[n_triggerDi] = {40, 60, 80, 140, 200, 260, 320, 400, 500}
 const int triggerValDi_HF[n_triggerDi_HF]  = {60,80,100,160,220,300};
 const int triggerValSi_HF[n_triggerSi_HF]  = {60,80,140,200,260,320,400,450,500};
 
-// const int n_pt = 12;
-const int n_pt = 13;
+const int n_pt = 12;
+//const int n_pt = 13;
 const int n_pt_Si = 13;
 
 // // //for Si derived trigger
@@ -103,6 +103,7 @@ const TString pt_range_HF[n_pt]={
 /*
    siTrg comparisson
 RunB      RunC  RunD  highest
+40       40     40    40
 62       65     53    65
 70       71     74    74
 100      100    94    100
@@ -113,7 +114,6 @@ RunB      RunC  RunD  highest
 445      440    443   445
 566      560    564   566
 604      608    598   608
-*/
 
 const double pt_bins[n_pt] = {
 40 ,
@@ -140,6 +140,46 @@ const TString pt_range[n_pt]={
   "445",
   "566",
   "608","1000","2000"};
+
+  siTrg comparisson (2nd attempt)
+RunB      RunC  RunD  highest
+28        33      39    39
+72        72      72    72
+77        77      95    95
+160       159     159  160
+226       226     226  226
+283       283     281  283
+344       343     343  344
+443       441     442  443
+577       563     567  577
+606       603     599  606
+
+*/
+
+const double pt_bins[n_pt] = {
+39 ,
+72  ,
+95 ,
+160 ,
+226 ,
+283 ,
+344 ,
+443 ,
+577 ,
+606 ,1000,2000};
+
+const TString pt_range[n_pt]={
+  "39",
+  "72",
+  "95",
+  "160",
+  "226",
+  "283",
+  "344",
+  "443",
+  "577",
+  "606","1000","2000"};
+
 
 /* // [END]SingleJet triggers? ------------- */
 

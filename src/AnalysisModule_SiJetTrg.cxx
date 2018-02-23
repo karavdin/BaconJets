@@ -211,8 +211,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     if(trigger_fwd) cout<<"!!!WARNING fwd for si trg not implemented yet\n"; //FIXME
     
-    ts  = (ctx.get("Trigger_Single") == "true"); //if true use single jet trigger, if false di jet trigger TODO collapse the SiJet and DiJEt AnalysisModules into one
-    // ts = true;
+    //ts  = (ctx.get("Trigger_Single") == "true"); //if true use single jet trigger, if false di jet trigger TODO collapse the SiJet and DiJEt AnalysisModules into one
+    ts = true;
     onlyBtB = (ctx.get("Only_BtB") == "true");
     if(debug) cout<<"onlyBtb is "<<onlyBtB<<endl;
         
@@ -668,6 +668,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	else if(JEC_Version == "Summer16_03Feb2017_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Summer16_03Feb2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Summer16_03Feb2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
+	else if(JEC_Version == "Fall17_17Nov2017_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified.");
       }
      
@@ -1162,19 +1163,22 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
         pass_minBias = (minBias_sel->passes(event));
 
       if(ts){
-	pass_trigger40 = (pass_trigger40 && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);
-	pass_trigger60 = (pass_trigger60 && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2]);
-	pass_trigger80 = (pass_trigger80 && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]); 
-	pass_trigger140 = (pass_trigger140 && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]);
-	pass_trigger200 = (pass_trigger200 && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]);
-	pass_trigger260 = (pass_trigger260 && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]); 
-	pass_trigger320 = (pass_trigger320 && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]); 
-	pass_trigger400 = (pass_trigger400 && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]);
-	pass_trigger450 = (pass_trigger450 && pt_ave>trg_thresh[8] && pt_ave<trg_thresh[9]);
-	pass_trigger500 = (pass_trigger500 && pt_ave>trg_thresh[9]);
+	//ToDo: use eta_cut for separation between central and forward triggers
+
+	pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);
+	pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2]);
+	pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]); 
+	pass_trigger140 = (trigger140_sel->passes(event) && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]);
+	pass_trigger200 = (trigger200_sel->passes(event) && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]);
+	pass_trigger260 = (trigger260_sel->passes(event) && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]); 
+	pass_trigger320 = (trigger320_sel->passes(event) && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]); 
+	pass_trigger400 = (trigger400_sel->passes(event) && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]);
+	pass_trigger450 = (trigger450_sel->passes(event) && pt_ave>trg_thresh[8] && pt_ave<trg_thresh[9]);
+	pass_trigger500 = (trigger500_sel->passes(event) && pt_ave>trg_thresh[9]);
       }
 
-      pass_trigger = pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
+      // pass_trigger = pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
+      pass_trigger = pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
     
       if(debug){
 	cout << "before triggers: " << endl;

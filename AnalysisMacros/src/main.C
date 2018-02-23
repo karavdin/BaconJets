@@ -373,7 +373,10 @@ int main(int argc,char *argv[]){
     if(do_oor_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].OnOffResp_Plots();
    if(do_matchtrg_plotdi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetMatching_PlotsDi();
     if(do_oor_plotdi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].OnOffResp_PlotsDi(useHF);
-    if(do_addAsymPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].AdditionalAsymmetryPlots();
+    if(do_addAsymPlots){
+      for(unsigned int i=0; i<Objects.size(); i++) Objects[i].AdditionalAsymmetryPlots();
+      //   for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetEnergyFractions();
+    }
     if(do_addAsymPlotsef) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].AdditionalAsymmetryPlots(false);
     if(do_triggerEx) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].triggerExclusivityCheck();
 
