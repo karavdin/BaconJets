@@ -360,7 +360,8 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   TF1* func095 = new TF1("func095", "pol1" , 0, 501);
   func095->SetLineColor(kBlue);
   TFitResultPtr r = gr095->Fit(func095);
-  all_thresholds[0]=gr095->Eval(40);
+  //  all_thresholds[0]=gr095->Eval(40);
+  all_thresholds[0]=func095->Eval(40);
   for(int i=0; i<n_trigger-1; i++){
     if(use_for_extrapol[i]) all_thresholds[i+1]=thresholds[i];
     else all_thresholds[i+1]=gr095->Eval(triggerVal_noLow[i]);
@@ -370,7 +371,8 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   TGraphErrors* gr09 = new TGraphErrors(n_extrapol, extrapol_x09 , extrapol_y09);
   TF1* func09 = new TF1("func09", "pol1" , 0, 501);
   r = gr09->Fit(func09);  
-  all_thresholds09[0]=gr09->Eval(40);
+  //  all_thresholds09[0]=gr09->Eval(40);
+  all_thresholds09[0]=func09->Eval(40);
   for(int i=0; i<n_trigger-1; i++){
     if(use_for_extrapol[i]) all_thresholds09[i+1]=thresholds09[i];
     else all_thresholds09[i+1]=gr09->Eval(triggerVal_noLow[i]);
@@ -403,7 +405,7 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
   gr095->Draw("ap");
   c->Print(CorrectionObject::_outpath+"plots/thresholds/"+"extrapolateLowestTrigger095"+".pdf","pdf");    
    TCanvas* c2 = new TCanvas("c2");
-   gr09->SetMarkerStyle(3);
+   gr09->SetMarkerStyle(20);
    gr095->SetMarkerStyle(5);
   TMultiGraph* mg = new TMultiGraph();
   mg->Add(gr09);

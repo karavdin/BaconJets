@@ -222,18 +222,31 @@ constexpr static float s_Pt_Ave300HF_cut  = 426;
  // constexpr static float s_Pt_Ave450_cut  = 481;
  // constexpr static float s_Pt_Ave500_cut  = 528;
 
-//from 94X Run D 17Nov2017
+/* //from 94X Run D 17Nov2017 */
+/*  constexpr static float s_Pt_AveMC_cut   =40; */
+/*  constexpr static float s_Pt_Ave40_cut   =53 ; */
+/*  constexpr static float s_Pt_Ave60_cut   =74 ; */
+/*  constexpr static float s_Pt_Ave80_cut   =94 ; */
+/*  constexpr static float s_Pt_Ave140_cut  =158; */
+/*  constexpr static float s_Pt_Ave200_cut  =222; */
+/*  constexpr static float s_Pt_Ave260_cut  =284; */
+/*  constexpr static float s_Pt_Ave320_cut  =345; */
+/*  constexpr static float s_Pt_Ave400_cut  =443; */
+/*  constexpr static float s_Pt_Ave450_cut  =564; */
+/*  constexpr static float s_Pt_Ave500_cut  =598; */
+
+//from 94X max RunB to RunD
  constexpr static float s_Pt_AveMC_cut   =40;
- constexpr static float s_Pt_Ave40_cut   =53 ;
- constexpr static float s_Pt_Ave60_cut   =74 ;
- constexpr static float s_Pt_Ave80_cut   =94 ;
- constexpr static float s_Pt_Ave140_cut  =158;
- constexpr static float s_Pt_Ave200_cut  =222;
- constexpr static float s_Pt_Ave260_cut  =284;
- constexpr static float s_Pt_Ave320_cut  =345;
+ constexpr static float s_Pt_Ave40_cut   =40 ;
+ constexpr static float s_Pt_Ave60_cut   =72 ;
+ constexpr static float s_Pt_Ave80_cut   =95 ;
+ constexpr static float s_Pt_Ave140_cut  =160;
+ constexpr static float s_Pt_Ave200_cut  =226;
+ constexpr static float s_Pt_Ave260_cut  =283;
+ constexpr static float s_Pt_Ave320_cut  =344;
  constexpr static float s_Pt_Ave400_cut  =443;
- constexpr static float s_Pt_Ave450_cut  =564;
- constexpr static float s_Pt_Ave500_cut  =598;
+ constexpr static float s_Pt_Ave450_cut  =577;
+ constexpr static float s_Pt_Ave500_cut  =606;
          	 	 
 //from Di triggers 92X
  // constexpr static float d_Pt_AveMC_cut   =  51;
