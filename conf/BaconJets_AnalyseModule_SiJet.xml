@@ -6,7 +6,7 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17BCD_Data_SiTrg/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17BCD_Data_SiTrg_RunBthresh/">
 
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Fall17_17Nov2017_V4">
@@ -48,7 +48,7 @@
 
 <!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunB_17Nov2017_wCHSMETfixed.xml">
 
-<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunC_17Nov2017.xml">
+<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunC_17Nov2017_wCHSMETfixed.xml">
 
 <!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunD_17Nov2017_wCHSMETfixed.xml">
 
@@ -60,7 +60,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Run17BCD_SiTrg"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Run17B_SiTrg_RunBthresh"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->

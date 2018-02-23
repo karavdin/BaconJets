@@ -38,31 +38,91 @@ const TString pt_range[n_pt]={
 
 const int n_pt_Si = 13;
 
+/* //SingleJet triggers RunD ------------- */
+// const double pt_bins_Si[n_pt_Si] = {
+//   40,
+//   53 ,
+//  74  ,
+//  94  ,
+//  158 ,
+//  222 ,
+//  284 ,
+//  345 ,
+//  443 ,
+//  564 ,
+//  598 ,1000,2000};
+
+// const TString pt_range_Si[n_pt_Si]={
+//   "40",
+//   "53",
+//   "74",
+//   "94",
+//   "158",
+//   "222",
+//   "284",
+//   "345",
+//   "443",
+//   "564",
+//   "598","1000","2000"};
+/* //SingleJet triggers RunD End------------- */
+
+// /* //SingleJet triggers RunB ------------- */
+// const double pt_bins_Si[n_pt_Si] = {
+//   40 ,
+//  62  ,
+//  70  ,
+//  100 ,
+//  165 ,
+//  226 ,
+//  285 ,
+//  344 ,
+//  445 ,
+//  566 ,
+//  604 ,1000,2000};
+
+// const TString pt_range_Si[n_pt_Si]={
+//   "40",
+//   "62",
+//   "70",
+//   "100",
+//   "165",
+//   "226",
+//   "285",
+//   "344",
+//   "445",
+//   "566",
+//   "604","1000","2000"};
+
+// /* //SingleJet triggers RunB End------------- */
+
+/* //SingleJet triggers highest ------------- */
 const double pt_bins_Si[n_pt_Si] = {
-  40,
-  53 ,
+  40 ,
+ 65  ,
  74  ,
- 94  ,
- 158 ,
- 222 ,
- 284 ,
- 345 ,
- 443 ,
- 564 ,
- 598 ,1000,2000};
+ 100 ,
+ 165 ,
+ 226 ,
+ 285 ,
+ 346 ,
+ 445 ,
+ 566 ,
+ 608 ,1000,2000};
 
 const TString pt_range_Si[n_pt_Si]={
   "40",
-  "53",
+  "65",
   "74",
-  "94",
-  "158",
-  "222",
-  "284",
-  "345",
-  "443",
-  "564",
-  "598","1000","2000"};
+  "100",
+  "165",
+  "226",
+  "285",
+  "346",
+  "445",
+  "566",
+  "608","1000","2000"};
+
+/* //SingleJet triggers highest End------------- */
 
 //19 bin edges, 18 actual bins
 constexpr static int n_eta = 19;
@@ -77,7 +137,10 @@ constexpr static float s_eta_barr = 1.3;
 // two back-to-back leading jets (delta_phi(j1,j2) = min(|phi1 - phi2|, 2PI - |phi2 - phi1|) > 2.9)
 constexpr static float s_delta_phi = 2.7;
 // cut on the asymmetry for events with two jets  |(j2->pt - j1->pt /(j2->pt + j1->pt)| < 0.70
-constexpr static float s_asymm = 0.7; 
+// constexpr static float s_asymm = 0.7;
+
+constexpr static float s_asymm = 1.;
+
  // cut on the asymmetry for events with two jets  |(j2->pt - j1->pt /(j2->pt + j1->pt)| < 0.2
 /* constexpr static float s_asymm = 0.2; */
 // relative third jet fraction pt_rel = 2*j3_pt/(j1_pt + j2_pt) < 0.2

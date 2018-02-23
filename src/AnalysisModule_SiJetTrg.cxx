@@ -684,6 +684,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     tt_jet1_pt = ctx.declare_event_output<float>("jet1_pt");
     tt_jet2_pt = ctx.declare_event_output<float>("jet2_pt");
     tt_jet3_pt = ctx.declare_event_output<float>("jet3_pt");
+    tt_jet3_eta = ctx.declare_event_output<float>("jet3_eta");
     tt_jet1_ptRaw = ctx.declare_event_output<float>("jet1_ptRaw");
     tt_jet2_ptRaw = ctx.declare_event_output<float>("jet2_ptRaw");
     tt_jet3_ptRaw = ctx.declare_event_output<float>("jet3_ptRaw");

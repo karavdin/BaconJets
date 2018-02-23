@@ -31,7 +31,7 @@
 
 <!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunB_17Nov2017_wCHSMETfixed.xml">
 
-<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean160118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunC_17Nov17_v1.xml">
+<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1/JetHT_RunC_17Nov17_v1.xml">
 
 
 <!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunD_17Nov2017_wCHSMETfixed.xml">
@@ -50,7 +50,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17BC_deriveThresholds_SiTrg_central"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17C_deriveThresholds_SiTrg_central"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -61,11 +61,11 @@
  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="8317" > 
 <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="4553" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="15" > -->
 
-<InputData Lumi="62988012" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_17Nov17_2017" Cacheable="&CACHEABLE;">
-          &DATA_RunB_promptReco_2017;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-</InputData>
+<!-- <InputData Lumi="62988012" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
+<!--           &DATA_RunB_promptReco_2017; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!-- </InputData> -->
 
 <InputData Lumi="96264601" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunC_promptReco_2017;
@@ -108,8 +108,8 @@
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
       <Item Name="GenParticleCollection"   Value="GenParticles"/>
-      <Item Name="ElectronCollection"      Value="slimmedElectronsUSER"/> <!-- change depending on 2016 MC or 17 data!!! or ntuplewriter version XD -->
-      <Item Name="MuonCollection"          Value="slimmedMuonsUSER"/>
+      <Item Name="ElectronCollection"      Value="slimmedElectrons"/> <!-- change depending on 2016 MC or 17 data!!! or ntuplewriter version XD -->
+      <Item Name="MuonCollection"          Value="slimmedMuons"/>
       <Item Name="TauCollection"           Value="slimmedTaus"/>
       <!-- AK4CHS -->
       <Item Name="JetCollection"           Value="slimmedJets"/>
