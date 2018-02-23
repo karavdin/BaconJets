@@ -6,7 +6,7 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17BCD_Data_SiTrg_RunBthresh/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17BCD_Data_SiTrg_maxThresh_2/">
 
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Fall17_17Nov2017_V4">
@@ -60,7 +60,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Run17B_SiTrg_RunBthresh"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Run17BCD_SiTrg_highestThresh_2"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -167,12 +167,11 @@
       <Item Name="JetCollection"           Value="slimmedJets"/>
       <Item Name="JetLabel"                Value="AK4CHS"/> 
       <Item Name="GenJetCollection"        Value="slimmedGenJets"/>
-      <!-- <Item Name="METName"                 Value="slMETsCHS"/> -->
      <Item Name="METName"                 Value="slimmedMETs"/>     
      
       <!-- <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/data/Cert_13TeV_2017_HCAL_DCS_GOOD_11Jul.root"/> -->
 
-       <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17/CMSSW_9_2_7_patch1/src/UHH2/common/data/Cert_294927-304507_13TeV_PromptReco_Collisions17_JSON.root"/>
+       <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/data/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.root"/>
      
       <!--
       	 <Item Name="pileup_directory"           Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_20/src/UHH2/BaconJets/data/PileUp/80X/PileUP_MC_pythia8_PUFlat.root"/>

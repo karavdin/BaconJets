@@ -29,6 +29,8 @@
 #include "UHH2/BaconJets/include/selection.h"
 #include "UHH2/BaconJets/include/constants.h"
 
+#include "UHH2/BaconJets/include/LumiHists.h"
+
 #include "TClonesArray.h"
 #include "TString.h"
 #include "Riostream.h"
@@ -80,7 +82,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     std::unique_ptr<uhh2::Selection> trigger400_sel;
     std::unique_ptr<uhh2::Selection> trigger450_sel;
     std::unique_ptr<uhh2::Selection> trigger500_sel;
-   
+
+    std::unique_ptr<LumiHists> h_monitoring_final;
+  
     //// Data/MC scale factors
     std::unique_ptr<uhh2::AnalysisModule> pileupSF;
     unique_ptr<AnalysisModule>  Jet_printer, GenParticles_printer;
@@ -823,7 +827,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     h_lumi_Trig400.reset(new LuminosityHists(ctx,"Lumi_Trig400")); 
     h_lumi_Trig450.reset(new LuminosityHists(ctx,"Lumi_Trig450"));
     h_lumi_Trig500.reset(new LuminosityHists(ctx,"Lumi_Trig500"));
-     
+
+    h_monitoring_final.reset(new LumiHists(ctx, "Monitoring_Final"));
+    
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     GenParticles_printer.reset(new GenParticlesPrinter(ctx));
  
@@ -1177,8 +1183,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	pass_trigger500 = (trigger500_sel->passes(event) && pt_ave>trg_thresh[9]);
       }
 
-      // pass_trigger = pass_minBias || pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
-      pass_trigger = pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
+
+      pass_trigger =  pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger450 || pass_trigger500;
+
     
       if(debug){
 	cout << "before triggers: " << endl;
@@ -1512,6 +1519,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     h_final->fill(event);
     // h_lumi_final->fill(event);
 
+    h_monitoring_final->fill(event);
+    
     event.set(tt_Nmuon,event.muons->size());
     if(event.muons->size()>0)  
       event.set(tt_muon_pt,event.muons->at(0).pt());
