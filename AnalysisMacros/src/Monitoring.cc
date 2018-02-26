@@ -205,7 +205,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
   cout<<"Setup canvas and draw several TGraphs"<<endl;
 
 
-  TLine* ave = new TLine(0,1,35000,1);
+  TLine* ave = new TLine(0,1,Fit_range[n_input],1);
   
   // TLine* lineB = new TLine(5750, 0.82, 5750, 1.42);
   // lineB -> SetLineStyle(2);
@@ -260,7 +260,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
       h->GetXaxis()->SetTitle("Luminosity");
       h->GetXaxis()->SetTitleSize(0.05);
       h->GetXaxis()->SetTitleOffset(0.80);
-      h->GetXaxis()->SetLimits(0,35000);
+      h->GetXaxis()->SetLimits(Fit_range[0],Fit_range[n_input]);
       h->GetXaxis()->SetLabelSize(0);
       h->GetYaxis()->SetRangeUser(0.82,1.42);
       h->GetYaxis()->SetTitle("R_{Rel}");
@@ -303,7 +303,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
       d->GetXaxis()->SetTitle("Luminosity");
       d->GetXaxis()->SetTitleSize(0.1);
       d->GetXaxis()->SetTitleOffset(1.2);
-      d->GetXaxis()->SetLimits(0,35000);
+      d->GetXaxis()->SetLimits(Fit_range[0],Fit_range[n_input]);
       d->GetYaxis()->SetRangeUser(0.86,1.14);
       d->GetXaxis()->SetTitleOffset(1.2);
       d->GetYaxis()->SetTitle("Data/Fit");
@@ -338,7 +338,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
       h->GetXaxis()->SetTitle("Luminosity");
       h->GetXaxis()->SetTitleSize(0.05);
       h->GetXaxis()->SetTitleOffset(0.80);
-      h->GetXaxis()->SetLimits(0,35000);
+      h->GetXaxis()->SetLimits(Fit_range[0],Fit_range[n_input]);
       h->GetXaxis()->SetLabelSize(0);
       h->GetYaxis()->SetRangeUser(0.82,1.42);
       h->GetYaxis()->SetTitle("R_{MPF}");
@@ -381,7 +381,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
       d2->GetXaxis()->SetTitle("Luminosity");
       d2->GetXaxis()->SetTitleSize(0.1);
       d2->GetXaxis()->SetTitleOffset(1.2);
-      d2->GetXaxis()->SetLimits(0,35000);
+      d2->GetXaxis()->SetLimits(Fit_range[0],Fit_range[n_input]);
       d2->GetYaxis()->SetRangeUser(0.86,1.14);
       d2->GetXaxis()->SetTitleOffset(1.2);
       d2->GetYaxis()->SetTitle("Data/Fit");

@@ -47,6 +47,8 @@ static void show_usage(std::string name)
        	      << "\t-F\t\tUse the F directory instead of the BCD directory.\n"      
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
       	      << "\t-useHF\t\tIncludes the HF trigger.\n"
+	      << "\t-IGF\t\tCreate the Global Fit Input plots with standart eta bins.\n"
+	      << "\t-IGFw\t\tCreate the Global Fit Input plots with wider eta bins.\n"
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
       	      <<"\t--input\t\tPath to the input data, if none is given following is used:\n"
@@ -75,7 +77,7 @@ int main(int argc,char *argv[]){
   //   cout<<argv[i]<<endl;
   // }
 
-  std::vector<std::string> argl = {"-FP" ,
+  std::vector<std:: string> argl = {"-FP" ,
 				   "-FPeta",
 				   "-FCP",
 				   "-tCP",
@@ -111,7 +113,9 @@ int main(int argc,char *argv[]){
 				   "-useHF",
 				   "-NPVEta",
 				   "-mon",
-				   "-monSi"};
+				    "-monSi",
+				    "-IGF",
+				    "-IGFw"};
   
   TString run_nr = "B";
   TString dataname_end = "17Nov17_2017";
@@ -148,6 +152,8 @@ int main(int argc,char *argv[]){
   bool useHF = false;
   bool do_mon = false;
   bool do_monSi = false;
+  bool do_IGF =false;
+  bool do_IGFw =false;
   TString input_path_="";
   double asym_cut = 0.;
   for (int i = 1; i < argc; ++i) {
@@ -234,6 +240,12 @@ int main(int argc,char *argv[]){
 	  else if(arg=="-monSi"){
 	    do_monSi=true;
 	  }
+	  else if(arg=="-IGF"){
+	    do_IGF=true;
+	  }
+	  else if(arg=="-IGFw"){
+	    do_IGFw=true;
+	  }
 	  else if(arg=="-BC"){
 	    use_BC=true;
 	  }
@@ -280,7 +292,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw)){
     cout<<"No plots were specified! Only the existing of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -387,6 +399,8 @@ int main(int argc,char *argv[]){
     if(do_addAsymPlotsef) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].AdditionalAsymmetryPlots(false);
     if(do_triggerEx) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].triggerExclusivityCheck();
 
+    if(do_IGF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit();
+    if(do_IGFw) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit_eta_0_13();    
      // // // //Macros to compare different Runs 
 // // //    // Objects[0].L2ResAllRuns();
 // // //    // Objects[0].L2ResOverlay(true);

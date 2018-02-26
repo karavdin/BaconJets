@@ -248,13 +248,7 @@ void CorrectionObject::InputForGlobalFit(){
 
 
 
-
-
-
-
-
   //delete everything
-
 
 
   delete outputfile;
@@ -270,7 +264,6 @@ void CorrectionObject::InputForGlobalFit(){
 
     }
   }
-
 
 
 

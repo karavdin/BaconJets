@@ -247,11 +247,26 @@ const TString eta_common_range[n_eta_common] = {"0.000", "0.261", "0.522", "0.78
 
 const TString eta_output[n_eta_common-1] = {"eta_00_03", "eta_03_05","eta_05_08","eta_08_10","eta_10_13","eta_13_15","eta_15_17", "eta_17_19", "eta_19_22", "eta_22_23", "eta_23_25", "eta_25_27", "eta_27_29", "eta_29_30", "eta_30_31", "eta_31_35", "eta_35_38", "eta_38_52"};  
 
-const int n_eta_common_2 = 19;
-const double eta_common_bins_2[n_eta_common] ={0, 0.261, 0.522, 0.783, 1.044, 1.305, 1.479, 1.653, 1.93, 2.172, 2.322, 2.5, 2.65, 2.853, 2.964, 3.139, 3.489, 3.839, 5.191};
-const TString eta_common_range_2[n_eta_common] = {"0.000", "0.261", "0.522", "0.783", "1.044", "1.305", "1.479", "1.653", "1.930", "2.172", "2.322", "2.500", "2.650", "2.853", "2.964", "3.139", "3.489", "3.839", "5.191"};
+const int n_eta_common_2 = 7;
+const double eta_common_bins_2[n_eta_common_2] ={
+  0.,
+  1.305,
+  1.93,
+  2.5,
+  2.964,
+  3.2,
+  5.191
+};
+const TString eta_common_range_2[n_eta_common_2] = {
+  "0.000",
+  "1.305",
+  "1.930",
+  "2.500",
+  "2.964",
+  "3.200",
+  "5.191"};
 
-const TString eta_output_2[n_eta_common-1] = {"eta_00_03", "eta_03_05","eta_05_08","eta_08_10","eta_10_13","eta_13_15","eta_15_17", "eta_17_19", "eta_19_22", "eta_22_23", "eta_23_25", "eta_25_27", "eta_27_29", "eta_29_30", "eta_30_31", "eta_31_35", "eta_35_38", "eta_38_52"};
+const TString eta_output_2[n_eta_common_2-1] = {"eta_00_13", "eta_13_19","eta_19_25","eta_25_30","eta_30_32","eta_32_52"};
 
 
 //LumiBins for the Runs
