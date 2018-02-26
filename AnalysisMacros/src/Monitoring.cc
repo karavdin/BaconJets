@@ -23,11 +23,13 @@
 
 using namespace std;
 
-const int n_input = 2;
-const int Fit_range[n_input+1] = {14500, 18900,25000};
+const int n_input_Di = 3;
+const int Fit_range_Di[n_input_Di+1] = {14500, 18900, 25000, 42000};
+const TString Name_range_Di[n_input_Di] = {"D", "E", "F"};
 
-// const TString Name_range[n_input] = {"B", "C", "D", "E", "F"};
-const TString Name_range[n_input] = {"D","E"};
+const int n_input_Si = 3;
+const int Fit_range_Si[n_input_Si+1] = {0, 4800, 14500, 18900};
+const TString Name_range_Si[n_input_Si] = {"B", "C", "D"};
 
 void Save_2D_Plot(TH2D* hist, TString Method, TString Runnr, TString input_path){
 
@@ -62,10 +64,20 @@ void Save_2D_Plot(TH2D* hist, TString Method, TString Runnr, TString input_path)
 
 
 
-void CorrectionObject::Monitoring(){
+void CorrectionObject::Monitoring(bool SiRuns){
   cout << "--------------- Starting Monitoring() ---------------" << endl << endl;
 
+  int n_input = (SiRuns ? n_input_Si : n_input_Di);
+  int Fit_range[n_input+1];
+  TString Name_range[n_input];
 
+  for(int i = 0; i<n_input; i++){
+    Fit_range[i]=(SiRuns ? Fit_range_Si[i] : Fit_range_Di[i]);
+    Name_range[i]=(SiRuns ? Name_range_Si[i] : Name_range_Di[i]);    
+  }
+  Fit_range[n_input+1]=(SiRuns ? Fit_range_Si[n_input+1] : Fit_range_Di[n_input+1]);
+  
+    
   CorrectionObject::make_path(std::string((_outpath + "plots/control/Monitoring/").Data()));
   
   TFile* f_monitoring[n_input];
@@ -195,27 +207,27 @@ void CorrectionObject::Monitoring(){
 
   TLine* ave = new TLine(0,1,35000,1);
   
-  TLine* lineB = new TLine(5750, 0.82, 5750, 1.42);
-  lineB -> SetLineStyle(2);
-  TLine* lineC = new TLine(8330, 0.82, 8300, 1.42);
-  lineC -> SetLineStyle(2);
-  TLine* lineD = new TLine(12600, 0.82, 12600,1.42);
-  lineD -> SetLineStyle(2);
-  TLine* lineEFearly = new TLine(19300, 0.82, 19300,1.42);
-  lineEFearly -> SetLineStyle(2);
-  TLine* lineFlateG = new TLine(27300, 0.82, 27300,1.42);
-  lineFlateG -> SetLineStyle(2);
+  // TLine* lineB = new TLine(5750, 0.82, 5750, 1.42);
+  // lineB -> SetLineStyle(2);
+  // TLine* lineC = new TLine(8330, 0.82, 8300, 1.42);
+  // lineC -> SetLineStyle(2);
+  TLine* line1 = new TLine(Fit_range[0], 0.82, Fit_range[0],1.42);
+  line1 -> SetLineStyle(2);
+  TLine* line2 = new TLine(Fit_range[1], 0.82, Fit_range[1],1.42);
+  line2 -> SetLineStyle(2);
+  TLine* line3 = new TLine(Fit_range[2], 0.82, Fit_range[2],1.42);
+  line3 -> SetLineStyle(2);
   
-  TLine* lineB_ratio = new TLine(5750, 0.86, 5750, 1.14);
-  lineB_ratio -> SetLineStyle(2);
-  TLine* lineC_ratio = new TLine(8330, 0.86, 8300, 1.14);
-  lineC_ratio -> SetLineStyle(2);
-  TLine* lineD_ratio = new TLine(12600, 0.86, 12600,1.14);
-  lineD_ratio -> SetLineStyle(2);
-  TLine* lineEFearly_ratio = new TLine(19300, 0.86, 19300,1.14);
-  lineEFearly_ratio -> SetLineStyle(2);
-  TLine* lineFlateG_ratio = new TLine(27300, 0.86, 27300,1.14);
-  lineFlateG_ratio -> SetLineStyle(2);
+  // TLine* lineB_ratio = new TLine(5750, 0.86, 5750, 1.14);
+  // lineB_ratio -> SetLineStyle(2);
+  // TLine* lineC_ratio = new TLine(8330, 0.86, 8300, 1.14);
+  // lineC_ratio -> SetLineStyle(2);
+  TLine* line1_ratio = new TLine(Fit_range[0], 0.86, Fit_range[0],1.14);
+  line1_ratio -> SetLineStyle(2);
+  TLine* line2_ratio = new TLine(Fit_range[1], 0.86, Fit_range[1],1.14);
+  line2_ratio -> SetLineStyle(2);
+  TLine* line3_ratio = new TLine(Fit_range[2], 0.86, Fit_range[2],1.14);
+  line3_ratio -> SetLineStyle(2);
 
   TLatex *tex1 = new TLatex();
   tex1->SetNDC();
@@ -226,15 +238,15 @@ void CorrectionObject::Monitoring(){
     for(int k=0; k<n_pt-1; k++){
  
       //dummy for tdrCanvas 
-      TH1D *h = new TH1D("h",";dummy;",5000,0,40000);
+      TH1D *h = new TH1D("h",";dummy;",14000,0,42000);
       h->SetMaximum(-0.4);
       h->SetMinimum(0.4);
       
-      TH1D *d = new TH1D("d",";dummy;",5000,0,40000);
+      TH1D *d = new TH1D("d",";dummy;",14000,0,42000);
       d->SetMaximum(0.5);
       d->SetMinimum(1.5);
       
-      TH1D *d2 = new TH1D("d2",";dummy;",5000,0,40000);
+      TH1D *d2 = new TH1D("d2",";dummy;",14000,0,42000);
       d2->SetMaximum(0.5);
       d2->SetMinimum(1.5);
       
@@ -275,11 +287,11 @@ void CorrectionObject::Monitoring(){
 	c3->Modified();
       }
 
-      lineB->Draw("SAME");
-      lineC->Draw("SAME");
-      lineD->Draw("SAME");
-      lineEFearly->Draw("SAME");
-      lineFlateG->Draw("SAME");
+      // lineB->Draw("SAME");
+      // lineC->Draw("SAME");
+      line1->Draw("SAME");
+      line2->Draw("SAME");
+      line3->Draw("SAME");
       
       leg_rel_res->Draw();
       
@@ -296,11 +308,11 @@ void CorrectionObject::Monitoring(){
       d->GetXaxis()->SetTitleOffset(1.2);
       d->GetYaxis()->SetTitle("Data/Fit");
 
-      lineB_ratio->Draw("SAME");
-      lineC_ratio->Draw("SAME");
-      lineD_ratio->Draw("SAME");
-      lineEFearly_ratio->Draw("SAME");
-      lineFlateG_ratio->Draw("SAME");
+      // lineB_ratio->Draw("SAME");
+      // lineC_ratio->Draw("SAME");
+      line1_ratio->Draw("SAME");
+      line2_ratio->Draw("SAME");
+      line3_ratio->Draw("SAME");
       ave->Draw("SAME");
       
       for(int i = 0; i<n_input; i++){
@@ -353,11 +365,11 @@ void CorrectionObject::Monitoring(){
 	c4->Modified();
       }
 
-      lineB->Draw("SAME");
-      lineC->Draw("SAME");
-      lineD->Draw("SAME");
-      lineEFearly->Draw("SAME");
-      lineFlateG->Draw("SAME");
+      // lineB->Draw("SAME");
+      // lineC->Draw("SAME");
+      line1->Draw("SAME");
+      line2->Draw("SAME");
+      line3->Draw("SAME");
       
       leg_mpf_res->Draw();
       
@@ -374,11 +386,11 @@ void CorrectionObject::Monitoring(){
       d2->GetXaxis()->SetTitleOffset(1.2);
       d2->GetYaxis()->SetTitle("Data/Fit");
 
-      lineB_ratio->Draw("SAME");
-      lineC_ratio->Draw("SAME");
-      lineD_ratio->Draw("SAME");
-      lineEFearly_ratio->Draw("SAME");
-      lineFlateG_ratio->Draw("SAME");
+      // lineB_ratio->Draw("SAME");
+      // lineC_ratio->Draw("SAME");
+      line1_ratio->Draw("SAME");
+      line2_ratio->Draw("SAME");
+      line3_ratio->Draw("SAME");
       ave->Draw("SAME");
       
       for(int i = 0; i<n_input; i++){

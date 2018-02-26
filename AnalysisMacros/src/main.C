@@ -27,6 +27,7 @@ static void show_usage(std::string name)
 	      << "\t-aAP\t\tDo asymmetry plots for all abs(eta) and pt bins sepertely.\n"
       	      << "\t-aAPef\t\tDo asymmetry plots for all eta and pt bins sepertely.\n"
 	      <<"\t-mon\t\tDo Monitoring Plots.\n"
+	      <<"\t-monSi\t\tDo Monitoring Plots.\n"
       	      << "\t-NPVEta\t\tDo eta to NPV plots.\n"      
     	      << "\t-derThreshSi\t\tDerive the trigger thresholds for single jet trigger.\n"
       	      << "\t-derThreshSi_ptCheck\t\tDerive the trigger efficiency distributions for the jet 1 and 2 pt as crosscheck for single jet trigger.\n"
@@ -109,7 +110,8 @@ int main(int argc,char *argv[]){
 				   "--outSuffix",
 				   "-useHF",
 				   "-NPVEta",
-				   "-mon"};
+				   "-mon",
+				   "-monSi"};
   
   TString run_nr = "B";
   TString dataname_end = "17Nov17_2017";
@@ -145,6 +147,7 @@ int main(int argc,char *argv[]){
   bool use_F = false;
   bool useHF = false;
   bool do_mon = false;
+  bool do_monSi = false;
   TString input_path_="";
   double asym_cut = 0.;
   for (int i = 1; i < argc; ++i) {
@@ -227,6 +230,9 @@ int main(int argc,char *argv[]){
 	  }
 	  else if(arg=="-mon"){
 	    do_mon=true;
+	  }
+	  else if(arg=="-monSi"){
+	    do_monSi=true;
 	  }
 	  else if(arg=="-BC"){
 	    use_BC=true;
@@ -369,6 +375,7 @@ int main(int argc,char *argv[]){
 
     if(do_lumi_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Lumi_Plots();
     if(do_mon) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Monitoring();
+    if(do_monSi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Monitoring(true);
     if(do_matchtrg_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetMatching_Plots();
     if(do_oor_plot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].OnOffResp_Plots();
    if(do_matchtrg_plotdi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetMatching_PlotsDi();

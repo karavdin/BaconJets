@@ -350,14 +350,6 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    JEC_corr               = JERFiles::Fall17_17Nov2017_V4_L123_AK4PFchs_MC;
 	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V4_L1RC_AK4PFchs_MC;	    
 	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V6"){
-	    JEC_corr               = JERFiles::Fall17_17Nov2017_V6_L123_AK4PFchs_MC;
-	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V6_L1RC_AK4PFchs_MC;	    
-	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V7"){
-	    JEC_corr               = JERFiles::Fall17_17Nov2017_V7_L123_AK4PFchs_MC;
-	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V7_L1RC_AK4PFchs_MC;	    
-	  }
 
 	  else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
       }
