@@ -284,7 +284,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     if(isMC){
       //for MC
       if(jetLabel == "AK4CHS"){
-	if(!ClosureTest){
+	{
 	  //residuals
 	  if(JEC_Version == "Summer16_23Sep2016_V4"){
 	    JEC_corr              = JERFiles::Summer16_23Sep2016_V4_L123_AK4PFchs_MC;           //noRes only for DATA ;), only one version for MC for deriving Summer16_23Sep2016
@@ -343,66 +343,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
 	  else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
 	}
-	//closure
-	else{
-	 if(JEC_Version == "Summer16_23Sep2016_V4"){
-	    JEC_corr              = JERFiles::Summer16_23Sep2016_V4_L123_AK4PFchs_MC;               //ReReco Data + Summer16 MC
-	    JEC_corr_L1RC         = JERFiles::Summer16_23Sep2016_V4_L1RC_AK4PFchs_MC;
-	    //dummies, in this version, MC is not split
-	    JEC_corr_BCD          = JERFiles::Summer16_23Sep2016_V4_L123_AK4PFchs_MC;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_23Sep2016_V4_L1RC_AK4PFchs_MC;
-	    JEC_corr_EFearly      = JERFiles::Summer16_23Sep2016_V4_L123_AK4PFchs_MC;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_23Sep2016_V4_L1RC_AK4PFchs_MC;
-	    JEC_corr_FlateG       = JERFiles::Summer16_23Sep2016_V4_L123_AK4PFchs_MC;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_23Sep2016_V4_L1RC_AK4PFchs_MC;
-	    JEC_corr_H            = JERFiles::Summer16_23Sep2016_V4_L123_AK4PFchs_MC;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_23Sep2016_V4_L1RC_AK4PFchs_MC;
-	    cout << "This is MC, JECs used are: ";
-	    for(unsigned int i=0; i<JEC_corr.size(); i++) cout << JEC_corr[i] << ", ";
-	    cout << endl;
-	  }
-	 //JEC-Version MC: V1
-	  else if(JEC_Version == "Summer16_03Feb2017_V3"){
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V1_L123_AK4PFchs_MC;               //ReReco Data + Summer16 MC V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V1_L1RC_AK4PFchs_MC;
-	    //dummies, in this version, MC is not split
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V1_L123_AK4PFchs_MC;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V1_L1RC_AK4PFchs_MC;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V1_L123_AK4PFchs_MC;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V1_L1RC_AK4PFchs_MC;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V1_L123_AK4PFchs_MC;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V1_L1RC_AK4PFchs_MC;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V1_L123_AK4PFchs_MC;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V1_L1RC_AK4PFchs_MC;
-	    cout << "This is MC, JECs used are: ";
-	    for(unsigned int i=0; i<JEC_corr.size(); i++) cout << JEC_corr[i] << ", ";
-	    cout << endl;
-	  }
-	 //JEC-Version MC: V6
-	  else if(JEC_Version == "Summer16_03Feb2017_V4" || JEC_Version == "Summer16_03Feb2017_V5" || JEC_Version == "Summer16_03Feb2017_V6"){
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V6_L123_AK4PFchs_MC;               //ReReco Data + Summer16 MC V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V6_L1RC_AK4PFchs_MC;
-	    //dummies, in this version, MC is not split
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V6_L123_AK4PFchs_MC;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V6_L1RC_AK4PFchs_MC;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V6_L123_AK4PFchs_MC;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V6_L1RC_AK4PFchs_MC;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V6_L123_AK4PFchs_MC;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V6_L1RC_AK4PFchs_MC;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V6_L123_AK4PFchs_MC;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V6_L1RC_AK4PFchs_MC;
-	    cout << "This is MC, JECs used are: ";
-	    for(unsigned int i=0; i<JEC_corr.size(); i++) cout << JEC_corr[i] << ", ";
-	    cout << endl;
-	  }	 
-	  else if(JEC_Version == "Fall17_17Nov2017_V4"){
-	    JEC_corr               = JERFiles::Fall17_17Nov2017_V4_L123_AK4PFchs_MC;
-	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V4_L1RC_AK4PFchs_MC;	    
-	  }
-
-
-	 else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, MC specified.");
-	}
+	
       }
     }
     else { 
@@ -474,18 +415,57 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V6_H_L123_noRes_AK4PFchs_DATA;
 	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V6_H_L1RC_AK4PFchs_DATA;
 	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V4"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V4_D_L123_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V4_E_L123_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V4_F_L123_AK4PFchs_DATA;
+	  // else if(JEC_Version == "Fall17_17Nov2017_V4"){
+	  //   JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
+	  //   JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
+	  //   JEC_corr_D               = JERFiles::Fall17_17Nov2017_V4_D_L123_AK4PFchs_DATA;
+	  //   JEC_corr_E               = JERFiles::Fall17_17Nov2017_V4_E_L123_AK4PFchs_DATA;
+	  //   JEC_corr_F               = JERFiles::Fall17_17Nov2017_V4_F_L123_AK4PFchs_DATA;
 	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V4_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V4_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V4_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
+	  //   JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V4_B_L1RC_AK4PFchs_DATA;
+	  //   JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V4_C_L1RC_AK4PFchs_DATA;
+	  //   JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V4_D_L1RC_AK4PFchs_DATA;
+	  //   JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
+	  //   JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
+	  // }
+	  else if(JEC_Version == "Fall17_17Nov2017_V5"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V5_B_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V5_C_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V5_D_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V5_E_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V5_F_L123_noRes_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V5_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V5_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V5_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V5_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V5_F_L1RC_AK4PFchs_DATA; 
+	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V6"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V6_B_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V6_C_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V6_D_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V6_E_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V6_F_L123_noRes_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V6_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V6_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V6_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V6_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V6_F_L1RC_AK4PFchs_DATA; 
+	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V7"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V7_B_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V7_C_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V7_D_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V7_E_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V7_F_L123_noRes_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V7_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V7_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V7_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V7_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V7_F_L1RC_AK4PFchs_DATA; 
 	  }
 	  else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
@@ -575,6 +555,45 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
 	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
 	  }	 
+	  else if(JEC_Version == "Fall17_17Nov2017_V5"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V5_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V5_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V5_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V5_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V5_F_L123_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V5_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V5_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V5_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V5_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V5_F_L1RC_AK4PFchs_DATA; 
+	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V6"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V6_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V6_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V6_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V6_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V6_F_L123_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V6_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V6_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V6_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V6_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V6_F_L1RC_AK4PFchs_DATA; 
+	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V7"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V7_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V7_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V7_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V7_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V7_F_L123_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V7_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V7_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V7_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V7_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V7_F_L1RC_AK4PFchs_DATA; 
+	  }
 	 
 
 	 else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
@@ -582,49 +601,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       }
     }
       
-      //Only for closure test
-      if(ClosureTest){
-	//DATA
-	if(!isMC){
-	  if(split_JEC_DATA){ //these only exist for DATA 
-	    jet_corrector_B.reset(new JetCorrector(ctx, JEC_corr_B, JEC_corr_B_L1RC));
-	    JLC_B.reset(new JetLeptonCleaner(ctx, JEC_corr_B));
-	    jet_corrector_C.reset(new JetCorrector(ctx, JEC_corr_C, JEC_corr_C_L1RC));
-	    JLC_C.reset(new JetLeptonCleaner(ctx, JEC_corr_C));
-	    jet_corrector_D.reset(new JetCorrector(ctx, JEC_corr_D, JEC_corr_D_L1RC));
-	    JLC_D.reset(new JetLeptonCleaner(ctx, JEC_corr_D));
-	    jet_corrector_E.reset(new JetCorrector(ctx, JEC_corr_E, JEC_corr_E_L1RC));
-	    JLC_E.reset(new JetLeptonCleaner(ctx, JEC_corr_E));
-	    jet_corrector_F.reset(new JetCorrector(ctx, JEC_corr_F, JEC_corr_F_L1RC));
-	    JLC_F.reset(new JetLeptonCleaner(ctx, JEC_corr_F));
-	  }
-	  else{
-	    jet_corrector.reset(new JetCorrector(ctx, JEC_corr, JEC_corr_L1RC));	
-	    jetleptoncleaner.reset(new JetLeptonCleaner(ctx, JEC_corr));
-	  }
-	}
-
-	//MC
-	 //For MC: only one version of JECs exists
-	else if(isMC){
-	  if(split_JEC_MC){
-	    jet_corrector_BCD.reset(new JetCorrector(ctx, JEC_corr_BCD, JEC_corr_BCD_L1RC));
-	    jet_corrector_EFearly.reset(new JetCorrector(ctx, JEC_corr_EFearly, JEC_corr_EFearly_L1RC));
-	    jet_corrector_FlateG.reset(new JetCorrector(ctx, JEC_corr_FlateG, JEC_corr_FlateG_L1RC));
-	    jet_corrector_H.reset(new JetCorrector(ctx, JEC_corr_H, JEC_corr_H_L1RC));
-	    JLC_BCD.reset(new JetLeptonCleaner(ctx, JEC_corr_BCD));
-	    JLC_EFearly.reset(new JetLeptonCleaner(ctx, JEC_corr_EFearly));
-	    JLC_FlateG.reset(new JetLeptonCleaner(ctx, JEC_corr_FlateG));
-	    JLC_H.reset(new JetLeptonCleaner(ctx, JEC_corr_H));
-	  }
-	  else{
-	    jet_corrector.reset(new JetCorrector(ctx, JEC_corr, JEC_corr_L1RC));
-	    jetleptoncleaner.reset(new JetLeptonCleaner(ctx, JEC_corr));
-	  }
-	}
-      }
-      //for residuals
-      else{
 	//DATA
 	if(!isMC){
 	  if(split_JEC_DATA){
@@ -645,7 +621,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  }
 	}
 	//MC
-	
 	else if(isMC){
 	  if(split_JEC_MC){
 	    jet_corrector_BCD.reset(new JetCorrector(ctx, JEC_corr_BCD, JEC_corr_BCD_L1RC));
@@ -663,7 +638,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	    cout << "setting up jet_corrector and JLC for MC, non-split JEC." << endl;
 	  }
 	}
-      }
     
 //JER Smearing for corresponding JEC-Version
       if(isMC){

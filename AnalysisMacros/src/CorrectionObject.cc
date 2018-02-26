@@ -113,7 +113,8 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
       else if(_runnr == "BCDEFearly") _lumitag = "RunBCDEFearly  19.7 fb^{-1}";
       else if(_runnr == "BCDEFGH") _lumitag = "RunBCDEFGH  36.8 fb^{-1}";
       else if(_runnr == "DE") _lumitag      = "RunDE  TODO fb^{-1}"; 
-      else if(_runnr == "DEF") _lumitag      = "RunDEF  TODO fb^{-1}";
+      else if(_runnr == "DEF") _lumitag      = "RunDEF  TODO fb^{-1}"; 
+      else if(_runnr == "BCD") _lumitag      = "RunBCD  TODO fb^{-1}";
       else throw runtime_error("In constructor: Invalid RunNr. specified.");
     }
 

@@ -437,6 +437,19 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	  //   JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
 	  //   JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
 	  // }
+	  else if(JEC_Version == "Fall17_17Nov2017_V5"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V5_B_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V5_C_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V5_D_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V5_E_L123_noRes_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V5_F_L123_noRes_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V5_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V5_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V5_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V5_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V5_F_L1RC_AK4PFchs_DATA; 
+	  }
 	  else if(JEC_Version == "Fall17_17Nov2017_V6"){
 	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V6_B_L123_noRes_AK4PFchs_DATA;
 	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V6_C_L123_noRes_AK4PFchs_DATA;
@@ -552,6 +565,19 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
 	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
 	  }
+	  else if(JEC_Version == "Fall17_17Nov2017_V5"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V5_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V5_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V5_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V5_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V5_F_L123_AK4PFchs_DATA;
+	    
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V5_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V5_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V5_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V5_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V5_F_L1RC_AK4PFchs_DATA; 
+	  }
 	  else if(JEC_Version == "Fall17_17Nov2017_V6"){
 	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V6_B_L123_AK4PFchs_DATA;
 	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V6_C_L123_AK4PFchs_DATA;
@@ -631,6 +657,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	else if(JEC_Version == "Summer16_03Feb2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Summer16_03Feb2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Fall17_17Nov2017_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
+	else if(JEC_Version == "Fall17_17Nov2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	

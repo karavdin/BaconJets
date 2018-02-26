@@ -54,9 +54,6 @@ LumiHists::LumiHists(uhh2::Context & ctx,
     }
     
     
-
-
-
     string lumifile = ctx.get("lumi_file");
     std::unique_ptr<TFile> file(TFile::Open(lumifile.c_str(), "read"));
     TTree * tree = dynamic_cast<TTree*>(file->Get("AnalysisTree"));
