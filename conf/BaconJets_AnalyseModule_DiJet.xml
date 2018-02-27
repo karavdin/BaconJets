@@ -52,7 +52,7 @@
 
 <!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunD_17Nov2017_wCHSMETfixed.xml">
 
-<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunE_17Nov201_wCHSMETfixed7.xml">
+<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunE_17Nov2017_wCHSMETfixed.xml">
 
 <!ENTITY DATA_RunF_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunF_17Nov2017_wCHSMETfixed.xml">
 
@@ -197,7 +197,7 @@
 	 <Item Name="pileup_directory_data_down" Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_20/src/UHH2/BaconJets/data/PileUp/80X/800pb/nPU_minBiasXsec58000.root"/> -->
 
 
-      <Item Name="lumihists_lumi_per_bin" Value="50."/>
+      <Item Name="lumihists_lumi_per_bin" Value="250."/>
 
 
 <!--      <Item Name="use_sframe_weight" Value="true"/> -->  <!--false-->

@@ -23,9 +23,9 @@
 
 using namespace std;
 
-const int n_input_Di = 3;
-const int Fit_range_Di[n_input_Di+1] = {14500, 18900, 25000, 42000};
-const TString Name_range_Di[n_input_Di] = {"D", "E", "F"};
+const int n_input_Di = 5;
+const int Fit_range_Di[n_input_Di+1] = {0, 4800,14500, 18900, 25000, 42000};
+const TString Name_range_Di[n_input_Di] = {"B", "C", "D", "E", "F"};
 
 const int n_input_Si = 3;
 const int Fit_range_Si[n_input_Si+1] = {0, 4800, 14500, 18900};
@@ -75,27 +75,27 @@ void CorrectionObject::Monitoring(bool SiRuns){
     Fit_range[i]=(SiRuns ? Fit_range_Si[i] : Fit_range_Di[i]);
     Name_range[i]=(SiRuns ? Name_range_Si[i] : Name_range_Di[i]);    
   }
-  Fit_range[n_input+1]=(SiRuns ? Fit_range_Si[n_input+1] : Fit_range_Di[n_input+1]);
+  Fit_range[n_input]=(SiRuns ? Fit_range_Si[n_input] : Fit_range_Di[n_input]);
   
     
   CorrectionObject::make_path(std::string((_outpath + "plots/control/Monitoring/").Data()));
   
   TFile* f_monitoring[n_input];
 
-  TH2D *hist_A[n_input][n_eta_full-1][n_pt-1];
-  TProfile *pr_A[n_input][n_eta_full-1][n_pt-1];
+  TH2D *hist_A[n_input][n_eta_full-1][n_pt-2];
+  TProfile *pr_A[n_input][n_eta_full-1][n_pt-2];
 
-  TGraphErrors *rel_res[n_input][n_eta_full-1][n_pt-1];
-  TGraphErrors *mpf_res[n_input][n_eta_full-1][n_pt-1];
+  TGraphErrors *rel_res[n_input][n_eta_full-1][n_pt-2];
+  TGraphErrors *mpf_res[n_input][n_eta_full-1][n_pt-2];
 
-  TGraphErrors *rel_ratio[n_input][n_eta_full-1][n_pt-1];
-  TGraphErrors *mpf_ratio[n_input][n_eta_full-1][n_pt-1];
+  TGraphErrors *rel_ratio[n_input][n_eta_full-1][n_pt-2];
+  TGraphErrors *mpf_ratio[n_input][n_eta_full-1][n_pt-2];
 
-  TF1 *Fit_rel[n_input][n_eta_full-1][n_pt-1];
-  TF1 *Fit_mpf[n_input][n_eta_full-1][n_pt-1];
+  TF1 *Fit_rel[n_input][n_eta_full-1][n_pt-2];
+  TF1 *Fit_mpf[n_input][n_eta_full-1][n_pt-2];
  
-  TH2D *hist_B[n_input][n_eta_full-1][n_pt-1];
-  TProfile *pr_B[n_input][n_eta_full-1][n_pt-1];
+  TH2D *hist_B[n_input][n_eta_full-1][n_pt-2];
+  TProfile *pr_B[n_input][n_eta_full-1][n_pt-2];
 
   TH2D *chi2_rel_fit[n_input];
   TH2D *param_rel_fit[n_input];
@@ -112,7 +112,8 @@ void CorrectionObject::Monitoring(bool SiRuns){
     f_monitoring[i] = new TFile(CorrectionObject::_input_path);
     cout<<"Create Hist"<<endl;
     for(int j=0; j<n_eta_full-1; j++){
-      for(int k=0; k<n_pt-1; k++){
+      for(int k=0; k<n_pt-2; k++){
+	cout<<"eta: "+eta_range_full[j]+" "+eta_range_full[j+1]+"   pT: "+pt_range[k]+" "+pt_range[k+1]<<endl;
         hist_A[i][j][k]    = (TH2D*)f_monitoring[i]->Get("Monitoring_Final/hist_data_A_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]);
 	pr_A[i][j][k]      = (TProfile*)hist_A[i][j][k] ->ProfileX(Form("prof_A_%i_%d_%d",i,j,k));
 	hist_B[i][j][k]    = (TH2D*)f_monitoring[i]    ->Get("Monitoring_Final/hist_data_B_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1]);
@@ -120,11 +121,11 @@ void CorrectionObject::Monitoring(bool SiRuns){
       }
     }
     
-    chi2_mpf_fit[i]  = new TH2D("chi2_mpf_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-1, pt_bins);
-    param_mpf_fit[i] = new TH2D("param_mpf_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-1, pt_bins);
+    chi2_mpf_fit[i]  = new TH2D("chi2_mpf_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-2, pt_bins);
+    param_mpf_fit[i] = new TH2D("param_mpf_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-2, pt_bins);
 
-    chi2_rel_fit[i]  = new TH2D("chi2_rel_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-1, pt_bins);
-    param_rel_fit[i] = new TH2D("param_rel_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-1, pt_bins);
+    chi2_rel_fit[i]  = new TH2D("chi2_rel_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-2, pt_bins);
+    param_rel_fit[i] = new TH2D("param_rel_fit",""+Name_range[i],n_eta_full-1, eta_bins_full, n_pt-2, pt_bins);
 
     cout<<"Finish Load Hists"<<endl;
 
@@ -134,11 +135,11 @@ void CorrectionObject::Monitoring(bool SiRuns){
     double bin_width = 0; 
     bin_width = pr_B[i][1][1]->GetXaxis()->GetBinWidth(1);
     
-    double res_rel[n_eta_full-1][n_pt-1][n_lumi-1];
-    double res_mpf[n_eta_full-1][n_pt-1][n_lumi-1];
+    double res_rel[n_eta_full-1][n_pt-2][n_lumi-1];
+    double res_mpf[n_eta_full-1][n_pt-2][n_lumi-1];
     
-    double err_res_rel[n_eta_full-1][n_pt-1][n_lumi-1];
-    double err_res_mpf[n_eta_full-1][n_pt-1][n_lumi-1];
+    double err_res_rel[n_eta_full-1][n_pt-2][n_lumi-1];
+    double err_res_mpf[n_eta_full-1][n_pt-2][n_lumi-1];
     
     double xbin_tgraph[n_lumi],zero[n_lumi];
     double xbin = 0;
@@ -149,7 +150,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
     }
 
     for(int j=0; j<n_eta_full-1; j++){
-      for(int k=0; k<n_pt-1; k++){
+      for(int k=0; k<n_pt-2; k++){
 	for(int l =0; l<n_lumi; l++){
 	  
 	  res_rel[j][k][l]=0;
@@ -235,7 +236,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
   tex1->SetTextSize(0.036); 
 
   for(int j=0; j<n_eta_full-1; j++){
-    for(int k=0; k<n_pt-1; k++){
+    for(int k=0; k<n_pt-2; k++){
  
       //dummy for tdrCanvas 
       TH1D *h = new TH1D("h",";dummy;",14000,0,42000);
