@@ -45,6 +45,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   TH1D *hdata_jet2_pt[(eta_abs ? n_eta : n_eta_full)-1];  
   TH1D *hdata_jet3_pt[(eta_abs ? n_eta : n_eta_full)-1];
   TH1D *hdata_jet3_eta[(eta_abs ? n_eta : n_eta_full)-1];
+  TH1D *hdata_jet3_dRmin[(eta_abs ? n_eta : n_eta_full)-1];//min dR to tag or probe jet from jet3
   
   int count = 0;
   TString name1 = "hist_data_A_";
@@ -58,6 +59,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       hdata_jet2_pt[j] = new TH1D(name2+"jet2_pt_"+eta_name,"",nResponseBins,0,600);    
       hdata_jet3_pt[j] = new TH1D(name2+"jet3_pt_"+eta_name,"",nResponseBins,0,600);
       hdata_jet3_eta[j] = new TH1D(name2+"jet3_eta_"+eta_name,"",100,-5.2,5.2);
+      hdata_jet3_dRmin[j] = new TH1D(name2+"jet3_dRmin_"+eta_name,"",100,0,10);
       
     for(int k=0; k<n_pt-1; k++){
       TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
@@ -94,6 +96,8 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   TTreeReaderValue<Float_t> jet2_pt_data(myReader_DATA, "jet2_pt");
   TTreeReaderValue<Float_t> jet3_pt_data(myReader_DATA, "jet3_pt");
   TTreeReaderValue<Float_t> jet3_eta_data(myReader_DATA, "jet3_eta");
+  TTreeReaderValue<Float_t> jet3_dRbarrel_data(myReader_DATA, "dR_jet3_barreljet");
+  TTreeReaderValue<Float_t> jet3_dRprobe_data(myReader_DATA, "dR_jet3_probejet");
     
   int myCount = 0;
   int myCount_cut = 0;
@@ -112,6 +116,9 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 	  hdata_jet2_pt[j]->Fill(*jet2_pt_data,*weight_data);
 	  hdata_jet3_pt[j]->Fill(*jet3_pt_data,*weight_data);	  
 	  hdata_jet3_eta[j]->Fill(*jet3_eta_data,*weight_data);	  
+	  double jet3_dRmin = *jet3_dRbarrel_data;
+	  if(jet3_dRmin>*jet3_dRprobe_data) jet3_dRmin = *jet3_dRprobe_data;
+	  hdata_jet3_dRmin[j]->Fill(jet3_dRmin,*weight_data);	  
 	  hdata_asymmetry[k][j]->Fill(*asymmetry_data,*weight_data);
 	  hdata_bsymmetry[k][j]->Fill(*bsymmetry_data,*weight_data);
 	  hdata_asymmetry_rho[k][j]->Fill(*asymmetry_data,*rho_data,*weight_data);
@@ -160,6 +167,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       hdata_jet2_pt[j]->Write();
       hdata_jet3_pt[j]->Write();     
       hdata_jet3_eta[j]->Write();     
+      hdata_jet3_dRmin[j]->Write();     
   }
   test_out_data_jet_pt->Close();
   delete test_out_data_jet_pt;
@@ -234,7 +242,9 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     TLatex *tex = new TLatex();
     tex->SetNDC();
     tex->SetTextSize(0.045); 
-    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
 
     TLatex *tex_lumi = new TLatex();
     tex_lumi->SetNDC();
@@ -263,7 +273,11 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     TLatex *tex = new TLatex();
     tex->SetNDC();
     tex->SetTextSize(0.045); 
-    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    //TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
 
     TLatex *tex_lumi = new TLatex();
     tex_lumi->SetNDC();
@@ -292,7 +306,11 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     TLatex *tex = new TLatex();
     tex->SetNDC();
     tex->SetTextSize(0.045); 
-    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+
+    //TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
 
     TLatex *tex_lumi = new TLatex();
     tex_lumi->SetNDC();
@@ -322,7 +340,10 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     TLatex *tex = new TLatex();
     tex->SetNDC();
     tex->SetTextSize(0.045); 
-    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    //    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
 
     TLatex *tex_lumi = new TLatex();
     tex_lumi->SetNDC();
@@ -337,10 +358,48 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       htemp_rel_data->GetXaxis()->SetTitle("eta jet3");
       htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");      
       // htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data->SetMarkerStyle(20);
+      htemp_rel_data->SetMarkerColor(kBlack);
+      htemp_rel_data->SetLineColor(kBlack);
       htemp_rel_data->Draw("EP");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       cFull_eta3->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/jet3_eta_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+ ".pdf");
       delete cFull_eta3;
+      delete htemp_rel_data;
+    
+  }  
+
+for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
+    TString eta_name = "eta_"+(eta_abs ? eta_range2 : eta_range2_full)[i]+"_"+(eta_abs ? eta_range2 : eta_range2_full)[i+1];
+    
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    //    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
+
+    TLatex *tex_lumi = new TLatex();
+    tex_lumi->SetNDC();
+    tex_lumi->SetTextSize(0.045); 
+    
+      TCanvas* cFull_dRmin3 = new TCanvas();
+      tdrCanvas(cFull_dRmin3,"cFull_dRmin3",h,4,10,kSquare,CorrectionObject::_lumitag);
+      TH1D* htemp_rel_data;
+      TString name_rel_data = "hist_data_jet3_dRmin_"+eta_name;
+      htemp_rel_data = (TH1D*)f_jet_pt->Get(name_rel_data);
+      htemp_rel_data->Draw();
+      htemp_rel_data->GetXaxis()->SetTitle("min (dR(jet3,tag), dR(jet3,probe))");
+      htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");      
+      // htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+      htemp_rel_data->SetMarkerStyle(20);
+      htemp_rel_data->SetMarkerColor(kBlack);
+      htemp_rel_data->SetLineColor(kBlack);
+      htemp_rel_data->Draw("EP");		
+      tex->DrawLatex(0.47,0.85,"Data, " + text);
+      cFull_dRmin3->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/jet3_dRmin_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+ ".pdf");
+      delete cFull_dRmin3;
       delete htemp_rel_data;
     
   }  
@@ -352,7 +411,10 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     TLatex *tex = new TLatex();
     tex->SetNDC();
     tex->SetTextSize(0.045); 
-    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    //    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
 
     TLatex *tex_lumi = new TLatex();
     tex_lumi->SetNDC();
@@ -388,7 +450,10 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     TLatex *tex = new TLatex();
     tex->SetNDC();
     tex->SetTextSize(0.045); 
-    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    //    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
 
     TLatex *tex_lumi = new TLatex();
     tex_lumi->SetNDC();
@@ -452,7 +517,10 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     TLatex *tex = new TLatex();
     tex->SetNDC();
     tex->SetTextSize(0.045); 
-    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    //    TString text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
 
     TLatex *tex_lumi = new TLatex();
     tex_lumi->SetNDC();
