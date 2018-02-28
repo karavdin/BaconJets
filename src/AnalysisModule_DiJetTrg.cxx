@@ -44,17 +44,16 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 
   protected:
     // correctors
-    std::unique_ptr<JetCorrector> jet_corrector, jet_corrector_BCD, jet_corrector_EFearly, jet_corrector_FlateG, jet_corrector_H;
+    std::unique_ptr<JetCorrector> jet_corrector;
     std::unique_ptr<JetCorrector>   jet_corrector_B, jet_corrector_C, jet_corrector_D, jet_corrector_E, jet_corrector_F;
     std::unique_ptr<GenericJetResolutionSmearer> jetER_smearer; 
 
 // cleaners
-   std::unique_ptr<JetLeptonCleaner> jetleptoncleaner, JLC_BCD, JLC_EFearly, JLC_FlateG, JLC_H;
+   std::unique_ptr<JetLeptonCleaner> jetleptoncleaner;
    std::unique_ptr<JetLeptonCleaner>  JLC_B, JLC_C, JLC_D, JLC_E, JLC_F;
    std::unique_ptr<JetCleaner> jetcleaner;
    std::unique_ptr<MuonCleaner>     muoSR_cleaner;   
    std::unique_ptr<ElectronCleaner> eleSR_cleaner;    
-
 
     // selections
     std::unique_ptr<uhh2::Selection> lumi_sel;
@@ -177,7 +176,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     sel(ctx)
   {
 
-    no_genp=true;
+    no_genp=false;
     
     try{
       debug = ctx.get("Debug") == "true";
@@ -221,57 +220,31 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     // ts = true;
     onlyBtB = (ctx.get("Only_BtB") == "true");
     if(debug) cout<<"onlyBtb is "<<onlyBtB<<endl;
+
+    
+#define GET_RESET_TRIGGER(trg_name)       \
+  const std::string& trg_name = ctx.get( #trg_name , "NULL"); \     
+  if ( trg_name != "NULL") trg_name##_sel.reset(new TriggerSelection( trg_name ));\
+  else trg_name##_sel.reset(new uhh2::AndSelection(ctx)); \
+  
+    
     if(!isMC){
-      const std::string& trigger40 = ctx.get("trigger40", "NULL");
-      const std::string& trigger60 = ctx.get("trigger60", "NULL");
-      const std::string& trigger80 = ctx.get("trigger80", "NULL");
-      const std::string& trigger140 = ctx.get("trigger140", "NULL");
-      const std::string& trigger200 = ctx.get("trigger200", "NULL");
-      const std::string& trigger260 = ctx.get("trigger260", "NULL");
-      const std::string& trigger320 = ctx.get("trigger320", "NULL");
-      const std::string& trigger400 = ctx.get("trigger400", "NULL");
-      const std::string& trigger500 = ctx.get("trigger500", "NULL");
+        GET_RESET_TRIGGER(trigger40)
+	GET_RESET_TRIGGER(trigger60)
+	GET_RESET_TRIGGER(trigger80)
+	GET_RESET_TRIGGER(trigger140)
+	GET_RESET_TRIGGER(trigger200)
+	GET_RESET_TRIGGER(trigger260)
+	GET_RESET_TRIGGER(trigger320)
+	GET_RESET_TRIGGER(trigger400)
+	GET_RESET_TRIGGER(trigger500)
 
-      const std::string& trigger60_HFJEC = ctx.get("trigger60_HFJEC", "NULL");
-      const std::string& trigger80_HFJEC = ctx.get("trigger80_HFJEC", "NULL");
-      const std::string& trigger100_HFJEC = ctx.get("trigger100_HFJEC", "NULL");
-      const std::string& trigger160_HFJEC = ctx.get("trigger160_HFJEC", "NULL");
-      const std::string& trigger220_HFJEC = ctx.get("trigger220_HFJEC", "NULL");
-      const std::string& trigger300_HFJEC = ctx.get("trigger300_HFJEC", "NULL");
-      
-      // const std::string& trigger = ctx.get("trigger", "NULL");
-      if(trigger40 != "NULL") trigger40_sel.reset(new TriggerSelection(trigger40));
-      else trigger40_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger60 != "NULL") trigger60_sel.reset(new TriggerSelection(trigger60));
-      else trigger60_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger80 != "NULL") trigger80_sel.reset(new TriggerSelection(trigger80));
-      else trigger80_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger140 != "NULL") trigger140_sel.reset(new TriggerSelection(trigger140));
-      else trigger140_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger200 != "NULL") trigger200_sel.reset(new TriggerSelection(trigger200));
-      else trigger200_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger260 != "NULL") trigger260_sel.reset(new TriggerSelection(trigger260));
-      else trigger260_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger320 != "NULL") trigger320_sel.reset(new TriggerSelection(trigger320));
-      else trigger320_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger400 != "NULL") trigger400_sel.reset(new TriggerSelection(trigger400));
-      else trigger400_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger500 != "NULL") trigger500_sel.reset(new TriggerSelection(trigger500));
-      else trigger500_sel.reset(new uhh2::AndSelection(ctx));
-      
-      if(trigger60_HFJEC != "NULL") trigger60_HFJEC_sel.reset(new TriggerSelection(trigger60_HFJEC));
-      else trigger60_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger80_HFJEC != "NULL") trigger80_HFJEC_sel.reset(new TriggerSelection(trigger80_HFJEC));
-      else trigger80_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger100_HFJEC != "NULL") trigger100_HFJEC_sel.reset(new TriggerSelection(trigger100_HFJEC));
-      else trigger100_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger160_HFJEC != "NULL") trigger160_HFJEC_sel.reset(new TriggerSelection(trigger160_HFJEC));
-      else trigger160_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger220_HFJEC != "NULL") trigger220_HFJEC_sel.reset(new TriggerSelection(trigger220_HFJEC));
-      else trigger220_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger300_HFJEC != "NULL") trigger300_HFJEC_sel.reset(new TriggerSelection(trigger300_HFJEC));
-      else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-
+	GET_RESET_TRIGGER(trigger60_HFJEC)	
+	GET_RESET_TRIGGER(trigger80_HFJEC)		
+	GET_RESET_TRIGGER(trigger100_HFJEC)		
+	GET_RESET_TRIGGER(trigger160_HFJEC)	
+	GET_RESET_TRIGGER(trigger220_HFJEC)	
+	GET_RESET_TRIGGER(trigger300_HFJEC)
     }
 
     //new
@@ -287,8 +260,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 
     if(debug) std::cout<<"isMC: "<<isMC<<"  split_JEC_MC: "<<split_JEC_MC<<"  split_JEC_DATA: "<<split_JEC_DATA <<"   ClosureTest: "<<ClosureTest<<std::endl;
     
-    std::vector<std::string> JEC_corr,       JEC_corr_BCD,       JEC_corr_EFearly,       JEC_corr_FlateG,       JEC_corr_H,      JEC_corr_MC_FlateGH;
-    std::vector<std::string> JEC_corr_L1RC,  JEC_corr_BCD_L1RC,  JEC_corr_EFearly_L1RC,  JEC_corr_FlateG_L1RC,  JEC_corr_H_L1RC, JEC_corr_MC_FlateGH_L1RC;
+    std::vector<std::string> JEC_corr ;
+    std::vector<std::string> JEC_corr_L1RC ;
     std::vector<std::string> JEC_corr_B, JEC_corr_C, JEC_corr_D, JEC_corr_E, JEC_corr_F;
     std::vector<std::string> JEC_corr_B_L1RC, JEC_corr_C_L1RC, JEC_corr_D_L1RC, JEC_corr_E_L1RC, JEC_corr_F_L1RC;     
 
@@ -303,108 +276,54 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	  else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
       }
     }
-    else { 
+    else {
+
+#define IF_MAKE_JEC_VARS_CLOSURE(jecv)				    \
+  if(JEC_Version == #jecv){			    \
+  JEC_corr_B               = JERFiles::jecv##_B_L123_AK4PFchs_DATA; \
+  JEC_corr_C               = JERFiles::jecv##_C_L123_AK4PFchs_DATA; \
+  JEC_corr_D               = JERFiles::jecv##_D_L123_AK4PFchs_DATA; \
+  JEC_corr_E               = JERFiles::jecv##_E_L123_AK4PFchs_DATA; \
+  JEC_corr_F               = JERFiles::jecv##_F_L123_AK4PFchs_DATA; \
+				       				\
+  JEC_corr_B_L1RC          = JERFiles::jecv##_B_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_C_L1RC          = JERFiles::jecv##_C_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_D_L1RC          = JERFiles::jecv##_D_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_E_L1RC          = JERFiles::jecv##_E_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_F_L1RC          = JERFiles::jecv##_F_L1RC_AK4PFchs_DATA;	\
+  }									\
+
+
+#define IF_MAKE_JEC_VARS_NO_CLOSURE(jecv)					\
+  if(JEC_Version == #jecv){			    \
+  JEC_corr_B               = JERFiles::jecv##_B_L123_noRes_AK4PFchs_DATA; \
+  JEC_corr_C               = JERFiles::jecv##_C_L123_noRes_AK4PFchs_DATA; \
+  JEC_corr_D               = JERFiles::jecv##_D_L123_noRes_AK4PFchs_DATA; \
+  JEC_corr_E               = JERFiles::jecv##_E_L123_noRes_AK4PFchs_DATA; \
+  JEC_corr_F               = JERFiles::jecv##_F_L123_noRes_AK4PFchs_DATA; \
+				       				\
+  JEC_corr_B_L1RC          = JERFiles::jecv##_B_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_C_L1RC          = JERFiles::jecv##_C_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_D_L1RC          = JERFiles::jecv##_D_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_E_L1RC          = JERFiles::jecv##_E_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_F_L1RC          = JERFiles::jecv##_F_L1RC_AK4PFchs_DATA;	\
+  }\      
+      
       //for DATA
       if(jetLabel == "AK4CHS"){
 	if(!ClosureTest){
 	  //residuals
-	  if(JEC_Version == "Fall17_17Nov2017_V5"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V5_B_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V5_C_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V5_D_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V5_E_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V5_F_L123_noRes_AK4PFchs_DATA;
-	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V5_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V5_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V5_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V5_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V5_F_L1RC_AK4PFchs_DATA; 
-	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V6"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V6_B_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V6_C_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V6_D_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V6_E_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V6_F_L123_noRes_AK4PFchs_DATA;
-	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V6_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V6_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V6_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V6_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V6_F_L1RC_AK4PFchs_DATA; 
-	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V7"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V7_B_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V7_C_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V7_D_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V7_E_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V7_F_L123_noRes_AK4PFchs_DATA;
-	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V7_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V7_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V7_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V7_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V7_F_L1RC_AK4PFchs_DATA; 
-	  }	 
-	 
-	  else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
+	    IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V5)
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V6) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V7) 
+	    else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
-	   if(JEC_Version == "Fall17_17Nov2017_V4"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V4_D_L123_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V4_E_L123_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V4_F_L123_AK4PFchs_DATA;
-	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V4_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V4_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V4_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
-	  }
-	else if(JEC_Version == "Fall17_17Nov2017_V5"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V5_B_L123_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V5_C_L123_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V5_D_L123_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V5_E_L123_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V5_F_L123_AK4PFchs_DATA;
-	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V5_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V5_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V5_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V5_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V5_F_L1RC_AK4PFchs_DATA; 
-	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V6"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V6_B_L123_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V6_C_L123_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V6_D_L123_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V6_E_L123_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V6_F_L123_AK4PFchs_DATA;
-	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V6_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V6_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V6_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V6_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V6_F_L1RC_AK4PFchs_DATA; 
-	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V7"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V7_B_L123_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V7_C_L123_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V7_D_L123_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V7_E_L123_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V7_F_L123_AK4PFchs_DATA;
-	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V7_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V7_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V7_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V7_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V7_F_L1RC_AK4PFchs_DATA; 
-	  }	 
-
-	 else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
+	    IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V4)
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V5)
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V6) 
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V7)
+	    else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }
     }
@@ -431,21 +350,14 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	//MC
 	
 	else if(isMC){
-	  if(split_JEC_MC){
-	    jet_corrector_BCD.reset(new JetCorrector(ctx, JEC_corr_BCD, JEC_corr_BCD_L1RC));
-	    jet_corrector_EFearly.reset(new JetCorrector(ctx, JEC_corr_EFearly, JEC_corr_EFearly_L1RC));
-	    jet_corrector_FlateG.reset(new JetCorrector(ctx, JEC_corr_FlateG, JEC_corr_FlateG_L1RC));
-	    jet_corrector_H.reset(new JetCorrector(ctx, JEC_corr_H, JEC_corr_H_L1RC));
-	    JLC_BCD.reset(new JetLeptonCleaner(ctx, JEC_corr_BCD));
-	    JLC_EFearly.reset(new JetLeptonCleaner(ctx, JEC_corr_EFearly));
-	    JLC_FlateG.reset(new JetLeptonCleaner(ctx, JEC_corr_FlateG));
-	    JLC_H.reset(new JetLeptonCleaner(ctx, JEC_corr_H));
-	  }
-	  else{
+	  // if(split_JEC_MC){
+
+	  // }
+	  // else{
 	    jet_corrector.reset(new JetCorrector(ctx, JEC_corr, JEC_corr_L1RC));
 	    jetleptoncleaner.reset(new JetLeptonCleaner(ctx, JEC_corr));
 	    cout << "setting up jet_corrector and JLC for MC, non-split JEC." << endl;
-	  }
+	  // }
 	}
      
 //JER Smearing for corresponding JEC-Version
@@ -628,50 +540,50 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     TString name_weights = ctx.get("MC_Weights_Path");
     apply_weights = (ctx.get("Apply_Weights") == "true" && isMC);
     if (debug) cout<<"Apply Weights: "<<apply_weights<<endl;
-    if(apply_weights){
-      if(isMC && dataset_version.Contains("RunBCD")){
-	if(dataset_version.Contains("_Fwd"))
-	  name_weights += "MC_ReWeights_FWD_RunBCD.root";
-	else if(dataset_version.Contains("_Flat"))
-	  name_weights += "MC_ReWeights_CENTRAL_RunBCD.root";
-	else
-	  name_weights += "MC_ReWeights_RunBCD.root";
-      }
-      else if(isMC && dataset_version.Contains("RunEFearly")){
-	if(dataset_version.Contains("_Fwd"))
-	  name_weights += "MC_ReWeights_FWD_RunEFearly.root";
-	else if(dataset_version.Contains("_Flat")) 
-	  name_weights += "MC_ReWeights_CENTRAL_RunEFearly.root";
-	else
-	  name_weights += "MC_ReWeights_RunEFearly.root";
-      }
-      else if(isMC && dataset_version.Contains("RunFlateG")){
-	if(dataset_version.Contains("_Fwd"))
-	  name_weights += "MC_ReWeights_FWD_RunFlateG.root";
-	else if(dataset_version.Contains("_Flat"))
-	  name_weights += "MC_ReWeights_CENTRAL_RunFlateG.root";
-	else
-	  name_weights += "MC_ReWeights_RunFlateG.root";
-      }
-      else if(isMC && dataset_version.Contains("RunH")){
-	if(dataset_version.Contains("_Fwd"))
-	  name_weights += "MC_ReWeights_FWD_RunH.root";
-	else if(dataset_version.Contains("_Flat"))
-	name_weights += "MC_ReWeights_CENTRAL_RunH.root";
-	else
-	  name_weights += "MC_ReWeights_RunH.root";
-      }
-      else if(isMC && dataset_version.Contains("RunBCDEFGH")){
-	if(dataset_version.Contains("_Fwd"))
-	  name_weights += "MC_ReWeights_FWD_RunBCDEFGH.root";
-	else if(dataset_version.Contains("_Flat"))
-	name_weights += "MC_ReWeights_CENTRAL_RunBCDEFGH.root";
-	else
-	  name_weights += "MC_ReWeights_RunBCDEFGH.root";
+    // if(apply_weights){
+    //   if(isMC && dataset_version.Contains("RunBCD")){
+    // 	if(dataset_version.Contains("_Fwd"))
+    // 	  name_weights += "MC_ReWeights_FWD_RunBCD.root";
+    // 	else if(dataset_version.Contains("_Flat"))
+    // 	  name_weights += "MC_ReWeights_CENTRAL_RunBCD.root";
+    // 	else
+    // 	  name_weights += "MC_ReWeights_RunBCD.root";
+    //   }
+    //   else if(isMC && dataset_version.Contains("RunEFearly")){
+    // 	if(dataset_version.Contains("_Fwd"))
+    // 	  name_weights += "MC_ReWeights_FWD_RunEFearly.root";
+    // 	else if(dataset_version.Contains("_Flat")) 
+    // 	  name_weights += "MC_ReWeights_CENTRAL_RunEFearly.root";
+    // 	else
+    // 	  name_weights += "MC_ReWeights_RunEFearly.root";
+    //   }
+    //   else if(isMC && dataset_version.Contains("RunFlateG")){
+    // 	if(dataset_version.Contains("_Fwd"))
+    // 	  name_weights += "MC_ReWeights_FWD_RunFlateG.root";
+    // 	else if(dataset_version.Contains("_Flat"))
+    // 	  name_weights += "MC_ReWeights_CENTRAL_RunFlateG.root";
+    // 	else
+    // 	  name_weights += "MC_ReWeights_RunFlateG.root";
+    //   }
+    //   else if(isMC && dataset_version.Contains("RunH")){
+    // 	if(dataset_version.Contains("_Fwd"))
+    // 	  name_weights += "MC_ReWeights_FWD_RunH.root";
+    // 	else if(dataset_version.Contains("_Flat"))
+    // 	name_weights += "MC_ReWeights_CENTRAL_RunH.root";
+    // 	else
+    // 	  name_weights += "MC_ReWeights_RunH.root";
+    //   }
+    //   else if(isMC && dataset_version.Contains("RunBCDEFGH")){
+    // 	if(dataset_version.Contains("_Fwd"))
+    // 	  name_weights += "MC_ReWeights_FWD_RunBCDEFGH.root";
+    // 	else if(dataset_version.Contains("_Flat"))
+    // 	name_weights += "MC_ReWeights_CENTRAL_RunBCDEFGH.root";
+    // 	else
+    // 	  name_weights += "MC_ReWeights_RunBCDEFGH.root";
 
-      }
-      f_weights.reset(new TFile(name_weights,"READ"));
-    }
+    //   }
+    //   f_weights.reset(new TFile(name_weights,"READ"));
+    // }
     apply_lumiweights = (ctx.get("Apply_Lumiweights") == "true" && isMC);
     apply_unflattening = (ctx.get("Apply_Unflattening") == "true" && isMC);
     if(apply_weights && apply_lumiweights) throw runtime_error("In AnalysisModule_DiJetTrg.cxx: 'apply_weights' and 'apply_lumiweights' are set 'true' simultaneously. This won't work, please decide on one");
@@ -729,10 +641,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 
 
 
-
-
   AnalysisModule_DiJetTrg::~AnalysisModule_DiJetTrg() {
-
+    
   }
 
   bool AnalysisModule_DiJetTrg::process(Event & event) {
@@ -821,27 +731,17 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     //discard events if not all jets fulfill JetID instead of just discarding single jets
     if (n_jets_beforeCleaner != n_jets_afterCleaner) return false;
 
-    // cout<<"1\n";
-    
     if(!isMC) h_afterCleaner->fill(event);
-    // cout<<"2\n";
     const int jet_n = event.jets->size();
-        // cout<<"3\n";
     if(jet_n<2) return false;
-        // cout<<"4\n";
     h_2jets->fill(event);
-        // cout<<"5\n";
+
 //###########################################################################################
   
 //####################  Select and Apply proper JEC-Versions for every Run ##################
 
  
     bool apply_global = false;
-    
-    // bool apply_BCD = false;
-    // bool apply_EFearly = false;
-    // bool apply_FlateG = false;
-    // bool apply_H = false;
 
     bool apply_B = false;
     bool apply_C = false;
@@ -870,12 +770,6 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     else if(isMC){
       //MC
       if(split_JEC_MC){
-	//split JEC
-	// if(dataset_version.Contains("RunBCD"))          apply_BCD = true;
-	// else if(dataset_version.Contains("RunEFearly")) apply_EFearly = true;
-	// else if(dataset_version.Contains("RunFlateG"))  apply_FlateG = true;
-	// else if(dataset_version.Contains("RunH"))       apply_H = true;
-	// else
 	  throw runtime_error("AnalysisModule split_JEC_MC not implemented or run number not covered by if-statements in process-routine.");
       }      
       else{
@@ -883,11 +777,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	apply_global = true;
       }
     }
-    
-
-    // if(apply_BCD+apply_EFearly+apply_FlateG+apply_H+apply_global != 1) throw runtime_error("In TestModule.cxx: Sum of apply_* when applying JECs is not == 1. Fix this.");
-
-    
+        
     h_beforeJEC->fill(event);
     if(debug) std::cout <<" before jetleptoncleaner  "<<std::endl;
     if(debug) std::cout <<"jetlepton cleaner is at "<<(jetleptoncleaner==0)<<std::endl;    
@@ -897,7 +787,6 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     
     if(debug) std::cout <<" before jet corrector "<<std::endl;
 
-    
     if(apply_B){
       JLC_B->process(event);
       jet_corrector_B->process(event);
@@ -907,9 +796,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
       jet_corrector_C->process(event);
     }
     if(apply_D){
-    if(debug) std::cout <<" in apply D jet corrector "<<std::endl;    
       JLC_D->process(event);
-    if(debug) std::cout <<" after D JLC "<<std::endl;       
       jet_corrector_D->process(event);
     }
     if(apply_E){
@@ -925,13 +812,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
       jet_corrector->process(event);
     }
  
-   
-
     //DEBUG
-    if(debug){
-      std::cout <<" after jetleptoncleaner  "<<std::endl;
-    }
-      
+    if(debug) std::cout <<" after jetleptoncleaner  "<<std::endl;
+          
     h_afterJEC->fill(event);
 
 //#############################################################################################################
@@ -1078,21 +961,24 @@ if(debug){
       }
     }
     
-    // 2.853
     if(debug) cout<<"before trigger pass checks\n";
     const double eta_cut = 2.853;//becuase HF triggers require forward jet with |eta|>2.7
     if(event.isRealData){
       float pt_ave_ = pt_ave;
-      float probejet_eta = jet_probe->eta(); 
-      pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1] && (abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.)));
-      pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2] &&  (abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.)));
-      pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]&&( abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.))); 
-      pass_trigger140 = (trigger140_sel->passes(event) && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]&&( abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.))); 
-      pass_trigger200 = (trigger200_sel->passes(event) && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]&& (abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.))); 
-      pass_trigger260 = (trigger260_sel->passes(event) && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]&& (abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.)));
-      pass_trigger320 = (trigger320_sel->passes(event) && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]&& (abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.)));
-      pass_trigger400 = (trigger400_sel->passes(event) && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]&&( abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.)));
-      pass_trigger500 = (trigger500_sel->passes(event) && pt_ave>trg_thresh[8]&& (abs(probejet_eta) < (trigger_fwd ? eta_cut : 100.)));
+      float probejet_eta = jet_probe->eta();
+      
+      bool eta_cut_bool = abs(probejet_eta) <  eta_cut;
+      
+      if(!trigger_fwd) eta_cut_bool = true;
+      pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1] && (eta_cut_bool));
+      pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2] &&  (eta_cut_bool));
+      pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]&&( eta_cut_bool)); 
+      pass_trigger140 = (trigger140_sel->passes(event) && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]&&( eta_cut_bool)); 
+      pass_trigger200 = (trigger200_sel->passes(event) && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]&& (eta_cut_bool)); 
+      pass_trigger260 = (trigger260_sel->passes(event) && pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]&& (eta_cut_bool));
+      pass_trigger320 = (trigger320_sel->passes(event) && pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]&& (eta_cut_bool));
+      pass_trigger400 = (trigger400_sel->passes(event) && pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]&&( eta_cut_bool));
+      pass_trigger500 = (trigger500_sel->passes(event) && pt_ave>trg_thresh[8]&& (eta_cut_bool));
       
 //FWD Trigger
       pass_trigger60_HFJEC = (trigger_fwd && trigger60_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[0]   && pt_ave<trgHF_thresh[1] &&( abs(probejet_eta) >  eta_cut));
@@ -1102,32 +988,25 @@ if(debug){
       pass_trigger220_HFJEC = (trigger_fwd && trigger220_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[4] && pt_ave<trgHF_thresh[5] && (abs(probejet_eta) >  eta_cut));
       pass_trigger300_HFJEC = (trigger_fwd && trigger300_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[5] && (abs(probejet_eta) > eta_cut));      
 
-
-      //cout << "Number of triggers that fired: " << n_trig << endl;
     
       //HLT Selection
       bool pass_trigger = false;
-      if(trigger_fwd){
-      if(abs(probejet_eta) < eta_cut ) pass_trigger = (pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500); 
+      if(eta_cut_bool) pass_trigger = (pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500); 
       else  pass_trigger = (pass_trigger60_HFJEC || pass_trigger80_HFJEC || pass_trigger100_HFJEC || pass_trigger160_HFJEC || pass_trigger220_HFJEC || pass_trigger300_HFJEC);
-      }
-      else{ //only central triggers
-	pass_trigger = (pass_trigger40 || pass_trigger60 || pass_trigger80 || pass_trigger140 || pass_trigger200  || pass_trigger260 || pass_trigger320 || pass_trigger400 || pass_trigger500); 
-      }
-      if(debug && pass_trigger){
-	cout<<"central dijet triggers: "<<endl;
-	cout<<pass_trigger40<<" "<<pass_trigger60<<" "<<pass_trigger80<<" "<<pass_trigger140<<" "<<pass_trigger200<<" "<<pass_trigger260<<" "<<pass_trigger320<<" "<<pass_trigger400<<" "<<pass_trigger500<<endl;
-	cout<<"HF dijet triggers: "<<endl;
-	cout<<pass_trigger60_HFJEC<<" "<<pass_trigger80_HFJEC<<" "<<pass_trigger100_HFJEC<<" "<<pass_trigger160_HFJEC<<" "<<pass_trigger220_HFJEC<<" "<<pass_trigger300_HFJEC<<endl;
-      }
-      if(debug){
-	cout << "before triggers: " << endl;
-	cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
-      }
+
+    if(debug && pass_trigger){
+      cout<<"central dijet triggers: "<<endl;
+      cout<<pass_trigger40<<" "<<pass_trigger60<<" "<<pass_trigger80<<" "<<pass_trigger140<<" "<<pass_trigger200<<" "<<pass_trigger260<<" "<<pass_trigger320<<" "<<pass_trigger400<<" "<<pass_trigger500<<endl;
+      cout<<"HF dijet triggers: "<<endl;
+      cout<<pass_trigger60_HFJEC<<" "<<pass_trigger80_HFJEC<<" "<<pass_trigger100_HFJEC<<" "<<pass_trigger160_HFJEC<<" "<<pass_trigger220_HFJEC<<" "<<pass_trigger300_HFJEC<<endl;
+    }
+    if(debug){
+      cout << "before triggers: " << endl;
+      cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
+    }
       h_beforeTriggerData->fill(event);
 
-      if(!pass_trigger)
-	return false;
+      if(!pass_trigger)	return false;
     }
 
     //Count Events passed Trigger
@@ -1151,7 +1030,7 @@ if(debug){
     
     h_afterTriggerData->fill(event);
 
-    if(onlyBtB){
+    if(onlyBtB){ //another back to back cut is part of the advanced dijet selection
      //turn jet2 around and check dR to jet1
      float eta1 = jet1->eta();
      float eta2 = -1.*jet2->eta();
@@ -1186,15 +1065,12 @@ if(debug){
     float gen_weight = 0;
     if(!event.isRealData){
       gen_weight = event.weight;
-      //      if(!no_genp) 
       gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph
     }
     float nvertices = event.pvs->size(); 
     float nPU = 0 ;//todo for data?
-    //    if(!event.isRealData && !no_genp) 
     if(!event.isRealData) 
       nPU = event.genInfo->pileup_TrueNumInteractions();
-
 
     float genjet1_pt = 0;
     float genjet2_pt = 0;
@@ -1268,7 +1144,6 @@ if(debug){
     
  //fill the containers
     double pu_pthat = -1;
-    //    if(!event.isRealData && !no_genp) pu_pthat = event.genInfo->PU_pT_hat_max();
     if(!event.isRealData) pu_pthat = event.genInfo->PU_pT_hat_max();
     if(debug) std::cout<<"pu_pthat = "<<pu_pthat<<" gen_pthat = "<<gen_pthat<<std::endl;
     event.set(tt_matchJetId_0,-10.);
@@ -1423,7 +1298,6 @@ if(debug){
 	cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
       }
 
-
       if(!sel.PtMC(event)) return false; // For MC only one Pt threshold
     }
 //######################################################################################################################################
@@ -1467,13 +1341,6 @@ if(debug){
 
     if(debug && isMC){
       Jet_printer->process(event);
-      // if(!no_genp){
-      // 	GenParticles_printer->process(event);
-      // 	cout << "event has " << event.genjets->size() << " GenJets" << endl;
-      // 	for(size_t i=0; i< event.genjets->size(); ++i){
-      // 	  const auto & jet = (*event.genjets)[i];
-      // 	  cout << " GenJet[" << i << "]: pt=" << jet.pt() << "; eta=" << jet.eta() << "; phi=" << jet.phi() <<  endl;}
-      // }
     }
     
     if(isMC){    

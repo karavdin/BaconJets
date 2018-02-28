@@ -40,37 +40,6 @@
 #include <stdexcept>
 
 
-#define IF_MAKE_JEC_VARS_CLOSURE(jecv)				    \
-  if(JEC_Version == #jecv){			    \
-  JEC_corr_B               = JERFiles::jecv##_B_L123_AK4PFchs_DATA; \
-  JEC_corr_C               = JERFiles::jecv##_C_L123_AK4PFchs_DATA; \
-  JEC_corr_D               = JERFiles::jecv##_D_L123_AK4PFchs_DATA; \
-  JEC_corr_E               = JERFiles::jecv##_E_L123_AK4PFchs_DATA; \
-  JEC_corr_F               = JERFiles::jecv##_F_L123_AK4PFchs_DATA; \
-				       				\
-  JEC_corr_B_L1RC          = JERFiles::jecv##_B_L1RC_AK4PFchs_DATA;	\
-  JEC_corr_C_L1RC          = JERFiles::jecv##_C_L1RC_AK4PFchs_DATA;	\
-  JEC_corr_D_L1RC          = JERFiles::jecv##_D_L1RC_AK4PFchs_DATA;	\
-  JEC_corr_E_L1RC          = JERFiles::jecv##_E_L1RC_AK4PFchs_DATA;	\
-  JEC_corr_F_L1RC          = JERFiles::jecv##_F_L1RC_AK4PFchs_DATA;	\
-  }									\
-
-
-#define IF_MAKE_JEC_VARS_NO_CLOSURE(jecv)					\
-  if(JEC_Version == #jecv){			    \
-  JEC_corr_B               = JERFiles::jecv##_B_L123_noRes_AK4PFchs_DATA; \
-  JEC_corr_C               = JERFiles::jecv##_C_L123_noRes_AK4PFchs_DATA; \
-  JEC_corr_D               = JERFiles::jecv##_D_L123_noRes_AK4PFchs_DATA; \
-  JEC_corr_E               = JERFiles::jecv##_E_L123_noRes_AK4PFchs_DATA; \
-  JEC_corr_F               = JERFiles::jecv##_F_L123_noRes_AK4PFchs_DATA; \
-				       				\
-  JEC_corr_B_L1RC          = JERFiles::jecv##_B_L1RC_AK4PFchs_DATA;	\
-  JEC_corr_C_L1RC          = JERFiles::jecv##_C_L1RC_AK4PFchs_DATA;	\
-  JEC_corr_D_L1RC          = JERFiles::jecv##_D_L1RC_AK4PFchs_DATA;	\
-  JEC_corr_E_L1RC          = JERFiles::jecv##_E_L1RC_AK4PFchs_DATA;	\
-  JEC_corr_F_L1RC          = JERFiles::jecv##_F_L1RC_AK4PFchs_DATA;	\
-  }\
-
 
 using namespace std;
 using namespace uhh2;
@@ -328,7 +297,39 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	
       }
     }
-    else { 
+    else {
+
+#define IF_MAKE_JEC_VARS_CLOSURE(jecv)				    \
+  if(JEC_Version == #jecv){			    \
+  JEC_corr_B               = JERFiles::jecv##_B_L123_AK4PFchs_DATA; \
+  JEC_corr_C               = JERFiles::jecv##_C_L123_AK4PFchs_DATA; \
+  JEC_corr_D               = JERFiles::jecv##_D_L123_AK4PFchs_DATA; \
+  JEC_corr_E               = JERFiles::jecv##_E_L123_AK4PFchs_DATA; \
+  JEC_corr_F               = JERFiles::jecv##_F_L123_AK4PFchs_DATA; \
+				       				\
+  JEC_corr_B_L1RC          = JERFiles::jecv##_B_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_C_L1RC          = JERFiles::jecv##_C_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_D_L1RC          = JERFiles::jecv##_D_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_E_L1RC          = JERFiles::jecv##_E_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_F_L1RC          = JERFiles::jecv##_F_L1RC_AK4PFchs_DATA;	\
+  }									\
+
+
+#define IF_MAKE_JEC_VARS_NO_CLOSURE(jecv)					\
+  if(JEC_Version == #jecv){			    \
+  JEC_corr_B               = JERFiles::jecv##_B_L123_noRes_AK4PFchs_DATA; \
+  JEC_corr_C               = JERFiles::jecv##_C_L123_noRes_AK4PFchs_DATA; \
+  JEC_corr_D               = JERFiles::jecv##_D_L123_noRes_AK4PFchs_DATA; \
+  JEC_corr_E               = JERFiles::jecv##_E_L123_noRes_AK4PFchs_DATA; \
+  JEC_corr_F               = JERFiles::jecv##_F_L123_noRes_AK4PFchs_DATA; \
+				       				\
+  JEC_corr_B_L1RC          = JERFiles::jecv##_B_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_C_L1RC          = JERFiles::jecv##_C_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_D_L1RC          = JERFiles::jecv##_D_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_E_L1RC          = JERFiles::jecv##_E_L1RC_AK4PFchs_DATA;	\
+  JEC_corr_F_L1RC          = JERFiles::jecv##_F_L1RC_AK4PFchs_DATA;	\
+  }\
+      
       //for DATA
       if(jetLabel == "AK4CHS"){
 	if(!ClosureTest){

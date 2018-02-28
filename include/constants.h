@@ -100,18 +100,6 @@ constexpr static float s_n_Pv_xy = 2.0;
 
 /** \brief The trigger thresholds of pt_ave **/
 
-/*
-//As in AN-15-254 (RunII, 2015, 25ns)
- constexpr static float s_Pt_Ave40_cut   = 56;
- constexpr static float s_Pt_Ave60_cut   = 78;
- constexpr static float s_Pt_Ave80_cut   = 100;
- constexpr static float s_Pt_Ave140_cut  = 168;
- constexpr static float s_Pt_Ave200_cut  = 232;
- constexpr static float s_Pt_Ave260_cut  = 300;
- constexpr static float s_Pt_Ave320_cut  = 366;
- constexpr static float s_Pt_Ave400_cut  = 453;
- constexpr static float s_Pt_Ave500_cut  = 562;
-*/
 
 constexpr static int n_pt_bins = 9;
 
@@ -152,27 +140,6 @@ constexpr static int trg_vals_Di[9]  = {40,60,80,140,200,260,320,400,500};
 constexpr static int trg_vals_HF[6]  = {60,80,100,160,220,300};
 constexpr static int trg_vals_Di_plusHF[15]  = {40,60,80,140,200,260,320,400,500,60,80,100,160,220,300};
 
-//shifted bins up for assym dip checks 
- // constexpr static float s_Pt_AveMC_cut   = 90;
- // constexpr static float s_Pt_Ave40_cut   = 90;
- // constexpr static float s_Pt_Ave60_cut   = 112;
- // constexpr static float s_Pt_Ave80_cut   = 135;
- // constexpr static float s_Pt_Ave140_cut  = 203;
- // constexpr static float s_Pt_Ave200_cut  = 272;
- // constexpr static float s_Pt_Ave260_cut  = 340;
- // constexpr static float s_Pt_Ave320_cut  = 409;
- // constexpr static float s_Pt_Ave400_cut  = 493;
- // constexpr static float s_Pt_Ave450_cut  = 536; 
- // constexpr static float s_Pt_Ave500_cut  = 586;
-
-// 2016
-// constexpr static float s_Pt_Ave60HF_cut   = 100;
-// constexpr static float s_Pt_Ave80HF_cut   = 126;
-// constexpr static float s_Pt_Ave100HF_cut  = 152;
-// constexpr static float s_Pt_Ave160HF_cut  = 250;
-// constexpr static float s_Pt_Ave220HF_cut  = 319;
-// constexpr static float s_Pt_Ave300HF_cut  = 433;
-
 // 2017 94X 17Nov2017
 constexpr static float s_Pt_Ave60HF_cut   = 73;
 constexpr static float s_Pt_Ave80HF_cut   = 93;
@@ -180,13 +147,6 @@ constexpr static float s_Pt_Ave100HF_cut  = 113;
 constexpr static float s_Pt_Ave160HF_cut  = 176;
 constexpr static float s_Pt_Ave220HF_cut  = 239;
 constexpr static float s_Pt_Ave300HF_cut  = 318;
-
-//Runnumbers for applying different corrections
-//2016
-constexpr static int s_runnr_BCD     = 276811; //up to this one, including this one
-constexpr static int s_runnr_EFearly = 278802; //up to this one, EXCLUDING this one
-constexpr static int s_runnr_Fearly  = 278802; //up to this one, EXCLUDING this one
-constexpr static int s_runnr_FlateG  = 280385; //up to this one, including this one
 
 //2017
 // taken from https://twiki.cern.ch/twiki/bin/view/CMS/PdmV2017Analysis
@@ -196,17 +156,6 @@ constexpr static int s_runnr_D = 303434; //up to this one, including this one
 constexpr static int s_runnr_E = 304826; //up to this one, including this one
 constexpr static int s_runnr_F = 306462; //up to this one, including this one
 
-//Lumi recorded by different triggers in pb-1
-// constexpr static float s_lumi_cent_40 = 0.101;
-// constexpr static float s_lumi_cent_60 = 1.704;
-// constexpr static float s_lumi_cent_80 = 4.203;
-// constexpr static float s_lumi_cent_140 = 27.769;
-// constexpr static float s_lumi_cent_200 = 139.732;
-// constexpr static float s_lumi_cent_260 = 521.863;
-// constexpr static float s_lumi_cent_320 = 2965.774;
-// constexpr static float s_lumi_cent_400 = 9021.331;
-// constexpr static float s_lumi_cent_450 = 29280.311;
-// constexpr static float s_lumi_cent_500 = 29280.311;
 
 constexpr static float s_lumi_HF_60 = 19.605;
 constexpr static float s_lumi_HF_80 = 28.773;

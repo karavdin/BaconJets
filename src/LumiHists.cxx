@@ -54,7 +54,6 @@ LumiHists::LumiHists(uhh2::Context & ctx,
     }
 
     siTrg = (ctx.get("Trigger_Single","false") == "true");
-    siTrg = false; //Use dijet ptbins for the Monitoring Histograms
     
     string lumifile = ctx.get("lumi_file");
     std::unique_ptr<TFile> file(TFile::Open(lumifile.c_str(), "read"));
