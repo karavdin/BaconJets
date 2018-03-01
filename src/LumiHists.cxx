@@ -133,7 +133,7 @@ LumiHists::LumiHists(uhh2::Context & ctx,
   for(int i=0;i<n_eta_full-1;i++){
     eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
     if(!trigger_fwd) eta_cut_bool=false;
-    for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF_-1 : n_pt_ ) ; j++ ){
+    for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF_-1 : n_pt_-1 ) ; j++ ){
       pt_range_j = ( eta_cut_bool ? pt_range_HF_[j] : pt_range_[j] );
       pt_range_j1 = ( eta_cut_bool ? pt_range_HF_[j+1] : pt_range_[j+1] );      
      TString name = name1; name+="eta_"+eta_range_full[i]+"_"+eta_range_full[i+1]+"_pT_"+pt_range_j+"_"+pt_range_j1;
@@ -231,7 +231,7 @@ void LumiHists::fill(const uhh2::Event & ev){
        if(probejet_eta > eta_bins_full[j+1] || probejet_eta < eta_bins_full[j]) continue;
        eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
        if(!trigger_fwd) eta_cut_bool=false;
-       for(int i= 0 ; i <  ( eta_cut_bool ?  n_pt_HF_-1 : n_pt_ ) ; i++ ){
+       for(int i= 0 ; i <  ( eta_cut_bool ?  n_pt_HF_-1 : n_pt_-1 ) ; i++ ){
 	 pt_bin_i = ( eta_cut_bool ? pt_bin_HF_[i] : pt_bin_[i] );
 	 pt_bin_i1 = ( eta_cut_bool ? pt_bin_HF_[i+1] : pt_bin_[i+1] );
 	 if(pt_ave>pt_bin_i1 || pt_ave<pt_bin_i) continue;

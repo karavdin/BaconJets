@@ -4,8 +4,11 @@
 #include <map>
 #include <array>
 
+//TODO get everything in a namespace, so that it can be checked against the constants from constants.h
+
 using namespace std;
 
+const double eta_cut = 2.853;
 
 const int nResponseBins = 100;// 100
 const int n_etabarr=5; // needed for the normalization to 1 in the barrel
@@ -59,34 +62,36 @@ const int n_pt_Si = 13;
 //DiJet triggers? -------------
 
 
-// const double pt_bins[n_pt] = {
-//   51,
-//   73,
-//   85,
-//   97,
-//   179,
-//   307,
-//   370,
-//   434,
-//   520,
-//   649,1000,2000};
+const double pt_bins[n_pt] = {
+  51,
+  73,
+  85,
+  97,
+  179,
+  307,
+  370,
+  434,
+  520,
+  649,1000,2000};
 
-// const TString pt_range[n_pt]={
-//   "51",
-//   "73",
-//   "85",
-//   "97",
-//   "179",
-//   "307",
-//   "370",
-//   "434",
-//   "520",
-//   "648","1000","2000"};
+const TString pt_range[n_pt]={
+  "51",
+  "73",
+  "85",
+  "97",
+  "179",
+  "307",
+  "370",
+  "434",
+  "520",
+  "648","1000","2000"};
 
 
 //for Di derived triggers 94X 17Nov2017
 
-const double pt_bins_HF[n_pt] = {
+const int n_pt_HF = 8;
+
+const double pt_bins_HF[n_pt_HF] = {
   73,
   93,
   113,
@@ -94,7 +99,7 @@ const double pt_bins_HF[n_pt] = {
   239,
   318,1000,2000};
 
-const TString pt_range_HF[n_pt]={
+const TString pt_range_HF[n_pt_HF]={
   "73","93","113","176","239","318","1000","2000"};
 
 //DiJet triggers? -------------
@@ -156,29 +161,29 @@ RunB      RunC  RunD  highest
 
 */
 
-const double pt_bins[n_pt] = {
-40 ,
-72  ,
-95 ,
-160 ,
-226 ,
-283 ,
-344 ,
-443 ,
-577 ,
-606 ,1000,2000};
+// const double pt_bins[n_pt] = {
+// 40 ,
+// 72  ,
+// 95 ,
+// 160 ,
+// 226 ,
+// 283 ,
+// 344 ,
+// 443 ,
+// 577 ,
+// 606 ,1000,2000};
 
-const TString pt_range[n_pt]={
-  "40",
-  "72",
-  "95",
-  "160",
-  "226",
-  "283",
-  "344",
-  "443",
-  "577",
-  "606","1000","2000"};
+// const TString pt_range[n_pt]={
+//   "40",
+//   "72",
+//   "95",
+//   "160",
+//   "226",
+//   "283",
+//   "344",
+//   "443",
+//   "577",
+//   "606","1000","2000"};
 
 
 /* // [END]SingleJet triggers? ------------- */
