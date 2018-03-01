@@ -3,7 +3,8 @@
 #ifndef  CONSTANTS_H
 #define  CONSTANTS_H
 
-
+const double eta_cut = 2.853;
+  
 const int n_eta_full = 37;
 
 const TString eta_range_full[n_eta_full] = {"-5.191","-3.839","-3.489","-3.139","-2.964","-2.853", "-2.65", "-2.5", "-2.322", "-2.172", "-1.93", "-1.653", "-1.479", "-1.305", "-1.044", "-0.783", "-0.522", "-0.261"," 0.000", "0.261", "0.522", "0.783", "1.044", "1.305", "1.479", "1.653", "1.930", "2.172", "2.322", "2.500", "2.650", "2.853", "2.964", "3.139", "3.489", "3.839", "5.191"};
@@ -35,6 +36,28 @@ const TString pt_range[n_pt]={
   "434",
   "520",
   "648","1000","2000"};
+
+
+const int n_pt_HF = 8;
+
+const double pt_bins_HF[n_pt_HF] = {
+  73 ,
+  93 ,
+  113,
+  176,
+  239,
+  318,
+  1000,2000};
+
+const TString pt_range_HF[n_pt_HF]={
+  "73",
+  "93",
+  "113",
+  "176",
+  "239",
+  "318",
+  "1000","2000"};
+
 
 const int n_pt_Si = 13;
 
@@ -141,8 +164,8 @@ constexpr static int trg_vals_HF[6]  = {60,80,100,160,220,300};
 constexpr static int trg_vals_Di_plusHF[15]  = {40,60,80,140,200,260,320,400,500,60,80,100,160,220,300};
 
 // 2017 94X 17Nov2017
-constexpr static float s_Pt_Ave60HF_cut   = 73;
-constexpr static float s_Pt_Ave80HF_cut   = 93;
+constexpr static float s_Pt_Ave60HF_cut   = 73 ;
+constexpr static float s_Pt_Ave80HF_cut   = 93 ;
 constexpr static float s_Pt_Ave100HF_cut  = 113;
 constexpr static float s_Pt_Ave160HF_cut  = 176;
 constexpr static float s_Pt_Ave220HF_cut  = 239;

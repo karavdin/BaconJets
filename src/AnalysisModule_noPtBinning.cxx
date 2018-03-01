@@ -1491,30 +1491,35 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       pass_triggerSiMu = (triggerSiMu_sel->passes(event));
 
       pass_minBias = (minBias_sel->passes(event));
-      //      const double eta_cut = 2.853;
-      const double eta_cut = 6.0;//TEST without eta cut
+      
+      bool eta_cut_bool = abs(probejet_eta) <  eta_cut;      
+      if(!trigger_fwd) eta_cut_bool = true;
+      
+      bool eta_cut_bool_HF = abs(probejet_eta) >=  eta_cut;
+      if(!trigger_central) eta_cut_bool_HF = true;
+      
       if(ts){
-	pass_trigger40 = (trigger40_sel->passes(event)  && (abs(probejet_eta) < eta_cut) );
-	pass_trigger60 = (trigger60_sel->passes(event)  && (abs(probejet_eta) < eta_cut)  );
-	pass_trigger80 = (trigger80_sel->passes(event)   && (abs(probejet_eta) < eta_cut) );
-	pass_trigger140 = (trigger140_sel->passes(event) && (abs(probejet_eta) < eta_cut) ); 
-	pass_trigger200 = (trigger200_sel->passes(event) && (abs(probejet_eta) < eta_cut) ); 
-	pass_trigger260 = (trigger260_sel->passes(event) && (abs(probejet_eta) < eta_cut) ); 
-	pass_trigger320 = (trigger320_sel->passes(event) && (abs(probejet_eta) < eta_cut) ); 
-	pass_trigger400 = (trigger400_sel->passes(event) && (abs(probejet_eta) < eta_cut) ); 
-	pass_trigger450 = (trigger450_sel->passes(event) && (abs(probejet_eta) < eta_cut) );
-	pass_trigger500 = (trigger500_sel->passes(event) && (abs(probejet_eta) < eta_cut) );
+	pass_trigger40 = (trigger40_sel->passes(event)  && eta_cut_bool );
+	pass_trigger60 = (trigger60_sel->passes(event)  && eta_cut_bool  );
+	pass_trigger80 = (trigger80_sel->passes(event)   && eta_cut_bool );
+	pass_trigger140 = (trigger140_sel->passes(event) && eta_cut_bool ); 
+	pass_trigger200 = (trigger200_sel->passes(event) && eta_cut_bool ); 
+	pass_trigger260 = (trigger260_sel->passes(event) && eta_cut_bool ); 
+	pass_trigger320 = (trigger320_sel->passes(event) && eta_cut_bool ); 
+	pass_trigger400 = (trigger400_sel->passes(event) && eta_cut_bool ); 
+	pass_trigger450 = (trigger450_sel->passes(event) && eta_cut_bool );
+	pass_trigger500 = (trigger500_sel->passes(event) && eta_cut_bool );
 
 	if(trigger_fwd){
-	  pass_trigger60_fwd = (trigger60_fwd_sel->passes(event)  && (abs(probejet_eta) > eta_cut) );
-	  pass_trigger80_fwd = (trigger80_fwd_sel->passes(event)  && (abs(probejet_eta) > eta_cut) );
-	  pass_trigger140_fwd = (trigger140_fwd_sel->passes(event)&& (abs(probejet_eta) > eta_cut) );
-	  pass_trigger200_fwd = (trigger200_fwd_sel->passes(event)&& (abs(probejet_eta) > eta_cut) );
-	  pass_trigger260_fwd = (trigger260_fwd_sel->passes(event)&& (abs(probejet_eta) > eta_cut) );
-	  pass_trigger320_fwd = (trigger320_fwd_sel->passes(event)&& (abs(probejet_eta) > eta_cut) );
-	  pass_trigger400_fwd = (trigger400_fwd_sel->passes(event)&& (abs(probejet_eta) > eta_cut) );
-	  pass_trigger450_fwd = (trigger450_fwd_sel->passes(event)&& (abs(probejet_eta) > eta_cut) );
-	  pass_trigger500_fwd = (trigger500_fwd_sel->passes(event)&& (abs(probejet_eta) > eta_cut) );
+	  pass_trigger60_fwd = (trigger60_fwd_sel->passes(event)  &&eta_cut_bool_HF );
+	  pass_trigger80_fwd = (trigger80_fwd_sel->passes(event)  &&eta_cut_bool_HF );
+	  pass_trigger140_fwd = (trigger140_fwd_sel->passes(event)&&eta_cut_bool_HF );
+	  pass_trigger200_fwd = (trigger200_fwd_sel->passes(event)&&eta_cut_bool_HF );
+	  pass_trigger260_fwd = (trigger260_fwd_sel->passes(event)&&eta_cut_bool_HF );
+	  pass_trigger320_fwd = (trigger320_fwd_sel->passes(event)&&eta_cut_bool_HF );
+	  pass_trigger400_fwd = (trigger400_fwd_sel->passes(event)&&eta_cut_bool_HF );
+	  pass_trigger450_fwd = (trigger450_fwd_sel->passes(event)&&eta_cut_bool_HF );
+	  pass_trigger500_fwd = (trigger500_fwd_sel->passes(event)&&eta_cut_bool_HF );
 	}
 	
       }
@@ -1522,21 +1527,21 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	if(trigger_central){
 	  pass_triggerDi40 = (triggerDi40_sel->passes(event)  );
 	  pass_triggerDi60 = (triggerDi60_sel->passes(event) ) ;
-	  pass_triggerDi80 = (triggerDi80_sel->passes(event)   && (abs(probejet_eta) < eta_cut));
-	  pass_triggerDi140 = (triggerDi140_sel->passes(event) && (abs(probejet_eta) < eta_cut)); 
-	  pass_triggerDi200 = (triggerDi200_sel->passes(event) && (abs(probejet_eta) < eta_cut)); 
-	  pass_triggerDi260 = (triggerDi260_sel->passes(event) && (abs(probejet_eta) < eta_cut)); 
-	  pass_triggerDi320 = (triggerDi320_sel->passes(event) && (abs(probejet_eta) < eta_cut)); 
-	  pass_triggerDi400 = (triggerDi400_sel->passes(event) && (abs(probejet_eta) < eta_cut)); 
-	  pass_triggerDi500 = (triggerDi500_sel->passes(event) && (abs(probejet_eta) < eta_cut));
+	  pass_triggerDi80 = (triggerDi80_sel->passes(event)   && eta_cut_bool);
+	  pass_triggerDi140 = (triggerDi140_sel->passes(event) && eta_cut_bool); 
+	  pass_triggerDi200 = (triggerDi200_sel->passes(event) && eta_cut_bool); 
+	  pass_triggerDi260 = (triggerDi260_sel->passes(event) && eta_cut_bool); 
+	  pass_triggerDi320 = (triggerDi320_sel->passes(event) && eta_cut_bool); 
+	  pass_triggerDi400 = (triggerDi400_sel->passes(event) && eta_cut_bool); 
+	  pass_triggerDi500 = (triggerDi500_sel->passes(event) && eta_cut_bool);
 	}
 	if(trigger_fwd){
-	  pass_trigger60_HFJEC = (trigger60_HFJEC_sel->passes(event)  && (abs(probejet_eta) > eta_cut));
-	  pass_trigger80_HFJEC = (trigger80_HFJEC_sel->passes(event)  && (abs(probejet_eta) > eta_cut));
-	  pass_trigger100_HFJEC = (trigger100_HFJEC_sel->passes(event)&& (abs(probejet_eta) > eta_cut));
-	  pass_trigger160_HFJEC = (trigger160_HFJEC_sel->passes(event)&& (abs(probejet_eta) > eta_cut));
-	  pass_trigger220_HFJEC = (trigger220_HFJEC_sel->passes(event)&& (abs(probejet_eta) > eta_cut));
-	  pass_trigger300_HFJEC = (trigger300_HFJEC_sel->passes(event)&& (abs(probejet_eta) > eta_cut));
+	  pass_trigger60_HFJEC = (trigger60_HFJEC_sel->passes(event)  &&eta_cut_bool_HF);
+	  pass_trigger80_HFJEC = (trigger80_HFJEC_sel->passes(event)  &&eta_cut_bool_HF);
+	  pass_trigger100_HFJEC = (trigger100_HFJEC_sel->passes(event)&&eta_cut_bool_HF);
+	  pass_trigger160_HFJEC = (trigger160_HFJEC_sel->passes(event)&&eta_cut_bool_HF);
+	  pass_trigger220_HFJEC = (trigger220_HFJEC_sel->passes(event)&&eta_cut_bool_HF);
+	  pass_trigger300_HFJEC = (trigger300_HFJEC_sel->passes(event)&&eta_cut_bool_HF);
 	}
       }
 

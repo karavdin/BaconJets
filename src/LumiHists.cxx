@@ -54,6 +54,7 @@ LumiHists::LumiHists(uhh2::Context & ctx,
     }
 
     siTrg = (ctx.get("Trigger_Single","false") == "true");
+    trigger_fwd     = (ctx.get("Trigger_FWD") == "true");
     
     string lumifile = ctx.get("lumi_file");
     std::unique_ptr<TFile> file(TFile::Open(lumifile.c_str(), "read"));
@@ -117,14 +118,27 @@ LumiHists::LumiHists(uhh2::Context & ctx,
     for(int i=0;i<n_pt_;i++){
       pt_range_[i]=(siTrg?pt_range_Si[i]:pt_range[i]);
     }
+
+    int n_pt_HF_ =(siTrg ? n_pt_Si : n_pt_HF);
+    TString pt_range_HF_[n_pt_HF_];
+    for(int i=0;i<n_pt_HF_;i++){
+      pt_range_HF_[i]=(siTrg?pt_range_Si[i]:pt_range_HF[i]);
+    }    
     
   TString name1 = "hist_data_A_";
   TString name2 = "hist_data_B_";
+  bool eta_cut_bool;
+  TString pt_range_j;
+  TString pt_range_j1;  
   for(int i=0;i<n_eta_full-1;i++){
-    for(int j=0;j<n_pt-1;j++){
-     TString name = name1; name+="eta_"+eta_range_full[i]+"_"+eta_range_full[i+1]+"_pT_"+pt_range_[j]+"_"+pt_range_[j+1];
+    eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
+    if(!trigger_fwd) eta_cut_bool=false;
+    for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF_-1 : n_pt_ ) ; j++ ){
+      pt_range_j = ( eta_cut_bool ? pt_range_HF_[j] : pt_range_[j] );
+      pt_range_j1 = ( eta_cut_bool ? pt_range_HF_[j+1] : pt_range_[j+1] );      
+     TString name = name1; name+="eta_"+eta_range_full[i]+"_"+eta_range_full[i+1]+"_pT_"+pt_range_j+"_"+pt_range_j1;
      hAsymLumi[i][j] = book<TH2D>(name, "Asymmetry per Lumi", nbins,0,(int(total_lumi / lumi_per_bin) + 1)*lumi_per_bin,100,-1.2,1.2);
-     name = name2; name+="eta_"+eta_range_full[i]+"_"+eta_range_full[i+1]+"_pT_"+pt_range_[j]+"_"+pt_range_[j+1];
+     name = name2; name+="eta_"+eta_range_full[i]+"_"+eta_range_full[i+1]+"_pT_"+pt_range_j+"_"+pt_range_j1;
      hBsymLumi[i][j] = book<TH2D>(name, "Bsymmetry per Lumi", nbins,0,(int(total_lumi / lumi_per_bin) + 1)*lumi_per_bin,100,-1.2,1.2);
   }
   }
@@ -195,17 +209,32 @@ void LumiHists::fill(const uhh2::Event & ev){
     float mpf_r = 1 + (met.Px()*pt.Px() + met.Py()*pt.Py())/(pt.Px()*pt.Px() + pt.Py()*pt.Py());
     float B = (met.Px()*pt.Px() + met.Py()*pt.Py())/((probejet_pt + barreljet_pt) * sqrt(pt.Px()*pt.Px() + pt.Py()*pt.Py())); //vec_MET*vec_ptbarr/(2ptave*ptbarr)
     
+
     int n_pt_ =(siTrg ? n_pt_Si : n_pt);
-    int pt_bins_[n_pt_];
+    double pt_bin_[n_pt_];
     for(int i=0;i<n_pt_;i++){
-      pt_bins_[i]=(siTrg?pt_bins_Si[i]:pt_bins[i]);
+      pt_bin_[i]=(siTrg?pt_bins_Si[i]:pt_bins[i]);
     }
-  
+
+    int n_pt_HF_ =(siTrg ? n_pt_Si : n_pt_HF);
+    double pt_bin_HF_[n_pt_HF_];
+    for(int i=0;i<n_pt_HF_;i++){
+      pt_bin_HF_[i]=(siTrg?pt_bins_Si[i]:pt_bins_HF[i]);
+    }    
+    
+
+    bool eta_cut_bool;
+    double pt_bin_i;
+    double pt_bin_i1;      
     for(int j=0; j<n_eta_full-1; j++){
       if(alpha>0.3) continue;
        if(probejet_eta > eta_bins_full[j+1] || probejet_eta < eta_bins_full[j]) continue;
-       for(int i=0; i<n_pt-1; i++){
-	 if(pt_ave>pt_bins_[i+1] || pt_ave<pt_bins_[i]) continue;
+       eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+       if(!trigger_fwd) eta_cut_bool=false;
+       for(int i= 0 ; i <  ( eta_cut_bool ?  n_pt_HF_-1 : n_pt_ ) ; i++ ){
+	 pt_bin_i = ( eta_cut_bool ? pt_bin_HF_[i] : pt_bin_[i] );
+	 pt_bin_i1 = ( eta_cut_bool ? pt_bin_HF_[i+1] : pt_bin_[i+1] );
+	 if(pt_ave>pt_bin_i1 || pt_ave<pt_bin_i) continue;
     hAsymLumi[j][i]->Fill(ibin*lumi_per_bin,asymmetry,ev.weight);
     hBsymLumi[j][i]->Fill(ibin*lumi_per_bin, B, ev.weight);
     }

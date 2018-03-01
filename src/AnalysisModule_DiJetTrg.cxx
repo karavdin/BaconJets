@@ -84,7 +84,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     //// Data/MC scale factors
     std::unique_ptr<uhh2::AnalysisModule> pileupSF;
   unique_ptr<AnalysisModule>  Jet_printer;
-
+  unique_ptr<AnalysisModule> GenParticles_printer;
+  
     Event::Handle<float> tt_jet1_ptGen;  Event::Handle<float> tt_jet2_ptGen;  Event::Handle<float> tt_jet3_ptGen;
     Event::Handle<float> tt_gen_pthat; Event::Handle<float> tt_gen_weight;  Event::Handle<float> tt_gen_PUpthat;
 
@@ -153,8 +154,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     uhh2bacon::Selection sel;
 
     bool debug;
-  bool no_genp;
-  bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB;
+    bool no_genp;
+    bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB;
     double lumiweight;
     string jetLabel;
     TString dataset_version, JEC_Version;
@@ -533,7 +534,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
     
-    //    if(!no_genp) GenParticles_printer.reset(new GenParticlesPrinter(ctx));
+    if(!no_genp) GenParticles_printer.reset(new GenParticlesPrinter(ctx));
     
     
     n_evt = 0;
@@ -962,14 +963,16 @@ if(debug){
     }
     
     if(debug) cout<<"before trigger pass checks\n";
-    const double eta_cut = 2.853;//becuase HF triggers require forward jet with |eta|>2.7
     if(event.isRealData){
       float pt_ave_ = pt_ave;
       float probejet_eta = jet_probe->eta();
       
-      bool eta_cut_bool = abs(probejet_eta) <  eta_cut;
-      
+      bool eta_cut_bool = abs(probejet_eta) <  eta_cut;     
       if(!trigger_fwd) eta_cut_bool = true;
+
+      bool eta_cut_bool_HF = abs(probejet_eta) >=  eta_cut;
+      if(!trigger_central) eta_cut_bool_HF = true;      
+      
       pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1] && (eta_cut_bool));
       pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2] &&  (eta_cut_bool));
       pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]&&( eta_cut_bool)); 
@@ -981,12 +984,12 @@ if(debug){
       pass_trigger500 = (trigger500_sel->passes(event) && pt_ave>trg_thresh[8]&& (eta_cut_bool));
       
 //FWD Trigger
-      pass_trigger60_HFJEC = (trigger_fwd && trigger60_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[0]   && pt_ave<trgHF_thresh[1] &&( abs(probejet_eta) >  eta_cut));
-      pass_trigger80_HFJEC = (trigger_fwd && trigger80_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[1]   && pt_ave<trgHF_thresh[2] && (abs(probejet_eta) >  eta_cut));
-      pass_trigger100_HFJEC = (trigger_fwd && trigger100_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[2] && pt_ave<trgHF_thresh[3] &&( abs(probejet_eta) >  eta_cut));
-      pass_trigger160_HFJEC = (trigger_fwd && trigger160_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[3] && pt_ave<trgHF_thresh[4] && (abs(probejet_eta) >  eta_cut));
-      pass_trigger220_HFJEC = (trigger_fwd && trigger220_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[4] && pt_ave<trgHF_thresh[5] && (abs(probejet_eta) >  eta_cut));
-      pass_trigger300_HFJEC = (trigger_fwd && trigger300_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[5] && (abs(probejet_eta) > eta_cut));      
+      pass_trigger60_HFJEC = (trigger_fwd && trigger60_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[0]   && pt_ave<trgHF_thresh[1] &&eta_cut_bool_HF);
+      pass_trigger80_HFJEC = (trigger_fwd && trigger80_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[1]   && pt_ave<trgHF_thresh[2] && eta_cut_bool_HF);
+      pass_trigger100_HFJEC = (trigger_fwd && trigger100_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[2] && pt_ave<trgHF_thresh[3] &&eta_cut_bool_HF);
+      pass_trigger160_HFJEC = (trigger_fwd && trigger160_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[3] && pt_ave<trgHF_thresh[4] && eta_cut_bool_HF);
+      pass_trigger220_HFJEC = (trigger_fwd && trigger220_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[4] && pt_ave<trgHF_thresh[5] && eta_cut_bool_HF);
+      pass_trigger300_HFJEC = (trigger_fwd && trigger300_HFJEC_sel->passes(event) && pt_ave>trgHF_thresh[5] && eta_cut_bool_HF);      
 
     
       //HLT Selection
@@ -1341,6 +1344,8 @@ if(debug){
 
     if(debug && isMC){
       Jet_printer->process(event);
+      GenParticles_printer->process(event);
+      
     }
     
     if(isMC){    

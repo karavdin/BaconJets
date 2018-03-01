@@ -34,13 +34,14 @@ private:
     std::map<run_lumi, double> rl2lumi;
 
     TH1D * hlumi;
-    TH2D * hAsymLumi[37][12];
-    TH2D * hBsymLumi[37][12];
-    TProfile * pr_AsymLumi[37][12];
+    TH2D * hAsymLumi[37][13];
+    TH2D * hBsymLumi[37][13];
+    TProfile * pr_AsymLumi[37][13];
     TH1D * hinstlumi;
     TH1D * hinstlumi_ref;
     double lumi_per_bin;
     bool siTrg;
+    bool trigger_fwd;
     const std::string triggername_;
 
   bool do_inst_lumi_hist_;
