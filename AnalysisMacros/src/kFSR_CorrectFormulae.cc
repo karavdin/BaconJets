@@ -62,7 +62,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
   for(int i=0; i<n_alpha; i++){
     for(int j=0; j<n_eta-1; j++){
       eta_cut_bool = fabs(eta_bins[j])>eta_cut;
-      for(int k= 0 ; k < n_pt_  ; k++ ){
+      for(int k= 0 ; k < n_pt_-1  ; k++ ){
 	ratio_al_rel_r[k][j][i] = 0;
 	err_ratio_al_rel_r[k][j][i] = 0;
 	ratio_al_mpf_r[k][j][i] = 0;
@@ -94,23 +94,16 @@ void CorrectionObject::kFSR_CorrectFormulae(){
      }
    }
 
-    cout<<"Define Tree Readers.\n";
-    CorrectionObject::_DATAFile->Print();
-    TTreeReader myReader_DATA("AnalysisTree", CorrectionObject::_DATAFile);
-    cout<<"1\n";
-    TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
-    cout<<"2\n";
-    TTreeReaderValue<Float_t> probejet_eta_data(myReader_DATA, "probejet_eta");
-    cout<<"3\n";
-    TTreeReaderValue<Float_t> alpha_data(myReader_DATA, "alpha");
-    cout<<"4\n";
-    TTreeReaderValue<Float_t> asymmetry_data(myReader_DATA, "asymmetry");
-    cout<<"5\n";
-    TTreeReaderValue<Float_t> B_data(myReader_DATA, "B");   
-    cout<<"6\n";
-    TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
-    int idx = 0;
-
+  cout<<"Define Tree Readers.\n";
+  TTreeReader myReader_DATA("AnalysisTree", CorrectionObject::_DATAFile);
+  TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
+  TTreeReaderValue<Float_t> probejet_eta_data(myReader_DATA, "probejet_eta");
+  TTreeReaderValue<Float_t> alpha_data(myReader_DATA, "alpha");
+  TTreeReaderValue<Float_t> asymmetry_data(myReader_DATA, "asymmetry");
+  TTreeReaderValue<Float_t> B_data(myReader_DATA, "B");   
+  TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
+  int idx = 0;
+  
   cout << "starting to loop over DATA events." << endl;
 
   while (myReader_DATA.Next()) {
