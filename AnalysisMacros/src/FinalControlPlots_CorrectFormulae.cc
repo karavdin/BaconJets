@@ -204,7 +204,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
   TTreeReaderValue<Float_t> probejet_phi_data(myReader_DATA, "probejet_phi");
   
   TTreeReaderValue<int> lumibin_data(myReader_DATA, "lumibin");
-  
+  int idx = 0;
   int myCount = 0;
   int myCount_cut = 0;
   while (myReader_DATA.Next()) {
@@ -251,6 +251,8 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 	  hdata_probejet_phi[k][j]->Fill(*probejet_phi_data,*weight_data);
     }
     }
+    idx++;
+    if(idx%1000000==0) cout << "looping over data-TTree: Idx = " << idx << endl;
   }
 
   //DEBUG
@@ -278,7 +280,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
   TTreeReaderValue<Float_t> probejet_photonEF_mc(myReader_MC, "probejet_photonEF");
   TTreeReaderValue<Float_t> probejet_muonEF_mc(myReader_MC, "probejet_muonEF");
   TTreeReaderValue<Float_t> probejet_phi_mc(myReader_MC, "probejet_phi");
-  
+  idx=0;
   double myCount_mc = 0.;
   double  myCount_cut_mc = 0.;
   while (myReader_MC.Next()) {
@@ -325,6 +327,8 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 	}
       }
     }
+    idx++;
+    if(idx%1000000==0) cout << "looping over MC-TTree: Idx = " << idx << endl;
   }
   
   //DEBUG
@@ -332,7 +336,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
   ofstream output;
   output.open(CorrectionObject::_outpath+"plots/control/Number_Events_Pt_Eta_bins_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+ (abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "")  + ".txt");
-    
+
   output << "Number of events in each bin for MC" << endl;
   output << "|Eta|:          ";
   double n_tot_MC = 0;
@@ -341,12 +345,17 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     if(i != n_eta-1) output << eta_range[i] << " -- ";
     else output << eta_range[i] << endl;
   }
+  output << "central trg pt bins:\n";
   for(int i=0; i<n_pt-1; i++){
     if(i==0) output << "pT = ["  << fixed << setprecision(0) << pt_bins[i] << "," << setprecision(0) << pt_bins[i+1] << "]  :    ";
     else if(i==1) output << "pT = ["  << fixed << setprecision(0) << pt_bins[i] << "," << setprecision(0) << pt_bins[i+1] << "] :    ";
     else output << "pT = ["  << fixed << setprecision(0) << pt_bins[i] << "," << setprecision(0) << pt_bins[i+1] << "]:    ";
 
     for(int j=0; j<n_eta-1; j++){
+      if(fabs(eta_bins[j])>eta_cut){
+	output << " ....   - ";
+	continue;
+      }
       if(j!=n_eta-2){
 	if(hmc_B[i][j]->GetEntries()/1000 < 0.01)     output << hmc_B[i][j]->GetEntries() << "      - "; //<1000
 	else if(hmc_B[i][j]->GetEntries()/1000 < 0.1) output << hmc_B[i][j]->GetEntries() << "     - "; //<1000
@@ -355,11 +364,38 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 	else if(hmc_B[i][j]->GetEntries()/1000 <100)  output << hmc_B[i][j]->GetEntries() << "  - ";
 	else                                          output << hmc_B[i][j]->GetEntries() << " - ";
       }
-      else output << hmc_B[i][j]->GetEntries() << endl;
+      else output << hmc_B[i][j]->GetEntries();
       n_tot_MC+= hmc_B[i][j]->GetEntries();
     }
+    output<<endl;
 
   }
+  output << "HF trg pt bins:\n";
+  for(int i=0; i<n_pt_HF-1; i++){
+    if(i==0) output << "pT = ["  << fixed << setprecision(0) << pt_bins_HF[i] << "," << setprecision(0) << pt_bins_HF[i+1] << "]  :    ";
+    else if(i==1) output << "pT = ["  << fixed << setprecision(0) << pt_bins_HF[i] << "," << setprecision(0) << pt_bins_HF[i+1] << "] :    ";
+    else output << "pT = ["  << fixed << setprecision(0) << pt_bins_HF[i] << "," << setprecision(0) << pt_bins[i+1] << "]:    ";
+
+    for(int j=0; j<n_eta-1; j++){
+      if(fabs(eta_bins[j])<eta_cut){
+	output << " ....   - ";
+	continue;
+      }
+      if(j!=n_eta-2){
+	if(hmc_B[i][j]->GetEntries()/1000 < 0.01)     output << hmc_B[i][j]->GetEntries() << "      - "; //<1000
+	else if(hmc_B[i][j]->GetEntries()/1000 < 0.1) output << hmc_B[i][j]->GetEntries() << "     - "; //<1000
+	else if(hmc_B[i][j]->GetEntries()/1000 < 1)   output << hmc_B[i][j]->GetEntries() << "    - "; //<1000
+	else if(hmc_B[i][j]->GetEntries()/1000 <10)   output << hmc_B[i][j]->GetEntries() << "   - "; //<10000
+	else if(hmc_B[i][j]->GetEntries()/1000 <100)  output << hmc_B[i][j]->GetEntries() << "  - ";
+	else                                          output << hmc_B[i][j]->GetEntries() << " - ";
+      }
+      else output << hmc_B[i][j]->GetEntries();
+      n_tot_MC+= hmc_B[i][j]->GetEntries();
+    }
+    output<<endl;
+
+  }
+
   output << endl << endl << "Total number of events in MC: " << n_tot_MC << endl;
 
   output << endl << endl << endl << endl << "Number of events in each bin for DATA" << endl;
@@ -368,11 +404,14 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     if(i != n_eta-1) output << eta_range[i] << " -- ";
     else output << eta_range[i] << endl;
   }
+  output << "central trg pt bins:\n";
   for(int i=0; i<n_pt-1; i++){
-    output << "central trg pt bins:\n";
     output << "pT = ["  << fixed << setprecision(0) << pt_bins[i] << "," << setprecision(0) << pt_bins[i+1] << "]  :    ";
     for(int j=0; j<n_eta-1; j++){
-      if(fabs(eta_bins[j])>eta_cut) continue;
+      if(fabs(eta_bins[j])>eta_cut){
+	output << " ....   - ";
+	continue;
+      }
       if(j!=n_eta-2){
 	if(hdata_B[i][j]->GetEntries()/1000 < 0.01)     output << hdata_B[i][j]->GetEntries() << "      - "; //<1000
 	else if(hdata_B[i][j]->GetEntries()/1000 < 0.1) output << hdata_B[i][j]->GetEntries() << "     - "; //<1000
@@ -381,16 +420,20 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 	else if(hdata_B[i][j]->GetEntries()/1000 <100)  output << hdata_B[i][j]->GetEntries() << "  - ";
 	else                                                output << hdata_B[i][j]->GetEntries() << " - ";
       }
-      else output << hdata_B[i][j]->GetEntries() << endl;
+      else output << hdata_B[i][j]->GetEntries();
       n_tot_DATA += hdata_B[i][j]->GetEntries();
     }
+    output<< endl;
 
   }
+  output << "HF trg pt bins:\n";
   for(int i=0; i<n_pt_HF-1; i++){
-    output << "HF trg pt bins:\n";
     output << "pT = ["  << fixed << setprecision(0) << pt_bins_HF[i] << "," << setprecision(0) << pt_bins_HF[i+1] << "]  :    ";
     for(int j=0; j<n_eta-1; j++){
-      if(fabs(eta_bins[j])<eta_cut) continue;
+      if(fabs(eta_bins[j])<eta_cut){
+	output << " ....   - ";
+	continue;
+      }
       if(j!=n_eta-2){
 	if(hdata_B[i][j]->GetEntries()/1000 < 0.01)     output << hdata_B[i][j]->GetEntries() << "      - "; //<1000
 	else if(hdata_B[i][j]->GetEntries()/1000 < 0.1) output << hdata_B[i][j]->GetEntries() << "     - "; //<1000
@@ -399,9 +442,10 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 	else if(hdata_B[i][j]->GetEntries()/1000 <100)  output << hdata_B[i][j]->GetEntries() << "  - ";
 	else                                                output << hdata_B[i][j]->GetEntries() << " - ";
       }
-      else output << hdata_B[i][j]->GetEntries() << endl;
+      else output << hdata_B[i][j]->GetEntries();
       n_tot_DATA += hdata_B[i][j]->GetEntries();
     }
+    output<< endl;
 
   }
   output << endl << endl << "Total number of events in DATA: " << n_tot_DATA << endl;

@@ -148,7 +148,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 	   n_entries_mc[j][i][k]++;
 	 }
 	 idx++;
-	   if(idx%1000000==0) cout << "looping over MC-TTree: Idx = " << idx << endl;
+	   if(idx%10000000==0) cout << "looping over MC-TTree: Idx = " << idx << endl;
        }
      }
    }
