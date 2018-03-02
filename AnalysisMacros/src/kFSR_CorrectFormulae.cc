@@ -61,7 +61,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 
   for(int i=0; i<n_alpha; i++){
     for(int j=0; j<n_eta-1; j++){
-      eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+      eta_cut_bool = fabs(eta_bins[j])>eta_cut;
       n_pt_cutted = ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 );
       for(int k= 0 ; k < n_pt_cutted  ; k++ ){
 	ratio_al_rel_r[k][j][i] = 0;
@@ -87,7 +87,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 
     for(int i=0; i<n_alpha; i++){
      for(int j=0; j<n_eta-1; j++){
-      eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+      eta_cut_bool = fabs(eta_bins[j])>eta_cut;
       for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){
 	 n_entries_mc[j][i][k] = 0;
 	 n_entries_data[j][i][k] = 0;
@@ -114,7 +114,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 	if(*alpha_data>alpha_bins[i]) continue;
 	hdata_asymmetry[j][i]->Fill(*pt_ave_data,*asymmetry_data,*weight_data);
 	hdata_B[j][i]->Fill(*pt_ave_data,*B_data,*weight_data);
-	eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+	eta_cut_bool = fabs(eta_bins[j])>eta_cut;
 	for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){
 	      if((*pt_ave_data < (eta_cut_bool?pt_bins_HF:pt_bins)[k]) || (*pt_ave_data >= (eta_cut_bool?pt_bins_HF:pt_bins)[k+1])) continue;
 	      n_entries_data[j][i][k]++;
@@ -143,7 +143,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 	 if(*alpha_mc>alpha_bins[i]) continue;
 	 hmc_asymmetry[j][i]->Fill(*pt_ave_mc,*asymmetry_mc,*weight_mc);
 	 hmc_B[j][i]->Fill(*pt_ave_mc,*B_mc,*weight_mc);
-	 eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+	 eta_cut_bool = fabs(eta_bins[j])>eta_cut;
 	 for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){  
 	   if((*pt_ave_mc < (eta_cut_bool?pt_bins_HF:pt_bins)[k]) || (*pt_ave_mc >= (eta_cut_bool?pt_bins_HF:pt_bins)[k+1])) continue;            
 	   n_entries_mc[j][i][k]++;
@@ -158,7 +158,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    bool enough_entries[n_alpha][n_eta-1][n_pt-1];
    for(int i=0; i<n_alpha; i++){
      for(int j=0; j<n_eta-1; j++){
-	 eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+	 eta_cut_bool = fabs(eta_bins[j])>eta_cut;
 	 for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){  
 	   enough_entries[i][j][k] = false;
 	   if(n_entries_mc[j][i][k] > 50 && n_entries_data[j][i][k] > 50) enough_entries[i][j][k] = true;
@@ -231,7 +231,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    //gaussian error propagation from errors on <A> and <B>
    for(int i=0; i<n_alpha; i++){
      for(int j=0; j<n_eta-1; j++){
-       eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+       eta_cut_bool = fabs(eta_bins[j])>eta_cut;
        for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){ 
 	 //responses for data, MC separately. Only for bins with >= 100 entries
 	 double mpf_mc = (1+pr_mc_B[j][i]->GetBinContent(k+1))/(1-pr_mc_B[j][i]->GetBinContent(k+1));
@@ -275,7 +275,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    //2) Normalize values and errors of responses to value at alpha = alpha_cut
    
    for(int j=0; j<n_eta-1; j++){
-     eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+     eta_cut_bool = fabs(eta_bins[j])>eta_cut;
      for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){ 
        double norm_alref_rel_r = ratio_al_rel_r[k][j][al_ref];
        double err_norm_alref_rel_r = err_ratio_al_rel_r[k][j][al_ref];
@@ -330,7 +330,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    for(int j=0; j<n_eta-1; j++){
      pTgraph_rel_r[j] = new TMultiGraph();
      pTgraph_mpf_r[j] = new TMultiGraph();
-     eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;     
+     eta_cut_bool = fabs(eta_bins[j])>eta_cut;     
      for(int k = 1 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){ 
        graph_rel_r[k][j] = new TGraphErrors(n_alpha,xbin_tgraph,ratio_al_rel_r[k][j],zero,err_ratio_al_rel_r[k][j]);
        graph_rel_r[k][j] = (TGraphErrors*)CleanEmptyPoints(graph_rel_r[k][j]);
@@ -388,7 +388,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 
    TF1 *pol_rel[n_eta-1][n_pt_-1];
     for(int i=0; i<n_eta-1; i++){
-     eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;     
+     eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
      for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){ 
 	plotname_rel[i][j]="dijet_kfsr_eta_"+eta_range[i]+"_"+eta_range[i+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
 	Rel[i][j] = new TCanvas(plotname_rel[i][j], plotname_rel[i][j], 800,700);
@@ -464,7 +464,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    h_kFSR_pt_rel[i] = new TH1D(name_rel[i],"kFSR pt dependence", n_pt_-1, pt_bins);
    Pt_dep_rel[i] = new TCanvas(name_rel[i], name_rel[i], 800,700);
    
-   eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;     
+   eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
    for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){ 
      h_kFSR_pt_rel[i]->SetBinContent(j+1, pol_rel[i][j]->GetParameter(0));
      h_kFSR_pt_rel[i]->SetBinError(j+1, pol_rel[i][j]->GetParError(0));
@@ -493,8 +493,8 @@ void CorrectionObject::kFSR_CorrectFormulae(){
   h_kFSR_pt_eta_mpf->SetTitle("kFSR");
   h_kFSR_pt_eta_mpf->GetXaxis()->SetTitle("|#eta|");
   h_kFSR_pt_eta_mpf->GetYaxis()->SetTitle("p_{T}^{ave}"); 
-  for(int i=0; i<n_eta; i++){   
-   eta_cut_bool = fabs(eta_bins_full[i]-1)>eta_cut;     
+  for(int i=0; i<n_eta-1; i++){   
+   eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
    for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
      h_kFSR_pt_eta_mpf->AddBin(eta_bins[i], (eta_cut_bool?pt_bins_HF:pt_bins)[j], eta_bins[i+1], (eta_cut_bool?pt_bins_HF:pt_bins)[j+1] );
    }
@@ -505,8 +505,8 @@ void CorrectionObject::kFSR_CorrectFormulae(){
   h_chi2_kFSR_mpf->SetTitle("#chi^{2} kFSR");
   h_chi2_kFSR_mpf->GetXaxis()->SetTitle("|#eta|");
   h_chi2_kFSR_mpf->GetYaxis()->SetTitle("p_{T}^{ave}"); 
-  for(int i=0; i<n_eta; i++){   
-   eta_cut_bool = fabs(eta_bins_full[i]-1)>eta_cut;     
+  for(int i=0; i<n_eta-1; i++){   
+   eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
    for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
      h_chi2_kFSR_mpf->AddBin(eta_bins[i], (eta_cut_bool?pt_bins_HF:pt_bins)[j], eta_bins[i+1], (eta_cut_bool?pt_bins_HF:pt_bins)[j+1] );
    }
@@ -516,8 +516,9 @@ void CorrectionObject::kFSR_CorrectFormulae(){
   TString plotname2[n_eta-1][n_pt_-1];
   TCanvas* MPF[n_eta-1][n_pt_-1];
    TF1 *pol_mpf[n_eta-1][n_pt_-1];
+   int bincounter = 1;
     for(int i=0; i<n_eta-1; i++){
-   eta_cut_bool = fabs(eta_bins_full[i]-1)>eta_cut;     
+   eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
    for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
 	plotname2[i][j]="MPF_kfsr_eta_"+eta_range[i]+"_"+eta_range[i+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
 	MPF[i][j] = new TCanvas(plotname2[i][j], plotname2[i][j], 800,700);
@@ -568,17 +569,17 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        tex2_mpf->SetTextSize(0.035); 
        tex2_mpf->DrawLatex(0.64,0.35,chi2_mpf);
 
-       //TODO check if this works fine on a TH2Poly histogram
-       h_kFSR_pt_eta_mpf->SetBinContent(i+1, j+1,pol_mpf[i][j]->GetParameter(0));
-       h_kFSR_pt_eta_mpf->SetBinError(i+1, j+1, pol_mpf[i][j]->GetParError(0));
-
+       h_kFSR_pt_eta_mpf->SetBinContent(bincounter,pol_mpf[i][j]->GetParameter(0));
+       h_kFSR_pt_eta_mpf->SetBinError(bincounter, pol_mpf[i][j]->GetParError(0));
+       
        chi2ndf_kFSR_mpf = pol_mpf[i][j]->GetChisquare() / pol_mpf[i][j]->GetNDF();
       }
-      h_chi2_kFSR_mpf->SetBinContent(i+1, j+1,chi2ndf_kFSR_mpf);
+      h_chi2_kFSR_mpf->SetBinContent(bincounter,chi2ndf_kFSR_mpf);
       MPF[i][j]->Print(CorrectionObject::_outpath+"plots/kFSR_MPF_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1]+".pdf");
 
      delete tex2_mpf;
      delete tex_mpf;
+     bincounter++;
      }
    }
 
@@ -588,7 +589,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
  TH1D* h_kFSR_pt_mpf[n_eta-1]; 
  for(int i=0; i<n_eta-1; i++){
    name_mpf[i]="MPF_kfsr_pt_dep_"+eta_range[i]+"_"+eta_range[i+1];
-   eta_cut_bool = fabs(eta_bins_full[i]-1)>eta_cut;     
+   eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
    h_kFSR_pt_mpf[i]  = new TH1D(name_mpf[i],"kFSR pt dependence", ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) , (eta_cut_bool ? pt_bins_HF : pt_bins));
    Pt_dep_mpf[i] = new TCanvas(name_mpf[i], name_mpf[i], 800,700);
    for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
@@ -603,7 +604,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    Pt_dep_mpf[i]->Print(CorrectionObject::_outpath+"plots/kFSR_MPF_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+".pdf");
  }
 
-
+ 
   TCanvas* c2 = new TCanvas();
     m_gStyle->SetOptTitle(0);
     h_kFSR_pt_eta_mpf->Draw("COLZ");
@@ -815,7 +816,6 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    }
    fclose(fp_mpf_r);
 
-
    // create output file including the kFSR plot
    TFile* outputfile_mpf_r;
    cout << "Creating output-rootfile: " << CorrectionObject::_outpath+"Histo_KFSR_MPF_"+CorrectionObject::_generator_tag+"_L1.root" << endl;
@@ -826,8 +826,6 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    outputfile_mpf_r->Close();
 
 
-
-
    cout << "+++++++++++++++++ Finished kFSR() +++++++++++++++++++" << endl;
 
    //delete everything
@@ -836,31 +834,26 @@ void CorrectionObject::kFSR_CorrectFormulae(){
      delete pol1[j];
    }
 
-
    delete outputfile_mpf_r;
    delete outputfile_rel_r;
    
-   
-
-
    delete plotkfsr;
    delete kFSR_DiJet;
    delete kFSR_MPF;
    delete line;
    
-
    for(int j=0; j<n_eta-1; j++){
-   eta_cut_bool = fabs(eta_bins_full[j]-1)>eta_cut;     
-   for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){
+     eta_cut_bool = fabs(eta_bins[j])>eta_cut;
+     for(int k= 1 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){
        delete graph_rel_r[k][j];
        delete graph_mpf_r[k][j];
      }
    }
+   
    for(int j=0; j<n_eta-1; j++){
      delete pTgraph_rel_r[j];
      delete pTgraph_mpf_r[j];
    }
-
    delete leg1;
    for(int i=0; i<n_alpha; i++){
      for(int j=0; j<n_eta-1; j++){
@@ -875,7 +868,6 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        }
      }
 	       
-   
    delete  m_gStyle;    
    cout << "++++++++++++ Deleted everything in kFSR(), exiting ++++++++++++++" << endl;
 }
