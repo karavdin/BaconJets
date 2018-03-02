@@ -24,42 +24,46 @@ using namespace std;
 void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cut, bool plot_full_A ,int lumi_bin){
   cout << "--------------- Starting FinalControlPlots_CorrectFormulae() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
-
+  
+  int n_pt_ = max(n_pt,n_pt_HF);
+  bool eta_cut_bool;
+  int n_pt_cutted;
+  
   if(plot_full_A) CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/fullAsym/");
 
   //Table with number of events in each pT- and eta-bin
   
   //Set up histos for ratios of responses
-  TH1D *hdata_asymmetry[n_pt-1][n_eta-1]; // A for data
-  TH1D *hdata_B[n_pt-1][n_eta-1];         // B for data
-  TH1D *hdata_METoverJetsPt[n_pt-1][n_eta-1];         // MET/sum_jets_pt for data
-  TH1D *hdata_METoverSqrtJetsPt[n_pt-1][n_eta-1];       //MET/Sqrt(sum_jets_pt)
+  TH1D *hdata_asymmetry[n_pt_-1][n_eta-1]; // A for data
+  TH1D *hdata_B[n_pt_-1][n_eta-1];         // B for data
+  TH1D *hdata_METoverJetsPt[n_pt_-1][n_eta-1];         // MET/sum_jets_pt for data
+  TH1D *hdata_METoverSqrtJetsPt[n_pt_-1][n_eta-1];       //MET/Sqrt(sum_jets_pt)
 
-  TH1D *hdata_probejet_neutEmEF[n_pt-1][n_eta-1]; //neutral EM energy fraction
-  TH1D *hdata_probejet_neutHadEF[n_pt-1][n_eta-1]; //neutral hadron energy fraction
-  TH1D *hdata_probejet_chEmEF[n_pt-1][n_eta-1]; //charged EM energy fraction
-  TH1D *hdata_probejet_chHadEF[n_pt-1][n_eta-1]; //charged hadron energy fraction
-  TH1D *hdata_probejet_photonEF[n_pt-1][n_eta-1]; //photon energy fraction
-  TH1D *hdata_probejet_muonEF[n_pt-1][n_eta-1]; //muon hadron energy fraction
-  TH1D *hdata_probejet_phi[n_pt-1][n_eta-1]; //phi
+  TH1D *hdata_probejet_neutEmEF[n_pt_-1][n_eta-1]; //neutral EM energy fraction
+  TH1D *hdata_probejet_neutHadEF[n_pt_-1][n_eta-1]; //neutral hadron energy fraction
+  TH1D *hdata_probejet_chEmEF[n_pt_-1][n_eta-1]; //charged EM energy fraction
+  TH1D *hdata_probejet_chHadEF[n_pt_-1][n_eta-1]; //charged hadron energy fraction
+  TH1D *hdata_probejet_photonEF[n_pt_-1][n_eta-1]; //photon energy fraction
+  TH1D *hdata_probejet_muonEF[n_pt_-1][n_eta-1]; //muon hadron energy fraction
+  TH1D *hdata_probejet_phi[n_pt_-1][n_eta-1]; //phi
   TH1D *hdata_MET[n_eta-1];//MET
   TH1D *hdata_alpha[n_eta-1];//alpha
   TH1D *hdata_jet3_pt[n_eta-1];//jet3_pt
 
-  TH1D *hmc_asymmetry[n_pt-1][n_eta-1];   // A for MC
-  TH1D *hmc_B[n_pt-1][n_eta-1];           // B for MC
-  TH1D *hmc_METoverJetsPt[n_pt-1][n_eta-1];         // MET/sum_jets_pt for MC
-  TH1D *hmc_METoverSqrtJetsPt[n_pt-1][n_eta-1];       //MET/Sqrt(sum_jets_pt)
+  TH1D *hmc_asymmetry[n_pt_-1][n_eta-1];   // A for MC
+  TH1D *hmc_B[n_pt_-1][n_eta-1];           // B for MC
+  TH1D *hmc_METoverJetsPt[n_pt_-1][n_eta-1];         // MET/sum_jets_pt for MC
+  TH1D *hmc_METoverSqrtJetsPt[n_pt_-1][n_eta-1];       //MET/Sqrt(sum_jets_pt)
   TH1F* hmc_pt_ave[n_eta-1];              // pt_ave for MC
   TH1F* hdata_pt_ave[n_eta-1];            // pt_ave for data
 
-  TH1D *hmc_probejet_neutEmEF[n_pt-1][n_eta-1]; //neutral EM energy fraction
-  TH1D *hmc_probejet_neutHadEF[n_pt-1][n_eta-1]; //neutral hadron energy fraction
-  TH1D *hmc_probejet_chEmEF[n_pt-1][n_eta-1]; //charged EM energy fraction
-  TH1D *hmc_probejet_chHadEF[n_pt-1][n_eta-1]; //charged hadron energy fraction
-  TH1D *hmc_probejet_photonEF[n_pt-1][n_eta-1]; //photon energy fraction
-  TH1D *hmc_probejet_muonEF[n_pt-1][n_eta-1]; //muon hadron energy fraction
-  TH1D *hmc_probejet_phi[n_pt-1][n_eta-1]; //phi
+  TH1D *hmc_probejet_neutEmEF[n_pt_-1][n_eta-1]; //neutral EM energy fraction
+  TH1D *hmc_probejet_neutHadEF[n_pt_-1][n_eta-1]; //neutral hadron energy fraction
+  TH1D *hmc_probejet_chEmEF[n_pt_-1][n_eta-1]; //charged EM energy fraction
+  TH1D *hmc_probejet_chHadEF[n_pt_-1][n_eta-1]; //charged hadron energy fraction
+  TH1D *hmc_probejet_photonEF[n_pt_-1][n_eta-1]; //photon energy fraction
+  TH1D *hmc_probejet_muonEF[n_pt_-1][n_eta-1]; //muon hadron energy fraction
+  TH1D *hmc_probejet_phi[n_pt_-1][n_eta-1]; //phi
   TH1D *hmc_MET[n_eta-1];//MET
   TH1D *hmc_alpha[n_eta-1];//alpha
   TH1D *hmc_jet3_pt[n_eta-1];//jet3_pt
@@ -93,9 +97,10 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
   TString name24 = "hist_data_MET_";
  
   for(int j=0; j<n_eta-1; j++){
+     eta_cut_bool = fabs(eta_bins[j])>eta_cut;
       TString eta_name = "eta_"+eta_range2[j]+"_"+eta_range2[j+1];
-    for(int k=0; k<n_pt-1; k++){
-      TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
+    for(int k=0; k< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1];
 
       
       TString name = name1 + eta_name + "_" + pt_name; 
@@ -227,11 +232,11 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     }
 
     //fill histos in bins of pt and eta
-    for(int k=0; k<n_pt-1; k++){
-      if(*pt_ave_data<pt_bins[k] || *pt_ave_data>pt_bins[k+1]) continue;
-      for(int j=0; j<n_eta-1; j++){
+    for(int j=0; j<n_eta-1; j++){
+    eta_cut_bool = fabs(eta_bins[j])>eta_cut; 
+    for(int k=0; k< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
+      if(*pt_ave_data<(eta_cut_bool?pt_bins_HF:pt_bins)[k] || *pt_ave_data>(eta_cut_bool?pt_bins_HF:pt_bins)[k+1]) continue;
 	if(fabs(*probejet_eta_data)>eta_bins[j+1] || fabs(*probejet_eta_data)<eta_bins[j]) continue;
-	else{
 	  hdata_asymmetry[k][j]->Fill(*asymmetry_data,*weight_data);
 	  hdata_B[k][j]->Fill(*B_data,*weight_data);
 	  hdata_METoverJetsPt[k][j]->Fill((*MET_data)/(*sum_jets_pt_data+*probejet_pt_data+*barreljet_pt_data),*weight_data);
@@ -244,8 +249,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 	  hdata_probejet_photonEF[k][j]->Fill(*probejet_photonEF_data,*weight_data);
 	  hdata_probejet_muonEF[k][j]->Fill(*probejet_muonEF_data,*weight_data);
 	  hdata_probejet_phi[k][j]->Fill(*probejet_phi_data,*weight_data);
-	}
-      }
+    }
     }
   }
 
@@ -267,7 +271,6 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
   TTreeReaderValue<Float_t> sum_jets_pt_mc(myReader_MC, "sum_jets_pt");
   TTreeReaderValue<Float_t> jet3_pt_mc(myReader_MC, "jet3_pt");
 
-  
   TTreeReaderValue<Float_t> probejet_neutEmEF_mc(myReader_MC, "probejet_neutEmEF");
   TTreeReaderValue<Float_t> probejet_neutHadEF_mc(myReader_MC, "probejet_neutHadEF");
   TTreeReaderValue<Float_t> probejet_chEmEF_mc(myReader_MC, "probejet_chEmEF");
@@ -300,9 +303,10 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     }
 
     //fill histos in bins of pt and eta
-    for(int k=0; k<n_pt-1; k++){
-      if(*pt_ave_mc<pt_bins[k] || *pt_ave_mc>pt_bins[k+1]) continue;
-      for(int j=0; j<n_eta-1; j++){
+    for(int j=0; j<n_eta-1; j++){
+      eta_cut_bool = fabs(eta_bins[j])>eta_cut; 
+    for(int k=0; k< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
+	if(*pt_ave_mc<(eta_cut_bool?pt_bins_HF:pt_bins)[k] || *pt_ave_mc>(eta_cut_bool?pt_bins_HF:pt_bins)[k+1]) continue;
 	if(fabs(*probejet_eta_mc)>eta_bins[j+1] || fabs(*probejet_eta_mc)<eta_bins[j]) continue;
 	else{
 	  hmc_asymmetry[k][j]->Fill(*asymmetry_mc,*weight_mc);
@@ -326,12 +330,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
   //DEBUG
   std::cout<<"\ncount mc "<<myCount_mc<<"  count cut mc "<<myCount_cut_mc<<std::endl<<std::endl;
 
- 
-
   ofstream output;
   output.open(CorrectionObject::_outpath+"plots/control/Number_Events_Pt_Eta_bins_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+ (abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "")  + ".txt");
     
-
   output << "Number of events in each bin for MC" << endl;
   output << "|Eta|:          ";
   double n_tot_MC = 0;
@@ -352,7 +353,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 	else if(hmc_B[i][j]->GetEntries()/1000 < 1)   output << hmc_B[i][j]->GetEntries() << "    - "; //<1000
 	else if(hmc_B[i][j]->GetEntries()/1000 <10)   output << hmc_B[i][j]->GetEntries() << "   - "; //<10000
 	else if(hmc_B[i][j]->GetEntries()/1000 <100)  output << hmc_B[i][j]->GetEntries() << "  - ";
-	else                                              output << hmc_B[i][j]->GetEntries() << " - ";
+	else                                          output << hmc_B[i][j]->GetEntries() << " - ";
       }
       else output << hmc_B[i][j]->GetEntries() << endl;
       n_tot_MC+= hmc_B[i][j]->GetEntries();
@@ -368,11 +369,28 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     else output << eta_range[i] << endl;
   }
   for(int i=0; i<n_pt-1; i++){
-    if(i==0) output << "pT = ["  << fixed << setprecision(0) << pt_bins[i] << "," << setprecision(0) << pt_bins[i+1] << "]  :    ";
-    else if(i==1) output << "pT = ["  << fixed << setprecision(0) << pt_bins[i] << "," << setprecision(0) << pt_bins[i+1] << "] :    ";
-    else output << "pT = ["  << fixed << setprecision(0) << pt_bins[i] << "," << setprecision(0) << pt_bins[i+1] << "]:    ";
-
+    output << "central trg pt bins:\n";
+    output << "pT = ["  << fixed << setprecision(0) << pt_bins[i] << "," << setprecision(0) << pt_bins[i+1] << "]  :    ";
     for(int j=0; j<n_eta-1; j++){
+      if(fabs(eta_bins[j])>eta_cut) continue;
+      if(j!=n_eta-2){
+	if(hdata_B[i][j]->GetEntries()/1000 < 0.01)     output << hdata_B[i][j]->GetEntries() << "      - "; //<1000
+	else if(hdata_B[i][j]->GetEntries()/1000 < 0.1) output << hdata_B[i][j]->GetEntries() << "     - "; //<1000
+	else if(hdata_B[i][j]->GetEntries()/1000 < 1)   output << hdata_B[i][j]->GetEntries() << "    - "; //<1000
+	else if(hdata_B[i][j]->GetEntries()/1000 <10)   output << hdata_B[i][j]->GetEntries() << "   - "; //<10000
+	else if(hdata_B[i][j]->GetEntries()/1000 <100)  output << hdata_B[i][j]->GetEntries() << "  - ";
+	else                                                output << hdata_B[i][j]->GetEntries() << " - ";
+      }
+      else output << hdata_B[i][j]->GetEntries() << endl;
+      n_tot_DATA += hdata_B[i][j]->GetEntries();
+    }
+
+  }
+  for(int i=0; i<n_pt_HF-1; i++){
+    output << "HF trg pt bins:\n";
+    output << "pT = ["  << fixed << setprecision(0) << pt_bins_HF[i] << "," << setprecision(0) << pt_bins_HF[i+1] << "]  :    ";
+    for(int j=0; j<n_eta-1; j++){
+      if(fabs(eta_bins[j])<eta_cut) continue;
       if(j!=n_eta-2){
 	if(hdata_B[i][j]->GetEntries()/1000 < 0.01)     output << hdata_B[i][j]->GetEntries() << "      - "; //<1000
 	else if(hdata_B[i][j]->GetEntries()/1000 < 0.1) output << hdata_B[i][j]->GetEntries() << "     - "; //<1000
@@ -394,7 +412,8 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
   TFile* test_out_mc_B = new TFile(CorrectionObject::_outpath+"plots/control/B_1d_mc"+ (abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "")+".root","RECREATE");
   for(int j=0; j<n_eta-1; j++){
-    for(int k=0; k<n_pt-1; k++){     ///k=0 n_pt-1 
+    eta_cut_bool = fabs(eta_bins[j])>eta_cut; 
+    for(int k=0; k< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hmc_B[k][j]->Write();
       hmc_METoverJetsPt[k][j]->Write();
       hmc_METoverSqrtJetsPt[k][j]->Write();
@@ -406,7 +425,6 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
       hmc_probejet_photonEF[k][j]->Write();
       hmc_probejet_muonEF[k][j]->Write();
       hmc_probejet_phi[k][j]->Write();
-      
     }
   }
   test_out_mc_B->Close();
@@ -414,7 +432,8 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
   TFile* test_out_data_B = new TFile(CorrectionObject::_outpath+"plots/control/B_1d_data"+ (abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "")+".root","RECREATE");
   for(int j=0; j<n_eta-1; j++){
-    for(int k=0; k<n_pt-1; k++){
+    eta_cut_bool = fabs(eta_bins[j])>eta_cut; 
+    for(int k=0; k< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hdata_B[k][j]->Write();
       hdata_METoverJetsPt[k][j]->Write();
       hdata_METoverSqrtJetsPt[k][j]->Write();
@@ -426,7 +445,6 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
       hdata_probejet_photonEF[k][j]->Write();
       hdata_probejet_muonEF[k][j]->Write();
       hdata_probejet_phi[k][j]->Write();
-      
     }
   }
   test_out_data_B->Close();
@@ -434,7 +452,8 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
   TFile* test_out_mc_A = new TFile(CorrectionObject::_outpath+"plots/control/A_1d_mc"+ (abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "")+".root","RECREATE");
   for(int j=0; j<n_eta-1; j++){
-    for(int k=0; k<n_pt-1; k++){
+    eta_cut_bool = fabs(eta_bins[j])>eta_cut; 
+    for(int k=0; k< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hmc_asymmetry[k][j]->Write();
     }
   }
@@ -442,31 +461,28 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
   delete test_out_mc_A;
 
   TFile* test_out_data_A = new TFile(CorrectionObject::_outpath+"plots/control/A_1d_data"+ (abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "")+".root","RECREATE");
-  for(int j=0; j<n_eta-1; j++){
-    for(int k=0; k<n_pt-1; k++){
+  for(int j=0; j<n_eta-1; j++){  
+    eta_cut_bool = fabs(eta_bins[j])>eta_cut; 
+    for(int k=0; k< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hdata_asymmetry[k][j]->Write();
     }
   }
   test_out_data_A->Close();
   delete test_out_data_A;
 
-
-
-
   //R_MC and R_DATA overlaid in the same plot as a function of pT, in bins of |eta|
-  double val_rel_mc[n_eta-1][n_pt-1]; //value at pt,eta
-  double err_rel_mc[n_eta-1][n_pt-1]; //error of ratio at pt,eta
-  double val_mpf_mc[n_eta-1][n_pt-1]; //ratio at pt,eta
-  double err_mpf_mc[n_eta-1][n_pt-1]; //error of ratio at pt,eta
-  double val_rel_data[n_eta-1][n_pt-1]; //value at pt,eta
-  double err_rel_data[n_eta-1][n_pt-1]; //error of ratio at pt,eta
-  double val_mpf_data[n_eta-1][n_pt-1]; //ratio at pt,eta
-  double err_mpf_data[n_eta-1][n_pt-1]; //error of ratio at pt,eta
-
-
+  double val_rel_mc[n_eta-1][n_pt_-1]; //value at pt,eta
+  double err_rel_mc[n_eta-1][n_pt_-1]; //error of ratio at pt,eta
+  double val_mpf_mc[n_eta-1][n_pt_-1]; //ratio at pt,eta
+  double err_mpf_mc[n_eta-1][n_pt_-1]; //error of ratio at pt,eta
+  double val_rel_data[n_eta-1][n_pt_-1]; //value at pt,eta
+  double err_rel_data[n_eta-1][n_pt_-1]; //error of ratio at pt,eta
+  double val_mpf_data[n_eta-1][n_pt_-1]; //ratio at pt,eta
+  double err_mpf_data[n_eta-1][n_pt_-1]; //error of ratio at pt,eta
 
   for(int i=0; i<n_eta-1; i++){
-    for(int j=0; j<n_pt-1; j++){
+    eta_cut_bool = fabs(eta_bins[i])>eta_cut; 
+    for(int j=0; j< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
 
       //get <A> and error on <A>
       pair <double,double> A_mc = GetValueAndError(hmc_asymmetry[j][i]);
@@ -475,8 +491,6 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
       pair <double,double> B_data = GetValueAndError(hdata_B[j][i]);
 
       //build MPF and pt_bal and their errors
-
-
       pair<double,double> res_mc_rel_r,res_data_rel_r;
       pair<double,double> res_mc_mpf_r,res_data_mpf_r;
       res_mc_mpf_r.first = (1+B_mc.first)/(1-B_mc.first);
@@ -487,7 +501,6 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
       res_mc_rel_r.second = 2/(pow((1-A_mc.first),2)) * A_mc.second;
       res_data_rel_r.first = (1+A_data.first)/(1-A_data.first);
       res_data_rel_r.second = 2/(pow((1-A_data.first),2)) * A_data.second;
-
 
       val_rel_mc[i][j] = res_mc_rel_r.first;
       err_rel_mc[i][j] = res_mc_rel_r.second;
@@ -510,34 +523,31 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
   TCanvas* c_0 = new TCanvas();
   tdrCanvas(c_0,"c_0",h,4,10,true,CorrectionObject::_lumitag);
 
-  
   for(int i=0; i<n_eta-1; i++){
+    eta_cut_bool = fabs(eta_bins[i])>eta_cut;
+    n_pt_cutted = ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 );
     //Create and fill TGraphErrors
-    double xbin_tgraph[n_pt-1];
-    double zero[n_pt-1];
-    for(int i=0;i<n_pt-1;i++){
-      xbin_tgraph[i]=(pt_bins[i]+pt_bins[i+1])/2;
-      zero[i]=(pt_bins[i+1]-pt_bins[i])/2 ;
+    double xbin_tgraph[n_pt_cutted];
+    double zero[n_pt_cutted];
+    for(int i=0;i<n_pt_cutted ;i++){
+      xbin_tgraph[i]=((eta_cut_bool?pt_bins_HF:pt_bins)[i]+(eta_cut_bool?pt_bins_HF:pt_bins)[i+1])/2;
+      zero[i]=((eta_cut_bool?pt_bins_HF:pt_bins)[i+1]-(eta_cut_bool?pt_bins_HF:pt_bins)[i])/2 ;
     }
 
-
- 
-
-    TGraphErrors *graph_mpf_mc   = new TGraphErrors(n_pt-1, xbin_tgraph, val_mpf_mc[i], zero, err_mpf_mc[i]);
-    TGraphErrors *graph_mpf_data = new TGraphErrors(n_pt-1, xbin_tgraph, val_mpf_data[i], zero, err_mpf_data[i]);
-    TGraphErrors *graph_rel_mc   = new TGraphErrors(n_pt-1, xbin_tgraph, val_rel_mc[i], zero, err_rel_mc[i]);
-    TGraphErrors *graph_rel_data = new TGraphErrors(n_pt-1, xbin_tgraph, val_rel_data[i], zero, err_rel_data[i]);
+    TGraphErrors *graph_mpf_mc   = new TGraphErrors(n_pt_cutted, xbin_tgraph, val_mpf_mc[i], zero, err_mpf_mc[i]);
+    TGraphErrors *graph_mpf_data = new TGraphErrors(n_pt_cutted, xbin_tgraph, val_mpf_data[i], zero, err_mpf_data[i]);
+    TGraphErrors *graph_rel_mc   = new TGraphErrors(n_pt_cutted, xbin_tgraph, val_rel_mc[i], zero, err_rel_mc[i]);
+    TGraphErrors *graph_rel_data = new TGraphErrors(n_pt_cutted, xbin_tgraph, val_rel_data[i], zero, err_rel_data[i]);
     graph_mpf_mc   = (TGraphErrors*)CleanEmptyPoints(graph_mpf_mc);
     graph_mpf_data = (TGraphErrors*)CleanEmptyPoints(graph_mpf_data);
     graph_rel_mc   = (TGraphErrors*)CleanEmptyPoints(graph_rel_mc);
     graph_rel_data = (TGraphErrors*)CleanEmptyPoints(graph_rel_data);
 
-
     graph_mpf_mc->SetTitle("");
     graph_mpf_mc->GetXaxis()->SetTitle("#bar{p}_{T} [GeV]");
     graph_mpf_mc->GetXaxis()->SetTitleSize(0.05);
     graph_mpf_mc->GetXaxis()->SetTitleOffset(0.80);
-    graph_mpf_mc->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
+    graph_mpf_mc->GetXaxis()->SetLimits(30,(eta_cut_bool?pt_bins_HF:pt_bins)[n_pt_cutted]+100);
     graph_mpf_mc->GetYaxis()->SetRangeUser(0.70,1.30);
     graph_mpf_mc->SetMarkerColor(kRed);
     graph_mpf_mc->SetMarkerStyle(20);
@@ -547,7 +557,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     graph_mpf_data->GetXaxis()->SetTitle("#bar{p}_{T} [GeV]");
     graph_mpf_data->GetXaxis()->SetTitleSize(0.05);
     graph_mpf_data->GetXaxis()->SetTitleOffset(0.80);
-    graph_mpf_data->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
+    graph_mpf_data->GetXaxis()->SetLimits(30,(eta_cut_bool?pt_bins_HF:pt_bins)[n_pt_cutted]+100);
     graph_mpf_data->GetYaxis()->SetRangeUser(0.70,1.30);
     graph_mpf_data->SetMarkerColor(kBlack);
     graph_mpf_data->SetMarkerStyle(20);
@@ -557,7 +567,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     graph_rel_mc->GetXaxis()->SetTitle("#bar{p}_{T} [GeV]");
     graph_rel_mc->GetXaxis()->SetTitleSize(0.05);
     graph_rel_mc->GetXaxis()->SetTitleOffset(0.80);
-    graph_rel_mc->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
+    graph_rel_mc->GetXaxis()->SetLimits(30,(eta_cut_bool?pt_bins_HF:pt_bins)[n_pt_cutted]+100);
     graph_rel_mc->GetYaxis()->SetRangeUser(0.70,1.30);
     graph_rel_mc->SetMarkerColor(kRed);
     graph_rel_mc->SetMarkerStyle(20);
@@ -567,13 +577,11 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     graph_rel_data->GetXaxis()->SetTitle("#bar{p}_{T} [GeV]");
     graph_rel_data->GetXaxis()->SetTitleSize(0.05);
     graph_rel_data->GetXaxis()->SetTitleOffset(0.80);
-    graph_rel_data->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
+    graph_rel_data->GetXaxis()->SetLimits(30,(eta_cut_bool?pt_bins_HF:pt_bins)[n_pt_cutted]+100);
     graph_rel_data->GetYaxis()->SetRangeUser(0.70,1.30);
     graph_rel_data->SetMarkerColor(kBlack);
     graph_rel_data->SetMarkerStyle(20);
     graph_rel_data->SetLineColor(kBlack);
-
-
 
     TString alVal;
     alVal.Form("%0.2f\n",alpha_cut);
@@ -588,14 +596,12 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     tex->SetNDC();
     tex->SetTextSize(0.045); 
 
-
-
     TCanvas* c_mpf = new TCanvas();
     tdrCanvas(c_mpf,"c_mpf",h,4,10,true,CorrectionObject::_lumitag);
     h->GetXaxis()->SetTitle("#bar{p}_{T} [GeV]");
     h->GetXaxis()->SetTitleSize(0.05);
     h->GetXaxis()->SetTitleOffset(0.80);
-    h->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
+    h->GetXaxis()->SetLimits(30,(eta_cut_bool?pt_bins_HF:pt_bins)[n_pt_cutted]+100);
     h->GetYaxis()->SetRangeUser(0.50,1.50);
     graph_mpf_mc->Draw("P SAME");
     graph_mpf_data->Draw("P SAME");
@@ -614,17 +620,14 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     leg_mpf->AddEntry(graph_mpf_data, axistitle_data,"P");
     leg_mpf->Draw();
 
-    //tex->DrawLatex(0.53,0.91,CorrectionObject::_lumitag+"(13TeV)");
-
     c_mpf->SaveAs(CorrectionObject::_outpath+"plots/control/MPF_Response_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "") + ".pdf");
-
 
     TCanvas* c_rel = new TCanvas();
     tdrCanvas(c_rel,"c_rel",h,4,10,true,CorrectionObject::_lumitag);
     h->GetXaxis()->SetTitle("#bar{p}_{T} [GeV]");
     h->GetXaxis()->SetTitleSize(0.05);
     h->GetXaxis()->SetTitleOffset(0.80);
-    h->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
+    h->GetXaxis()->SetLimits(30,(eta_cut_bool?pt_bins_HF:pt_bins)[n_pt_cutted]+100);
     h->GetYaxis()->SetRangeUser(0.50,1.50);
     graph_rel_mc->Draw("P SAME");
     graph_rel_data->Draw("P SAME");
@@ -643,14 +646,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     leg_rel->AddEntry(graph_rel_data, axistitle_data,"P");
     leg_rel->Draw();
 
-    //tex->DrawLatex(0.53,0.91,CorrectionObject::_lumitag+"(13TeV)");
-
     c_rel->SaveAs(CorrectionObject::_outpath+"plots/control/Rel_Response_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "") + ".pdf");
 
-
-    //delete leg_rel;
     delete c_rel;
-    //delete leg_mpf;
     delete c_mpf;
     delete tex;
     delete graph_rel_data;
@@ -661,7 +659,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
 
 
-  //********************************************************************  Plot all Control Hists ********************************************************************************
+//*******************************************  Plot all Control Hists **************************
 
   //Plot 1d response distributions in a particular eta-bin for different pt-bins onto a single canvas
 
@@ -690,9 +688,10 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_mpf_mc;
     gPad->SetLogy();
 
-    for(int j=0; j<n_pt-1; j++){   ///j=0 j<pt_n-1
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    eta_cut_bool = fabs(eta_bins[i])>eta_cut; 
+    for(int j=0; j < ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_mpf_mc = "hist_mc_B_"+eta_name+"_"+pt_name;
       htemp_mpf_mc = (TH1D*)f_mpf_mc->Get(name_mpf_mc);
       int n_ev = htemp_mpf_mc->GetEntries();
@@ -723,10 +722,10 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
     TH1D* htemp_mpf_data;
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
    
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_mpf_data = "hist_data_B_"+eta_name+"_"+pt_name;
       htemp_mpf_data = (TH1D*)f_mpf_data->Get(name_mpf_data);
       int n_ev = htemp_mpf_data->GetEntries();
@@ -757,9 +756,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_rel_mc;
     gPad->SetLogy();
 
-    for(int j=0; j<n_pt-1; j++){
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_rel_mc = "hist_mc_A_"+eta_name+"_"+pt_name;
       htemp_rel_mc = (TH1D*)f_rel_mc->Get(name_rel_mc);
       int n_ev =  htemp_rel_mc->GetEntries();
@@ -785,12 +784,12 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
 
     if(plot_full_A){
-          for(int j=0; j<n_pt-1; j++){
+      for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
 	        TCanvas* cFullA = new TCanvas();
 		tdrCanvas(cFullA,"cFullA",h,4,10,kSquare,CorrectionObject::_lumitag);
 		TH1D* htemp_rel_data;
-		TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-		TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+		TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+		TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
 		TString name_rel_data = "hist_data_A_"+eta_name+"_"+pt_name;
 		htemp_rel_data = (TH1D*)f_rel_data->Get(name_rel_data);
 		htemp_rel_data->Draw("E");
@@ -801,7 +800,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 		htemp_rel_data->Draw("E");		
 		tex->DrawLatex(0.47,0.85,"Data, " + text);
 		tex->DrawLatex(0.54,0.8,legname);		
-		cFullA->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "") + ".pdf");
+		cFullA->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+"_pt_"+ (eta_cut_bool?pt_range_HF:pt_range)[j] + "_" + (eta_cut_bool?pt_range_HF:pt_range)[j+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "") + ".pdf");
 		delete cFullA;
 		delete htemp_rel_data;
 	  }
@@ -814,9 +813,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_rel_data;
 
    gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_rel_data = "hist_data_A_"+eta_name+"_"+pt_name;
       htemp_rel_data = (TH1D*)f_rel_data->Get(name_rel_data);
       int n_ev = htemp_rel_data->GetEntries();
@@ -847,9 +846,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TLegend leg5 = tdrLeg(0.22,0.6,0.88,0.79);
     leg5.SetNColumns(2);
     TH1D* htemp_met_mc;
-    for(int j=0; j<n_pt-1; j++){
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_met_mc = "hist_mc_METoverJetsPt_"+eta_name+"_"+pt_name;
       htemp_met_mc = (TH1D*)f_mpf_mc->Get(name_met_mc);
     
@@ -881,10 +880,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TLegend leg6 = tdrLeg(0.22,0.6,0.88,0.79);
     leg6.SetNColumns(2);
     TH1D* htemp_met_data;
-    for(int j=0; j<n_pt-1; j++){
-   
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_met_data = "hist_data_METoverJetsPt_"+eta_name+"_"+pt_name;
       htemp_met_data = (TH1D*)f_mpf_data->Get(name_met_data);
       int n_ev = htemp_met_data->GetEntries();
@@ -908,9 +906,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
     ///END MET over sum pt
 
-
-
-//************************* Different energy fractions **************************************************************************************
+//************************* Different energy fractions *****************************************
     
     TCanvas* c7 = new TCanvas();
     tdrCanvas(c7,"c7",hEF,4,10,kSquare,"MC");
@@ -919,10 +915,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_probejet_neutEmEF_mc;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-  
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_neutEmEF_mc = "hist_mc_probejet_neutEmEF_"+eta_name+"_"+pt_name;
       htemp_probejet_neutEmEF_mc = (TH1D*)f_mpf_mc->Get(name_probejet_neutEmEF_mc);
       //      htemp_probejet_neutEmEF_mc->Print();
@@ -948,8 +943,6 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     tex->DrawLatex(0.47,0.85,"MC, " + text);
     c7->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_neutEmEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "") + ".pdf");
 
-
-
     TCanvas* c8 = new TCanvas();
     tdrCanvas(c8,"c8",hEF,4,10,kSquare,"DATA");
     //    TLegend leg8 = tdrLeg(0.62,0.46,0.85,0.81);
@@ -958,11 +951,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_probejet_neutEmEF_data;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_neutEmEF_data = "hist_data_probejet_neutEmEF_"+eta_name+"_"+pt_name;
       htemp_probejet_neutEmEF_data = (TH1D*)f_mpf_data->Get(name_probejet_neutEmEF_data);
       //      htemp_probejet_neutEmEF_data->Print();
@@ -993,11 +984,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_probejet_neutHadEF_mc;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_neutHadEF_mc = "hist_mc_probejet_neutHadEF_"+eta_name+"_"+pt_name;
       htemp_probejet_neutHadEF_mc = (TH1D*)f_mpf_mc->Get(name_probejet_neutHadEF_mc);
       //      htemp_probejet_neutHadEF_mc->Print();
@@ -1032,11 +1021,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_probejet_neutHadEF_data;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_neutHadEF_data = "hist_data_probejet_neutHadEF_"+eta_name+"_"+pt_name;
       htemp_probejet_neutHadEF_data = (TH1D*)f_mpf_data->Get(name_probejet_neutHadEF_data);
       //      htemp_probejet_neutHadEF_data->Print();
@@ -1072,11 +1059,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_probejet_chEmEF_mc;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_chEmEF_mc = "hist_mc_probejet_chEmEF_"+eta_name+"_"+pt_name;
       htemp_probejet_chEmEF_mc = (TH1D*)f_mpf_mc->Get(name_probejet_chEmEF_mc);
       //      htemp_probejet_chEmEF_mc->Print();
@@ -1109,11 +1094,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_probejet_chEmEF_data;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_chEmEF_data = "hist_data_probejet_chEmEF_"+eta_name+"_"+pt_name;
       htemp_probejet_chEmEF_data = (TH1D*)f_mpf_data->Get(name_probejet_chEmEF_data);
       //      htemp_probejet_chEmEF_data->Print();
@@ -1146,11 +1129,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_probejet_chHadEF_mc;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_chHadEF_mc = "hist_mc_probejet_chHadEF_"+eta_name+"_"+pt_name;
       htemp_probejet_chHadEF_mc = (TH1D*)f_mpf_mc->Get(name_probejet_chHadEF_mc);
       //      htemp_probejet_chHadEF_mc->Print();
@@ -1182,11 +1163,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     TH1D* htemp_probejet_chHadEF_data;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_chHadEF_data = "hist_data_probejet_chHadEF_"+eta_name+"_"+pt_name;
       htemp_probejet_chHadEF_data = (TH1D*)f_mpf_data->Get(name_probejet_chHadEF_data);
       //      htemp_probejet_chHadEF_data->Print();
@@ -1216,11 +1195,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     tdrCanvas(c15,"c15",hEF,4,10,kSquare,"MC");
     TLegend leg15 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_photonEF_mc;
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_photonEF_mc = "hist_mc_probejet_photonEF_"+eta_name+"_"+pt_name;
       htemp_probejet_photonEF_mc = (TH1D*)f_mpf_mc->Get(name_probejet_photonEF_mc);
       //      htemp_probejet_photonEF_mc->Print();
@@ -1249,11 +1226,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     tdrCanvas(c16,"c16",hEF,4,10,kSquare,"DATA");
     TLegend leg16 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_photonEF_data;
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_photonEF_data = "hist_data_probejet_photonEF_"+eta_name+"_"+pt_name;
       htemp_probejet_photonEF_data = (TH1D*)f_mpf_data->Get(name_probejet_photonEF_data);
       //      htemp_probejet_photonEF_data->Print();
@@ -1283,11 +1258,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     tdrCanvas(c17,"c17",hEF,4,10,kSquare,"MC");
     TLegend leg17 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_muonEF_mc;
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_muonEF_mc = "hist_mc_probejet_muonEF_"+eta_name+"_"+pt_name;
       htemp_probejet_muonEF_mc = (TH1D*)f_mpf_mc->Get(name_probejet_muonEF_mc);
       //      htemp_probejet_muonEF_mc->Print();
@@ -1316,11 +1289,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     tdrCanvas(c18,"c18",hEF,4,10,kSquare,"DATA");
     TLegend leg18 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_muonEF_data;
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_muonEF_data = "hist_data_probejet_muonEF_"+eta_name+"_"+pt_name;
       htemp_probejet_muonEF_data = (TH1D*)f_mpf_data->Get(name_probejet_muonEF_data);
       htemp_probejet_muonEF_data->Print();
@@ -1349,11 +1320,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     tdrCanvas(c19,"c19",hEF,4,10,kSquare,"MC");
     TLegend leg19 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_phi_mc;
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_phi_mc = "hist_mc_probejet_phi_"+eta_name+"_"+pt_name;
       htemp_probejet_phi_mc = (TH1D*)f_mpf_mc->Get(name_probejet_phi_mc);
       //      htemp_probejet_phi_mc->Print();
@@ -1383,11 +1352,9 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     tdrCanvas(c20,"c20",hEF,4,10,kSquare,"DATA");
     TLegend leg20 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_phi_data;
-    for(int j=0; j<n_pt-1; j++){
-    //    for(int j=0; j<5; j++){ //TEST
-    //    for(int j=5; j<n_pt-1; j++){//TEST
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){ 
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_probejet_phi_data = "hist_data_probejet_phi_"+eta_name+"_"+pt_name;
       htemp_probejet_phi_data = (TH1D*)f_mpf_data->Get(name_probejet_phi_data);
       //      htemp_probejet_phi_data->Print();
@@ -1412,10 +1379,8 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     leg20.Draw();
     tex->DrawLatex(0.47,0.85,"Data, " + text);
     c20->SaveAs(CorrectionObject::_outpath+"plots/control/probejet_phi_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"")+ (lumi_bin>=0 ? "_lumiBin" + to_string(lumi_bin)  : "") + ".pdf");
-
-    
+   
     //END Different energy fractions
-
 
     delete tex;
     delete htemp_rel_data;
@@ -1428,9 +1393,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
     delete c2;
     delete htemp_mpf_mc;
     delete c1;
-  }
-
-
+  } //END big n_eta loop
 
 
 
@@ -1565,8 +1528,9 @@ TCanvas* c4 = new TCanvas();
   delete c_0;
   delete h;
   
-  for(int i=0; i<n_pt-1; i++){
-    for(int j=0; j<n_eta-1; j++){
+  for(int j=0; j<n_eta-1; j++){
+    eta_cut_bool = fabs(eta_bins[j])>eta_cut; 
+    for(int i=0; i< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); i++){
       delete hdata_asymmetry[i][j];
       delete hmc_asymmetry[i][j];
       delete hdata_B[i][j];

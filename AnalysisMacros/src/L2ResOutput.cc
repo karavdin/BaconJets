@@ -17,7 +17,6 @@ using namespace std;
 void CorrectionObject::L2ResOutput(){
   cout << "--------------- Starting L2ResOutput() ---------------" << endl << endl;
 
-
   TFile* f_Res_mpf = new TFile(CorrectionObject::_outpath+"Histo_Res_MPF_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");
   TFile* f_Res_dijet = new TFile(CorrectionObject::_outpath+"Histo_Res_DiJet_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");  
 
