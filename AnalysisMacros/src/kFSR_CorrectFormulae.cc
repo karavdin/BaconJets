@@ -62,14 +62,14 @@ void CorrectionObject::kFSR_CorrectFormulae(){
   for(int i=0; i<n_alpha; i++){
     for(int j=0; j<n_eta-1; j++){
       eta_cut_bool = fabs(eta_bins[j])>eta_cut;
-      n_pt_cutted = ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 );
-      for(int k= 0 ; k < n_pt_cutted  ; k++ ){
+      for(int k= 0 ; k < n_pt_  ; k++ ){
 	ratio_al_rel_r[k][j][i] = 0;
 	err_ratio_al_rel_r[k][j][i] = 0;
 	ratio_al_mpf_r[k][j][i] = 0;
 	err_ratio_al_mpf_r[k][j][i] = 0;
       }
       
+      n_pt_cutted = ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 );
       TString name = name1; name+=count;
       hdata_asymmetry[j][i] = new TH2D(name,"A in DATA; p_{T}^{ave} [GeV]; A",n_pt_cutted , (eta_cut_bool?pt_bins_HF:pt_bins),nResponseBins, -1.2, 1.2);
       name = name2;name+=count;
@@ -88,7 +88,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
     for(int i=0; i<n_alpha; i++){
      for(int j=0; j<n_eta-1; j++){
       eta_cut_bool = fabs(eta_bins[j])>eta_cut;
-      for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){
+      for(int k= 0 ; k < n_pt_ ; k++ ){
 	 n_entries_mc[j][i][k] = 0;
 	 n_entries_data[j][i][k] = 0;
        }
@@ -120,7 +120,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 	      n_entries_data[j][i][k]++;
 	}
 	idx++;
-	if(idx%1000000==0) cout << "looping over data-TTree: Idx = " << idx << endl;
+	if(idx%5000000==0) cout << "looping over data-TTree: Idx = " << idx << endl;
       }
     }
   }
