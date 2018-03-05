@@ -380,11 +380,35 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    //Create horizontal line for plotting ("ideal value")
    TLine *line = new TLine(alpha_bins[0],1,alpha_bins[n_alpha-1]+0.01,1);
 
-   TH2D* h_kFSR_pt_eta_rel = new TH2D("kFSR_pt_eta_rel","kFSR;|#eta|;p_{T}^{ave}", n_eta-1, eta_bins, n_pt_-1, pt_bins);
-   TH2D* h_chi2_kFSR_rel = new TH2D("chi2_kFSR_rel","#chi^{2} kFSR;|#eta|;p_{T}^{ave}", n_eta-1, eta_bins, n_pt_-1, pt_bins);
+  TH2Poly* h_kFSR_pt_eta_rel = new TH2Poly();
+  h_kFSR_pt_eta_rel->SetName("kFSR_pt_eta_rel");  
+  h_kFSR_pt_eta_rel->SetTitle("kFSR");
+  h_kFSR_pt_eta_rel->GetXaxis()->SetTitle("|#eta|");
+  h_kFSR_pt_eta_rel->GetYaxis()->SetTitle("p_{T}^{ave}"); 
+  for(int i=0; i<n_eta-1; i++){   
+   eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
+   for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
+     h_kFSR_pt_eta_rel->AddBin(eta_bins[i], (eta_cut_bool?pt_bins_HF:pt_bins)[j], eta_bins[i+1], (eta_cut_bool?pt_bins_HF:pt_bins)[j+1] );
+   }
+  }
+
+  TH2Poly* h_chi2_kFSR_rel = new TH2Poly();
+  h_chi2_kFSR_rel->SetName("chi2_kFSR_rel");  
+  h_chi2_kFSR_rel->SetTitle("#chi^{2} kFSR");
+  h_chi2_kFSR_rel->GetXaxis()->SetTitle("|#eta|");
+  h_chi2_kFSR_rel->GetYaxis()->SetTitle("p_{T}^{ave}"); 
+  for(int i=0; i<n_eta-1; i++){   
+   eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
+   for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
+     h_chi2_kFSR_rel->AddBin(eta_bins[i], (eta_cut_bool?pt_bins_HF:pt_bins)[j], eta_bins[i+1], (eta_cut_bool?pt_bins_HF:pt_bins)[j+1] );
+   }
+  }
+  
    TCanvas* Rel[n_eta-1][n_pt_-1];
    TString plotname_rel[n_eta-1][n_pt_-1];
 
+   int bincounter = 1;
+   
    TF1 *pol_rel[n_eta-1][n_pt_-1];
     for(int i=0; i<n_eta-1; i++){
      eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
@@ -441,16 +465,17 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        tex2_rel->SetTextSize(0.035); 
        tex2_rel->DrawLatex(0.64,0.35,chi2_rel);
 
-       h_kFSR_pt_eta_rel->SetBinContent(i+1, j+1,pol_rel[i][j]->GetParameter(0));
-       h_kFSR_pt_eta_rel->SetBinError(i+1, j+1, pol_rel[i][j]->GetParError(0));
+       h_kFSR_pt_eta_rel->SetBinContent(bincounter, pol_rel[i][j]->GetParameter(0));
+       h_kFSR_pt_eta_rel->SetBinError(bincounter, pol_rel[i][j]->GetParError(0));
 
        chi2ndf_kFSR_rel = pol_rel[i][j]->GetChisquare() / pol_rel[i][j]->GetNDF();
       }
-      h_chi2_kFSR_rel->SetBinContent(i+1, j+1,chi2ndf_kFSR_rel);
+      h_chi2_kFSR_rel->SetBinContent(bincounter ,chi2ndf_kFSR_rel);
 
      Rel[i][j]->Print(CorrectionObject::_outpath+"plots/kFSR_Pt_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1]+".pdf");
      delete tex2_rel;
      delete tex_rel;
+     bincounter++;
        }
      }
 
@@ -515,7 +540,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
   TString plotname2[n_eta-1][n_pt_-1];
   TCanvas* MPF[n_eta-1][n_pt_-1];
    TF1 *pol_mpf[n_eta-1][n_pt_-1];
-   int bincounter = 1;
+   bincounter = 1;
     for(int i=0; i<n_eta-1; i++){
    eta_cut_bool = fabs(eta_bins[i])>eta_cut;     
    for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
