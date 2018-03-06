@@ -311,7 +311,17 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    leg1->SetTextFont(42);
    leg1->SetNColumns(2);
 
+   //Define legend HF
+   TLegend *leg1_HF;
+   leg1_HF = new TLegend(0.17,0.68,0.65,0.89,"","brNDC");//x+0.1
+   leg1_HF->SetBorderSize(0);
+   leg1_HF->SetTextSize(0.03);
+   leg1_HF->SetFillColor(10);
+   leg1_HF->SetLineColor(1);
+   leg1_HF->SetTextFont(42);
+   leg1_HF->SetNColumns(2);
 
+   
    double xbin_tgraph[n_alpha],zero[n_alpha];
    for(int i=0;i<n_alpha;i++){
      xbin_tgraph[i] = alpha_bins[i];
@@ -322,6 +332,8 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    bool multigraph_rel_empty[n_eta-1];
    bool multigraph_mpf_empty[n_eta-1];
 
+   bool firstHFeta = true;
+   
    for(int j=0; j<n_eta-1; j++){
      multigraph_rel_empty[j] = true;
      multigraph_mpf_empty[j] = true;
@@ -353,7 +365,8 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        pTbin_label+=(eta_cut_bool?pt_bins_HF:pt_bins)[k];
        pTbin_label+=" < p_T < ";
        pTbin_label+=(eta_cut_bool?pt_bins_HF:pt_bins)[k+1];
-       if(j==0) leg1->AddEntry(graph_rel_r[k][j],pTbin_label,"epl");
+       if(j==0) leg1->AddEntry(graph_rel_r[k][j],pTbin_label,"epl");     
+       if(eta_cut_bool && firstHFeta) leg1_HF->AddEntry(graph_rel_r[k][j],pTbin_label,"epl");       
       
        graph_mpf_r[k][j] = new TGraphErrors(n_alpha,xbin_tgraph,ratio_al_mpf_r[k][j],zero,err_ratio_al_mpf_r[k][j]);
        graph_mpf_r[k][j] = (TGraphErrors*)CleanEmptyPoints(graph_mpf_r[k][j]);
@@ -372,6 +385,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 	 multigraph_mpf_empty[j] = false;
        }
      }
+     firstHFeta = firstHFeta && !eta_cut_bool;
    }
 
   //************************************* Test 2D plot kFSR  *************************************
@@ -664,6 +678,8 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    TString plotname[n_eta-1];
    TF1 *pol1[n_eta-1];
    for (int j=0; j<n_eta-1; j++){ 
+     eta_cut_bool = fabs(eta_bins[j])>eta_cut;
+     
      plotname[j]="dijet_kfsr_diffPt_eta_"+eta_range[j]+"_"+eta_range[j+1];
      a[j] = new TCanvas(plotname[j], plotname[j], 800,700);
      m_gStyle->SetOptTitle(0);
@@ -711,9 +727,15 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        kFSR_DiJet->SetBinError(j+1,pol1[j]->GetParError(0));
      }
 
-     leg1->SetHeader("p_{T} balance, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
-     leg1->Draw();
-
+     if(eta_cut_bool){
+       leg1_HF->SetHeader("p_{T} balance, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
+       leg1_HF->Draw();
+     }
+     else{
+       leg1->SetHeader("p_{T} balance, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
+       leg1->Draw();
+     }
+     
      TLatex *tex = new TLatex();
      tex->SetNDC();
      tex->SetTextSize(0.045); 
@@ -767,6 +789,8 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    TCanvas* b[n_eta-1];
    TString plotname1[n_eta-1];
     for (int j=0; j<n_eta-1; j++){
+      eta_cut_bool = fabs(eta_bins[j])>eta_cut;
+      
      plotname1[j]="mpf_kfsr_diffPt_eta_"+eta_range[j]+"_"+eta_range[j+1];
      b[j] = new TCanvas(plotname1[j], plotname1[j], 800,700);
      m_gStyle->SetOptTitle(0);
@@ -808,9 +832,15 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        kFSR_MPF->SetBinError(j+1,pol1[j]->GetParError(0));
      }
 
-     leg1->SetHeader("MPF, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
-     leg1->Draw();
-
+     if(eta_cut_bool){
+       leg1_HF->SetHeader("MPF, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
+       leg1_HF->Draw();
+     }
+     else{
+       leg1->SetHeader("MPF, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
+       leg1->Draw();
+     }
+     
      TLatex *tex = new TLatex();
      tex->SetNDC();
      tex->SetTextSize(0.045); 
@@ -879,6 +909,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
      delete pTgraph_mpf_r[j];
    }
    delete leg1;
+   delete leg1_HF;   
    for(int i=0; i<n_alpha; i++){
      for(int j=0; j<n_eta-1; j++){
        delete pr_data_asymmetry[j][i];
