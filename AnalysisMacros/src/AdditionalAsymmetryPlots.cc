@@ -25,6 +25,10 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   cout << "--------------- StartingAdditionalAsymmetryPlots() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
+  int n_pt_ = max(n_pt,n_pt_HF);
+  bool eta_cut_bool;
+  int n_pt_cutted;
+  
   // const int n_pt_ = (si_trg ? n_pt_Si : n_pt );
 
   // double pt_bins_[n_pt_]; = (si_trg ? pt_bins_Si : pt_bins);
@@ -36,10 +40,10 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 
   //Table with number of events in each pT- and eta-bin
 
-  TH1D *hdata_asymmetry[n_pt-1][(eta_abs ? n_eta : n_eta_full)  -1]; // A for data
-  TH1D *hdata_bsymmetry[n_pt-1][(eta_abs ? n_eta : n_eta_full)  -1]; // B for data
-  TH2D *hdata_asymmetry_nvert[n_pt-1][(eta_abs ? n_eta : n_eta_full)-1]; // A for data
-  TH2D *hdata_asymmetry_rho[n_pt-1][(eta_abs ? n_eta : n_eta_full)-1]; // A for data
+  TH1D *hdata_asymmetry[n_pt_-1][(eta_abs ? n_eta : n_eta_full)  -1]; // A for data
+  TH1D *hdata_bsymmetry[n_pt_-1][(eta_abs ? n_eta : n_eta_full)  -1]; // B for data
+  TH2D *hdata_asymmetry_nvert[n_pt_-1][(eta_abs ? n_eta : n_eta_full)-1]; // A for data
+  TH2D *hdata_asymmetry_rho[n_pt_-1][(eta_abs ? n_eta : n_eta_full)-1]; // A for data
 
   TH1D *hdata_jet1_pt[(eta_abs ? n_eta : n_eta_full)-1];
   TH1D *hdata_jet2_pt[(eta_abs ? n_eta : n_eta_full)-1];  
@@ -53,6 +57,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   TString name3 = "hist_data_B_";
 
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
+      eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
       TString eta_name = "eta_"+(eta_abs ? eta_range2 : eta_range2_full)[j]+"_"+(eta_abs ? eta_range2 : eta_range2_full)[j+1];
 
       hdata_jet1_pt[j] = new TH1D(name2+"jet1_pt_"+eta_name,"",nResponseBins,0,600);
@@ -61,8 +66,8 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       hdata_jet3_eta[j] = new TH1D(name2+"jet3_eta_"+eta_name,"",100,-5.2,5.2);
       hdata_jet3_dRmin[j] = new TH1D(name2+"jet3_dRmin_"+eta_name,"",100,0,10);
       
-    for(int k=0; k<n_pt-1; k++){
-      TString pt_name = "pt_"+pt_range[k]+"_"+pt_range[k+1];
+    for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1];
 
       TString name = name1 + eta_name + "_" + pt_name; 
       hdata_asymmetry[k][j] = new TH1D(name,"",nResponseBins, -1.2, 1.2);
@@ -107,9 +112,11 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       continue;
     }
     //fill histos in bins of pt and eta
-    for(int k=0; k<n_pt-1; k++){
-      if(*pt_ave_data<pt_bins[k] || *pt_ave_data>pt_bins[k+1]) continue;
+
       for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
+	eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+    for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
+      if(*pt_ave_data<(eta_cut_bool?pt_bins_HF:pt_bins)[k] || *pt_ave_data>(eta_cut_bool?pt_bins_HF:pt_bins)[k+1]) continue;
 	if( (eta_abs ? fabs(*probejet_eta_data) : *probejet_eta_data) > (eta_abs ? eta_bins : eta_bins_full)[j+1] || (eta_abs ? fabs(*probejet_eta_data) : *probejet_eta_data)  < (eta_abs ? eta_bins : eta_bins_full)[j]) continue;
 	else{
 	  hdata_jet1_pt[j]->Fill(*jet1_pt_data,*weight_data);
@@ -134,7 +141,8 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 
   TFile* test_out_data_A = new TFile(CorrectionObject::_outpath+"plots/control/A_1d_data_smaller_split.root","RECREATE");
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
-    for(int k=0; k<n_pt-1; k++){
+    eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+    for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hdata_asymmetry[k][j]->Write();
       hdata_bsymmetry[k][j]->Write();
     }
@@ -144,7 +152,8 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 
   TFile* test_out_data_A_rho = new TFile(CorrectionObject::_outpath+"plots/control/A_rho_2d_data.root","RECREATE");
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
-    for(int k=0; k<n_pt-1; k++){
+    eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+    for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hdata_asymmetry_rho[k][j]->Write();
     }
   }
@@ -154,7 +163,8 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 
   TFile* test_out_data_A_nvert = new TFile(CorrectionObject::_outpath+"plots/control/A_nvert_2d_data.root","RECREATE");
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
-    for(int k=0; k<n_pt-1; k++){
+    eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+    for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hdata_asymmetry_nvert[k][j]->Write();
     }
   }
@@ -208,11 +218,12 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   
   for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     //Create and fill TGraphErrors
-    double xbin_tgraph[n_pt-1];
-    double zero[n_pt-1];
-    for(int i=0;i<n_pt-1;i++){
-      xbin_tgraph[i]=(pt_bins[i]+pt_bins[i+1])/2;
-      zero[i]=(pt_bins[i+1]-pt_bins[i])/2 ;
+    double xbin_tgraph[n_pt_-1];
+    double zero[n_pt_-1];
+    eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
+    for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
+      xbin_tgraph[k]=(pt_bins[k]+pt_bins[k+1])/2;
+      zero[k]=(pt_bins[k+1]-pt_bins[k])/2 ;
     }
 
     TString alVal;
@@ -420,12 +431,13 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     tex_lumi->SetNDC();
     tex_lumi->SetTextSize(0.045); 
     
-    for(int j=0; j<n_pt-1; j++){
+    eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
       TCanvas* cFullA_nvert = new TCanvas();
       // tdrCanvas(cFullA_nvert,"cFullA_nvert",h,4,10,kSquare,CorrectionObject::_lumitag);
       TH2D* htemp_rel_data_nvert;
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_rel_data = "hist_data_A_nvert_"+eta_name+"_"+pt_name;
       htemp_rel_data_nvert = (TH2D*)f_rel_data_nvert->Get(name_rel_data);
       htemp_rel_data_nvert->Draw("E");
@@ -436,7 +448,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       htemp_rel_data_nvert->Draw("COLZ");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       tex->DrawLatex(0.54,0.8,legname);		
-      cFullA_nvert->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_nvert_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
+      cFullA_nvert->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_nvert_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ (eta_cut_bool?pt_range_HF:pt_range)[j] + "_" + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + ".pdf");
       delete cFullA_nvert;
       delete htemp_rel_data_nvert;
     }
@@ -457,14 +469,15 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
 
     TLatex *tex_lumi = new TLatex();
     tex_lumi->SetNDC();
-    tex_lumi->SetTextSize(0.045); 
+    tex_lumi->SetTextSize(0.045);
     
-    for(int j=0; j<n_pt-1; j++){
+    eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
       TCanvas* cFullA = new TCanvas();
       tdrCanvas(cFullA,"cFullA",h,4,10,kSquare,CorrectionObject::_lumitag);
       TH1D* htemp_rel_data;
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString evname = "Tot.Events = ";
      
       TString name_rel_data = "hist_data_A_"+eta_name+"_"+pt_name;
@@ -479,7 +492,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       tex->DrawLatex(0.54,0.8,legname);		
       tex->DrawLatex(0.58,0.75,evname);		
-      cFullA->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
+      cFullA->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ (eta_cut_bool?pt_range_HF:pt_range)[j] + "_" + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + ".pdf");
       delete cFullA;
       delete htemp_rel_data;
 
@@ -501,7 +514,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       tex->DrawLatex(0.54,0.8,legname);		
       tex->DrawLatex(0.58,0.75,evname);		
-      cFullB->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/B_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
+      cFullB->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/B_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ (eta_cut_bool?pt_range_HF:pt_range)[j] + "_" + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + ".pdf");
     
       delete cFullB;
       delete htemp_mpf_data;
@@ -524,14 +537,15 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
 
     TLatex *tex_lumi = new TLatex();
     tex_lumi->SetNDC();
-    tex_lumi->SetTextSize(0.045); 
+    tex_lumi->SetTextSize(0.045);
     
-    for(int j=0; j<n_pt-1; j++){
+    eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
       TCanvas* cFullA_rho = new TCanvas();
       // tdrCanvas(cFullA_rho,"cFullA_rho",h,4,10,kSquare,CorrectionObject::_lumitag);
       TH2D* htemp_rel_data_rho;
-      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
-      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+      TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+      TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString name_rel_data = "hist_data_A_rho_"+eta_name+"_"+pt_name;
       htemp_rel_data_rho = (TH2D*)f_rel_data_rho->Get(name_rel_data);
       htemp_rel_data_rho->Draw("E");
@@ -542,7 +556,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       htemp_rel_data_rho->Draw("COLZ");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       tex->DrawLatex(0.54,0.8,legname);		
-      cFullA_rho->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_rho_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ pt_range[j] + "_" + pt_range[j+1] + ".pdf");
+      cFullA_rho->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_rho_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ (eta_cut_bool?pt_range_HF:pt_range)[j] + "_" + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + ".pdf");
       delete cFullA_rho;
       delete htemp_rel_data_rho;
     }
