@@ -32,6 +32,8 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check, bool useHF){
   cout << "--------------- Starting Derive_Thresholds_DiJet() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
+  TH1::SetDefaultSumw2();
+  
   //cout<<"debug 1\n";
   
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/thresholds/");
@@ -68,8 +70,10 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check, bool useHF){
     TString name = "pt_ave_trg"+to_string(triggerVal[j]);
     TString name2 = "pt_ave_wNext_trg"+to_string(triggerVal[j]);
 
-    hdata_pt_ave[j]= new TH1D(name,"",nResponseBins*6,0,j<7?600:1200);
-    hdata_pt_ave_wNext[j]= new TH1D(name2,"",nResponseBins*6,0,j<7?600:1200);
+    hdata_pt_ave[j]= new TH1D(name,"",nResponseBins*6,0,// j<7?600:
+			      1200);
+    hdata_pt_ave_wNext[j]= new TH1D(name2,"",nResponseBins*6,0,// j<7?600:
+				    1200);
 
 
     TString name_1 = "pt_1_trg"+to_string(triggerVal[j]);
@@ -88,8 +92,10 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check, bool useHF){
     TString name_HF = "pt_ave_trg"+to_string(triggerVal_HF[j]);
     TString name2_HF = "pt_ave_wNext_trg"+to_string(triggerVal_HF[j]);
 
-    hdata_pt_ave_HF[j]= new TH1D(name_HF,"",nResponseBins*6,0,j<7?600:1200);
-    hdata_pt_ave_wNext_HF[j]= new TH1D(name2_HF,"",nResponseBins*6,0,j<7?600:1200);
+    hdata_pt_ave_HF[j]= new TH1D(name_HF,"",nResponseBins*6,0,// j<7?600:
+				 1200);
+    hdata_pt_ave_wNext_HF[j]= new TH1D(name2_HF,"",nResponseBins*6,0,// j<7?600:
+				       1200);
 
 
     TString name_1_HF = "pt_1_trg"+to_string(triggerVal_HF[j]);
@@ -441,9 +447,59 @@ void CorrectionObject::Derive_Thresholds_DiJet(bool pt_check, bool useHF){
 
   }
 
+    //all in one plot
+    TLegend *leg3 = new TLegend(0.6,0.15,0.8,0.45);
+    leg3 -> SetBorderSize(0);
+    leg3 -> SetTextSize(0.035);
+    leg3 -> SetFillColor(0);
+    
+    TCanvas* c5 = new TCanvas("trig_central","",0,0,800,600);
+    gStyle->SetOptStat(0);
+    c5->SetFrameFillColor(0);
+
+    for(int i=0; i<n_trigger-1; i++){
+           TString fitname = "fit";
+      fitname +=  to_string(triggerVal[i+1]);
+      double N_func = ptave_data_eff[i]->GetFunction(fitname)->GetParameter(2);
+      ptave_data_eff[i]->Scale(1./N_func);
+      ptave_data_eff[i]->RebinX(5);
+      ptave_data_eff[i]->Scale(1./5.);
+      ptave_data_eff[i]->GetFunction(fitname)->SetBit(TF1::kNotDraw);
+      
+      if(i==0){
+	ptave_data_eff[i]->GetYaxis()->SetTitle("#epsilon");
+	ptave_data_eff[i]->GetYaxis()->SetTitleOffset(1.1);
+	ptave_data_eff[i]->GetXaxis()->SetTitle("p_{T}^{ave} [GeV]");
+	ptave_data_eff[i]->GetXaxis()->SetTitleOffset(1.1);
+      	ptave_data_eff[i]->SetMaximum(1.5);
+	ptave_data_eff[i]->SetMinimum(0);
+      }
+      
+      ptave_data_eff[i]->SetMarkerStyle(20);
+      ptave_data_eff[i]->SetMarkerColor(kRed-i*5);
+      ptave_data_eff[i]->Draw("P X0 SAME");
+      
+      TString fitname_n= fitname+"_norm";
+      TF1* func_1 =  new TF1(fitname_n,SmoothFit,0,
+		      1200 ,3);
+      func_1->SetParameters(ptave_data_eff[i]->GetFunction(fitname)->GetParameter(0),ptave_data_eff[i]->GetFunction(fitname)->GetParameter(1), 1.);
+
+      func_1->SetLineColor(kRed-i*5);
+      func_1->Draw("SAME");
+
+      TLine * line = new TLine(all_thresholds[i+1], 0,all_thresholds[i+1], 1.5);
+      line->SetLineStyle(2);
+      line->Draw("SAME");
+      
+      leg3 -> AddEntry(ptave_data_eff[i],TString("HLT_DiPFJetAve"+to_string(triggerValDi[i+1])),"p");
+      
+    }
+	leg3->Draw("SAME");
+	c5->Print(CorrectionObject::_outpath+"plots/thresholds/"+"HLT_DiPFJetAve_all.pdf","pdf");
 
 
 
+	
     if(useHF){
 
 

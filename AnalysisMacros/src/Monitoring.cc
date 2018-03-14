@@ -23,9 +23,9 @@
 
 using namespace std;
 
-const int n_input_Di = 5;
-const int Fit_range_Di[n_input_Di+1] = {0, 4800,14500, 18900, 25000, 42000};
-const TString Name_range_Di[n_input_Di] = {"B", "C", "D", "E", "F"};
+const int n_input_Di = 3;
+const int Fit_range_Di[n_input_Di+1] = {14500, 18900, 28000, 42000};
+const TString Name_range_Di[n_input_Di] = { "D", "E", "F"};
 
 const int n_input_Si = 3;
 const int Fit_range_Si[n_input_Si+1] = {0, 4800, 14500, 18900};
@@ -212,7 +212,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
   cout<<"Setup canvas and draw several TGraphs"<<endl;
 
 
-  TLine* ave = new TLine(0,1,Fit_range[n_input],1);
+  TLine* ave = new TLine(Fit_range[0],1,Fit_range[n_input],1);
   
   // TLine* lineB = new TLine(5750, 0.82, 5750, 1.42);
   // lineB -> SetLineStyle(2);

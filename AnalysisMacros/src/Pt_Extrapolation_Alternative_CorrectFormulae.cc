@@ -292,13 +292,14 @@ for(int j=0; j<n_eta-1; j++){
   for(int j=0; j<n_eta-1; j++) graph_filled[j] = false;
   for(int j=0; j<n_eta-1; j++){
     graph1_mpf[j] = new TGraphErrors(n_pt-1, xbin_tgraph[j], ratio_mpf[j], zero[j], err_ratio_mpf[j]);
+    graph1_mpf[j]->SetTitle("");
     graph1_mpf[j] = (TGraphErrors*)CleanEmptyPoints(graph1_mpf[j]); 
     if(graph1_mpf[j]->GetN() > 0) graph_filled[j] = true;
   }
 
   // create horizontal line for plotting ("ideal value")
-  TLine *line = new TLine(0.,1,pt_bins[n_pt-1]+10,1);
-
+  // TLine *line = new TLine(0.,1,pt_bins[n_pt-1]+10,1);
+  TLine *line = new TLine(0.,1,pt_bins[n_pt-2]+10,1);
   // create a function for the loglinear fit
   TF1 * f1[n_eta-1];
   // create a function for the constant fit
@@ -390,10 +391,13 @@ for(int j=0; j<n_eta-1; j++){
    
     graph1_mpf[j]->Draw("AP");
     if(graph_filled[j]){
-      graph1_mpf[j]->GetXaxis()->SetTitle("#bar{p}_{T} [GeV]");
+      graph1_mpf[j]->GetXaxis()->SetTitle("p_{T}^{ave} [GeV]");
       graph1_mpf[j]->GetXaxis()->SetTitleSize(0.05);
       graph1_mpf[j]->GetXaxis()->SetTitleOffset(0.80);
       graph1_mpf[j]->GetXaxis()->SetLimits(30,(eta_cut_bool?pt_bins_HF:pt_bins)[n_pt_cutted-1]+100);
+      graph1_mpf[j]->GetYaxis()->SetTitle("(R^{MC}/R^{data})");
+      graph1_mpf[j]->GetYaxis()->SetTitleSize(0.05);
+      graph1_mpf[j]->GetYaxis()->SetTitleOffset(0.80);
       graph1_mpf[j]->GetYaxis()->SetRangeUser(0.85,1.25);
     }
  
@@ -440,10 +444,10 @@ for(int j=0; j<n_eta-1; j++){
     leg1->SetLineColor(1);
     leg1->SetTextFont(42);
     if(mpfMethod){
-      leg1->SetHeader("MPF #bar{p}_{T} extrapolation, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
+      leg1->SetHeader("MPF p_{T}^{ave} extrapolation, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
     }
     else{
-      leg1->SetHeader("p_{T} balance #bar{p}_{T} extrapolation, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
+      leg1->SetHeader("p_{T} balance p_{T}^{ave} extrapolation, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]);
     }
 
 
@@ -540,9 +544,9 @@ for(int j=0; j<n_eta-1; j++){
     hist_kfsr_mpf = (TH1D*)kfsr_mpf->Get("kfsr_mpf");
 
     //fit the kFSR values
-    TF1 *kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.);   //Range: 0,5. by default
+    TF1 *kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19);   //Range: 0,5. by default
 
-    bool fit_fullrange = false;
+    bool fit_fullrange = true; //TODO works for RunD check rest;
     bool fit_285       = false;
  
     //VERY fragile fit, carefully set initial values
@@ -572,13 +576,14 @@ for(int j=0; j<n_eta-1; j++){
     std::cout<<"!!! kFSR MPF fit !!!"<<std::endl;
     std::cout<<hist_kfsr_mpf->GetEntries()<<std::endl;
     
-    if(!fit_fullrange && !fit_285) hist_kfsr_mpf->Fit("kfsr_fit_mpf","SR","",0,3.14);
-    else if(!fit_fullrange && fit_285) hist_kfsr_mpf->Fit("kfsr_fit_mpf","SR","",0,2.85);
-    else hist_kfsr_mpf->Fit("kfsr_fit_mpf","SR","",0,5.19);
+    if(!fit_fullrange && !fit_285) hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,3.14);
+    else if(!fit_fullrange && fit_285) hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,2.85);
+    else hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,5.19);
 
     std::cout<<"Create a histogram to hold the confidence intervals\n";
     
     hist_kfsr_fit_mpf = (TH1D*)hist_kfsr_mpf->Clone();
+    // hist_kfsr_fit_mpf = new TH1D("hist_kfsr_fit_mpf","",hist_kfsr_mpf->GetNbinsX(),hist_kfsr_mpf->GetMinimumBin(),hist_kfsr_mpf->GetMaximumBin());
     (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hist_kfsr_fit_mpf);
     //Now the "hist_kfsr_fit" histogram has the fitted function values as the
     //bin contents and the confidence intervals as bin errors
@@ -871,10 +876,10 @@ for(int j=0; j<n_eta-1; j++){
     hist_kfsr_dijet = (TH1D*)kfsr_dijet->Get("kfsr_dijet");
     
     //kFSR fit function
-    TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.); //Range: 0,5. by default
+    TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19); //Range: 0,5. by default
     
     //Be carefull with fit range!
-    bool fit_fullrange = false;
+    bool fit_fullrange = true; //TODO check for BCEF, works for Run D
     bool fit_285 = false;
   
     //Very fragile fit! tune the initial values for the fit
@@ -902,15 +907,18 @@ for(int j=0; j<n_eta-1; j++){
       }
     }
     else throw runtime_error("PTextrapolation: Invalid generator specified.");
-
+    
+    kfsr_fit_dijet->SetParameters(1,0.03,0.5);
+      
     //Finally perform the fit 
     kfsr_fit_dijet->SetLineColor(kBlue+1);
     std::cout<<"------ !!! kFSR pT-balance fit !!! ------"<<std::endl;
-    if(fit_fullrange) hist_kfsr_dijet->Fit("kfsr_fit_dijet","SR","",0,5.);
-    else if(!fit_285) hist_kfsr_dijet->Fit("kfsr_fit_dijet","SR","",0,2.65);
-    else              hist_kfsr_dijet->Fit("kfsr_fit_dijet","SR","",0,2.85);
+    if(fit_fullrange) hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,5.19);
+    else if(!fit_285) hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,2.65);
+    else              hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,2.85);
  
-    //Create a histogram to hold the confidence intervals  
+    //Create a histogram to hold the confidence intervals
+    // hist_kfsr_fit_dijet = new TH1D("hist_kfsr_fit_dijet","",hist_kfsr_dijet->GetNbinsX(),hist_kfsr_dijet->GetMinimumBin(),hist_kfsr_dijet->GetMaximumBin());
     hist_kfsr_fit_dijet = (TH1D*)hist_kfsr_dijet->Clone();
     (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hist_kfsr_fit_dijet);
     //Now the "hist_kfsr_fit" histogram has the fitted function values as the

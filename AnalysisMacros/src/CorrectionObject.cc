@@ -96,25 +96,17 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
       //lumitags
       if(_runnr == "BCD_old")    _lumitag      = "RunBCD  12.9 fb^{-1}";
       else if(_runnr == "G") _lumitag      = "RunG  7.6 fb^{-1}";
-      else if(_runnr == "B") _lumitag      = "RunB  TODO fb^{-1}";
-      else if(_runnr == "BC") _lumitag      = "RunBC 8.3 fb^{-1}";   //2017! 
+      else if(_runnr == "B") _lumitag      = "RunB  4.8 fb^{-1}";
+      else if(_runnr == "BC") _lumitag      = "RunBC 14.4 fb^{-1}";   //2017! 
       //FIXME differentiate between 2016 (5.8 fb^{-1}) and 2017
-      else if(_runnr == "C") _lumitag      = "RunC  TODO fb^{-1}";
-      else if(_runnr == "D") _lumitag      = "RunD  TODO fb^{-1}";
-      else if(_runnr == "E") _lumitag      = "RunE  TODO fb^{-1}";
-      else if(_runnr == "F") _lumitag      = "RunF  TODO fb^{-1}";
-      else if(_runnr == "G") _lumitag      = "RunG  7.6 fb^{-1}";
-      else if(_runnr == "Fearly") _lumitag = "RunFearly  2.7 fb^{-1}";
-      else if(_runnr == "EFearly") _lumitag = "RunEFearly  6.8 fb^{-1}";
-      else if(_runnr == "Flate") _lumitag = "RunFlate  0.4 fb^{-1}";
-      else if(_runnr == "FlateG") _lumitag = "RunFlateG  8.0 fb^{-1}";
-      else if(_runnr == "FlateGH") _lumitag = "RunFlateGH  X.X fb^{-1}";
-      else if(_runnr == "H") _lumitag = "RunH  8.5 fb^{-1}";
-      else if(_runnr == "BCDEFearly") _lumitag = "RunBCDEFearly  19.7 fb^{-1}";
-      else if(_runnr == "BCDEFGH") _lumitag = "RunBCDEFGH  36.8 fb^{-1}";
-      else if(_runnr == "DE") _lumitag      = "RunDE  TODO fb^{-1}"; 
-      else if(_runnr == "DEF") _lumitag      = "RunDEF  TODO fb^{-1}"; 
-      else if(_runnr == "BCD") _lumitag      = "RunBCD  TODO fb^{-1}";
+      else if(_runnr == "C") _lumitag      = "RunC  9.6 fb^{-1}";
+      else if(_runnr == "D") _lumitag      = "RunD  4.2 fb^{-1}";
+      else if(_runnr == "E") _lumitag      = "RunE  9.3 fb^{-1}";
+      else if(_runnr == "F") _lumitag      = "RunF  13.5 fb^{-1}";
+      else if(_runnr == "DE") _lumitag      = "RunDE  13.5 fb^{-1}"; 
+      else if(_runnr == "DEF") _lumitag      = "RunDEF  26.9 fb^{-1}"; 
+      else if(_runnr == "BCD") _lumitag      = "RunBCD  18.6 fb^{-1}";
+      else if(_runnr == "BCDEF") _lumitag      = "RunBCD  41.3 fb^{-1}";
       else throw runtime_error("In constructor: Invalid RunNr. specified.");
     }
 

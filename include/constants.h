@@ -59,11 +59,10 @@ const TString pt_range_HF[n_pt_HF]={
   "1000","2000"};
 
 
-const int n_pt_Si = 13;
+const int n_pt_Si = 12;
 
 /* //SingleJet triggers highest ------------- */
 const double pt_bins_Si[n_pt_Si] = {
-  40 ,
   40 ,
   72 ,
   95 ,
@@ -76,7 +75,6 @@ const double pt_bins_Si[n_pt_Si] = {
   606,1000,2000};
 
 const TString pt_range_Si[n_pt_Si]={
-  "40",
   "40",
   "72",
   "95",
@@ -105,7 +103,7 @@ constexpr static float s_delta_phi = 2.7;
 // cut on the asymmetry for events with two jets  |(j2->pt - j1->pt /(j2->pt + j1->pt)| < 0.70
 // constexpr static float s_asymm = 0.7;
 
-constexpr static float s_asymm = 1.;
+constexpr static float s_asymm = 1.; //FIXME change back to 0.7?
 
  // cut on the asymmetry for events with two jets  |(j2->pt - j1->pt /(j2->pt + j1->pt)| < 0.2
 /* constexpr static float s_asymm = 0.2; */

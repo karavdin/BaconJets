@@ -135,6 +135,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    TTreeReaderValue<Float_t> weight_mc(myReader_MC, "weight");
    idx = 0;
 
+   //TODO make a option to load MC rel responses instead of calculating them every time
    while (myReader_MC.Next()) {
      for(int j=0; j<n_eta-1; j++){
        if(fabs(*probejet_eta_mc)>eta_bins[j+1] || fabs(*probejet_eta_mc)<eta_bins[j]) continue;
@@ -440,7 +441,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        graph_rel_r[j][i]->SetMarkerSize(1.3);
        graph_rel_r[j][i]->GetYaxis()->SetRangeUser(0.92,1.08);
        graph_rel_r[j][i]->GetXaxis()->SetRangeUser(0,alpha_bins[n_alpha-1]+0.01);
-       graph_rel_r[j][i]->GetYaxis()->SetTitle("(R_{MC}/R_{DATA})");
+       graph_rel_r[j][i]->GetYaxis()->SetTitle("#frac{(R_{MC}/R_{DATA})}{(R_{MC}/R_{DATA})|_{#alpha<0.3}}");
        graph_rel_r[j][i]->GetXaxis()->SetTitle("cut on #alpha");
 
        graph_rel_r[j][i]->Draw("AP");
