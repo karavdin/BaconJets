@@ -204,7 +204,7 @@ void CorrectionObject::L2ResOutput(){
   TCanvas *c4 = new TCanvas();
   tdrCanvas(c4,"L2res_kFSRfit",h,4,10,kSquare,CorrectionObject::_lumitag);
   h->GetYaxis()->SetTitle("Relative correction");
-  h->GetYaxis()->SetRangeUser(0.8,1.2);
+  h->GetYaxis()->SetRangeUser(0.81,1.15);
   res_const_mpf_kfsrfit->SetMarkerStyle(1);
   res_const_dijet_kfsrfit->SetMarkerStyle(1);
   res_logpt_mpf_kfsrfit->SetMarkerStyle(1);
@@ -221,7 +221,7 @@ void CorrectionObject::L2ResOutput(){
  TCanvas *c10 = new TCanvas();
   tdrCanvas(c10,"L2res_kFSRfit",h,4,10,kSquare,CorrectionObject::_lumitag);
   h->GetYaxis()->SetTitle("Relative correction");
-  h->GetYaxis()->SetRangeUser(0.8,1.2);
+  h->GetYaxis()->SetRangeUser(0.81,1.15);
   res_const_mpf_kfsrfit_val->SetMarkerStyle(1);
   res_const_dijet_kfsrfit_val->SetMarkerStyle(1);
   res_logpt_mpf_kfsrfit_val->SetMarkerStyle(1);

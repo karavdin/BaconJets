@@ -299,7 +299,7 @@ int main(int argc,char *argv[]){
   
   TString generator    = "pythia";
   bool    closure_test    = false;
-  bool    trigger_fwd     = false;     //Use for Weight Calc
+  bool    trigger_fwd     = false;     //Use for Weight Calc and MC path selection, atm the path form here is used if(_trigger_central && !_trigger_fwd) 
   bool    trigger_central = true;     //Use for Weight Calc
   TString collection    = "AK4CHS";
 
@@ -330,8 +330,8 @@ int main(int argc,char *argv[]){
   input_path += dataname_end + ".root";
   }
   
-  TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; 
-  //  TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2ResTest_PUpthat/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
+  TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; //used as output path of CalculateMCWeights_TriggerThresholds
+  // TString input_path_MC = "/nfs/dust/cms/user/multh/JEC/2016Legacy/Residuals/Summer16_07Aug2017_V5/AK4CHS/MC_NoReweighted_CentralFWD_NewBinning/uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_AK4CHS_RunBCDEFGH.root";
   TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2Res_wMPF_CentralTriggersONLY/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
   
   TString outpath_postfix = (dataname_end!="") ? "_" : "";

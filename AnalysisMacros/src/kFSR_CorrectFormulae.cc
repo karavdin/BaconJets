@@ -33,6 +33,22 @@ void CorrectionObject::kFSR_CorrectFormulae(){
   int n_pt_ = max(n_pt,n_pt_HF);
   bool eta_cut_bool;
   int n_pt_cutted;
+
+ 
+  //get MC response
+  double rel_r_mc[n_pt_-1][n_eta-1][n_alpha];
+  double err_rel_r_mc[n_pt_-1][n_eta-1][n_alpha];
+ 
+  double mpf_r_mc[n_pt_-1][n_eta-1][n_alpha];
+  double err_mpf_r_mc[n_pt_-1][n_eta-1][n_alpha];
+ 
+  //get DATA response
+  double rel_r_data[n_pt_-1][n_eta-1][n_alpha];
+  double err_rel_r_data[n_pt_-1][n_eta-1][n_alpha];
+ 
+  double mpf_r_data[n_pt_-1][n_eta-1][n_alpha];
+  double err_mpf_r_data[n_pt_-1][n_eta-1][n_alpha];
+ 
   
 // get ratio for MC to DATA responses
   double ratio_al_rel_r[n_pt_-1][n_eta-1][n_alpha]; //ratio at pt,eta,alpha bins
@@ -63,6 +79,16 @@ void CorrectionObject::kFSR_CorrectFormulae(){
     for(int j=0; j<n_eta-1; j++){
       eta_cut_bool = fabs(eta_bins[j])>eta_cut;
       for(int k= 0 ; k < n_pt_-1  ; k++ ){
+	rel_r_mc[k][j][i] = 0;      
+	err_rel_r_mc[k][j][i] = 0;  
+	mpf_r_mc[k][j][i] = 0;      
+	err_mpf_r_mc[k][j][i] = 0;  
+                                  
+	rel_r_data[k][j][i] = 0;    
+	err_rel_r_data[k][j][i] = 0;
+	mpf_r_data[k][j][i] = 0;    
+	err_mpf_r_data[k][j][i] = 0;
+	
 	ratio_al_rel_r[k][j][i] = 0;
 	err_ratio_al_rel_r[k][j][i] = 0;
 	ratio_al_mpf_r[k][j][i] = 0;
@@ -250,6 +276,20 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 	 double err_rel_mc = 2/(pow((1-pr_mc_asymmetry[j][i]->GetBinContent(k+1)),2)) * pr_mc_asymmetry[j][i]->GetBinError(k+1);
 	 double err_rel_data = 2/(pow((1-pr_data_asymmetry[j][i]->GetBinContent(k+1)),2)) * pr_data_asymmetry[j][i]->GetBinError(k+1);
 
+
+	 //MC responses
+	 rel_r_mc[k][j][i] = rel_mc;
+	 err_rel_r_mc[k][j][i] = err_rel_mc;
+	 mpf_r_mc[k][j][i] = mpf_mc;
+	 err_mpf_r_mc[k][j][i] = err_mpf_mc;
+	 
+	 //DATA responses
+	 rel_r_data[k][j][i] = rel_data;
+	 err_rel_r_data[k][j][i] = err_rel_data;
+	 mpf_r_data[k][j][i] = mpf_data;
+	 err_mpf_r_data[k][j][i] = err_mpf_data;
+
+	 
 	 //ratio of responses, again gaussian error propagation
 	 if(rel_data > 0){
 	   ratio_al_rel_r[k][j][i] = rel_mc/rel_data;
@@ -294,7 +334,14 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        }
      }
    }
-  
+   
+   // Build the Multigraphs containing the responses (MC and DATA) as a function of alpha
+   TGraphErrors *graph_rel_r_mc[n_pt_-1][n_eta-1];  //set of points vs alpha
+   TGraphErrors *graph_mpf_r_mc[n_pt_-1][n_eta-1];  //set of points vs alpha
+
+   TGraphErrors *graph_rel_r_data[n_pt_-1][n_eta-1];  //set of points vs alpha
+   TGraphErrors *graph_mpf_r_data[n_pt_-1][n_eta-1];  //set of points vs alpha
+ 
    // Build the Multigraphs containing the ratio of responses (MC/DATA) as a function of alpha
    TGraphErrors *graph_rel_r[n_pt_-1][n_eta-1];  //set of points vs alpha
    TMultiGraph *pTgraph_rel_r[n_eta-1];         //set of different pT bins in on eta bin
@@ -322,6 +369,12 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    leg1_HF->SetTextFont(42);
    leg1_HF->SetNColumns(2);
 
+    
+   //dummy for tdrCanvas
+   TH1D *h = new TH1D("h",";dummy;",41,0,5.191);
+   h->SetMaximum(1.2);
+   h->SetMinimum(0.8);  
+
    
    double xbin_tgraph[n_alpha],zero[n_alpha];
    for(int i=0;i<n_alpha;i++){
@@ -329,7 +382,131 @@ void CorrectionObject::kFSR_CorrectFormulae(){
      zero[i] = 0;
    }
 
-
+    TCanvas* c_rel_r[n_eta-1][n_pt_-1];
+    TCanvas* c_mpf_r[n_eta-1][n_pt_-1];
+    TString name_rel_r[n_eta-1][n_pt_-1];
+    TString name_mpf_r[n_eta-1][n_pt_-1];
+ 
+    for(int j=0; j<n_eta-1; j++){
+      for(int k = 1 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){ 
+        graph_rel_r_mc[k][j] = new TGraphErrors(n_alpha,xbin_tgraph,rel_r_mc[k][j],zero,err_rel_r_mc[k][j]);
+        graph_rel_r_mc[k][j] = (TGraphErrors*)CleanEmptyPoints(graph_rel_r_mc[k][j]);
+        graph_mpf_r_mc[k][j] = new TGraphErrors(n_alpha,xbin_tgraph,mpf_r_mc[k][j],zero,err_mpf_r_mc[k][j]);
+        graph_mpf_r_mc[k][j] = (TGraphErrors*)CleanEmptyPoints(graph_mpf_r_mc[k][j]);
+ 
+        graph_rel_r_data[k][j] = new TGraphErrors(n_alpha,xbin_tgraph,rel_r_data[k][j],zero,err_rel_r_data[k][j]);
+        graph_rel_r_data[k][j] = (TGraphErrors*)CleanEmptyPoints(graph_rel_r_data[k][j]);
+        graph_mpf_r_data[k][j] = new TGraphErrors(n_alpha,xbin_tgraph,mpf_r_data[k][j],zero,err_mpf_r_data[k][j]);
+        graph_mpf_r_data[k][j] = (TGraphErrors*)CleanEmptyPoints(graph_mpf_r_data[k][j]);
+ 
+        graph_rel_r_mc[k][j]->SetMarkerSize(1.5);
+        graph_rel_r_mc[k][j]->SetMarkerColor(kRed);
+        graph_rel_r_mc[k][j]->SetLineColor(kRed);
+        graph_rel_r_mc[k][j]->SetMarkerStyle(20);
+        graph_rel_r_mc[k][j]->SetTitle("");
+ 
+        graph_mpf_r_mc[k][j]->SetMarkerSize(1.5);
+        graph_mpf_r_mc[k][j]->SetMarkerColor(kRed);
+        graph_mpf_r_mc[k][j]->SetLineColor(kRed);
+        graph_mpf_r_mc[k][j]->SetMarkerStyle(20);
+        graph_mpf_r_mc[k][j]->SetTitle("");
+ 
+        graph_rel_r_data[k][j]->SetMarkerSize(1.5);
+        graph_rel_r_data[k][j]->SetMarkerColor(kBlack);
+        graph_rel_r_data[k][j]->SetLineColor(kBlack);
+        graph_rel_r_data[k][j]->SetMarkerStyle(20);
+        graph_rel_r_data[k][j]->SetTitle("");
+ 
+        graph_mpf_r_data[k][j]->SetMarkerSize(1.5);
+        graph_mpf_r_data[k][j]->SetMarkerColor(kBlack);
+        graph_mpf_r_data[k][j]->SetLineColor(kBlack);
+        graph_mpf_r_data[k][j]->SetMarkerStyle(20);
+        graph_mpf_r_data[k][j]->SetTitle("");
+ 
+        name_rel_r[j][k]="rel_r_alpha_"+eta_range[j]+"_"+eta_range[j+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1];
+        c_rel_r[j][k] = new TCanvas(name_rel_r[j][k], name_rel_r[j][k], 850,700);
+ 
+        m_gStyle->SetOptTitle(0);
+  
+        graph_rel_r_mc[k][j]->Draw("AP");
+        graph_rel_r_data[k][j]->Draw("P SAME");
+ 
+        graph_rel_r_mc[k][j]->GetYaxis()->SetRangeUser(0.8,1.2);
+        graph_rel_r_mc[k][j]->GetXaxis()->SetRangeUser(0,alpha_bins[n_alpha-1]+0.01);
+        graph_rel_r_mc[k][j]->GetYaxis()->SetTitle("R_{p_{T}-balance}");
+        graph_rel_r_mc[k][j]->GetYaxis()->SetTitleSize(0.045);
+        graph_rel_r_mc[k][j]->GetYaxis()->SetTitleOffset(1.);
+        graph_rel_r_mc[k][j]->GetXaxis()->SetTitle("cut on #alpha");
+        graph_rel_r_mc[k][j]->GetXaxis()->SetTitleSize(0.045);
+ 
+        graph_rel_r_data[k][j]->GetYaxis()->SetRangeUser(0.8,1.2);
+        graph_rel_r_data[k][j]->GetXaxis()->SetRangeUser(0,alpha_bins[n_alpha-1]+0.01);
+        graph_rel_r_data[k][j]->GetYaxis()->SetTitle("R_{p_{T}-balance}");
+        graph_rel_r_data[k][j]->GetYaxis()->SetTitleSize(0.045);
+        graph_rel_r_data[k][j]->GetYaxis()->SetTitleOffset(1.);
+        graph_rel_r_data[k][j]->GetXaxis()->SetTitle("cut on #alpha");
+        graph_rel_r_data[k][j]->GetXaxis()->SetTitleSize(0.045);
+ 
+        
+        TLegend* leg_rel = new TLegend(0.25,0.6,0.41,0.85,"","brNDC");//x+0.1
+        leg_rel->SetBorderSize(0);
+        leg_rel->SetTextSize(0.038);
+        leg_rel->SetFillColor(10);
+        leg_rel->SetFillStyle(0);
+        leg_rel->SetLineColor(1);
+        leg_rel->SetTextFont(42);
+        leg_rel->SetHeader("Rel response, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]+", "+(eta_cut_bool?pt_range_HF:pt_range)[k]+"#leq p_{T}<"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]);
+        leg_rel->AddEntry(graph_rel_r_mc[k][j], "R^{MC}","P");
+        leg_rel->AddEntry(graph_rel_r_data[k][j], "R^{DATA}","P");
+        leg_rel->Draw("SAME");
+        
+        //tex->DrawLatex(0.53,0.91,CorrectionObject::_lumitag+"(13TeV)");
+        
+        c_rel_r[j][k]->SaveAs(CorrectionObject::_outpath+"plots/control/Rel_ResponseVsAlpha_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]+".pdf");
+ 
+        name_mpf_r[j][k]="mpf_r_alpha_"+eta_range[j]+"_"+eta_range[j+1]+"_pT_"+pt_range[k]+"_"+pt_range[k+1];
+        c_mpf_r[j][k] = new TCanvas(name_mpf_r[j][k], name_mpf_r[j][k], 850,700);
+ 
+        m_gStyle->SetOptTitle(0);
+  
+        graph_mpf_r_mc[k][j]->Draw("AP");
+        graph_mpf_r_data[k][j]->Draw("P SAME");
+ 
+        graph_mpf_r_mc[k][j]->GetYaxis()->SetRangeUser(0.8,1.2);
+        graph_mpf_r_mc[k][j]->GetXaxis()->SetRangeUser(0,alpha_bins[n_alpha-1]+0.01);
+        graph_mpf_r_mc[k][j]->GetYaxis()->SetTitle("R_{MPF}");
+        graph_mpf_r_mc[k][j]->GetYaxis()->SetTitleSize(0.045);
+        graph_mpf_r_mc[k][j]->GetYaxis()->SetTitleOffset(1.);
+        graph_mpf_r_mc[k][j]->GetXaxis()->SetTitle("cut on #alpha");
+        graph_mpf_r_mc[k][j]->GetXaxis()->SetTitleSize(0.045);
+ 
+        graph_mpf_r_data[k][j]->GetYaxis()->SetRangeUser(0.8,1.2);
+        graph_mpf_r_data[k][j]->GetXaxis()->SetRangeUser(0,alpha_bins[n_alpha-1]+0.01);
+        graph_mpf_r_data[k][j]->GetYaxis()->SetTitle("R_{MPF}");
+        graph_mpf_r_data[k][j]->GetYaxis()->SetTitleSize(0.045);
+        graph_mpf_r_data[k][j]->GetYaxis()->SetTitleOffset(1.);
+        graph_mpf_r_data[k][j]->GetXaxis()->SetTitle("cut on #alpha");
+        graph_mpf_r_data[k][j]->GetXaxis()->SetTitleSize(0.045);
+ 
+        
+        TLegend* leg_mpf = new TLegend(0.25,0.6,0.41,0.85,"","brNDC");//x+0.1
+        leg_mpf->SetBorderSize(0);
+        leg_mpf->SetTextSize(0.038);
+        leg_mpf->SetFillColor(10);
+        leg_mpf->SetFillStyle(0);
+        leg_mpf->SetLineColor(1);
+        leg_mpf->SetTextFont(42);
+        leg_mpf->SetHeader("MPF response, "+eta_range[j]+"#leq|#eta|<"+eta_range[j+1]+", "+(eta_cut_bool?pt_range_HF:pt_range)[k]+"#leq p_{T}<"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]);
+        leg_mpf->AddEntry(graph_mpf_r_mc[k][j], "R^{MC}","P");
+        leg_mpf->AddEntry(graph_mpf_r_data[k][j], "R^{DATA}","P");
+        leg_mpf->Draw("SAME");
+        
+        //tex->DrawLatex(0.53,0.91,CorrectionObject::_lumitag+"(13TeV)");
+        
+        c_mpf_r[j][k]->SaveAs(CorrectionObject::_outpath+"plots/control/MPF_ResponseVsAlpha_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]+".pdf");
+      } 
+    }
+   
    bool multigraph_rel_empty[n_eta-1];
    bool multigraph_mpf_empty[n_eta-1];
 
