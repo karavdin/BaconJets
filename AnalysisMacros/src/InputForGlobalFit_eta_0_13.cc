@@ -215,6 +215,8 @@ void CorrectionObject::InputForGlobalFit_eta_0_13(){
       }
     }
 
+  CorrectionObject::make_path(std::string((_outpath + "output/").Data()));
+
   //Save results in root file
   TFile* outputfile = new TFile(CorrectionObject::_outpath+"output/JEC_L2_Dijet_"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+"_eta_0_13.root","RECREATE");
   outputfile->Print();

@@ -51,6 +51,7 @@ static void show_usage(std::string name)
 	      << "\t-IGFw\t\tCreate the Global Fit Input plots with wider eta bins.\n"
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
+	      <<"\t--kfsrRange\t\tRneg to which the kFSR fit is performed.The default is 5.19.\n"
       	      <<"\t--input\t\tPath to the input data, if none is given following is used:\n"
 	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/17Nov2017/Residuals/Run17BCD_Data <_mode> /Run17 <run><_dname> .root\n\tThe completion script assumes the same file structure."	    
               << std::endl;
@@ -115,7 +116,8 @@ int main(int argc,char *argv[]){
 				   "-mon",
 				    "-monSi",
 				    "-IGF",
-				    "-IGFw"};
+				    "-IGFw",
+				    "--kfsrRange"};
   
   TString run_nr = "B";
   TString dataname_end = "17Nov17_2017";
@@ -156,6 +158,7 @@ int main(int argc,char *argv[]){
   bool do_IGFw =false;
   TString input_path_="";
   double asym_cut = 0.;
+  double kfsrRange = 5.19;
   for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
 	if(arg=="-h"||arg=="--help"){
@@ -288,6 +291,9 @@ int main(int argc,char *argv[]){
 	      else if(arg=="--input"){
 		input_path_ = argv[i+1];
 	      }
+	      else if(arg=="--kfsrRange"){
+		kfsrRange = stod(argv[i+1]);
+	      }
 	  }
 	}
   }
@@ -319,7 +325,7 @@ int main(int argc,char *argv[]){
       if(use_DE) input_path+="DE";  
       if(use_DEF) input_path+="DEF";     
       if(use_F) input_path+="F";      
-      if(not(use_BC or use_D or use_E or use_DE or use_F or use_DEF)) input_path+="BCD";
+      if(not(use_BC or use_D or use_E or use_DE or use_F or use_DEF)) input_path+="BCDEF";
   // if(muonCrosscheck) input_path+="D";
   input_path+="_Data";
   if(mode!="") input_path+="_";
@@ -346,7 +352,7 @@ int main(int argc,char *argv[]){
  
     cout << "testobject is " << Objects[0] << endl;
 
-    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae();
+    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange);
     if(do_fullPlots or do_JEF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetEnergyFractions();
 
     

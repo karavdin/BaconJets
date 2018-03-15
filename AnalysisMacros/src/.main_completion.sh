@@ -4,11 +4,11 @@ _main()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--help --mode --dname --run -FP -FPeta -MP -OORP -MPd -OORPd -FCP -tCP -lFCP -aFCP -derThreshSi -derThreshSi_ptCheck -derThreshDi -derThreshDi_ptCheck -JEF -BC -D -E -DE -DEF -F -LP -aAP -aAPef -TEC -mu --muTrg --asym_cut --input --outSuffix -useHF -NPVEta -mon -monSi -IGF -IGFw"
+    opts="--help --mode --dname --run -FP -FPeta -MP -OORP -MPd -OORPd -FCP -tCP -lFCP -aFCP -derThreshSi -derThreshSi_ptCheck -derThreshDi -derThreshDi_ptCheck -JEF -BC -D -E -DE -DEF -F -LP -aAP -aAPef -TEC -mu --muTrg --asym_cut --input --outSuffix -useHF -NPVEta -mon -monSi -IGF -IGFw --kfsrRange"
 
     case "${prev}" in
 	--run)
-	    COMPREPLY=( $(compgen -W "B C D DE DEF BC" -- ${cur}) )
+	    COMPREPLY=( $(compgen -W "B C D DE DEF BC BCD BCDEF" -- ${cur}) )
             return 0
             ;;
 	--mode)
@@ -37,6 +37,10 @@ _main()
             ;;	
         *)
         ;;
+	--kfsrRange)
+	    COMPREPLY=( $(compgen -W "2.853" -- ${cur}) )
+            return 0
+            ;;
     esac
 	
     if [[ ${cur} == -* ]] ; then

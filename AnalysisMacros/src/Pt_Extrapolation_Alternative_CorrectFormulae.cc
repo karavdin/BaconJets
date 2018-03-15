@@ -36,7 +36,7 @@
 
 using namespace std;
 
-void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod){
+void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod,double kfsr_fitrange){
   cout << "--------------- Starting Pt_Extrapolation() ---------------" << endl << endl;
   TStyle* m_gStyle = new TStyle();
   m_gStyle->SetOptFit(000);
@@ -544,31 +544,7 @@ for(int j=0; j<n_eta-1; j++){
     hist_kfsr_mpf = (TH1D*)kfsr_mpf->Get("kfsr_mpf");
 
     //fit the kFSR values
-    TF1 *kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19);   //Range: 0,5. by default
-
-    bool fit_fullrange = true; //TODO works for RunD check rest;
-    bool fit_285       = false;
- 
-    //VERY fragile fit, carefully set initial values
-    if(CorrectionObject::_generator == "pythia"){
-
-      if(CorrectionObject::_collection == "AK4CHS"){
-	if(CorrectionObject::_runnr == "BCDEFGH"){
-	  if(!CorrectionObject::_closuretest) kfsr_fit_mpf->SetParameters(1,4,120); //RES
-	  else kfsr_fit_mpf->SetParameters(0.9,2,40); //CLOSURETEST
-	  fit_fullrange = true;
-	}
-	/*
-	if(CorrectionObject::_runnr == "BCD"){
-	  //	  kfsr_fit_mpf->SetParameters(1,100,500);
-	  kfsr_fit_mpf->SetParameters(1,3,-70);      
-	  fit_fullrange = false;
-	  fit_285       = true;
-	}
-	*/
-	}
-      }    
-    else throw runtime_error("PTextrapolation, MPF kFSR-fit: Invalid generator specified.");
+    TF1 *kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19);  
 
     //Finally perform the fit!
     //Be carefull with the fit range!
@@ -576,9 +552,7 @@ for(int j=0; j<n_eta-1; j++){
     std::cout<<"!!! kFSR MPF fit !!!"<<std::endl;
     std::cout<<hist_kfsr_mpf->GetEntries()<<std::endl;
     
-    if(!fit_fullrange && !fit_285) hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,3.14);
-    else if(!fit_fullrange && fit_285) hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,2.85);
-    else hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,5.19);
+    hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,kfsr_fitrange);
 
     std::cout<<"Create a histogram to hold the confidence intervals\n";
     
@@ -878,44 +852,12 @@ for(int j=0; j<n_eta-1; j++){
     //kFSR fit function
     TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19); //Range: 0,5. by default
     
-    //Be carefull with fit range!
-    bool fit_fullrange = true; //TODO check for BCEF, works for Run D
-    bool fit_285 = false;
-  
-    //Very fragile fit! tune the initial values for the fit
-    ///Set Parameter for kFSR Fit (pT-Balance)
-    if(CorrectionObject::_generator == "pythia"){
-       if(CorrectionObject::_collection == "AK4CHS"){ 
-	if(CorrectionObject::_runnr == "BCDEFGH"){
-	  if(!CorrectionObject::_closuretest) kfsr_fit_dijet->SetParameters(-2,360,100); //RES
-	  else kfsr_fit_dijet->SetParameters(1,500,150); //CLOSURETEST
-	  //fit_fullrange = true;
-	  fit_285 = true;
-	}
-	/*
-	//RunBCD
-	if(CorrectionObject::_runnr == "BCD"){ 
-	  if(CorrectionObject::_closuretest) kfsr_fit_dijet->SetParameters(-2,500,150.); //Closure Test
-	  if(!CorrectionObject::_closuretest) kfsr_fit_dijet->SetParameters(6, 700, -100.); //reweighted MC, RES
-	
-	fit_fullrange = false;
-        fit_285 = true;
-	}
-	else kfsr_fit_dijet->SetParameters(0,0,200.); 
-      }
-	*/
-      }
-    }
-    else throw runtime_error("PTextrapolation: Invalid generator specified.");
-    
     kfsr_fit_dijet->SetParameters(1,0.03,0.5);
       
     //Finally perform the fit 
     kfsr_fit_dijet->SetLineColor(kBlue+1);
     std::cout<<"------ !!! kFSR pT-balance fit !!! ------"<<std::endl;
-    if(fit_fullrange) hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,5.19);
-    else if(!fit_285) hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,2.65);
-    else              hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,2.85);
+    hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,kfsr_fitrange);
  
     //Create a histogram to hold the confidence intervals
     // hist_kfsr_fit_dijet = new TH1D("hist_kfsr_fit_dijet","",hist_kfsr_dijet->GetNbinsX(),hist_kfsr_dijet->GetMinimumBin(),hist_kfsr_dijet->GetMaximumBin());

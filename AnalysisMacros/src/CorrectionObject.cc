@@ -94,10 +94,7 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
 
 
       //lumitags
-      if(_runnr == "BCD_old")    _lumitag      = "RunBCD  12.9 fb^{-1}";
-      else if(_runnr == "G") _lumitag      = "RunG  7.6 fb^{-1}";
-      else if(_runnr == "B") _lumitag      = "RunB  4.8 fb^{-1}";
-      else if(_runnr == "BC") _lumitag      = "RunBC 14.4 fb^{-1}";   //2017! 
+      if(_runnr == "BC") _lumitag      = "RunBC 14.4 fb^{-1}";   //2017! 
       //FIXME differentiate between 2016 (5.8 fb^{-1}) and 2017
       else if(_runnr == "C") _lumitag      = "RunC  9.6 fb^{-1}";
       else if(_runnr == "D") _lumitag      = "RunD  4.2 fb^{-1}";
@@ -106,20 +103,20 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
       else if(_runnr == "DE") _lumitag      = "RunDE  13.5 fb^{-1}"; 
       else if(_runnr == "DEF") _lumitag      = "RunDEF  26.9 fb^{-1}"; 
       else if(_runnr == "BCD") _lumitag      = "RunBCD  18.6 fb^{-1}";
-      else if(_runnr == "BCDEF") _lumitag      = "RunBCD  41.3 fb^{-1}";
+      else if(_runnr == "BCDEF") _lumitag      = "RunBCDEF  41.3 fb^{-1}";
       else throw runtime_error("In constructor: Invalid RunNr. specified.");
     }
 
-void CorrectionObject::FullCycle_CorrectFormulae(){
+void CorrectionObject::FullCycle_CorrectFormulae(double kfsr_fitrange){
   std::cout<<"Doing the Full Cycle"<<std::endl;
   std::cout<<"\nStarting ControlPlots()\n"<<std::endl;
   CorrectionObject::ControlPlots();  
   std::cout<<"\nStarting kFSR_CorrectFormulae()\n"<<std::endl;
   CorrectionObject::kFSR_CorrectFormulae();
-  std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(true)\n"<<std::endl;
-  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(true);
-  std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(false)\n"<<std::endl;
-  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(false);
+  std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(true) with fitrange "<< kfsr_fitrange <<" \n"<<std::endl;
+  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(true,kfsr_fitrange);
+  std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(false) with fitrange "<< kfsr_fitrange <<" \n"<<std::endl;
+  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(false,kfsr_fitrange);
   std::cout<<"\nStarting L2ResOutput()\n"<<std::endl;
   CorrectionObject::L2ResOutput();
   std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;

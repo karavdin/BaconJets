@@ -27,9 +27,9 @@ const int n_input_Di = 3;
 const int Fit_range_Di[n_input_Di+1] = {14500, 18900, 28000, 42000};
 const TString Name_range_Di[n_input_Di] = { "D", "E", "F"};
 
-const int n_input_Si = 3;
-const int Fit_range_Si[n_input_Si+1] = {0, 4800, 14500, 18900};
-const TString Name_range_Si[n_input_Si] = {"B", "C", "D"};
+const int n_input_Si = 5;
+const int Fit_range_Si[n_input_Si+1] = {0, 4800, 14500, 18900,28000, 42000};
+const TString Name_range_Si[n_input_Si] = {"B", "C", "D", "E", "F"};
 
 void Save_2D_Plot(TH2D* hist, TString Method, TString Runnr, TString input_path){
 
@@ -224,6 +224,16 @@ void CorrectionObject::Monitoring(bool SiRuns){
   line2 -> SetLineStyle(2);
   TLine* line3 = new TLine(Fit_range[2], 0.82, Fit_range[2],1.42);
   line3 -> SetLineStyle(2);
+  TLine* line4;
+  TLine* line5;
+  if(n_input>3){
+      line4 = new TLine(Fit_range[3], 0.82, Fit_range[3],1.42);
+      line4 -> SetLineStyle(2);
+  }
+  if(n_input>4){
+      line5 = new TLine(Fit_range[4], 0.82, Fit_range[4],1.42);
+      line5 -> SetLineStyle(2);
+  }
   
   // TLine* lineB_ratio = new TLine(5750, 0.86, 5750, 1.14);
   // lineB_ratio -> SetLineStyle(2);
@@ -235,7 +245,17 @@ void CorrectionObject::Monitoring(bool SiRuns){
   line2_ratio -> SetLineStyle(2);
   TLine* line3_ratio = new TLine(Fit_range[2], 0.86, Fit_range[2],1.14);
   line3_ratio -> SetLineStyle(2);
-
+  TLine* line4_ratio;
+  TLine* line5_ratio;
+  if(n_input>3){
+      line4_ratio = new TLine(Fit_range[3], 0.82, Fit_range[3],1.42);
+      line4_ratio -> SetLineStyle(2);
+  }
+  if(n_input>4){
+      line5_ratio = new TLine(Fit_range[4], 0.82, Fit_range[4],1.42);
+      line5_ratio -> SetLineStyle(2);
+  }
+  
   TLatex *tex1 = new TLatex();
   tex1->SetNDC();
   tex1->SetTextFont(42);
@@ -288,6 +308,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
 	else if(i==1){  rel_res[i][j][k]->SetLineColor(kViolet); rel_res[i][j][k]->SetMarkerColor(kViolet);}
 	else if(i==2){  rel_res[i][j][k]->SetLineColor(kGreen);  rel_res[i][j][k]->SetMarkerColor(kGreen);}
 	else if(i==3){  rel_res[i][j][k]->SetLineColor(kRed);    rel_res[i][j][k]->SetMarkerColor(kRed);}
+	else if(i==4){  rel_res[i][j][k]->SetLineColor(kOrange);    rel_res[i][j][k]->SetMarkerColor(kOrange);}
 	leg_rel_res->AddEntry(rel_res[i][j][k], Name_range[i],"lep"); 
 	
 	rel_res[i][j][k]->Draw("PE SAME");
@@ -299,6 +320,8 @@ void CorrectionObject::Monitoring(bool SiRuns){
       line1->Draw("SAME");
       line2->Draw("SAME");
       line3->Draw("SAME");
+      if(n_input>3) line4->Draw("SAME");
+      if(n_input>4) line5->Draw("SAME");
       
       leg_rel_res->Draw();
       
@@ -320,6 +343,8 @@ void CorrectionObject::Monitoring(bool SiRuns){
       line1_ratio->Draw("SAME");
       line2_ratio->Draw("SAME");
       line3_ratio->Draw("SAME");
+      if(n_input>3) line4_ratio->Draw("SAME");
+      if(n_input>4) line5_ratio->Draw("SAME");      
       ave->Draw("SAME");
       
       for(int i = 0; i<n_input; i++){
@@ -328,6 +353,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
 	else if(i==1){  rel_ratio[i][j][k]->SetLineColor(kViolet); rel_ratio[i][j][k]->SetMarkerColor(kViolet);}
 	else if(i==2){  rel_ratio[i][j][k]->SetLineColor(kGreen);  rel_ratio[i][j][k]->SetMarkerColor(kGreen);}
 	else if(i==3){  rel_ratio[i][j][k]->SetLineColor(kRed);    rel_ratio[i][j][k]->SetMarkerColor(kRed);}
+	else if(i==3){  rel_ratio[i][j][k]->SetLineColor(kOrange);    rel_ratio[i][j][k]->SetMarkerColor(kOrange);}
 	
 	rel_ratio[i][j][k]->Draw("PE SAME");
 	c3->Modified();
@@ -366,6 +392,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
 	else if(i==1){  mpf_res[i][j][k]->SetLineColor(kViolet); mpf_res[i][j][k]->SetMarkerColor(kViolet);}
 	else if(i==2){  mpf_res[i][j][k]->SetLineColor(kGreen);  mpf_res[i][j][k]->SetMarkerColor(kGreen);}
 	else if(i==3){  mpf_res[i][j][k]->SetLineColor(kRed);    mpf_res[i][j][k]->SetMarkerColor(kRed);}
+	else if(i==4){  mpf_res[i][j][k]->SetLineColor(kOrange);    mpf_res[i][j][k]->SetMarkerColor(kOrange);}
 	leg_mpf_res->AddEntry(mpf_res[i][j][k], Name_range[i],"lep"); 
 	
 	mpf_res[i][j][k]->Draw("PE SAME");
@@ -377,7 +404,8 @@ void CorrectionObject::Monitoring(bool SiRuns){
       line1->Draw("SAME");
       line2->Draw("SAME");
       line3->Draw("SAME");
-      
+      if(n_input>3) line4->Draw("SAME");
+      if(n_input>4) line5->Draw("SAME");
       leg_mpf_res->Draw();
       
       tex1->DrawLatex(0.7,0.75, (eta_cut_bool?pt_range_HF:pt_range)[k]+"<p_{T}<"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]);
@@ -406,6 +434,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
 	else if(i==1){  mpf_ratio[i][j][k]->SetLineColor(kViolet); mpf_ratio[i][j][k]->SetMarkerColor(kViolet);}
 	else if(i==2){  mpf_ratio[i][j][k]->SetLineColor(kGreen);  mpf_ratio[i][j][k]->SetMarkerColor(kGreen);}
 	else if(i==3){  mpf_ratio[i][j][k]->SetLineColor(kRed);    mpf_ratio[i][j][k]->SetMarkerColor(kRed);}
+	else if(i==4){  mpf_ratio[i][j][k]->SetLineColor(kOrange);    mpf_ratio[i][j][k]->SetMarkerColor(kOrange);}
 	mpf_ratio[i][j][k]->Draw("PE SAME");
 	c4->Modified();
       }
