@@ -297,8 +297,8 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
     func[i]->SetParNames("p0", "p1", "N");
     ptave_data_eff[i]->Fit(func[i],"R");
 
-    // use_for_extrapol[i] = func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.;
-    use_for_extrapol[i] = true; //triggerVal[i+1]>190;
+    use_for_extrapol[i] = ptave_data_eff[i]->GetEntries()>100 ;
+    use_for_extrapol[i] = true;
     cout<< (func[i]->GetParError(0)<100. && func[i]->GetParError(1)<100.)<<endl;
     if(use_for_extrapol[i]) n_extrapol++;
     

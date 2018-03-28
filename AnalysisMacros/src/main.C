@@ -93,6 +93,7 @@ int main(int argc,char *argv[]){
 				   "-E",
 				   "-DE",
 				   "-DEF",
+				   "-CDEF",
 				   "-F" ,
 				   "-LP",
 				   "-MP",
@@ -149,7 +150,8 @@ int main(int argc,char *argv[]){
   bool use_D = false;
   bool use_E = false;
   bool use_DE = false; 
-  bool use_DEF = false;   
+  bool use_DEF = false; 
+  bool use_CDEF = false;   
   bool use_F = false;
   bool useHF = false;
   bool do_mon = false;
@@ -264,6 +266,9 @@ int main(int argc,char *argv[]){
 	  else if(arg=="-DEF"){
 	    use_DEF=true;
 	  }
+	  else if(arg=="-CDEF"){
+	    use_CDEF=true;
+	  }
 	  else if(arg=="-F"){
 	    use_F=true;
 	  }	  
@@ -323,9 +328,10 @@ int main(int argc,char *argv[]){
       if(use_D) input_path+="D";
       if(use_E) input_path+="E";
       if(use_DE) input_path+="DE";  
-      if(use_DEF) input_path+="DEF";     
+      if(use_DEF) input_path+="DEF"; 
+      if(use_CDEF) input_path+="CDEF";      
       if(use_F) input_path+="F";      
-      if(not(use_BC or use_D or use_E or use_DE or use_F or use_DEF)) input_path+="BCDEF";
+      if(not(use_BC or use_D or use_E or use_DE or use_F or use_DEF or use_CDEF)) input_path+="BCDEF";
   // if(muonCrosscheck) input_path+="D";
   input_path+="_Data";
   if(mode!="") input_path+="_";

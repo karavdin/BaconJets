@@ -57,7 +57,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   TString name3 = "hist_data_B_";
 
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
-      eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+      eta_cut_bool = fabs((eta_abs ? eta_bins : eta_bins_full)[j])>eta_cut;
       TString eta_name = "eta_"+(eta_abs ? eta_range2 : eta_range2_full)[j]+"_"+(eta_abs ? eta_range2 : eta_range2_full)[j+1];
 
       hdata_jet1_pt[j] = new TH1D(name2+"jet1_pt_"+eta_name,"",nResponseBins,0,600);
@@ -114,7 +114,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     //fill histos in bins of pt and eta
 
       for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
-	eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+	eta_cut_bool = fabs((eta_abs ? eta_bins : eta_bins_full)[j])>eta_cut;
     for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       if(*pt_ave_data<(eta_cut_bool?pt_bins_HF:pt_bins)[k] || *pt_ave_data>(eta_cut_bool?pt_bins_HF:pt_bins)[k+1]) continue;
 	if( (eta_abs ? fabs(*probejet_eta_data) : *probejet_eta_data) > (eta_abs ? eta_bins : eta_bins_full)[j+1] || (eta_abs ? fabs(*probejet_eta_data) : *probejet_eta_data)  < (eta_abs ? eta_bins : eta_bins_full)[j]) continue;
@@ -141,7 +141,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 
   TFile* test_out_data_A = new TFile(CorrectionObject::_outpath+"plots/control/A_1d_data_smaller_split.root","RECREATE");
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
-    eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+    eta_cut_bool = fabs((eta_abs ? eta_bins : eta_bins_full)[j])>eta_cut;
     for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hdata_asymmetry[k][j]->Write();
       hdata_bsymmetry[k][j]->Write();
@@ -152,7 +152,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 
   TFile* test_out_data_A_rho = new TFile(CorrectionObject::_outpath+"plots/control/A_rho_2d_data.root","RECREATE");
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
-    eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+    eta_cut_bool = fabs((eta_abs ? eta_bins : eta_bins_full)[j])>eta_cut;
     for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hdata_asymmetry_rho[k][j]->Write();
     }
@@ -163,7 +163,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 
   TFile* test_out_data_A_nvert = new TFile(CorrectionObject::_outpath+"plots/control/A_nvert_2d_data.root","RECREATE");
   for(int j=0; j<(eta_abs ? n_eta : n_eta_full)-1; j++){
-    eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
+    eta_cut_bool = fabs((eta_abs ? eta_bins : eta_bins_full)[j])>eta_cut;
     for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       hdata_asymmetry_nvert[k][j]->Write();
     }
@@ -220,7 +220,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     //Create and fill TGraphErrors
     double xbin_tgraph[n_pt_-1];
     double zero[n_pt_-1];
-    eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
+    eta_cut_bool = fabs((eta_abs ? eta_bins : eta_bins_full)[i])>eta_cut;
     for(int k=0; k<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       xbin_tgraph[k]=(pt_bins[k]+pt_bins[k+1])/2;
       zero[k]=(pt_bins[k+1]-pt_bins[k])/2 ;
@@ -431,7 +431,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     tex_lumi->SetNDC();
     tex_lumi->SetTextSize(0.045); 
     
-    eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
+    eta_cut_bool = fabs((eta_abs ? eta_bins : eta_bins_full)[i])>eta_cut;
     for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
       TCanvas* cFullA_nvert = new TCanvas();
       // tdrCanvas(cFullA_nvert,"cFullA_nvert",h,4,10,kSquare,CorrectionObject::_lumitag);
@@ -471,7 +471,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     tex_lumi->SetNDC();
     tex_lumi->SetTextSize(0.045);
     
-    eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
+    eta_cut_bool = fabs((eta_abs ? eta_bins : eta_bins_full)[i])>eta_cut;
     for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
       TCanvas* cFullA = new TCanvas();
       tdrCanvas(cFullA,"cFullA",h,4,10,kSquare,CorrectionObject::_lumitag);
@@ -539,7 +539,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     tex_lumi->SetNDC();
     tex_lumi->SetTextSize(0.045);
     
-    eta_cut_bool = fabs(eta_bins_full[i])>eta_cut;
+    eta_cut_bool = fabs((eta_abs ? eta_bins : eta_bins_full)[i])>eta_cut;
     for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
       TCanvas* cFullA_rho = new TCanvas();
       // tdrCanvas(cFullA_rho,"cFullA_rho",h,4,10,kSquare,CorrectionObject::_lumitag);

@@ -551,6 +551,8 @@ for(int j=0; j<n_eta-1; j++){
     kfsr_fit_mpf->SetLineColor(kRed+1);
     std::cout<<"!!! kFSR MPF fit !!!"<<std::endl;
     std::cout<<hist_kfsr_mpf->GetEntries()<<std::endl;
+
+    if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(1.,0.1,8.5);
     
     hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,kfsr_fitrange);
 
@@ -852,8 +854,14 @@ for(int j=0; j<n_eta-1; j++){
     //kFSR fit function
     TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19); //Range: 0,5. by default
     
-    kfsr_fit_dijet->SetParameters(1,0.03,0.5);
-      
+    // kfsr_fit_dijet->SetParameters(1,0.03,0.5);//start parameters that wor for DEF dijet central+HF
+    if(CorrectionObject::_runnr== "B") kfsr_fit_dijet->SetParameters(0.6,7,1.6);
+    else if(CorrectionObject::_runnr== "C") kfsr_fit_dijet->SetParameters(0.65,5.,14);
+    else if(CorrectionObject::_runnr== "D") kfsr_fit_dijet->SetParameters(0.6,7,16.3); 
+    else if(CorrectionObject::_runnr== "E") kfsr_fit_dijet->SetParameters(0.1,40.,44.);  
+    else if(CorrectionObject::_runnr== "F") kfsr_fit_dijet->SetParameters(0.4,17.,27.);  
+    else kfsr_fit_dijet->SetParameters(0.6,7,16);
+    
     //Finally perform the fit 
     kfsr_fit_dijet->SetLineColor(kBlue+1);
     std::cout<<"------ !!! kFSR pT-balance fit !!! ------"<<std::endl;

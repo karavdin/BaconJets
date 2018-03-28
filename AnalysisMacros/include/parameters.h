@@ -8,8 +8,8 @@
 
 using namespace std;
 
-// const double eta_cut = 2.853;
-const double eta_cut = 100.; //central only
+const double eta_cut = 2.853;
+// const double eta_cut = 100.; //central only
 
 const int nResponseBins = 100;
 const int n_etabarr=5; // needed for the normalization to 1 in the barrel. ???
@@ -63,27 +63,29 @@ const int n_pt_Si = 12;
 //DiJet triggers? -------------
 
 
-// const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin
-//   73,
-//   85,
-//   97,
-//   179,
-//   307,
-//   370,
-//   434,
-//   520,
-//   649,1000,2000};
+const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin
+  51,
+  73,
+  85,
+  97,
+  179,
+  307,
+  370,
+  434,
+  520,
+  649,1000,2000};
 
-// const TString pt_range[n_pt]={
-//   "73",
-//   "85",
-//   "97",
-//   "179",
-//   "307",
-//   "370",
-//   "434",
-//   "520",
-//   "648","1000","2000"};
+const TString pt_range[n_pt]={
+  "51",
+  "73",
+  "85",
+  "97",
+  "179",
+  "307",
+  "370",
+  "434",
+  "520",
+  "648","1000","2000"};
 
 
 // //for Di derived triggers 94X 17Nov2017
@@ -147,6 +149,17 @@ RunB      RunC  RunD  highest
 566      560    564   566   577
 604      608    598   608   606
 
+siTrg HF comparisson
+thresh    RunD    RunE    RunC    highest
+60 	 50.23    50.80   67.06   67
+80       95.41    94.86   95.66   96
+140	 154.45   154.88  154.29  155
+200	 228.65   229.43  231.21  231
+260	 286.16   289.35  295.62  296
+320	 366.11   361.42  360     366
+400	 430.72   435.49  432.95  436
+450 and 500 have too low statistic
+
 const double pt_bins[n_pt] = {
 40 ,
 65 ,
@@ -188,29 +201,29 @@ RunB      RunC  RunD  highest
 
 */
 
-const double pt_bins[n_pt] = {
-40 ,
-72  ,
-95 ,
-160 ,
-226 ,
-283 ,
-344 ,
-443 ,
-577 ,
-606 ,1000,2000};
+// const double pt_bins[n_pt] = {
+// 40 ,
+// 72  ,
+// 95 ,
+// 160 ,
+// 226 ,
+// 283 ,
+// 344 ,
+// 443 ,
+// 577 ,
+// 606 ,1000,2000};
 
-const TString pt_range[n_pt]={
-  "40" ,
-  "72" ,
-  "95" ,
-  "160",
-  "226",
-  "283",
-  "344",
-  "443",
-  "577",
-  "606","1000","2000"};
+// const TString pt_range[n_pt]={
+//   "40" ,
+//   "72" ,
+//   "95" ,
+//   "160",
+//   "226",
+//   "283",
+//   "344",
+//   "443",
+//   "577",
+//   "606","1000","2000"};
 
 
 /* // [END]SingleJet triggers? ------------- */
