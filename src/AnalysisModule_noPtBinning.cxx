@@ -336,6 +336,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     int k = 0;
     
     if(ts){
+      if(trigger_central){
       handle_triggers[0] = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet40" );
       handle_triggers[1] = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet60" );
       handle_triggers[2] = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet80" );
@@ -347,6 +348,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
       handle_triggers[8] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet450" );
       handle_triggers[9] = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
       k = 10;
+      }
       if(trigger_fwd){
 	  handle_triggers[0+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFFwdJet60" );
 	  handle_triggers[1+k]= ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFFwdJet80" );
@@ -453,18 +455,18 @@ else trigger500_fwd_sel.reset(new uhh2::AndSelection(ctx));
       else triggerDi500_sel.reset(new uhh2::AndSelection(ctx));
       
 
-      if(trigger60_HFJEC != "NULL") trigger60_HFJEC_sel.reset(new TriggerSelection(trigger60_HFJEC));
+      if(trigger60_HFJEC != "NULL" and not ts) trigger60_HFJEC_sel.reset(new TriggerSelection(trigger60_HFJEC));
       else trigger60_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger80_HFJEC != "NULL") trigger80_HFJEC_sel.reset(new TriggerSelection(trigger80_HFJEC));
+      if(trigger80_HFJEC != "NULL" and not ts) trigger80_HFJEC_sel.reset(new TriggerSelection(trigger80_HFJEC));
       else trigger80_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger100_HFJEC != "NULL") trigger100_HFJEC_sel.reset(new TriggerSelection(trigger100_HFJEC));
+      if(trigger100_HFJEC != "NULL" and not ts) trigger100_HFJEC_sel.reset(new TriggerSelection(trigger100_HFJEC));
       else trigger100_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger160_HFJEC != "NULL") trigger160_HFJEC_sel.reset(new TriggerSelection(trigger160_HFJEC));
+      if(trigger160_HFJEC != "NULL" and not ts) trigger160_HFJEC_sel.reset(new TriggerSelection(trigger160_HFJEC));
       else trigger160_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger220_HFJEC != "NULL") trigger220_HFJEC_sel.reset(new TriggerSelection(trigger220_HFJEC));
+      if(trigger220_HFJEC != "NULL" and not ts) trigger220_HFJEC_sel.reset(new TriggerSelection(trigger220_HFJEC));
       else trigger220_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
-      if(trigger300_HFJEC != "NULL") trigger300_HFJEC_sel.reset(new TriggerSelection(trigger300_HFJEC));
-else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
+      if(trigger300_HFJEC != "NULL" and not ts) trigger300_HFJEC_sel.reset(new TriggerSelection(trigger300_HFJEC));
+      else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       
     }
     // }
@@ -611,71 +613,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       if(jetLabel == "AK4CHS"){
 	if(!ClosureTest){
 	  //residuals
-	 if(JEC_Version == "Summer16_23Sep2016_V4"){
-	    JEC_corr              = JERFiles::Summer16_23Sep2016_V4_H_L123_noRes_AK4PFchs_DATA;  //ReReco Data + Moriond17 MC
-	    JEC_corr_L1RC         = JERFiles::Summer16_23Sep2016_V4_H_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_23Sep2016_V4_BCD_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_23Sep2016_V4_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_23Sep2016_V4_EF_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_23Sep2016_V4_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_23Sep2016_V4_G_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_23Sep2016_V4_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_23Sep2016_V4_H_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_23Sep2016_V4_H_L1RC_AK4PFchs_DATA;
-	  }
-	 //JEC-Version: V7
-	  else if(JEC_Version == "Summer16_03Feb2017_V3"){
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V3_H_L123_noRes_AK4PFchs_DATA;  //ReReco Data + Moriond17 MC V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V3_H_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V3_BCD_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V3_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V3_EF_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V3_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V3_G_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V3_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V3_H_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V3_H_L1RC_AK4PFchs_DATA;
-	  }
-	 //JEC-Version Data: V4
-	  else if(JEC_Version == "Summer16_03Feb2017_V4"){
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V4_H_L123_noRes_AK4PFchs_DATA;  //ReReco Data + Moriond17 MC V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V4_H_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V4_BCD_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V4_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V4_EF_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V4_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V4_G_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V4_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V4_H_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V4_H_L1RC_AK4PFchs_DATA;
-	  }
-	 //JEC-Version Data: V5
-	  else if(JEC_Version == "Summer16_03Feb2017_V5"){
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V5_H_L123_noRes_AK4PFchs_DATA;  //ReReco Data + Moriond17 MC V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V5_H_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V5_BCD_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V5_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V5_EF_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V5_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V5_G_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V5_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V5_H_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V5_H_L1RC_AK4PFchs_DATA;
-	  }
-	 //JEC-Version Data: V6
-	  else if(JEC_Version == "Summer16_03Feb2017_V6"){
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V6_H_L123_noRes_AK4PFchs_DATA;  //ReReco Data + Moriond17 MC V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V6_H_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V6_BCD_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V6_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V6_EF_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V6_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V6_G_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V6_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V6_H_L123_noRes_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V6_H_L1RC_AK4PFchs_DATA;
-	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V4"){
+	 if(JEC_Version == "Fall17_17Nov2017_V4"){
 	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
 	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
 	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V4_D_L123_AK4PFchs_DATA;
@@ -694,79 +632,7 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	  else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
-	 if(JEC_Version == "Summer16_23Sep2016_V4"){
-	    //closure
-	    JEC_corr              = JERFiles::Summer16_23Sep2016_V4_H_L123_AK4PFchs_DATA;              //ReReco Data + Summer16 MC
-	    JEC_corr_L1RC         = JERFiles::Summer16_23Sep2016_V4_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_23Sep2016_V4_BCD_L123_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_23Sep2016_V4_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_23Sep2016_V4_EF_L123_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_23Sep2016_V4_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_23Sep2016_V4_G_L123_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_23Sep2016_V4_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_23Sep2016_V4_H_L123_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_23Sep2016_V4_H_L1RC_AK4PFchs_DATA;
-	    cout << "JEC for DATA: Summer16_23Sep2016_V4_BCD/EFearly/FlateG/H_L123_AK4PFchs_DATA;" << endl;
-	  }
-	 //JEC-Version: V7
-	  else if(JEC_Version == "Summer16_03Feb2017_V3"){
-	    //closure
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V3_H_L123_AK4PFchs_DATA;              //ReReco Data + Summer16 V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V3_H_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V3_BCD_L123_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V3_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V3_EF_L123_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V3_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V3_G_L123_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V3_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V3_H_L123_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V3_H_L1RC_AK4PFchs_DATA;
-	    cout << "JEC for DATA: Summer16_03Feb2017_V3_BCD/EFearly/FlateG/H_L123_AK4PFchs_DATA;" << endl;
-	  }
-	 //JEC-Version Data: V4
-	  else if(JEC_Version == "Summer16_03Feb2017_V4"){
-	    //closure
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V4_H_L123_AK4PFchs_DATA;              //ReReco Data + Summer16 V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V4_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V4_BCD_L123_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V4_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V4_EF_L123_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V4_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V4_G_L123_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V4_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V4_H_L123_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V4_H_L1RC_AK4PFchs_DATA;
-	    cout << "JEC for DATA: Summer16_03Feb2017_V4_BCD/EFearly/FlateG/H_L123_AK4PFchs_DATA;" << endl;
-	  }
-	  else if(JEC_Version == "Summer16_03Feb2017_V5"){
-	    //closure
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V5_G_L123_AK4PFchs_DATA;              //ReReco Data + Summer16 V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V5_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V5_BCD_L123_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V5_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V5_EF_L123_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V5_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V5_G_L123_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V5_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V5_H_L123_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V5_H_L1RC_AK4PFchs_DATA;
-	    cout << "JEC for DATA: Summer16_03Feb2017_V5_BCD/EFearly/FlateG/H_L123_AK4PFchs_DATA;" << endl;
-	  }
-	  else if(JEC_Version == "Summer16_03Feb2017_V6"){
-	    //closure
-	    JEC_corr              = JERFiles::Summer16_03Feb2017_V6_H_L123_AK4PFchs_DATA;              //ReReco Data + Summer16 V7
-	    JEC_corr_L1RC         = JERFiles::Summer16_03Feb2017_V6_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_BCD          = JERFiles::Summer16_03Feb2017_V6_BCD_L123_AK4PFchs_DATA;
-	    JEC_corr_BCD_L1RC     = JERFiles::Summer16_03Feb2017_V6_BCD_L1RC_AK4PFchs_DATA;
-	    JEC_corr_EFearly      = JERFiles::Summer16_03Feb2017_V6_EF_L123_AK4PFchs_DATA;
-	    JEC_corr_EFearly_L1RC = JERFiles::Summer16_03Feb2017_V6_EF_L1RC_AK4PFchs_DATA;
-	    JEC_corr_FlateG       = JERFiles::Summer16_03Feb2017_V6_G_L123_AK4PFchs_DATA;
-	    JEC_corr_FlateG_L1RC  = JERFiles::Summer16_03Feb2017_V6_G_L1RC_AK4PFchs_DATA;
-	    JEC_corr_H            = JERFiles::Summer16_03Feb2017_V6_H_L123_AK4PFchs_DATA;
-	    JEC_corr_H_L1RC       = JERFiles::Summer16_03Feb2017_V6_H_L1RC_AK4PFchs_DATA;
-	    cout << "JEC for DATA: Summer16_03Feb2017_V6_BCD/EFearly/FlateG/H_L123_AK4PFchs_DATA;" << endl;
-	  }
-	  else if(JEC_Version == "Fall17_17Nov2017_V4"){
+	 if(JEC_Version == "Fall17_17Nov2017_V4"){
 	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
 	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
 	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V4_D_L123_AK4PFchs_DATA;
@@ -1369,6 +1235,21 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
     h_afterJER->fill(event); 
 
     //correct MET only AFTER smearing the jets
+    if(apply_B){
+      jet_corrector_B->correct_met(event,true);
+    }
+    if(apply_C){
+      jet_corrector_C->correct_met(event,true);
+    }
+    if(apply_D){
+      jet_corrector_D->correct_met(event,true);
+    }
+    if(apply_E){
+      jet_corrector_E->correct_met(event,true);
+    }
+    if(apply_F){
+      jet_corrector_F->correct_met(event,true);
+    }     
     if(apply_global){
       jet_corrector->correct_met(event);
     }
@@ -1499,27 +1380,28 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       if(!trigger_central) eta_cut_bool_HF = true;
       
       if(ts){
-	pass_trigger40 = (trigger40_sel->passes(event)  && eta_cut_bool );
-	pass_trigger60 = (trigger60_sel->passes(event)  && eta_cut_bool  );
-	pass_trigger80 = (trigger80_sel->passes(event)   && eta_cut_bool );
-	pass_trigger140 = (trigger140_sel->passes(event) && eta_cut_bool ); 
-	pass_trigger200 = (trigger200_sel->passes(event) && eta_cut_bool ); 
-	pass_trigger260 = (trigger260_sel->passes(event) && eta_cut_bool ); 
-	pass_trigger320 = (trigger320_sel->passes(event) && eta_cut_bool ); 
-	pass_trigger400 = (trigger400_sel->passes(event) && eta_cut_bool ); 
-	pass_trigger450 = (trigger450_sel->passes(event) && eta_cut_bool );
-	pass_trigger500 = (trigger500_sel->passes(event) && eta_cut_bool );
-
+	if(trigger_central){
+	  pass_trigger40 = (trigger40_sel->passes(event)  && eta_cut_bool );
+	  pass_trigger60 = (trigger60_sel->passes(event)  && eta_cut_bool  );
+	  pass_trigger80 = (trigger80_sel->passes(event)   && eta_cut_bool );
+	  pass_trigger140 = (trigger140_sel->passes(event) && eta_cut_bool ); 
+	  pass_trigger200 = (trigger200_sel->passes(event) && eta_cut_bool ); 
+	  pass_trigger260 = (trigger260_sel->passes(event) && eta_cut_bool ); 
+	  pass_trigger320 = (trigger320_sel->passes(event) && eta_cut_bool ); 
+	  pass_trigger400 = (trigger400_sel->passes(event) && eta_cut_bool ); 
+	  pass_trigger450 = (trigger450_sel->passes(event) && eta_cut_bool );
+	  pass_trigger500 = (trigger500_sel->passes(event) && eta_cut_bool );
+	}
 	if(trigger_fwd){
-	  pass_trigger60_fwd = (trigger60_fwd_sel->passes(event)  &&eta_cut_bool_HF );
-	  pass_trigger80_fwd = (trigger80_fwd_sel->passes(event)  &&eta_cut_bool_HF );
-	  pass_trigger140_fwd = (trigger140_fwd_sel->passes(event)&&eta_cut_bool_HF );
-	  pass_trigger200_fwd = (trigger200_fwd_sel->passes(event)&&eta_cut_bool_HF );
-	  pass_trigger260_fwd = (trigger260_fwd_sel->passes(event)&&eta_cut_bool_HF );
-	  pass_trigger320_fwd = (trigger320_fwd_sel->passes(event)&&eta_cut_bool_HF );
-	  pass_trigger400_fwd = (trigger400_fwd_sel->passes(event)&&eta_cut_bool_HF );
-	  pass_trigger450_fwd = (trigger450_fwd_sel->passes(event)&&eta_cut_bool_HF );
-	  pass_trigger500_fwd = (trigger500_fwd_sel->passes(event)&&eta_cut_bool_HF );
+	  pass_trigger60_fwd = (trigger60_fwd_sel->passes(event)   && eta_cut_bool_HF );
+	  pass_trigger80_fwd = (trigger80_fwd_sel->passes(event)   && eta_cut_bool_HF );
+	  pass_trigger140_fwd = (trigger140_fwd_sel->passes(event) && eta_cut_bool_HF );
+	  pass_trigger200_fwd = (trigger200_fwd_sel->passes(event) && eta_cut_bool_HF );
+	  pass_trigger260_fwd = (trigger260_fwd_sel->passes(event) && eta_cut_bool_HF );
+	  pass_trigger320_fwd = (trigger320_fwd_sel->passes(event) && eta_cut_bool_HF );
+	  pass_trigger400_fwd = (trigger400_fwd_sel->passes(event) && eta_cut_bool_HF );
+	  pass_trigger450_fwd = (trigger450_fwd_sel->passes(event) && eta_cut_bool_HF );
+	  pass_trigger500_fwd = (trigger500_fwd_sel->passes(event) && eta_cut_bool_HF );
 	}
 	
       }
@@ -1604,7 +1486,8 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	bool pass_di_trg_HF =  pass_trigger60_HFJEC || pass_trigger80_HFJEC || pass_trigger100_HFJEC || pass_trigger160_HFJEC || pass_trigger220_HFJEC || pass_trigger300_HFJEC;
 
 	if(ts){
-	  pass_trigger = pass_sng_trg;
+	  if(trigger_central)
+	    pass_trigger = pass_trigger || pass_sng_trg;
 	  if(trigger_fwd)
 	    pass_trigger = pass_trigger || pass_si_trg_fwd;
 	}
@@ -1669,7 +1552,8 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       bool passes_Di[9] = {pass_triggerDi40,pass_triggerDi60,pass_triggerDi80,pass_triggerDi140,pass_triggerDi200,pass_triggerDi260,pass_triggerDi320,pass_triggerDi400,pass_triggerDi500};
       bool passes_Di_HF[6] = {pass_trigger60_HFJEC , pass_trigger80_HFJEC , pass_trigger100_HFJEC , pass_trigger160_HFJEC , pass_trigger220_HFJEC , pass_trigger300_HFJEC};
       bool passes_Di_plusHF[15] = {pass_triggerDi40,pass_triggerDi60,pass_triggerDi80,pass_triggerDi140,pass_triggerDi200,pass_triggerDi260,pass_triggerDi320,pass_triggerDi400,pass_triggerDi500,pass_trigger60_HFJEC , pass_trigger80_HFJEC , pass_trigger100_HFJEC , pass_trigger160_HFJEC , pass_trigger220_HFJEC , pass_trigger300_HFJEC};
-      int n_trg = ts ? 10 : 0;
+      int n_trg = 0;
+      if(ts && trigger_central) n_trg += 10;      
       if(!ts && trigger_central) n_trg += 9;
       if(trigger_fwd) n_trg += 6;
       if(trigger_fwd && ts) n_trg += 3;
@@ -1679,8 +1563,9 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
       for(int i = 0; i<n_trg; i++){
 	if(debug) cout<<i<<endl;
 	bool i_passed = false;
-	if(ts && !trigger_fwd ) i_passed = passes_Si[i];
-	else if(ts && trigger_fwd ) i_passed = passes_Si_plusfwd[i];	
+	if(ts && trigger_central && !trigger_fwd ) i_passed = passes_Si[i];
+	else if(ts && trigger_fwd && !trigger_central ) i_passed = passes_Si_fwd[i];		
+	else if(ts && trigger_fwd && trigger_central ) i_passed = passes_Si_plusfwd[i];	
 	else if(trigger_central && !trigger_fwd && !ts) i_passed = passes_Di[i];
 	else if(!trigger_central && trigger_fwd && !ts) i_passed = passes_Di_HF[i];
 	else if(trigger_central && trigger_fwd && !ts) i_passed = passes_Di_plusHF[i];
@@ -1697,7 +1582,11 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	    
 	    int trg_val = 0;
 	    if(ts && !trigger_fwd) trg_val=trg_vals_Si[i];
-	    else if(ts && trigger_fwd){
+	    if(ts && trigger_fwd && !trigger_central){
+	      trg_val=trg_vals_Sifwd[i];
+	      fwd=true;
+	    }
+	    else if(ts && trigger_fwd && trigger_central){
 	      if(debug) cout<<"ts and trg fwd"<<endl;	      
 	      trg_val=trg_vals_Si_plusfwd[i];
 	      fwd=i>9;
@@ -1750,8 +1639,12 @@ else trigger300_HFJEC_sel.reset(new uhh2::AndSelection(ctx));
 	      
 	      int trg_val = 0;
 	      bool fwd = false;
-	      if(ts && !trigger_fwd) trg_val=trg_vals_Si[i];
-	      else if(trigger_fwd && ts){
+	      if(ts && !trigger_fwd && trigger_central) trg_val=trg_vals_Si[i];
+	      else if(trigger_fwd && ts && !trigger_central){
+		trg_val = trg_vals_Sifwd[i];
+		fwd=true;
+	      }	      
+	      else if(trigger_fwd && ts && trigger_central){
 		trg_val = trg_vals_Si_plusfwd[i];
 		fwd=i>9;
 	      }

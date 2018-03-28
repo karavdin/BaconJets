@@ -847,6 +847,21 @@ if(debug){
     h_afterJER->fill(event); 
 
     //correct MET only AFTER smearing the jets
+    if(apply_B){
+      jet_corrector_B->correct_met(event,true);
+    }
+    if(apply_C){
+      jet_corrector_C->correct_met(event,true);
+    }
+    if(apply_D){
+      jet_corrector_D->correct_met(event,true);
+    }
+    if(apply_E){
+      jet_corrector_E->correct_met(event,true);
+    }
+    if(apply_F){
+      jet_corrector_F->correct_met(event,true);
+    }     
     if(apply_global){
       jet_corrector->correct_met(event,true);
     }
@@ -1345,7 +1360,6 @@ if(debug){
     if(debug && isMC){
       Jet_printer->process(event);
       GenParticles_printer->process(event);
-      
     }
     
     if(isMC){    
