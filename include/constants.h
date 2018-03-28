@@ -154,8 +154,8 @@ constexpr static int n_pt_bins = 9;
 //2017
 //from Si triggers
 constexpr static int trg_vals_Si[10]  = {40,60,80,140,200,260,320,400,450,500};
-constexpr static int trg_vals_Sifwd[9]  = {60,80,140,200,260,320,400,450,500};
-constexpr static int trg_vals_Si_plusfwd[19]  = {40,60,80,140,200,260,320,400,450,500,60,80,140,200,260,320,400,450,500};
+constexpr static int trg_vals_Sifwd[7]  = {60,80,140,200,260,320,400};
+constexpr static int trg_vals_Si_plusfwd[17]  = {40,60,80,140,200,260,320,400,450,500,60,80,140,200,260,320,400};
 //from Di triggersint trg_val
 constexpr static int trg_vals_Di[9]  = {40,60,80,140,200,260,320,400,500};
 constexpr static int trg_vals_HF[6]  = {60,80,100,160,220,300};
