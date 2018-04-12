@@ -4,7 +4,7 @@ _main()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--help --mode --dname --run -FP -FPeta -MP -OORP -MPd -OORPd -FCP -tCP -lFCP -aFCP -derThreshSi -derThreshSi_ptCheck -derThreshDi -derThreshDi_ptCheck -JEF -BC -D -E -DE -DEF -CDEF -F -LP -aAP -aAPef -TEC -mu --muTrg --asym_cut --input --outSuffix -useHF -NPVEta -mon -monSi -IGF -IGFw --kfsrRange"
+    opts="--help --mode --dname --run -FP -FPeta -MP -OORP -MPd -OORPd -FCP -tCP -lFCP -aFCP -derThreshSi -derThreshSi_ptCheck -derThreshDi -derThreshDi_ptCheck -JEF -BC -D -E -DE -DEF -CDEF -F -LP -aAP -aAPef -TEC -mu --muTrg --asym_cut --input --outSuffix -useHF -NPVEta -mon -monSi -IGF -IGFw --kfsrRange -MEPC"
 
     case "${prev}" in
 	--run)
@@ -19,7 +19,7 @@ _main()
             ;;
 	--dname)
 	    # COMPREPLY=( $(compgen -W "newPtBinning wMu17 wIsoMu27 wIsoMu20" -- ${cur}) )
-	    local names=$(for x in `ls -1 /nfs/dust/cms/user/"$USER"/forBaconJets/17Nov2017/Residuals/Run17*/ | grep Run.*.root`; do k=${x%.root}; y=${k#Run17[B]*[C]*[D]*[E]*[F]*_17Nov17_2017_}; z=${y#*_17Nov17_2017}; j=${z#*_17Nov17}; echo ${j#_}; done)
+	    local names=$(for x in `ls -1 /nfs/dust/cms/user/"$USER"/forBaconJets/17Nov2017/Residuals/Run17*/ | grep Run.*.root`; do k=${x%.root}; y=${k#Run17[B]*[C]*[D]*[E]*[F]*_}; j=${y#*_}; echo ${j#_}; done)
 	    COMPREPLY=( $(compgen -W "${names}" -- ${cur}) )
             return 0
             ;;

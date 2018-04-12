@@ -141,7 +141,11 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     Event::Handle<int> tt_trigger100_HF;
     Event::Handle<int> tt_trigger160_HF;
     Event::Handle<int> tt_trigger220_HF;
-    Event::Handle<int> tt_trigger300_HF;  
+    Event::Handle<int> tt_trigger300_HF;
+
+    Event::Handle<int> tt_run; 
+    Event::Handle<int> tt_evID;
+    Event::Handle<int> tt_lumiSec;
  
     std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
     std::unique_ptr<JECAnalysisHists> h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg500;
@@ -202,8 +206,12 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     metfilters_sel->add<TriggerSelection>("HBHENoiseFilter", "Flag_HBHENoiseFilter");        
     metfilters_sel->add<TriggerSelection>("HBHENoiseIsoFilter", "Flag_HBHENoiseIsoFilter");
     metfilters_sel->add<TriggerSelection>("EcalDeadCellTriggerPrimitiveFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter"); 
-    metfilters_sel->add<TriggerSelection>("CSCTightHalo2016Filter", "Flag_CSCTightHalo2016Filter"); 
-   
+    // metfilters_sel->add<TriggerSelection>("CSCTightHalo2016Filter", "Flag_CSCTightHalo2016Filter");
+    metfilters_sel->add<TriggerSelection>("BadPFMuonFilter", "Flag_BadPFMuonFilter");
+    metfilters_sel->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter");
+    metfilters_sel->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter");
+    metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","Flag_ecalBadCalibFilter");
+     
     Jet_PFID = JetPFID(JetPFID::WP_LOOSE);
     //Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
@@ -446,6 +454,10 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     tt_ele_pt = ctx.declare_event_output<float>("electron_pt");
     tt_Nele = ctx.declare_event_output<int>("Nelectron");
     tt_integrated_lumi = ctx.declare_event_output<float>("integrated_lumi");
+    
+    tt_run = ctx.declare_event_output<int>("run");
+    tt_evID = ctx.declare_event_output<int>("eventID");
+    tt_lumiSec = ctx.declare_event_output<int>("lumi_sec");
     
     tt_trigger40 = ctx.declare_event_output<int>("trigger40");
     tt_trigger60 = ctx.declare_event_output<int>("trigger60");
@@ -694,7 +706,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     }
 
     // MET filters   
-    //    if(!metfilters_sel->passes(event)) return false;   
+    if(!metfilters_sel->passes(event)) return false;   
 
     int event_in_lumibin = -1;
     double fill_event_integrated_lumi = 0;
@@ -1074,7 +1086,7 @@ if(debug){
       dR_jet3_barreljet = deltaR(event.jets->at(2), *jet_barrel);
       dR_jet3_probejet = deltaR(event.jets->at(2), *jet_probe);
     }
-//###############################################################################################
+//###############################################################################################   
 
     if(debug) cout<<"read or calculated values for dijet events\n";
     
@@ -1281,6 +1293,32 @@ if(debug){
     //PhiEta Region cleaning
     if(apply_EtaPhi_cut && !sel.EtaPhiCleaning(event)) return false; 
 
+    
+    //### fast and dirty eta phi clean #####
+    bool cutEtaPhi = false;
+    if(jet_probe->eta()>2.853 && jet_probe->eta()<2.964){
+      if(jet_probe->phi()>2.25 && jet_probe->phi()<2.4){
+	cutEtaPhi =true;
+      }
+      else if(jet_probe->phi()>0.8 && jet_probe->phi()<0.9){
+	cutEtaPhi =true;
+      }
+    }
+    //saving this information to be put into a txt by the MakeEtaCleanTxt.cc Module
+    if(cutEtaPhi){
+      event.set(tt_run,event.run);
+      event.set(tt_evID,event.event);
+      event.set(tt_lumiSec,event.luminosityBlock);
+      // return false;
+    }
+    else{
+      event.set(tt_run,0);
+      event.set(tt_evID,0);
+      event.set(tt_lumiSec,0);
+      // return false;
+    }
+    
+    
     if(debug){
      cout << "before 'dijet advanced selection' : " << endl;
      cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;

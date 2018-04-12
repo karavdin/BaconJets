@@ -14,6 +14,8 @@ const double eta_cut = 2.853;
 const int nResponseBins = 100;
 const int n_etabarr=5; // needed for the normalization to 1 in the barrel. ???
 
+const int n_enough_entries = 100;
+
 //Alpha: 
 const double alpha_cut = 0.3;
 const TString s_alpha_cut = "0.3";

@@ -67,7 +67,23 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
   }
 
 
-
+  //save the mean of pt_ave that will be used for the loglin fits
+  TCanvas *cmptave = new TCanvas();
+  TH1D* h_mean_pt_ave =  new TH1D("mean_pt_ave","mean_pt_ave", n_eta-1,eta_bins);
+  for(int i=0; i<n_eta-1; i++){
+    h_mean_pt_ave->SetBinContent(i+1,ptave_data[i]->GetMean());
+  }
+  h_mean_pt_ave->GetYaxis()->SetTitle("<pT_{ave}>");
+  h_mean_pt_ave->GetXaxis()->SetTitle("|#eta|");
+  h_mean_pt_ave->Draw();
+  TFile* f_mean_pt_ave;
+  f_mean_pt_ave = new TFile(CorrectionObject::_outpath+"mean_pt_ave.root","RECREATE");
+  h_mean_pt_ave->Write();
+  cmptave->Print(CorrectionObject::_outpath + "plots/mean_pt_ave.pdf");
+  f_mean_pt_ave->Close();
+  delete h_mean_pt_ave;
+  delete cmptave;
+  
 
   //Set up histos for ratios of responses
   double ratio_al_rel_r[n_pt_-1][n_eta-1]; //ratio at pt,eta,alpha bins
@@ -193,7 +209,7 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
     eta_cut_bool = fabs(eta_bins[j])>eta_cut; 
     for(int k=0; k< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       enough_entries[j][k] = false;
-      if(n_entries_mc[j][k] > 50 && n_entries_data[j][k] > 50) enough_entries[j][k] = true;
+      if(n_entries_mc[j][k] > n_enough_entries && n_entries_data[j][k] > n_enough_entries) enough_entries[j][k] = true;
     }
   }
 
@@ -261,7 +277,7 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
     eta_cut_bool = fabs(eta_bins[j])>eta_cut; 
     for(int k=0; k< ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); k++){
       if(mpfMethod){
-	ratio_mpf[j][k] = ratio_al_mpf_r[k][j];
+	ratio_mpf[j][k] = ratio_al_mpf_r[k][j];  //TODO switching pt and eta order is not nice...
 	err_ratio_mpf[j][k] = err_ratio_al_mpf_r[k][j];
 	//	std::cout<<"ratio_mpf[j][k] = @"<<eta_range[j]<<" "<<ratio_mpf[j][k]<<std::endl;
       }
@@ -553,6 +569,7 @@ for(int j=0; j<n_eta-1; j++){
     std::cout<<hist_kfsr_mpf->GetEntries()<<std::endl;
 
     if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(1.,0.1,8.5);
+    else if(CorrectionObject::_runnr== "F") kfsr_fit_mpf->SetParameters(0.62,63.2,165.);
     
     hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,kfsr_fitrange);
 
@@ -857,9 +874,9 @@ for(int j=0; j<n_eta-1; j++){
     // kfsr_fit_dijet->SetParameters(1,0.03,0.5);//start parameters that wor for DEF dijet central+HF
     if(CorrectionObject::_runnr== "B") kfsr_fit_dijet->SetParameters(0.6,7,1.6);
     else if(CorrectionObject::_runnr== "C") kfsr_fit_dijet->SetParameters(0.65,5.,14);
-    else if(CorrectionObject::_runnr== "D") kfsr_fit_dijet->SetParameters(0.6,7,16.3); 
-    else if(CorrectionObject::_runnr== "E") kfsr_fit_dijet->SetParameters(0.1,40.,44.);  
-    else if(CorrectionObject::_runnr== "F") kfsr_fit_dijet->SetParameters(0.4,17.,27.);  
+    else if(CorrectionObject::_runnr== "D") kfsr_fit_dijet->SetParameters(0.97,0.028,0.44); 
+    else if(CorrectionObject::_runnr== "E") kfsr_fit_dijet->SetParameters(0.99,0.013,0.26);  
+    else if(CorrectionObject::_runnr== "F") kfsr_fit_dijet->SetParameters(0.98,0.027,0.54);  
     else kfsr_fit_dijet->SetParameters(0.6,7,16);
     
     //Finally perform the fit 

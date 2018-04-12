@@ -109,6 +109,7 @@ using namespace std;
     void OnOffResp_PlotsDi(bool useHF = true);
     void AdditionalAsymmetryPlots(bool eta_abs = true, bool si_trg=false);
     void triggerExclusivityCheck();
+    void MakeEtaPhiCleanTxt();
     
 static bool make_path(std::string path_name){
     int status = 1;

@@ -243,9 +243,110 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
 
   //********************************************************************  Plot all Control Hists ********************************************************************************
 
-  //Get histo files
- 
+  // cout<<"before f_mpf file load"<<endl;
 
+  //Get histo files
+  TFile* f_mpf_mc = new TFile(CorrectionObject::_outpath+"plots/control/B_1d_mc" +".root","READ");
+  TFile* f_mpf_data = new TFile(CorrectionObject::_outpath+"plots/control/B_1d_data"+".root","READ");
+  
+    for(int i=0; i<n_eta-1; i++){
+      TString eta_name = "eta_"+eta_range2[i]+"_"+eta_range2[i+1];
+    bool eta_cut_bool = fabs(eta_bins[i])>eta_cut; 
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
+
+    TLatex *tex_lumi = new TLatex();
+    tex_lumi->SetNDC();
+    tex_lumi->SetTextSize(0.045);
+      
+    TH1D* htemp_met_mc;
+    
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
+      
+     TCanvas* c5 = new TCanvas();
+    tdrCanvas(c5,"c5",h,4,10,kSquare,"MC");
+    // cout<<"after tdrCanvas"<<endl;
+    
+    TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+    TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
+    TString name_met_mc = "hist_mc_METoverJetsPt_"+eta_name+"_"+pt_name;
+    
+    htemp_met_mc = (TH1D*)f_mpf_mc->Get(name_met_mc);
+
+    cout<<"after getting hist "<<name_met_mc<<endl;
+    
+    int n_ev =  htemp_met_mc->GetEntries();
+    cout<<"hist has "<<n_ev<<" entries"<<endl;
+
+    if(htemp_met_mc->Integral() > 0) htemp_met_mc->Scale(1/htemp_met_mc->Integral());
+
+    TString textPt;
+    textPt = text + ", "+legname;
+    
+    htemp_met_mc->GetXaxis()->SetTitle("MET/#sum p_{T}");
+    htemp_met_mc->GetYaxis()->SetTitle("Norm. Entries");
+    htemp_met_mc->GetYaxis()->SetTitleOffset(1.5);
+    // h->SetMaximum(0.3);
+    h->GetXaxis()->SetLimits(0,1.2);
+    //      h->GetYaxis()->SetLimits(0,0.8);
+    // htemp_met_mc->SetMaximum(0.3);
+    htemp_met_mc->SetLineWidth(3);
+    htemp_met_mc->Draw("HIST");
+    tex->DrawLatex(0.2,0.85,"MC, " + textPt);
+    //tex_lumi->DrawLatex(0.6,0.91,"MC");
+    c5->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/METoverPt_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_" + pt_name + ".pdf");
+    
+    }
+  }
+
+   for(int i=0; i<n_eta-1; i++){
+      TString eta_name = "eta_"+eta_range2[i]+"_"+eta_range2[i+1];
+    bool eta_cut_bool = fabs(eta_bins[i])>eta_cut; 
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    TString text;
+    if(eta_abs) text = eta_range[i] + " < |#eta| < " + eta_range[i+1];
+    else text = eta_range_full[i] + " < #eta < " + eta_range_full[i+1];
+
+    TLatex *tex_lumi = new TLatex();
+    tex_lumi->SetNDC();
+    tex_lumi->SetTextSize(0.045);
+      
+    TCanvas* c5 = new TCanvas();
+    tdrCanvas(c5,"c5",h,4,10,kSquare,"DATA");
+    TH1D* htemp_met_data;
+    for(int j=0; j<( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ); j++){
+    TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
+    TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
+    TString name_met_data = "hist_data_METoverJetsPt_"+eta_name+"_"+pt_name;
+    htemp_met_data = (TH1D*)f_mpf_data->Get(name_met_data);
+
+    TString textPt;
+    textPt = text + ", "+legname;
+       
+    int n_ev =  htemp_met_data->GetEntries();
+    if(htemp_met_data->Integral() > 0)htemp_met_data->Scale(1/htemp_met_data->Integral());
+    htemp_met_data->GetXaxis()->SetTitle("MET/#sum p_{T}");
+    htemp_met_data->GetYaxis()->SetTitle("Norm. Entries");
+    htemp_met_data->GetYaxis()->SetTitleOffset(1.5);
+    // h->SetMaximum(0.3);
+    htemp_met_data->GetXaxis()->SetLimits(0,1.2);
+    //      h->GetYaxis()->SetLimits(0,0.8);
+    // htemp_met_data->SetMaximum(0.3);
+    htemp_met_data->SetLineWidth(3);
+    htemp_met_data->Draw("HIST");
+    tex->DrawLatex(0.2,0.85,"DATA, " + textPt);
+    //tex_lumi->DrawLatex(0.6,0.91,"DATA");
+    c5->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/METoverPt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_" + pt_name + ".pdf");
+    
+    }
+  }
+  
   TFile* f_jet_pt = new TFile(CorrectionObject::_outpath+"plots/control/jet_pt_data.root","READ");
   for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     TString eta_name = "eta_"+(eta_abs ? eta_range2 : eta_range2_full)[i]+"_"+(eta_abs ? eta_range2 : eta_range2_full)[i+1];

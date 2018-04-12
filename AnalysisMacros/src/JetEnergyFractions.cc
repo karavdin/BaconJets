@@ -387,8 +387,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      h->GetYaxis()->SetLimits(0,0.8);
-      //      hEF->SetMaximum(0.8);
-      hEF->SetMaximum(3);
+      hEF->SetMaximum(0.8);
+      // hEF->SetMaximum(3);
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_neutEmEF_mc->SetLineColor(j+1);
       else    htemp_probejet_neutEmEF_mc->SetLineColor(j+31);
@@ -426,7 +426,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->GetYaxis()->SetTitleOffset(1.5);
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
-      hEF->SetMaximum(3);
+      hEF->SetMaximum(0.5);
+      // hEF->SetMaximum(3);
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_neutEmEF_data->SetLineColor(j+1);
       else    htemp_probejet_neutEmEF_data->SetLineColor(j+31);      htemp_probejet_neutEmEF_data->SetLineWidth(3);
@@ -462,9 +463,9 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
-      hEF->SetMaximum(3);
+      // hEF->SetMaximum(3);
       hEF->SetMinimum(0.001);
-      //      hEF->SetMaximum(0.8);
+      hEF->SetMaximum(0.8);
       if(j<9) htemp_probejet_neutHadEF_mc->SetLineColor(j+1);
       else    htemp_probejet_neutHadEF_mc->SetLineColor(j+31);
       htemp_probejet_neutHadEF_mc->SetLineWidth(3);
@@ -501,9 +502,9 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
-      hEF->SetMaximum(3);
+      // hEF->SetMaximum(3);
       hEF->SetMinimum(0.001);
-      //hEF->SetMaximum(0.8);
+      hEF->SetMaximum(0.8);
       if(j<9) htemp_probejet_neutHadEF_data->SetLineColor(j+1);
       else    htemp_probejet_neutHadEF_data->SetLineColor(j+31);
       htemp_probejet_neutHadEF_data->SetLineWidth(3);
@@ -541,7 +542,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //  hEF->GetYaxis()->SetLimits(0,0.1);
-      hEF->SetMaximum(3);
+      // hEF->SetMaximum(3);
+      hEF->SetMaximum(0.5);
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_chEmEF_mc->SetLineColor(j+1);
       else    htemp_probejet_chEmEF_mc->SetLineColor(j+31);
@@ -578,7 +580,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
-      hEF->SetMaximum(3);
+      // hEF->SetMaximum(3);
+      hEF->SetMaximum(0.5);
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_chEmEF_data->SetLineColor(j+1);
       else    htemp_probejet_chEmEF_data->SetLineColor(j+31);
@@ -615,7 +618,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
-      hEF->SetMaximum(3);
+      // hEF->SetMaximum(3);
+      hEF->SetMaximum(0.5);
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_chHadEF_mc->SetLineColor(j+1);
       else    htemp_probejet_chHadEF_mc->SetLineColor(j+31);
@@ -651,7 +655,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
-      hEF->SetMaximum(3);
+      // hEF->SetMaximum(3);
+      hEF->SetMaximum(0.5);
      hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_chHadEF_data->SetLineColor(j+1);
       else    htemp_probejet_chHadEF_data->SetLineColor(j+31);
@@ -683,10 +688,10 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->GetYaxis()->SetTitle("Norm. Entries");
       hEF->GetYaxis()->SetTitleOffset(1.5);
       // h->SetMaximum(0.3);
-      hEF->SetMaximum(3);
+      // hEF->SetMaximum(3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
-      //      hEF->SetMaximum(0.8);
+           hEF->SetMaximum(0.8);
       if(j<9) htemp_probejet_photonEF_mc->SetLineColor(j+1);
       else    htemp_probejet_photonEF_mc->SetLineColor(j+31);
       htemp_probejet_photonEF_mc->SetLineWidth(3);
@@ -718,8 +723,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
-      hEF->SetMaximum(3);
-      //hEF->SetMaximum(0.8);
+      // hEF->SetMaximum(3);
+      hEF->SetMaximum(0.8);
       if(j<9) htemp_probejet_photonEF_data->SetLineColor(j+1);
       else    htemp_probejet_photonEF_data->SetLineColor(j+31);
       htemp_probejet_photonEF_data->SetLineWidth(3);
@@ -752,8 +757,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
-      hEF->SetMaximum(3);
-      //      hEF->SetMaximum(0.8);
+      // hEF->SetMaximum(3);
+      hEF->SetMaximum(0.8);
       if(j<9) htemp_probejet_muonEF_mc->SetLineColor(j+1);
       else    htemp_probejet_muonEF_mc->SetLineColor(j+31);
       htemp_probejet_muonEF_mc->SetLineWidth(3);
@@ -785,7 +790,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //hEF->GetYaxis()->SetLimits(0,0.1);
-      hEF->SetMaximum(3);
+      // hEF->SetMaximum(3);
+      hEF->SetMaximum(0.5);
       if(j<9) htemp_probejet_muonEF_data->SetLineColor(j+1);
       else    htemp_probejet_muonEF_data->SetLineColor(j+31);
       htemp_probejet_muonEF_data->SetLineWidth(3);
@@ -820,7 +826,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->GetXaxis()->SetLimits(-3.15,3.15);
       hEF->GetYaxis()->SetLimits(0,0.1);
       //      hEF->SetMaximum(3);
-      //      hEF->SetMaximum(0.8);
+      // hEF->SetMaximum(0.8);
       if(j<9) htemp_probejet_phi_mc->SetLineColor(j+1);
       else    htemp_probejet_phi_mc->SetLineColor(j+31);
       htemp_probejet_phi_mc->SetLineWidth(3);
