@@ -5,6 +5,7 @@
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/FlavorParticle.h"
+#include "UHH2/core/include/Jet.h"
 
 #include <TFile.h>
 #include <TH1D.h>
@@ -81,7 +82,7 @@ class Selection {
     bool PUpthat(uhh2::Event& evt);
     bool EtaPhi(uhh2::Event& evt);
     bool EtaPhiCleaning(uhh2::Event& evt);
-
+  
     //jetmatching, find the jet in the event that corresponds to the jetid-th jet in the trigger object of the trigger with threshold trigger_th
   //returns -1 if the triggerobject does not contain less than jetid jets
   //returns -2 if no jet is matched within dR

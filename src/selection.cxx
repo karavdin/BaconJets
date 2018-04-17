@@ -385,20 +385,19 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
   {
     assert(event);
     
-    double EtaPhi_regions[9][4]={{-2.650, -2.500, -1.35, -1.05},
-				 {-2.964, -2.650, -1.10, -0.80},
-				 {-2.964, -2.650, -0.25, 0.1},
-				 {-2.964, -2.650, -3.14159, -2.8},
-				 {-2.964, -2.650, 2.14, 2.37},
-				 {-2.964, -2.650, 2.9, 3.14159},
-				 {2.650, 2.964, -2., -1.6},
-				 {2.650, 2.964, -0.97, -0.65},
-				 {2.650, 3.139, 0, 0.25}};
+    double EtaPhi_regions[8][4]={{2.853, 2.964, 0.8, 0.9},
+				 {2.853, 2.964, 2.25, 2.4},
+				 {2.853, 2.964, -2.4, -2.3},
+				 {-2.853, -2.964, -2.4, -2.3},
+				 {-2.853, -2.964, 0.8, 0.9},
+				 {-2.853, -2.964, 2.25, 2.4},
+				 {-2.853, -2.964, 2.9, 3.1},
+				 {2.853, 2.964, 2.9, 3.1}};
 
     double probejet_eta = event->get(tt_probejet_eta);
     double probejet_phi = event->get(tt_probejet_phi);
 
-    for(int i=0; i<9; i++){
+    for(int i=0; i<8; i++){
 //      cout<<"EtaPi Region: "<<EtaPhi_regions[i][0]<<"  "<<EtaPhi_regions[i][1]<<"  "<<EtaPhi_regions[i][2]<<"  "<<EtaPhi_regions[i][3]<<endl;
 //      cout<<"probejet_eta: "<<probejet_eta<<endl;
 //      cout<<"probejet_phi: "<<probejet_phi<<endl;
@@ -452,8 +451,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     return true;
   }
 
-
-
+  
 Selection::~Selection()
 {
 }

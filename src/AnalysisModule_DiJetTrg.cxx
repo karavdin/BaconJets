@@ -26,6 +26,7 @@
 
 #include "UHH2/BaconJets/include/LumiHists.h"
 
+
 #include "TClonesArray.h"
 #include "TString.h"
 #include "Riostream.h"
@@ -212,8 +213,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     metfilters_sel->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter");
     metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","Flag_ecalBadCalibFilter");
      
-    Jet_PFID = JetPFID(JetPFID::WP_LOOSE);
-    //Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
+    // Jet_PFID = JetPFID(JetPFID::WP_LOOSE); //not updated yet
+    Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
 
 //Lepton cleaner
@@ -738,22 +739,26 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     if(debug) cout<<"#jets before clean "<<n_jets_beforeCleaner<<endl;
     
     //JetID
-    // if(jetLabel == "AK4CHS" || jetLabel == "AK8CHS") jetcleaner->process(event);
+    if(jetLabel == "AK4CHS" // || jetLabel == "AK8CHS"
+       ) jetcleaner->process(event);
     int n_jets_afterCleaner = event.jets->size();
      if(debug) cout<<"#jets after clean "<<n_jets_afterCleaner<<endl;   
     //discard events if not all jets fulfill JetID instead of just discarding single jets
     if (n_jets_beforeCleaner != n_jets_afterCleaner) return false;
 
-    if(!isMC) h_afterCleaner->fill(event);
-    const int jet_n = event.jets->size();
-    if(jet_n<2) return false;
-    h_2jets->fill(event);
+    if(debug) cout<<"before jet id selection"<<endl;
 
+    if(!isMC) h_afterCleaner->fill(event); 
+
+    if(debug) cout<<"after jet id selection"<<endl;   
 //###########################################################################################
   
 //####################  Select and Apply proper JEC-Versions for every Run ##################
 
- 
+    const int jet_n = event.jets->size();
+    if(jet_n<2) return false;
+    h_2jets->fill(event); 
+
     bool apply_global = false;
 
     bool apply_B = false;
@@ -1291,32 +1296,25 @@ if(debug){
     if(debug)       cout << "after MET/pt cut : " << endl;
 
     //PhiEta Region cleaning
-    if(apply_EtaPhi_cut && !sel.EtaPhiCleaning(event)) return false; 
+    if(apply_EtaPhi_cut && !sel.EtaPhi(event)) return false; 
 
     
-    //### fast and dirty eta phi clean #####
-    bool cutEtaPhi = false;
-    if(jet_probe->eta()>2.853 && jet_probe->eta()<2.964){
-      if(jet_probe->phi()>2.25 && jet_probe->phi()<2.4){
-	cutEtaPhi =true;
-      }
-      else if(jet_probe->phi()>0.8 && jet_probe->phi()<0.9){
-	cutEtaPhi =true;
-      }
-    }
-    //saving this information to be put into a txt by the MakeEtaCleanTxt.cc Module
-    if(cutEtaPhi){
-      event.set(tt_run,event.run);
-      event.set(tt_evID,event.event);
-      event.set(tt_lumiSec,event.luminosityBlock);
+    // //### fast and dirty eta phi clean ##### change it to the EtaPhi function in selection.cxx at some point
+    // bool cutEtaPhi = false;
+ 
+    // //saving this inforamtion to be put into a txt by the MakeEtaCleanTxt.cc Module
+    // if(cutEtaPhi){
+    //   event.set(tt_run,event.run);
+    //   event.set(tt_evID,event.event);
+    //   event.set(tt_lumiSec,event.luminosityBlock);
+    //   return false;
+    // }
+    // else{
+    event.set(tt_run,0);
+    event.set(tt_evID,0);
+    event.set(tt_lumiSec,0);
       // return false;
-    }
-    else{
-      event.set(tt_run,0);
-      event.set(tt_evID,0);
-      event.set(tt_lumiSec,0);
-      // return false;
-    }
+    // }
     
     
     if(debug){
