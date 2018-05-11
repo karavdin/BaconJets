@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const double eta_cut = 2.853;
+const double eta_cut = 2.853-1e-5;
 // const double eta_cut = 100.; //central only
 
 const int nResponseBins = 100;

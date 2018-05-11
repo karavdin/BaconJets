@@ -28,6 +28,7 @@ class Selection {
     uhh2::Event::Handle<float> tt_gen_pthat; uhh2::Event::Handle<float> tt_gen_weight;
     uhh2::Event::Handle<float> tt_jet1_pt;     uhh2::Event::Handle<float> tt_jet2_pt;     uhh2::Event::Handle<float> tt_jet3_pt;
     uhh2::Event::Handle<float> tt_jet1_ptRaw;  uhh2::Event::Handle<float> tt_jet2_ptRaw;  uhh2::Event::Handle<float> tt_jet3_ptRaw;
+    uhh2::Event::Handle<float> tt_probejet_chEmEF;
     uhh2::Event::Handle<int> tt_nvertices;
     uhh2::Event::Handle<float> tt_probejet_eta;  uhh2::Event::Handle<float> tt_probejet_phi; uhh2::Event::Handle<float> tt_probejet_pt; uhh2::Event::Handle<float> tt_probejet_ptRaw;
     uhh2::Event::Handle<float> tt_barreljet_eta;  uhh2::Event::Handle<float> tt_barreljet_phi; uhh2::Event::Handle<float> tt_barreljet_pt; uhh2::Event::Handle<float> tt_barreljet_ptRaw;
@@ -80,9 +81,10 @@ class Selection {
     //  bool FullSelection();
     //Cut events with pthat in PU higher than pthat
     bool PUpthat(uhh2::Event& evt);
+    bool EtaPtCut(uhh2::Event& evt);
     bool EtaPhi(uhh2::Event& evt);
     bool EtaPhiCleaning(uhh2::Event& evt);
-  
+    bool ChEMFrakCut(uhh2::Event& evt);  
     //jetmatching, find the jet in the event that corresponds to the jetid-th jet in the trigger object of the trigger with threshold trigger_th
   //returns -1 if the triggerobject does not contain less than jetid jets
   //returns -2 if no jet is matched within dR

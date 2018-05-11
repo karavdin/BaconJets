@@ -203,8 +203,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     metfilters_sel->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter");
     metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","Flag_ecalBadCalibFilter");
    
-    Jet_PFID = JetPFID(JetPFID::WP_LOOSE);
-    //Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
+    Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
     
 //Lepton cleaner

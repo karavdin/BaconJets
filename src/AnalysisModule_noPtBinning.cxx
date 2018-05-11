@@ -265,8 +265,7 @@ class AnalysisModule_noPtBinning: public uhh2::AnalysisModule {
     metfilters_sel->add<TriggerSelection>("EcalDeadCellTriggerPrimitiveFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter"); 
     metfilters_sel->add<TriggerSelection>("CSCTightHalo2016Filter", "Flag_CSCTightHalo2016Filter"); 
    
-    Jet_PFID = JetPFID(JetPFID::WP_LOOSE);
-    //Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
+    Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
 
 //Lepton cleaner

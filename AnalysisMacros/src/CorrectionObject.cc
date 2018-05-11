@@ -37,7 +37,7 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
 	
 	_MCpath_ForWeights_FLAT = _weightpath_FLAT + "uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_" + _collection + ".root";//  "_Flat.root";
 	_MCpath_ForWeights_FWD  = _weightpath_FWD + "uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_" + _collection  + ".root";// "_Fwd.root";
-	_MCpath_ForWeights  = _weightpath + "uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_" + _collection  + ".root";
+	_MCpath_ForWeights  = _MCpath; // _weightpath + "uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_" + _collection  + ".root";
 	_generator_tag = "pythia8";
       }
      
@@ -75,7 +75,7 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
 	;
       _DATApath_ForWeights_FLAT = _weightpath_FLAT + "uhh2.AnalysisModuleRunner.DATA.DATA_Run" + _runnr + "_" + _collection + ".root";
       _DATApath_ForWeights_FWD = _weightpath_FWD + "uhh2.AnalysisModuleRunner.DATA.DATA_Run" + _runnr + "_" + _collection + ".root";
-      _DATApath_ForWeights = _weight_path + "uhh2.AnalysisModuleRunner.DATA.DATA_Run" + _runnr + "_" + _collection + ".root";
+      _DATApath_ForWeights = _DATApath;// _weight_path + "uhh2.AnalysisModuleRunner.DATA.DATA_Run" + _runnr + "_" + _collection + ".root";
       
       //Check if files are in place:
       cout << "Opening MC file:   " << _MCpath << endl;

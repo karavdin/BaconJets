@@ -54,7 +54,8 @@ Selection::Selection(uhh2::Context & ctx) :
   tt_mpf_r = ctx.declare_event_output<float>("mpf_r");
   tt_asymmetry = ctx.declare_event_output<float>("asymmetry");
   tt_nPU = ctx.declare_event_output<int>("nPU");
-
+  tt_probejet_chEmEF = ctx.declare_event_output<float>("probejet_chEmEF");
+  
   Cut_Dir = ctx.get("Cut_dir");
   dataset_version = ctx.get("dataset_version");
 
@@ -381,17 +382,45 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     return false;
   }
 
-  bool Selection::EtaPhi(uhh2::Event& evt)
+  bool Selection::EtaPtCut(uhh2::Event& evt)
   {
     assert(event);
     
-    double EtaPhi_regions[8][4]={{2.853, 2.964, 0.8, 0.9},
-				 {2.853, 2.964, 2.25, 2.4},
-				 {2.853, 2.964, -2.4, -2.3},
-				 {-2.853, -2.964, -2.4, -2.3},
-				 {-2.853, -2.964, 0.8, 0.9},
-				 {-2.853, -2.964, 2.25, 2.4},
-				 {-2.853, -2.964, 2.9, 3.1},
+    double probejet_eta = event->get(tt_probejet_eta);
+    double ptave = event->get(tt_pt_ave);
+    
+    if( probejet_eta>2.500 && probejet_eta<3.139 && ptave > 370 ){
+      return false;
+    }
+
+    return true;
+  }
+
+  bool Selection::ChEMFrakCut(uhh2::Event& evt)
+  {
+    assert(event);
+    
+    double probejet_eta = event->get(tt_probejet_eta);
+    double chEM = event->get(tt_probejet_chEmEF);
+    
+    if( probejet_eta>2.650 && probejet_eta<2.853 && chEM > 0.1 ){
+      return false;
+    }
+
+    return true;
+  }
+  
+  bool Selection::EtaPhi(uhh2::Event& evt)
+  {
+    assert(event);
+
+    double EtaPhi_regions[8][4]={{2.853, 2.964, 0.6, 1.},
+				 {-2.964,-2.853, 0.6, 1.},
+				 {2.853, 2.964, 2.2, 2.6},
+				 {-2.964,-2.853, 2.2, 2.6},
+				 {2.853, 2.964, -2.8, -2.2},
+				 {-2.964,-2.853, -2.8, -2.2},
+				 {-2.964,-2.853, 2.9, 3.1},
 				 {2.853, 2.964, 2.9, 3.1}};
 
     double probejet_eta = event->get(tt_probejet_eta);

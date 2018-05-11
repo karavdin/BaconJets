@@ -6,6 +6,7 @@
 #include <TH1.h>
 #include <TH1D.h>
 #include <TH2D.h>
+#include <TH2Poly.h>
 #include <TString.h>
 #include <TLegend.h>
 #include <TCanvas.h>
@@ -56,7 +57,7 @@ void CorrectionObject::CalculateMCWeights(){
      if(f_data->GetSize()==-1) throw runtime_error("In CorrectionObject.cc: File or Directory " + _DATApath_ForWeights+" does not exist!");
 
   //pT and eta bins  
-  double bins[16] = {51, 73, 95, 100, 126,152, 163, 230, 250, 299, 316, 365, 433, 453, 566, 1000};
+  // double bins[16] = {51, 73, 95, 100, 126,152, 163, 230, 250, 299, 316, 365, 433, 453, 566, 1000}; //take pt-bins from paramters.h
   double bins_eta[5] = {-5.2, -2.853, 0, 2.853, 5.2};
 
  //pT_ave-histograms for MC & DATA
@@ -66,12 +67,62 @@ void CorrectionObject::CalculateMCWeights(){
   TH1D* h1_pt_ave_mc_scaled = new TH1D("h1_pt_ave_mc_scaled", "pt_ave mc scaled;p_{T}^{ave};entries", n_pt_bins, 0, 5000); //cross-check 1d
   TH1D* h1_pt_ave_data = new TH1D("h1_pt_ave_data", "pt_ave data;p_{T}^{ave};entries", n_pt_bins, 0, 5000);                //cross-check 1d
 
-  TH2D* h_pt_ave_binned_mc = new TH2D("pt_ave_binned_mc","pt_ave binned mc;p_{T}^{ave};|#eta|", 15, bins, 4, bins_eta);
-  TH2D* h_pt_ave_binned_data = new TH2D("pt_ave_binned_data","pt_ave binned data;p_{T}^{ave};|#eta|", 15, bins, 4, bins_eta);
-  TH2D* h_pt_ave_binned_yield = new TH2D("pt_ave_binned_yield","CENTRAL Triggers;p_{T}^{ave};|#eta|", 15, bins, n_eta-1, eta_bins);
-  TH2D* h_pt_ave_binned_mc_scaled = new TH2D("pt_ave_binned_mc_scaled","pt_ave binned mc scaled;p_{T}^{ave};|#eta|", 15, bins, 4, bins_eta);
-  TH1D* h1_pt_ave_binned_mc_scaled = new TH1D("h1_pt_ave_binned_mc_scaled", "pt_ave mc scaled;p_{T}^{ave};entries", 15, bins);   //cross-check 1d
-  TH1D* h1_pt_ave_binned_data = new TH1D("h1_pt_ave_binned_data", "pt_ave data;p_{T}^{ave};entries", 15, bins);                  //cross-check 1d 
+
+  TH2Poly* h_pt_ave_binned_mc = new TH2Poly();
+  h_pt_ave_binned_mc->SetName("pt_ave_binned_mc");  
+  h_pt_ave_binned_mc->SetTitle("pt_ave binned mc");
+  h_pt_ave_binned_mc->GetYaxis()->SetTitle("|#eta|");
+  h_pt_ave_binned_mc->GetXaxis()->SetTitle("p_{T}^{ave}");
+  bool eta_cut_bool;
+  for(int i=0; i<5-1; i++){
+    eta_cut_bool = fabs(bins_eta[i])>eta_cut && fabs(bins_eta[i+1])>eta_cut;
+       for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
+	 h_pt_ave_binned_mc->AddBin( (eta_cut_bool?pt_bins_HF:pt_bins)[j], bins_eta[i], (eta_cut_bool?pt_bins_HF:pt_bins)[j+1], bins_eta[i+1] );
+       }
+  }
+  
+ 
+  TH2Poly* h_pt_ave_binned_data = new TH2Poly();
+  h_pt_ave_binned_data->SetName("pt_ave_binned_data");  
+  h_pt_ave_binned_data->SetTitle("pt_ave binned data");
+  h_pt_ave_binned_data->GetYaxis()->SetTitle("#eta");
+  h_pt_ave_binned_data->GetXaxis()->SetTitle("p_{T}"); 
+  for(int i=0; i<5-1; i++){
+    eta_cut_bool = fabs(bins_eta[i])>eta_cut && fabs(bins_eta[i+1])>eta_cut;
+       for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
+	 h_pt_ave_binned_data->AddBin( (eta_cut_bool?pt_bins_HF:pt_bins)[j], bins_eta[i], (eta_cut_bool?pt_bins_HF:pt_bins)[j+1], bins_eta[i+1] );
+       }
+  }
+
+  TH2Poly* h_pt_ave_binned_yield = new TH2Poly();
+  h_pt_ave_binned_yield->SetName("pt_ave_binned_yield");  
+  h_pt_ave_binned_yield->SetTitle("pt_ave binned yield");
+  h_pt_ave_binned_yield->GetYaxis()->SetTitle("#eta");
+  h_pt_ave_binned_yield->GetXaxis()->SetTitle("p_{T}"); 
+  for(int i=0; i<5-1; i++){
+    eta_cut_bool = fabs(bins_eta[i])>eta_cut && fabs(bins_eta[i+1])>eta_cut;
+       for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
+	 h_pt_ave_binned_yield->AddBin( (eta_cut_bool?pt_bins_HF:pt_bins)[j], bins_eta[i], (eta_cut_bool?pt_bins_HF:pt_bins)[j+1], bins_eta[i+1] );
+       }
+  }  
+  
+  // TH2D* h_pt_ave_binned_yield = new TH2D("pt_ave_binned_yield","CENTRAL Triggers;p_{T}^{ave};|#eta|", 15, bins, n_eta-1, eta_bins);
+
+  TH2Poly* h_pt_ave_binned_mc_scaled = new TH2Poly();
+  h_pt_ave_binned_mc_scaled->SetName("pt_ave_binned_mc_scaled");  
+  h_pt_ave_binned_mc_scaled->SetTitle("pt_ave binned mc scaled");
+  h_pt_ave_binned_mc_scaled->GetYaxis()->SetTitle("|#eta|");
+  h_pt_ave_binned_mc_scaled->GetXaxis()->SetTitle("p_{T}^{ave}"); 
+  for(int i=0; i<5-1; i++){
+    eta_cut_bool = fabs(bins_eta[i])>eta_cut && fabs(bins_eta[i+1])>eta_cut;
+       for(int j= 0 ; j <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; j++ ){
+	 h_pt_ave_binned_mc_scaled->AddBin( (eta_cut_bool?pt_bins_HF:pt_bins)[j], bins_eta[i], (eta_cut_bool?pt_bins_HF:pt_bins)[j+1], bins_eta[i+1] );
+       }
+  }  
+  
+  
+  // TH1D* h1_pt_ave_binned_mc_scaled = new TH1D("h1_pt_ave_binned_mc_scaled", "pt_ave mc scaled;p_{T}^{ave};entries", 15, bins);   //cross-check 1d
+  // TH1D* h1_pt_ave_binned_data = new TH1D("h1_pt_ave_binned_data", "pt_ave data;p_{T}^{ave};entries", 15, bins);                  //cross-check 1d 
 
 
   //Fill histograms
@@ -82,12 +133,12 @@ void CorrectionObject::CalculateMCWeights(){
   TTreeReaderValue<Float_t> alpha_data(myReader_data, "alpha");
   TTreeReaderValue<Float_t> probejet_eta_data(myReader_data, "probejet_eta");
   while (myReader_data.Next()){
-    if(*alpha_data >= 0.3 || *pt_ave_data < bins[0]) continue;
+    if(*alpha_data >= 0.3 || *pt_ave_data < pt_bins[0]) continue;
     h_pt_ave_data->Fill(*pt_ave_data, *probejet_eta_data, *weight_data);
     h_pt_ave_binned_data->Fill(*pt_ave_data, *probejet_eta_data, *weight_data);
     h_pt_ave_binned_yield->Fill(*pt_ave_data, *probejet_eta_data, *weight_data);
     h1_pt_ave_data->Fill(*pt_ave_data, *weight_data);
-    h1_pt_ave_binned_data->Fill(*pt_ave_data, *weight_data);
+    // h1_pt_ave_binned_data->Fill(*pt_ave_data, *weight_data);
   }
 
   h_pt_ave_binned_yield->SetMinimum(0);
@@ -100,7 +151,7 @@ void CorrectionObject::CalculateMCWeights(){
   TTreeReaderValue<Float_t> alpha_mc(myReader_mc, "alpha");
   TTreeReaderValue<Float_t> probejet_eta_mc(myReader_mc, "probejet_eta");
   while (myReader_mc.Next()){
-    if(*alpha_mc >= 0.3  || *pt_ave_mc<bins[0]) continue;
+    if(*alpha_mc >= 0.3  || *pt_ave_mc<pt_bins[0]) continue;
     h_pt_ave_mc->Fill(*pt_ave_mc, *probejet_eta_mc, *weight_mc);
     h_pt_ave_binned_mc->Fill(*pt_ave_mc, *probejet_eta_mc, *weight_mc);
   }
@@ -141,7 +192,8 @@ void CorrectionObject::CalculateMCWeights(){
 
     int idx_x = 0;
     int idx_y = 0;
-    while(pt > bins[idx_x]){ 
+    eta_cut_bool = fabs(eta)>eta_cut;
+    while(pt > (eta_cut_bool?pt_bins_HF:pt_bins)[idx_x]){ 
       idx_x++;
     }
     while(eta > bins_eta[idx_y]){
@@ -156,7 +208,7 @@ void CorrectionObject::CalculateMCWeights(){
     h_pt_ave_mc_scaled->Fill(pt, eta, right_weight);
     h_pt_ave_binned_mc_scaled->Fill(pt, eta, right_weight);
     h1_pt_ave_mc_scaled->Fill(pt, right_weight);
-    h1_pt_ave_binned_mc_scaled->Fill(pt, right_weight);
+    // h1_pt_ave_binned_mc_scaled->Fill(pt, right_weight);
 
     ind++;
   } 
@@ -187,28 +239,31 @@ void CorrectionObject::CalculateMCWeights(){
   l1->AddEntry(h1_pt_ave_data,"DATA","p");
   l1->Draw();
 
-  //Save
+  // //Save
   c1->SaveAs(CorrectionObject::_weight_path + "MC_scaled_PtEta_Fine.pdf");
 
-  //Setup Canvas binned 
-  TCanvas* c2 = new TCanvas();
-  h1_pt_ave_binned_mc_scaled->SetLineWidth(2);
-  h1_pt_ave_binned_mc_scaled->GetXaxis()->SetTitle("p_{T}^{ave} [GeV]");
-  h1_pt_ave_binned_mc_scaled->GetXaxis()->SetRangeUser(20,1000);
-  h1_pt_ave_binned_mc_scaled->Draw("HIST");
-  h1_pt_ave_binned_data->SetLineColor(2);
-  h1_pt_ave_binned_data->SetMarkerColor(2);
-  h1_pt_ave_binned_data->SetMarkerStyle(20);
-  h1_pt_ave_binned_data->Draw("P SAME");
+  // //Setup Canvas binned 
+  // TCanvas* c2 = new TCanvas();
+  // h1_pt_ave_binned_mc_scaled->SetLineWidth(2);
+  // h1_pt_ave_binned_mc_scaled->GetXaxis()->SetTitle("p_{T}^{ave} [GeV]");
+  // h1_pt_ave_binned_mc_scaled->GetXaxis()->SetRangeUser(20,1000);
+  // h1_pt_ave_binned_mc_scaled->Draw("HIST");
+  // h1_pt_ave_binned_data->SetLineColor(2);
+  // h1_pt_ave_binned_data->SetMarkerColor(2);
+  // h1_pt_ave_binned_data->SetMarkerStyle(20);
+  // h1_pt_ave_binned_data->Draw("P SAME");
 
-  TLegend* l2 = new TLegend(0.52,0.2,0.90,0.4);    
-  l2->AddEntry(h1_pt_ave_binned_mc_scaled,"MC after reweighting","l");
-  l2->AddEntry(h1_pt_ave_binned_data,"DATA","p");
-  l2->Draw();
+  // TLegend* l2 = new TLegend(0.52,0.2,0.90,0.4);    
+  // l2->AddEntry(h1_pt_ave_binned_mc_scaled,"MC after reweighting","l");
+  // l2->AddEntry(h1_pt_ave_binned_data,"DATA","p");
+  // l2->Draw();
 
-  //Save
-  c2->SaveAs(CorrectionObject::_weight_path + "MC_scaled_PtEta_Fine_binned.pdf");
+  // //Save
+  // c2->SaveAs(CorrectionObject::_weight_path + "MC_scaled_PtEta_Fine_binned.pdf");
 
+  if(!  CorrectionObject::make_path(CorrectionObject::_weight_path)){
+    cout << "No new Directory was created" << endl;
+  }
 
   //Write output
   TFile* out = new TFile(CorrectionObject::_weight_path + "/MC_ReWeights_Run" + CorrectionObject::_runnr  + ".root","RECREATE");
@@ -217,8 +272,8 @@ void CorrectionObject::CalculateMCWeights(){
   out->Close();
 
   //delete out;
-  delete l2;
-  delete c2;
+  // delete l2;
+  // delete c2;
   delete l1;
   delete c1;
   delete for_SF_mc;

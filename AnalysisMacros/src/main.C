@@ -47,6 +47,7 @@ static void show_usage(std::string name)
        	      << "\t-F\t\tUse the F directory instead of the BCD directory.\n"      
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
       	      << "\t-useHF\t\tIncludes the HF trigger.\n"
+      	      << "\t-calcMCW\t\tCalculate the weights for flat QCD MC.\n"
 	      << "\t-IGF\t\tCreate the Global Fit Input plots with standart eta bins.\n"
 	      << "\t-IGFw\t\tCreate the Global Fit Input plots with wider eta bins.\n"
 	      << "\t-MEPC\t\tMake eta phi cleaning txt.\n"
@@ -70,7 +71,7 @@ int main(int argc,char *argv[]){
   // To execute all, choose FullCycle_CorrectFormulae
   //
   //************************************************************
-
+  
   cout << "Hello from main(). What am I going to do?\nWill it involve dead regions and high jetiness?\n13371n6 1n 7h3 57uff" << endl << endl;
 
    // cout<<argc<<endl;
@@ -114,7 +115,8 @@ int main(int argc,char *argv[]){
 				   "--input",
 				   "--outSuffix",
 				   "-useHF",
-				   "-NPVEta",
+				    "-NPVEta",
+				    "-calcMCW",
 				   "-mon",
 				    "-monSi",
 				    "-IGF",
@@ -161,6 +163,7 @@ int main(int argc,char *argv[]){
   bool do_IGF =false;
   bool do_IGFw =false;
   bool do_MEPC=false;
+  bool do_calcMCW=false;
   TString input_path_="";
   double asym_cut = 0.;
   double kfsrRange = 5.19;
@@ -179,6 +182,9 @@ int main(int argc,char *argv[]){
 	  } 
 	  else if(arg=="-FP"){
 	       do_fullPlots=true;
+	  } 
+	  else if(arg=="-calcMCW"){
+	       do_calcMCW=true;
 	  } 
 	  else if(arg=="-FPeta"){
 	       do_fullPlotsef=true;
@@ -309,7 +315,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW)){
     cout<<"No plots were specified! Only the existence of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -348,9 +354,14 @@ int main(int argc,char *argv[]){
   input_path += dataname_end + ".root";
   }
   
-  TString weight_path  = "/nfs/dust/cms/user/karavdia/JEC_Summer16_V8_ForWeights/"; //used as output path of CalculateMCWeights_TriggerThresholds
+  TString weight_path  = "/nfs/dust/cms/user/garbersc/JEC_Fall17_ForWeights/"; //used as output path of CalculateMCWeights_TriggerThresholds
   // TString input_path_MC = "/nfs/dust/cms/user/multh/JEC/2016Legacy/Residuals/Summer16_07Aug2017_V5/AK4CHS/MC_NoReweighted_CentralFWD_NewBinning/uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_AK4CHS_RunBCDEFGH.root";
-  TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2Res_wMPF_CentralTriggersONLY/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
+  TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_"+run_nr+".root";
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals//Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_23Apr.root";
+  // TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2Res_wMPF_CentralTriggersONLY/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_noL1METcorrectButRawChs.root";
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_noJetIDCleaning.root";
+ // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_noMETFilter.root";
   
   TString outpath_postfix = (dataname_end!="") ? "_" : "";
   outpath_postfix  +=  dataname_end;
@@ -367,7 +378,8 @@ int main(int argc,char *argv[]){
     if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange);
     if(do_fullPlots or do_JEF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetEnergyFractions();
 
-    
+    if(do_calcMCW) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CalculateMCWeights();
+ 
     if(do_fullPlotsef) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();    
     if(do_trgControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
     

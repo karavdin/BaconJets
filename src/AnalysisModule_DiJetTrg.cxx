@@ -176,6 +176,10 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     double integrated_lumi;
     vector<run_lumi> upper_binborders_runnrs;
     vector<double> lumi_in_bins;
+
+    double L1METptThresh;
+    double eta_thresh_low;
+    double eta_thresh_high;
   };
 
   AnalysisModule_DiJetTrg::AnalysisModule_DiJetTrg(uhh2::Context & ctx) :
@@ -199,9 +203,14 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     isMC = (ctx.get("dataset_type") == "MC");
     if(isMC && no_genp) cout<<"!!! WARNING, no genparticle are used! !!!"<<endl;
     //// COMMON MODULES
+
+    L1METptThresh = stod(ctx.get("L1METptThresh"));
+    eta_thresh_low = stod(ctx.get("eta_thresh_low"));
+      
     if(!isMC) lumi_sel.reset(new LumiSelection(ctx));
-    /* MET filters */ 
-    metfilters_sel.reset(new uhh2::AndSelection(ctx, "metfilters")); 
+    /* MET filters */
+    if(!isMC){
+    metfilters_sel.reset(new uhh2::AndSelection(ctx, "metfilters"));
     metfilters_sel->add<TriggerSelection>("1-good-vtx", "Flag_goodVertices"); 
     metfilters_sel->add<TriggerSelection>("globalTightHalo2016Filter", "Flag_globalTightHalo2016Filter"); 
     metfilters_sel->add<TriggerSelection>("HBHENoiseFilter", "Flag_HBHENoiseFilter");        
@@ -211,7 +220,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     metfilters_sel->add<TriggerSelection>("BadPFMuonFilter", "Flag_BadPFMuonFilter");
     metfilters_sel->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter");
     metfilters_sel->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter");
-    metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","Flag_ecalBadCalibFilter");
+    metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","Flag_ecalBadCalibFilter");}
      
     // Jet_PFID = JetPFID(JetPFID::WP_LOOSE); //not updated yet
     Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
@@ -275,16 +284,23 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     std::vector<std::string> JEC_corr_B, JEC_corr_C, JEC_corr_D, JEC_corr_E, JEC_corr_F;
     std::vector<std::string> JEC_corr_B_L1RC, JEC_corr_C_L1RC, JEC_corr_D_L1RC, JEC_corr_E_L1RC, JEC_corr_F_L1RC;     
 
+    
+#define IF_MAKE_JEC_VARS_MC(jecv)				    \
+  if(JEC_Version == #jecv){			    \
+  JEC_corr               = JERFiles::jecv##_L123_AK4PFchs_MC; \
+				       				\
+  JEC_corr_L1RC          = JERFiles::jecv##_L1RC_AK4PFchs_MC;	\
+	\
+  }									\
+    
     if(isMC){
       //for MC
       if(jetLabel == "AK4CHS"){
-	if(JEC_Version == "Fall17_17Nov2017_V4"){
-	    JEC_corr               = JERFiles::Fall17_17Nov2017_V4_L123_AK4PFchs_MC;
-	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V4_L1RC_AK4PFchs_MC;	    
-	  }
+	  IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V6)
+	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V4)
+       }
 
-	  else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
-      }
+      else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
     }
     else {
 
@@ -357,17 +373,11 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    jetleptoncleaner.reset(new JetLeptonCleaner(ctx, JEC_corr));
 	  }
 	}
-	//MC
-	
+	//MC	
 	else if(isMC){
-	  // if(split_JEC_MC){
-
-	  // }
-	  // else{
 	    jet_corrector.reset(new JetCorrector(ctx, JEC_corr, JEC_corr_L1RC));
 	    jetleptoncleaner.reset(new JetLeptonCleaner(ctx, JEC_corr));
 	    cout << "setting up jet_corrector and JLC for MC, non-split JEC." << endl;
-	  // }
 	}
      
 //JER Smearing for corresponding JEC-Version
@@ -554,50 +564,23 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     TString name_weights = ctx.get("MC_Weights_Path");
     apply_weights = (ctx.get("Apply_Weights") == "true" && isMC);
     if (debug) cout<<"Apply Weights: "<<apply_weights<<endl;
-    // if(apply_weights){
-    //   if(isMC && dataset_version.Contains("RunBCD")){
-    // 	if(dataset_version.Contains("_Fwd"))
-    // 	  name_weights += "MC_ReWeights_FWD_RunBCD.root";
-    // 	else if(dataset_version.Contains("_Flat"))
-    // 	  name_weights += "MC_ReWeights_CENTRAL_RunBCD.root";
-    // 	else
-    // 	  name_weights += "MC_ReWeights_RunBCD.root";
-    //   }
-    //   else if(isMC && dataset_version.Contains("RunEFearly")){
-    // 	if(dataset_version.Contains("_Fwd"))
-    // 	  name_weights += "MC_ReWeights_FWD_RunEFearly.root";
-    // 	else if(dataset_version.Contains("_Flat")) 
-    // 	  name_weights += "MC_ReWeights_CENTRAL_RunEFearly.root";
-    // 	else
-    // 	  name_weights += "MC_ReWeights_RunEFearly.root";
-    //   }
-    //   else if(isMC && dataset_version.Contains("RunFlateG")){
-    // 	if(dataset_version.Contains("_Fwd"))
-    // 	  name_weights += "MC_ReWeights_FWD_RunFlateG.root";
-    // 	else if(dataset_version.Contains("_Flat"))
-    // 	  name_weights += "MC_ReWeights_CENTRAL_RunFlateG.root";
-    // 	else
-    // 	  name_weights += "MC_ReWeights_RunFlateG.root";
-    //   }
-    //   else if(isMC && dataset_version.Contains("RunH")){
-    // 	if(dataset_version.Contains("_Fwd"))
-    // 	  name_weights += "MC_ReWeights_FWD_RunH.root";
-    // 	else if(dataset_version.Contains("_Flat"))
-    // 	name_weights += "MC_ReWeights_CENTRAL_RunH.root";
-    // 	else
-    // 	  name_weights += "MC_ReWeights_RunH.root";
-    //   }
-    //   else if(isMC && dataset_version.Contains("RunBCDEFGH")){
-    // 	if(dataset_version.Contains("_Fwd"))
-    // 	  name_weights += "MC_ReWeights_FWD_RunBCDEFGH.root";
-    // 	else if(dataset_version.Contains("_Flat"))
-    // 	name_weights += "MC_ReWeights_CENTRAL_RunBCDEFGH.root";
-    // 	else
-    // 	  name_weights += "MC_ReWeights_RunBCDEFGH.root";
+    if(apply_weights){
+      if(isMC && dataset_version.Contains("RunD")){
+    	  name_weights += "MC_ReWeights_RunD.root";
+      }
+      else if(isMC && dataset_version.Contains("RunE")){
+    	  name_weights += "MC_ReWeights_RunE.root";
+      }
+      else if(isMC && dataset_version.Contains("RunF")){
+    	  name_weights += "MC_ReWeights_RunF.root";
+      }
+      else{
+	cout<<"No MC weights found? dataset_version is "<<dataset_version<<endl;
+      }
+      f_weights.reset(new TFile(name_weights,"READ"));
+    }
 
-    //   }
-    //   f_weights.reset(new TFile(name_weights,"READ"));
-    // }
+    
     apply_lumiweights = (ctx.get("Apply_Lumiweights") == "true" && isMC);
     apply_unflattening = (ctx.get("Apply_Unflattening") == "true" && isMC);
     if(apply_weights && apply_lumiweights) throw runtime_error("In AnalysisModule_DiJetTrg.cxx: 'apply_weights' and 'apply_lumiweights' are set 'true' simultaneously. This won't work, please decide on one");
@@ -706,8 +689,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
       else  h_lumisel->fill(event);
     }
 
-    // MET filters   
-    if(!metfilters_sel->passes(event)) return false;   
+    // MET filters
+    if(!isMC && !metfilters_sel->passes(event)) return false;   
 
     int event_in_lumibin = -1;
     double fill_event_integrated_lumi = 0;
@@ -787,13 +770,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     }     
     else if(isMC){
       //MC
-      if(split_JEC_MC){
-	  throw runtime_error("AnalysisModule split_JEC_MC not implemented or run number not covered by if-statements in process-routine.");
-      }      
-      else{
-	//not split JEC
 	apply_global = true;
-      }
+      
     }
         
     h_beforeJEC->fill(event);
@@ -863,24 +841,33 @@ if(debug){
 
     h_afterJER->fill(event); 
 
+    if(eta_thresh_low==1.) eta_thresh_high=2.;
+    else if(eta_thresh_low==0.) eta_thresh_high=1.;
+    else  if(eta_thresh_low==2.) eta_thresh_high=2.5;
+    else  if(eta_thresh_low==2.5) eta_thresh_high=3;
+    else  if(eta_thresh_low==3.) eta_thresh_high=5.;
+    else{
+      eta_thresh_low=0.;
+      eta_thresh_high=10.;
+    }
     //correct MET only AFTER smearing the jets
     if(apply_B){
-      jet_corrector_B->correct_met(event,true);
+      jet_corrector_B->correct_met(event,true,L1METptThresh,  eta_thresh_low, eta_thresh_high);
     }
     if(apply_C){
-      jet_corrector_C->correct_met(event,true);
+      jet_corrector_C->correct_met(event,true,L1METptThresh,  eta_thresh_low, eta_thresh_high);
     }
     if(apply_D){
-      jet_corrector_D->correct_met(event,true);
+      jet_corrector_D->correct_met(event,true,L1METptThresh,  eta_thresh_low, eta_thresh_high);
     }
     if(apply_E){
-      jet_corrector_E->correct_met(event,true);
+      jet_corrector_E->correct_met(event,true,L1METptThresh,  eta_thresh_low, eta_thresh_high);
     }
     if(apply_F){
-      jet_corrector_F->correct_met(event,true);
+      jet_corrector_F->correct_met(event,true,L1METptThresh,  eta_thresh_low, eta_thresh_high);
     }     
     if(apply_global){
-      jet_corrector->correct_met(event,true);
+      jet_corrector->correct_met(event,true,L1METptThresh,  eta_thresh_low, eta_thresh_high);
     }
 
     h_afterMET->fill(event); 
@@ -1296,7 +1283,21 @@ if(debug){
     if(debug)       cout << "after MET/pt cut : " << endl;
 
     //PhiEta Region cleaning
-    if(apply_EtaPhi_cut && !sel.EtaPhi(event)) return false; 
+    if(!isMC)
+      if(apply_EtaPhi_cut && !sel.EtaPhi(event)) return false;
+    
+//     I was looking at the material you prepare some time ago [0]
+// In particularly in PF fractions and asymmetries at high pt bins in 2.5-3.0 eta.
+// The reason why we should care about EC region is that MET group claims everything becomes better as soon as they don't apply corrections in this region [1] and JEC V6  (pt-balance const) works better for them than JECV8 (MPF loglin).
+// Basically correction with no pt dependence works better for them than one with pt dependence. Interesting enough is that pt dependence in this region is driven by high pt bins, where asymmetry does not look great, becuase of some small peaks in the tails (i.e p. 142 or p.156 in [0]). PF fraction also look quite peculiar, i.e there are some events with high chEmEF on p.158 even after cleaning. So I think at high pt we are biased by some noise or mis-modeling, therefore pt-dependence we derive in EC is not very reliable. There are two approaches to deal with it:
+// [0] https://indico.cern.ch/event/722484/contributions/2977850/attachments/1637096/2612964/controlplots_RunF_veryDetailed_20Apr.pdf
+// [1] https://indico.cern.ch/event/722467/contributions/2971253/attachments/1635662/2609542/MetStudyInZ_18Apr2018_SamuelMay.pdf
+// [2] https://indico.cern.ch/event/726656/contributions/2990422/attachments/1642997/2626523/MetStudyInZ_3May2018.pdf
+    //TODO let them get apply_xxx bools from the xml-config
+    if(!isMC){
+          if(! sel.EtaPtCut(event)) return false;
+	  if(! sel.ChEMFrakCut(event)) return false;
+    }
 
     
     // //### fast and dirty eta phi clean ##### change it to the EtaPhi function in selection.cxx at some point
