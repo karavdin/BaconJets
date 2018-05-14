@@ -389,7 +389,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     double probejet_eta = event->get(tt_probejet_eta);
     double ptave = event->get(tt_pt_ave);
     
-    if( probejet_eta>2.500 && probejet_eta<3.139 && ptave > 370 ){
+    if( fabs(probejet_eta)>2.500 && fabs(probejet_eta)<3.139 && ptave > 370 ){
       return false;
     }
 
@@ -403,7 +403,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     double probejet_eta = event->get(tt_probejet_eta);
     double chEM = event->get(tt_probejet_chEmEF);
     
-    if( probejet_eta>2.650 && probejet_eta<2.853 && chEM > 0.1 ){
+    if( fabs(probejet_eta)>2.650 && fabs(probejet_eta)<2.853 && chEM > 0.1 ){
       return false;
     }
 
