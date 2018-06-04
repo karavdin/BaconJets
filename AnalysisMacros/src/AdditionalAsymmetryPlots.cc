@@ -912,12 +912,12 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     int n_ev =  htemp_pt_mc2->GetEntries();
     cout<<"hist has "<<n_ev<<" entries"<<endl;
 
-    if(htemp_pt_mc2->Integral() > 0) htemp_pt_mc2->Scale(1/htemp_pt_mc2->Integral());
+    // if(htemp_pt_mc2->Integral() > 0) htemp_pt_mc2->Scale(1/htemp_pt_mc2->Integral());
 
     n_ev =  htemp_pt_data2->GetEntries();
     cout<<"hist has "<<n_ev<<" entries"<<endl;
 
-    if(htemp_pt_data2->Integral() > 0) htemp_pt_data2->Scale(1/htemp_pt_data2->Integral());   
+    // if(htemp_pt_data2->Integral() > 0) htemp_pt_data2->Scale(1/htemp_pt_data2->Integral());   
 
     htemp_pt_datamc = (TH1D*)htemp_pt_data2->Clone();
     htemp_pt_datamc->Divide(htemp_pt_mc2);
@@ -1018,12 +1018,12 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     int n_ev =  htemp_pt_mc2->GetEntries();
     cout<<"hist has "<<n_ev<<" entries"<<endl;
 
-    if(htemp_pt_mc2->Integral() > 0) htemp_pt_mc2->Scale(1/htemp_pt_mc2->Integral());
+    // if(htemp_pt_mc2->Integral() > 0) htemp_pt_mc2->Scale(1/htemp_pt_mc2->Integral());
 
     n_ev =  htemp_pt_data2->GetEntries();
     cout<<"hist has "<<n_ev<<" entries"<<endl;
 
-    if(htemp_pt_data2->Integral() > 0) htemp_pt_data2->Scale(1/htemp_pt_data2->Integral());   
+    // if(htemp_pt_data2->Integral() > 0) htemp_pt_data2->Scale(1/htemp_pt_data2->Integral());   
 
     htemp_pt_datamc = (TH1D*)htemp_pt_data2->Clone();
     htemp_pt_datamc->Divide(htemp_pt_mc2);
@@ -1123,12 +1123,12 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     int n_ev =  htemp_pt_mc2->GetEntries();
     cout<<"hist has "<<n_ev<<" entries"<<endl;
 
-    if(htemp_pt_mc2->Integral() > 0) htemp_pt_mc2->Scale(1/htemp_pt_mc2->Integral());
+    // if(htemp_pt_mc2->Integral() > 0) htemp_pt_mc2->Scale(1/htemp_pt_mc2->Integral());
 
     n_ev =  htemp_pt_data2->GetEntries();
     cout<<"hist has "<<n_ev<<" entries"<<endl;
 
-    if(htemp_pt_data2->Integral() > 0) htemp_pt_data2->Scale(1/htemp_pt_data2->Integral());   
+    // if(htemp_pt_data2->Integral() > 0) htemp_pt_data2->Scale(1/htemp_pt_data2->Integral());   
 
     htemp_pt_datamc = (TH1D*)htemp_pt_data2->Clone();
     htemp_pt_datamc->Divide(htemp_pt_mc2);
@@ -1231,12 +1231,12 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     int n_ev =  htemp_met_mc2->GetEntries();
     cout<<"hist has "<<n_ev<<" entries"<<endl;
 
-    if(htemp_met_mc2->Integral() > 0) htemp_met_mc2->Scale(1/htemp_met_mc2->Integral());
+    // if(htemp_met_mc2->Integral() > 0) htemp_met_mc2->Scale(1/htemp_met_mc2->Integral());
 
     n_ev =  htemp_met_data2->GetEntries();
     cout<<"hist has "<<n_ev<<" entries"<<endl;
 
-    if(htemp_met_data2->Integral() > 0) htemp_met_data2->Scale(1/htemp_met_data2->Integral());   
+    // if(htemp_met_data2->Integral() > 0) htemp_met_data2->Scale(1/htemp_met_data2->Integral());   
 
     htemp_met_datamc = (TH1D*)htemp_met_data2->Clone();
     htemp_met_datamc->Divide(htemp_met_mc2);

@@ -3,7 +3,7 @@
 #ifndef  CONSTANTS_H
 #define  CONSTANTS_H
 
-const double eta_cut = 2.853;
+const double eta_cut = 100; //2.853-1e-5;
   
 const int n_eta_full = 37;
 
@@ -137,7 +137,18 @@ constexpr static int n_pt_bins = 9;
  constexpr static float s_Pt_Ave400_cut  =443;
  constexpr static float s_Pt_Ave450_cut  =577;
  constexpr static float s_Pt_Ave500_cut  =606;
-         	 	 
+
+//FIXME check the numbers below, are copy of central triggers atm
+  constexpr static float s_Pt_Ave40HF_cut   =40 ;
+  constexpr static float s_Pt_Ave60HF_cut   =72 ;
+  constexpr static float s_Pt_Ave80HF_cut   =95 ;
+ constexpr static float s_Pt_Ave140HF_cut  =160;
+ constexpr static float s_Pt_Ave200HF_cut  =226;
+ constexpr static float s_Pt_Ave260HF_cut  =283;
+ constexpr static float s_Pt_Ave320HF_cut  =344;
+ constexpr static float s_Pt_Ave400HF_cut  =443;
+ constexpr static float s_Pt_Ave450HF_cut  =577;
+ constexpr static float s_Pt_Ave500HF_cut  =606;        	 	 
 
 //from Di triggers 94X 17Nov2017
  constexpr static float d_Pt_AveMC_cut   =  51;
@@ -162,13 +173,12 @@ constexpr static int trg_vals_HF[6]  = {60,80,100,160,220,300};
 constexpr static int trg_vals_Di_plusHF[15]  = {40,60,80,140,200,260,320,400,500,60,80,100,160,220,300};
 
 // 2017 94X 17Nov2017
-constexpr static float s_Pt_Ave60HF_cut   = 73 ;
-constexpr static float s_Pt_Ave80HF_cut   = 93 ;
-constexpr static float s_Pt_Ave100HF_cut  = 113;
-constexpr static float s_Pt_Ave160HF_cut  = 176;
-constexpr static float s_Pt_Ave220HF_cut  = 239;
-constexpr static float s_Pt_Ave300HF_cut  = 318;
-
+constexpr static float d_Pt_Ave60HF_cut   = 73 ;
+constexpr static float d_Pt_Ave80HF_cut   = 93 ;
+constexpr static float d_Pt_Ave100HF_cut  = 113;
+constexpr static float d_Pt_Ave160HF_cut  = 176;
+constexpr static float d_Pt_Ave220HF_cut  = 239;
+constexpr static float d_Pt_Ave300HF_cut  = 318;
 //2017
 // taken from https://twiki.cern.ch/twiki/bin/view/CMS/PdmV2017Analysis
 constexpr static int s_runnr_B = 299329; //up to this one, including this one

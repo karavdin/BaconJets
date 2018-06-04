@@ -32,6 +32,8 @@
 #include "Riostream.h"
 #include "TFile.h"
 #include "TTree.h"
+#include "TH2Poly.h"
+
 
 using namespace std;
 using namespace uhh2;
@@ -62,7 +64,6 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 
     std::unique_ptr<uhh2::Selection> triggerSiMu_sel;
 
-    std::unique_ptr<uhh2::Selection> minBias_sel; 
     std::unique_ptr<uhh2::Selection> trigger40_sel;
     std::unique_ptr<uhh2::Selection> trigger60_sel;
     std::unique_ptr<uhh2::Selection> trigger80_sel;
@@ -244,7 +245,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 
 //Lepton cleaner
     const     MuonId muoSR(AndId<Muon>    (MuonID(Muon::CutBasedIdTight),PtEtaCut  (15, 2.4)));
-    const ElectronId eleSR(AndId<Electron>(ElectronID_PHYS14_25ns_tight , PtEtaSCCut(15, 2.4)));  
+    const ElectronId eleSR(AndId<Electron>(ElectronID_MVA_Fall17_loose_noIso , PtEtaSCCut(15, 2.4)));  
    muoSR_cleaner.reset(new     MuonCleaner(muoSR));
    eleSR_cleaner.reset(new ElectronCleaner(eleSR)); 
 
@@ -400,7 +401,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
       if(isMC){
 	if(JEC_Version == "Fall17_17Nov2017_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Fall17_17Nov2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
-	else if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
+	else if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	
 	else cout << "In AnalysisModule_DiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
@@ -609,17 +610,21 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     if (debug) cout<<"Apply Weights: "<<apply_weights<<endl;
     if(apply_weights){
       if(isMC && dataset_version.Contains("RunD")){
-    	  name_weights += "MC_ReWeights_RunD.root";
+    	  name_weights += "MC_ReWeights_RunD_17Nov17_2017_EndOfMay_forRunD.root";
       }
       else if(isMC && dataset_version.Contains("RunE")){
-    	  name_weights += "MC_ReWeights_RunE.root";
+    	  name_weights += "MC_ReWeights_RunE_17Nov17_2017_EndOfMay_forRunE.root";
       }
       else if(isMC && dataset_version.Contains("RunF")){
+	if(dataset_version.Contains("QCDPt15to7000")){
     	  name_weights += "MC_ReWeights_RunF.root";
+	}
+	else  name_weights += "MC_ReWeights_RunF_17Nov17_2017_newerEtaPhiClean_noEtaPtCut__QCDPtBinned.root";
       }
       else{
 	cout<<"No MC weights found? dataset_version is "<<dataset_version<<endl;
       }
+      cout<<"Using MC weights from "<<name_weights<<endl;
       f_weights.reset(new TFile(name_weights,"READ"));
     }
 
@@ -627,8 +632,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     apply_lumiweights = (ctx.get("Apply_Lumiweights") == "true" && isMC);
     apply_unflattening = (ctx.get("Apply_Unflattening") == "true" && isMC);
     if(apply_weights && apply_lumiweights) throw runtime_error("In AnalysisModule_DiJetTrg.cxx: 'apply_weights' and 'apply_lumiweights' are set 'true' simultaneously. This won't work, please decide on one");
-    if(apply_lumiweights){
+    if(isMC){
       lumiweight = string2double(ctx.get("dataset_lumi"));
+      cout<<"will be scaled my lumi "<<lumiweight<<endl;
     }
     
     string lumifile = ctx.get("lumi_file");
@@ -710,15 +716,16 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     //LEPTON selection
     muoSR_cleaner->process(event);
     sort_by_pt<Muon>(*event.muons); 
-    // if(debug )std::cout<<"#muons = "<<event.muons->size()<<std::endl;
+    if(debug )std::cout<<"#muons = "<<event.muons->size()<<std::endl;
 
     eleSR_cleaner->process(event);
     sort_by_pt<Electron>(*event.electrons);
-    // if(debug) std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
+    if(debug) std::cout<<"#electrons = "<<event.electrons->size()<<std::endl;
 
     if (event.electrons->size()>0 || event.muons->size()>0) return false; //TEST lepton cleaning
 
     if(debug) cout<<"no leptons in the event";
+    
     
     h_runnr_input->fill(event);
 
@@ -862,6 +869,7 @@ if(debug){
   cout<<"After JEC, before JER"<<endl;
       cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
       cout<< "MET: "<< event.met->pt() <<endl;
+      cout<<"number of jets: "<<event.jets->size() <<endl;
       for(unsigned int i=0;i<event.jets->size();i++){
 	Jet* jet = &event.jets->at(i);
 	std::cout<<"jet #"<<i<<" with eta = "<<jet->eta()<<" and corrected pt = "<<jet->pt()<<std::endl<<endl;
@@ -870,7 +878,11 @@ if(debug){
 
 
     //Apply JER to all jet collections
-    if(jetER_smearer.get()) jetER_smearer->process(event);
+ if(jetER_smearer.get()){
+   if(debug) cout<<"jet smearing will be done\n";
+   jetER_smearer->process(event);
+   if(debug) cout<<"after jet smearing\n";
+ }
     
 if(debug){   
   cout<<"After JER, before MET"<<endl;
@@ -886,8 +898,9 @@ if(debug){
 
     if(eta_thresh_low==1.) eta_thresh_high=2.;
     else if(eta_thresh_low==0.) eta_thresh_high=1.;
-    else  if(eta_thresh_low==2.) eta_thresh_high=2.5;
-    else  if(eta_thresh_low==2.5) eta_thresh_high=3;
+    else  if(eta_thresh_low==2.) eta_thresh_high=2.7;
+    else  if(eta_thresh_low==2.650) eta_thresh_high=3.139;
+    else  if(eta_thresh_low==2.7) eta_thresh_high=3;
     else  if(eta_thresh_low==3.) eta_thresh_high=5.;
     else{
       eta_thresh_low=0.;
@@ -991,7 +1004,7 @@ if(debug){
       d_Pt_Ave500_cut
     };
 
-    double trgHF_thresh[6] = {s_Pt_Ave60HF_cut,s_Pt_Ave80HF_cut,s_Pt_Ave100HF_cut,s_Pt_Ave160HF_cut,s_Pt_Ave220HF_cut,s_Pt_Ave300HF_cut};
+    double trgHF_thresh[6] = {d_Pt_Ave60HF_cut,d_Pt_Ave80HF_cut,d_Pt_Ave100HF_cut,d_Pt_Ave160HF_cut,d_Pt_Ave220HF_cut,d_Pt_Ave300HF_cut};
     
     Jet* jet_probe = jet1;
     Jet* jet_barrel = jet2;
@@ -1023,7 +1036,7 @@ if(debug){
 	jet_barrel = jet2;
       }
     }
-    
+
     if(debug) cout<<"before trigger pass checks\n";
     if(event.isRealData){
       float pt_ave_ = pt_ave;
@@ -1189,7 +1202,90 @@ if(debug){
       jets_pt += ((Jet*)&event.jets->at(i))->pt();
     }
 //###############################################################################################
+//###########################################  Obtain weights from MC reweighting  ###############################
+    if(apply_weights && isMC){
+      // TH2D* h_weights = (TH2D*)f_weights->Get("pt_ave_data");
+      // int idx_x=0;
+      // int idx_y=0;
+      // while(pt_ave > idx_x*5) idx_x++;
+      // while(fabs(probejet_eta) > eta_range[idx_y]) idx_y++;
+      // event.weight *= h_weights->GetBinContent(idx_x, idx_y);
 
+      // TH1D* h_weights = (TH1D*)f_weights->Get("pt_ave_binned_data");
+      TH2Poly* h_weights = (TH2Poly*)f_weights->Get("pt_ave_binned_data");
+
+      // int idx=0;
+      // int idy=0;
+      // double eta_bins[5] = {-5.2,-2.853,0,2.853,5.2};
+      // while(probejet_eta > eta_bins[idy]) idy++;
+      bool eta_cut_bool = fabs(probejet_eta)>eta_cut;
+      // while(pt_ave > (eta_cut_bool?pt_bins_HF:pt_bins)[idx]) idx++;
+     
+      // if(idx == 0) return false;
+      if(pt_ave < (eta_cut_bool?pt_bins_HF:pt_bins)[0]) return false;
+      if(h_weights->FindBin(pt_ave<2000?pt_ave:(2000-1e-7)<0,probejet_eta)<0.){
+	if(debug) cout<<"did not found the MC reweighting bin for pt_ave/eta "<<pt_ave<<"/"<<probejet_eta<<endl;
+	return false;}
+      event.weight *= h_weights->GetBinContent(h_weights->FindBin(pt_ave<2000?pt_ave:(2000-1e-7),probejet_eta));
+    }
+
+    // h_afterPtEtaReweight->fill(event);
+//################################################################################################################
+//#############################################  scale to Lumi  ##############################################
+    if(isMC && lumiweight != 0){
+      event.weight *= 1./lumiweight;
+    }
+    
+
+        //#############################################  Apply Lumi-Weight  ##############################################
+
+    // if(apply_lumiweights){
+    //   double factor = -1.;
+    //   //find correct trigger lumi, depending on fwd/flat and pT_ave
+    //   if(dataset_version.Contains("_Flat")){
+    // 	if(pt_ave < trg_thresh[0]) return false;
+    // 	double trigger_lumis[9] = {s_lumi_cent_40,s_lumi_cent_60,s_lumi_cent_80,s_lumi_cent_140,s_lumi_cent_200,s_lumi_cent_260,s_lumi_cent_320,s_lumi_cent_400,s_lumi_cent_500};
+    // 	for(int i=0; i<9; i++){
+    // 	  if(i<8){
+    // 	    if(!(pt_ave >= trg_thresh[i] && pt_ave < trg_thresh[i+1])) continue;
+    // 	  }
+    // 	  else if(i==8){
+    // 	    if(!(pt_ave > trg_thresh[i])) continue;
+    // 	  }
+    // 	  factor = trigger_lumis[i]/lumiweight;
+    // 	  if(debug) cout << "pt_ave is " << pt_ave << ", corresponding trigger lumi is " << trigger_lumis[i] << " pb-1, this sample's lumiweight is " << lumiweight << ", therefore the factor is " << factor << endl;
+    // 	  continue;
+    // 	}
+    //   }
+    //   if(dataset_version.Contains("_Fwd")){
+    // 	if(pt_ave < trgHF_thresh[0]) return false;
+    // 	double trigger_lumis[6] = {s_lumi_HF_60,s_lumi_HF_80,s_lumi_HF_100,s_lumi_HF_160,s_lumi_HF_220,s_lumi_HF_300};
+    // 	for(int i=0; i<6; i++){
+    // 	  if(i<5){
+    // 	    if(!(pt_ave >= trgHF_thresh[i] && pt_ave < trgHF_thresh[i+1])) continue;
+    // 	  }
+    // 	  else if(i==5){
+    // 	    if(!(pt_ave > trgHF_thresh[i])) continue;
+    // 	  }
+    // 	  factor = trigger_lumis[i]/lumiweight;
+    // 	  if(debug) cout << "pt_ave is " << pt_ave << ", corresponding trigger lumi is " << trigger_lumis[i] << " pb-1, this sample's lumiweight is " << lumiweight << ", therefore the factor is " << factor << endl;
+    // 	  continue;
+    // 	}
+    //   }
+    //   if(factor < 0) {
+    // 	cout << "This event has factor < 0, pt_ave is " << pt_ave << endl;
+    // 	throw runtime_error("In TestModule.cxx: While applying lumiweights: factor to multiply event.weight with is negative. Has never been set?");
+    //   }
+
+    //   if(debug) cout << "event.weight before: " << event.weight << endl;
+    //   event.weight *= factor;
+    //   if(debug) cout << "event.weight after: " << event.weight << endl;
+    // }
+
+    h_afterLumiReweight->fill(event);
+//#####################################################################################################################
+
+    
 //########Split Samples into FWD/CENTRAL for old flat MC samples  only ##########################
     if(debug) cout<<"#Split Samples into FWD/CENTRAL for old flat MC samples  only\n";
     
@@ -1202,7 +1298,7 @@ if(debug){
    //  h_afterFlatFwd->fill(event);
 
 
-   // h_afterUnflat->fill(event);
+   h_afterUnflat->fill(event);
     
     int flavor = 0;
 
@@ -1316,8 +1412,9 @@ if(debug){
 
 //Pu_pt_hat/pt_hat Selection
     //  if(!event.isRealData && !no_genp){
-    if(!event.isRealData){
+    if(isMC){
       if(!sel.PUpthat(event)) return false;
+      // if((gen_pthat-genjet1_pt)/gen_pthat<-0.4) return false;
     }
     if(debug) cout<<"After PUpthat! "<<endl;
     // h_nocuts->fill(event);
@@ -1330,7 +1427,8 @@ if(debug){
 
     //PhiEta Region cleaning
     if(!isMC)
-      if(apply_EtaPhi_cut && !sel.EtaPhi(event)) return false;
+      if(apply_EtaPhi_cut && (!sel.EtaPhiCleaning(event)  || !sel.EtaPhi(event)
+			      )) return false;
     
 //     I was looking at the material you prepare some time ago [0]
 // In particularly in PF fractions and asymmetries at high pt bins in 2.5-3.0 eta.
@@ -1341,7 +1439,7 @@ if(debug){
 // [2] https://indico.cern.ch/event/726656/contributions/2990422/attachments/1642997/2626523/MetStudyInZ_3May2018.pdf
     //TODO let them get apply_xxx bools from the xml-config
     if(!isMC){
-          if(! sel.EtaPtCut(event)) return false;
+          // if(! sel.EtaPtCut(event)) return false;
 	  if(! sel.ChEMFrakCut(event)) return false;
     }
 

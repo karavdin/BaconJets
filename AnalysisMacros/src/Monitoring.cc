@@ -118,10 +118,12 @@ void CorrectionObject::Monitoring(bool SiRuns){
     for(int j=0; j<n_eta_full-1; j++){
       eta_cut_bool = fabs(eta_bins_full[j])>eta_cut;
       for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-2 : n_pt-2 ) ; k++ ){
-	cout<<"eta: "+eta_range_full[j]+" "+eta_range_full[j+1]+"   pT: "+(eta_cut_bool?pt_range_HF:pt_range)[k]+" "+(eta_cut_bool?pt_range_HF:pt_range)[k+1]<<endl;
+	// cout<<"eta: "+eta_range_full[j]+" "+eta_range_full[j+1]+"   pT: "+(eta_cut_bool?pt_range_HF:pt_range)[k]+" "+(eta_cut_bool?pt_range_HF:pt_range)[k+1]<<endl;
         hist_A[i][j][k]    = (TH2D*)f_monitoring[i]->Get("Monitoring_Final/hist_data_A_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]);
+	hist_A[i][j][k]=(TH2D*)hist_A[i][j][k]->RebinX(4);
 	pr_A[i][j][k]      = (TProfile*)hist_A[i][j][k] ->ProfileX(Form("prof_A_%i_%d_%d",i,j,k));
 	hist_B[i][j][k]    = (TH2D*)f_monitoring[i]    ->Get("Monitoring_Final/hist_data_B_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]);
+	hist_B[i][j][k]=(TH2D*)hist_B[i][j][k]->RebinX(4);
 	pr_B[i][j][k]      = (TProfile*)hist_B[i][j][k] ->ProfileX(Form("prof_B_%i_%d_%d",i,j,k));
       }
     }
@@ -135,7 +137,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
     cout<<"Finish Load Hists"<<endl;
 
     int n_lumi = 0;
-    n_lumi = pr_B[i][1][1]->GetNbinsX();
+    n_lumi = pr_B[i][1][1]->GetNbinsX()*4;
     
     double bin_width = 0; 
     bin_width = pr_B[i][1][1]->GetXaxis()->GetBinWidth(1);
@@ -388,6 +390,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
  
       for(int i = 0; i<n_input; i++){
 	mpf_res[i][j][k]->SetMarkerStyle(2);
+	
 	if(i==0)     {  mpf_res[i][j][k]->SetLineColor(kBlue);   mpf_res[i][j][k]->SetMarkerColor(kBlue);}
 	else if(i==1){  mpf_res[i][j][k]->SetLineColor(kViolet); mpf_res[i][j][k]->SetMarkerColor(kViolet);}
 	else if(i==2){  mpf_res[i][j][k]->SetLineColor(kGreen);  mpf_res[i][j][k]->SetMarkerColor(kGreen);}

@@ -59,18 +59,47 @@ Selection::Selection(uhh2::Context & ctx) :
   Cut_Dir = ctx.get("Cut_dir");
   dataset_version = ctx.get("dataset_version");
 
- if(dataset_version.Contains("RunH")){
-  cut_map = new TFile(Cut_Dir+"hotjets-runH.root","READ");
-  h_map = (TH2D*) cut_map->Get("h2jet");
+ // if(dataset_version.Contains("RunH")){
+ //  cut_map = new TFile(Cut_Dir+"hotjets-17runH.root","READ");
+ //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
+ //  h_map->SetDirectory(0);
+ //  cut_map->Close();
+ //  }
+ // else if(dataset_version.Contains("RunB")){
+ //  cut_map = new TFile(Cut_Dir+"hotjets-17runB.root","READ");
+ //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
+ //  h_map->SetDirectory(0);
+ //  cut_map->Close();
+ //  }
+ // else if(dataset_version.Contains("RunC")){
+ //  cut_map = new TFile(Cut_Dir+"hotjets-17runC.root","READ");
+ //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
+ //  h_map->SetDirectory(0);
+ //  cut_map->Close();
+ //  }
+ // else if(dataset_version.Contains("RunD")){
+ //  cut_map = new TFile(Cut_Dir+"hotjets-17runD.root","READ");
+ //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
+ //  h_map->SetDirectory(0);
+ //  cut_map->Close();
+ //  }
+ // else if(dataset_version.Contains("RunE")){
+ //  cut_map = new TFile(Cut_Dir+"hotjets-17runE.root","READ");
+ //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
+ //  h_map->SetDirectory(0);
+ //  cut_map->Close();
+ //  }
+ // else if(dataset_version.Contains("RunF")){
+ //  cut_map = new TFile(Cut_Dir+"hotjets-17runF.root","READ");
+ //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
+ //  h_map->SetDirectory(0);
+ //  cut_map->Close();
+ //  }
+  
+  cut_map = new TFile(Cut_Dir+"hotjets-17runBCDEF.root","READ");
+  h_map = (TH2D*) cut_map->Get("h2hotfilter");
   h_map->SetDirectory(0);
   cut_map->Close();
-  }
- else{
-  cut_map = new TFile(Cut_Dir+"hotjets-runH.root","READ");
-  h_map = (TH2D*) cut_map->Get("h2jet");
-  h_map->SetDirectory(0);
-  cut_map->Close();
- }
 
  try{
    diJetTrg  = (ctx.get("Trigger_Single") == "false");
@@ -462,7 +491,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
  
  for(int i=0; i < njets; i++){
     int idx_x = 0;
-   int idx_y = 0;
+    int idx_y = 0;
     Jet* jet = &event->jets->at(i);// loop over all jets in event
  
     while(jet->eta() > xMin+xWidth + idx_x * xWidth) idx_x++;

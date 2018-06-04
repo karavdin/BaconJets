@@ -54,6 +54,7 @@ static void show_usage(std::string name)
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
 	      <<"\t--kfsrRange\t\tRneg to which the kFSR fit is performed.The default is 5.19.\n"
+	      <<"\t--inputMC\t\tPath to the input mc. Default is hard coded in main.C"
       	      <<"\t--input\t\tPath to the input data, if none is given following is used:\n"
 	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/17Nov2017/Residuals/Run17BCD_Data <_mode> /Run17 <run><_dname> .root\n\tThe completion script assumes the same file structure."	    
               << std::endl;
@@ -113,6 +114,7 @@ int main(int argc,char *argv[]){
 				   "--asym_cut" ,
 				   "-JEF",
 				   "--input",
+				   "--inputMC",
 				   "--outSuffix",
 				   "-useHF",
 				    "-NPVEta",
@@ -130,6 +132,7 @@ int main(int argc,char *argv[]){
   bool muonCrosscheck = false;
   TString muonTriggerName = "HLT_Mu17";
   TString mode ="";
+  TString inputMC_="";
   bool do_fullPlots=false;
   bool do_fullPlotsef=false;
   bool do_trgControlPlots=false;
@@ -305,6 +308,9 @@ int main(int argc,char *argv[]){
 	      else if(arg=="--asym_cut"){
 		asym_cut = stod(argv[i+1]);
 	      }
+	      else if(arg=="--inputMC"){
+		inputMC_ = argv[i+1];
+	      }
 	      else if(arg=="--input"){
 		input_path_ = argv[i+1];
 	      }
@@ -353,16 +359,28 @@ int main(int argc,char *argv[]){
   if(dataname_end!="") input_path+="_";
   input_path += dataname_end + ".root";
   }
-  
+
+
   TString weight_path  = "/nfs/dust/cms/user/garbersc/JEC_Fall17_ForWeights/"; //used as output path of CalculateMCWeights_TriggerThresholds
   // TString input_path_MC = "/nfs/dust/cms/user/multh/JEC/2016Legacy/Residuals/Summer16_07Aug2017_V5/AK4CHS/MC_NoReweighted_CentralFWD_NewBinning/uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_AK4CHS_RunBCDEFGH.root";
-  TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_"+run_nr+".root";
+
+  TString input_path_MC = "";
+  if(inputMC_==TString("")){
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_forRun"+run_nr+"_v1.root";
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_forRun"+run_nr+"_v1.root";
+  // input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/QCDPt15to7000_pythia8_AK4CHS_forRun"+run_nr+"_nextModType1MET.root";
+  input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/QCDPt15to7000_pythia8_AK4CHS_forRunF_nextModType1MET.root";
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/QCDPt15to7000_forRun"+run_nr+"_noT1MET.root";
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/QCDPt15to7000_forRun"+run_nr+"_noT1MET.root";
   // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals//Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_23Apr.root";
   // TString input_path_MC = "/nfs/dust/cms/user/karavdia/JERC/Fall17_17Nov_V4_L2Res_wMPF_CentralTriggersONLY/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000.root";
   // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_noL1METcorrectButRawChs.root";
   // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_noJetIDCleaning.root";
  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_noMETFilter.root";
-  
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_wFirstEtaPtAndChEMFrakCuts_oneBugLess.root";
+  // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_checkType1ExclusionFromMETGroup_noEtaPtCleaning.root";
+    }
+  else{ input_path_MC=inputMC_;}
   TString outpath_postfix = (dataname_end!="") ? "_" : "";
   outpath_postfix  +=  dataname_end;
   if(outSuf!="") outpath_postfix += "_";

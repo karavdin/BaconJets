@@ -27,6 +27,7 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     book<TH1F>("N_jets", "N_{jets}", 50, -0.5, 49.5);
     book<TH1F>("pt_hat", "p_{T} hat", 150, 0, 6000);
     book<TH1F>("pt","p_{T} all jets; p_{T} (GeV)",100,0,1500);
+    book<TH1F>("pt_modT1METjets","p_{T} all jets in 2.650<#eta<3.139; p_{T} (GeV)",100,0,1500);
     book<TH1F>("eta","#eta all jets; #eta",100,-5,5);
     double eta_bins[n_eta];
     for(int i=0; i<n_eta; i++) eta_bins[i] = eta_range[i];
@@ -135,6 +136,8 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
   for (int i=0; i<njets; i++){
     Jet* jets = &ev.jets->at(i);
     hist("pt")->Fill(jets->pt(), weight);
+    if(jets->eta()>2.650&&jets->eta()<3.139)
+      hist("pt_modT1METjets")->Fill(jets->pt(), weight);    
     hist("eta")->Fill(jets->eta(), weight);
     hist("eta_binned")->Fill(jets->eta(), weight);
     hist("phi")->Fill(jets->phi(), weight);

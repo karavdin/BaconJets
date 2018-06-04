@@ -18,7 +18,8 @@ void CorrectionObject::ControlPlots(bool forEverySingleTrigger){
   }
   gStyle->SetOptFit(0);
   gStyle->SetOptStat(0);
-
+  gStyle->SetPalette(55);
+  
   TString dirNames[16] = {"Selection", "HLT_PFJet40", "HLT_PFJet60", "HLT_PFJet80","HLT_PFJet140","HLT_PFJet200","HLT_PFJet260","HLT_PFJet320","HLT_PFJet400","HLT_PFJet500", "HLT_DiPFJetAve60_HFJEC", "HLT_DiPFJetAve80_HFJEC", "HLT_DiPFJetAve100_HFJEC", "HLT_DiPFJetAve160_HFJEC", "HLT_DiPFJetAve220_HFJEC", "HLT_DiPFJetAve300_HFJEC"};
 
   int loop_inter = 1;

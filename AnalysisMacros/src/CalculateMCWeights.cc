@@ -44,7 +44,7 @@ void CorrectionObject::CalculateMCWeights(){
   cout << "--------------- Starting CalculateMCWeights() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
 
-  const int n_pt_bins = 1000;
+  const int n_pt_bins = 100;
 
 
   //Check if Files are available
@@ -155,24 +155,53 @@ void CorrectionObject::CalculateMCWeights(){
     h_pt_ave_mc->Fill(*pt_ave_mc, *probejet_eta_mc, *weight_mc);
     h_pt_ave_binned_mc->Fill(*pt_ave_mc, *probejet_eta_mc, *weight_mc);
   }
-
+  cout<<"\nDATA fine binned entries "<<h_pt_ave_data->GetEntries()<<endl;
+  cout<<"DATA fine binned effective entries "<<h_pt_ave_data->GetEffectiveEntries()<<endl;
+  cout<<"DATA fine binned integral "<<h_pt_ave_data->Integral()<<endl;
+  cout<<"DATA pt binned entries "<<h_pt_ave_binned_data->GetEntries()<<endl;
+  cout<<"DATA pt binned effective entries "<<h_pt_ave_binned_data->GetEffectiveEntries()<<endl;
+  cout<<"DATA pt binned integral "<<h_pt_ave_binned_data->Integral()<<endl;
+  cout<<"DATA pt binned mean "<<h_pt_ave_binned_data->GetMean()<<endl;  
+  cout<<"DATA pt binned rms "<<h_pt_ave_binned_data->GetStdDev()<<endl;
+  cout<<"\nMC fine binned entries "<<h_pt_ave_mc->GetEntries()<<endl;
+  cout<<"MC fine binned effective entries "<<h_pt_ave_mc->GetEffectiveEntries()<<endl;
+  cout<<"MC fine binned integral "<<h_pt_ave_mc->Integral()<<endl;
+  cout<<"MC pt binned entries "<<h_pt_ave_binned_mc->GetEntries()<<endl;
+  cout<<"MC pt binned effective entries "<<h_pt_ave_binned_mc->GetEffectiveEntries()<<endl;
+  cout<<"MC pt binned integral "<<h_pt_ave_binned_mc->Integral()<<endl;
+  cout<<"MC pt binned mean "<<h_pt_ave_binned_mc->GetMean()<<endl;  
+  cout<<"MC pt binned rms "<<h_pt_ave_binned_mc->GetStdDev()<<endl;
+   
  //Calculate scale factors
-  TH2D* SF =  (TH2D*)h_pt_ave_binned_data->Clone();
+  TH2Poly* SF =  (TH2Poly*)h_pt_ave_binned_data->Clone();
   SF->SetMinimum(0);
   SF->SetMaximum(1);
-  TH2D* for_SF_mc =  (TH2D*)h_pt_ave_binned_mc->Clone();
+  TH2Poly* for_SF_mc =  (TH2Poly*)h_pt_ave_binned_mc->Clone();
   
-  for(int i=0; i<SF->GetNbinsX(); i++){
-    for(int j=0; j<4; j++){
+  int idx_runing=0;
+  for(int j=0; j<4; j++){
+    eta_cut_bool = fabs(bins_eta[j])>eta_cut && fabs(bins_eta[j+1])>eta_cut;
+    for(int i= 0 ; i <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; i++ ){
       double content = 0;
-      double data = SF->GetBinContent(i+1,j+1);
-      double mc = for_SF_mc->GetBinContent(i+1,j+1);
-      if(mc > 0) content = data/mc;
+      double data = SF->GetBinContent(idx_runing);
+      double mc = for_SF_mc->GetBinContent(idx_runing);
+      if(mc > 0) {content = data/mc; // cout<<"data/mc "<<data<<"/"<<mc<<endl;
+      }
       else content = 0;
-      SF->SetBinContent(i+1, j+1, content);
+      SF->SetBinContent(idx_runing, content);
       //cout << "lower pt: " << 5+i*5 << ", eta-bin: " << j+1 << " DATA: " << h_pt_ave_data->GetBinContent(i+1,j+1) << ", MC: " << for_SF_mc->GetBinContent(i+1,j+1) << ", content: " << content << endl;
+      idx_runing++;
     }
   }
+
+  //do a dummy crosscheck first...
+  for(int k=0; k<idx_runing; k++){
+    if(fabs(h_pt_ave_binned_data->GetBinContent(k)-(h_pt_ave_binned_mc->GetBinContent(k)*SF->GetBinContent(k)))>0.5){
+      cout<<"Bin "<<k<<" data: "<<h_pt_ave_binned_data->GetBinContent(k)<<" unscaled MC: "<<h_pt_ave_binned_mc->GetBinContent(k)<<" SF: "<<SF->GetBinContent(k)<<" scaled MC: "<<h_pt_ave_binned_mc->GetBinContent(k)*SF->GetBinContent(k)<<endl<<endl;
+      throw runtime_error("did not pass dummy crosscheck");
+    }
+  }
+  cout<<"after dummy crosscheck"<<endl;
 
 //looping over events for the 2nd time
 //Create re-weighted pT_ave hists to cross-check procedure
@@ -188,20 +217,28 @@ void CorrectionObject::CalculateMCWeights(){
     if(*alpha_mc2 >= 0.3) continue;
     double right_SF = 0;
     double pt = *pt_ave_mc2;
-    double eta = fabs(*probejet_eta_mc2);
+    double eta = *probejet_eta_mc2;
 
     int idx_x = 0;
     int idx_y = 0;
     eta_cut_bool = fabs(eta)>eta_cut;
-    while(pt > (eta_cut_bool?pt_bins_HF:pt_bins)[idx_x]){ 
-      idx_x++;
-    }
+    idx_runing = 0;
     while(eta > bins_eta[idx_y]){
       idx_y++;
+      idx_runing+= ( eta_cut_bool ?  n_pt_HF : n_pt );
     }
+    while(pt > (eta_cut_bool?pt_bins_HF:pt_bins)[idx_x]){ 
+      idx_x++;
+      idx_runing++;
+    }
+
     
     //Now i is the number of the bin, whose weight has to be taken for this event
-    right_SF = SF->GetBinContent(idx_x,idx_y);
+    // cout<<"glob findBin: "<<SF->FindBin(pt,eta)<<" idx runing: "<<idx_runing<<endl;
+    if(SF->FindBin(pt,eta)<0)
+      if(SF->FindBin(2000-1e-7,eta)<0)
+	cout<<"didnt found SF for pt,eta "<<pt<<","<<eta<<endl;
+    right_SF = SF->GetBinContent(SF->FindBin((pt>2000?(2000-1e-7):pt),eta));
 
     double right_weight = *weight_mc2 * right_SF;
 
@@ -211,15 +248,37 @@ void CorrectionObject::CalculateMCWeights(){
     // h1_pt_ave_binned_mc_scaled->Fill(pt, right_weight);
 
     ind++;
-  } 
+  }
 
-  for(int i=0; i<n_pt_bins; i++){
+   cout<<"\nMC pt scaled entries "<<h_pt_ave_mc_scaled->GetEntries()<<endl;
+   cout<<"MC pt scaled effective entries "<<h_pt_ave_mc_scaled->GetEffectiveEntries()<<endl;
+   cout<<"MC pt scaled integral "<<h_pt_ave_mc_scaled->Integral()<<endl;
+   cout<<"MC pt scaled mean "<<h_pt_ave_mc_scaled->GetMean()<<endl;  
+   cout<<"MC pt scaled rms "<<h_pt_ave_mc_scaled->GetStdDev()<<endl;
+
+
+   double count_xcheck_mc =0.;
+   
+    idx_runing = 0;
     for(int j=0; j<n_eta-1; j++){
-      //cout << "Data: " << h_pt_ave_data->GetBinContent(i+1, j+1) << ", MC: " << h_pt_ave_mc_scaled->GetBinContent(i+1, j+1) << endl;
-      //cout << "Data: " << h_pt_ave_data->GetBinContent(i+1, j+1) << ", SF: " << SF->GetBinContent(i+1, j+1) << endl << endl;
-      //  if(fabs(h_pt_ave_mc_scaled->GetBinContent(i+1, j+1) - h_pt_ave_data->GetBinContent(i+1, j+1)) > 0.05) cout << "Eta_low: " << eta_bins[j] << ", pT: " << i*5 << ", MC: " << h_pt_ave_mc_scaled->GetBinContent(i+1, j+1) << ", DATA: " << h_pt_ave_data->GetBinContent(i+1, j+1) << endl;//throw runtime_error("In CalculateMCWeights.cc: Scaled MC bin-content does not match the bin-content in data.");
+      eta_cut_bool = fabs(bins_eta[j])>eta_cut && fabs(bins_eta[j+1])>eta_cut;
+      for(int i= 0 ; i < 1000 ; i++ ){
+	if(fabs(h_pt_ave_mc_scaled->GetBinContent(i,j) - h_pt_ave_data->GetBinContent(i,j))/h_pt_ave_mc_scaled->GetBinContent(i,j) > 0.05 && h_pt_ave_data->GetBinContent(i,j)>0){
+	  cout << "\nData: " << h_pt_ave_data->GetBinContent(i,j) << ", MC: " << h_pt_ave_mc_scaled->GetBinContent(i,j) << endl;
+	count_xcheck_mc+=h_pt_ave_mc_scaled->GetBinContent(i,j);
+	cout << "Data: " << h_pt_ave_data->GetBinContent(i,j) << ", SF: " << SF->GetBinContent(SF->FindBin(i*5000./n_pt_bins,eta_bins[j])) << endl;
+	  cout << "Eta_low: " << eta_bins[j] << ", pT: " << i*5000/n_pt_bins << ", MC: " << h_pt_ave_mc_scaled->GetBinContent(i,j) << ", DATA: " << h_pt_ave_data->GetBinContent(i,j) << endl;
+	  cout<<"so MC is off by "<<fabs(h_pt_ave_mc_scaled->GetBinContent(i,j) - h_pt_ave_data->GetBinContent(i,j))/h_pt_ave_mc_scaled->GetBinContent(i,j)*100<<"%"<<endl;
+	if(SF->GetBinContent(SF->FindBin(i*5000./n_pt_bins,eta_bins[j]))>0.){
+	  cout<<"MC eta-pt binned count "<<for_SF_mc->GetBinContent(for_SF_mc->FindBin(i*5000./n_pt_bins,eta_bins[j]))<<endl;
+	  // throw runtime_error("In CalculateMCWeights.cc: Scaled MC bin-content does not match the bin-content in data.");
+	}
+      }
+      idx_runing++;
     }
   }
+
+    cout<<"counted scaled fine binned MC to be "<< count_xcheck_mc<<endl;
 
   //Save re-weighted pT_ave hists
   //Setup Canvas Fine binnig 
@@ -266,7 +325,7 @@ void CorrectionObject::CalculateMCWeights(){
   }
 
   //Write output
-  TFile* out = new TFile(CorrectionObject::_weight_path + "/MC_ReWeights_Run" + CorrectionObject::_runnr  + ".root","RECREATE");
+  TFile* out = new TFile(CorrectionObject::_weight_path + "/MC_ReWeights_Run" + CorrectionObject::_runnr  + CorrectionObject::_outpath_postfix +".root","RECREATE");
   SF->Write();
   h_pt_ave_binned_yield->Write();
   out->Close();
