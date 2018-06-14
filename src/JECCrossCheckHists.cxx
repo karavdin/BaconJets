@@ -59,8 +59,8 @@ JECCrossCheckHists::JECCrossCheckHists(Context & ctx, const string & dirname): H
 
     book<TH1F>("asym","asymmetry jet 1 and jet 2; Asymmetry",150,-1.5,1.5);
 
-    bool no_genp = false;
-    if(no_genp) cout<<"!!! WARNING, no genparticle are used! !!!"<<endl;
+    //    no_genp = false;
+    //    if(no_genp) cout<<"!!! WARNING, no genparticle are used! !!!"<<endl;
 }
 
 void JECCrossCheckHists::fill(const uhh2::Event & ev){
@@ -77,7 +77,8 @@ void JECCrossCheckHists::fill(const uhh2::Event & ev, const int rand){
   double weight = ev.weight;
   const int njets = ev.jets->size();
   hist("N_jets")->Fill(njets, weight);
-  if(!ev.isRealData && !no_genp){
+  //  if(!ev.isRealData && !no_genp){
+  if(!ev.isRealData){
     double pt_hat = ev.genInfo->binningValues()[0];
     double PU_pt_hat = ev.genInfo->PU_pT_hat_max();
     hist("pt_hat")->Fill(pt_hat,weight);
@@ -98,7 +99,8 @@ void JECCrossCheckHists::fill(const uhh2::Event & ev, const int rand){
   }
   hist("MET")->Fill(ev.met->pt(), weight);
   double nPU = 0;
-  if(!ev.isRealData && !no_genp) nPU = ev.genInfo->pileup_TrueNumInteractions();
+  //  if(!ev.isRealData && !no_genp) nPU = ev.genInfo->pileup_TrueNumInteractions();
+  if(!ev.isRealData) nPU = ev.genInfo->pileup_TrueNumInteractions();
   hist("nPu")->Fill(nPU, weight);
   hist("weight_histo")->Fill(weight, 1);
   
