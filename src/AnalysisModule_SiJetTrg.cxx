@@ -422,8 +422,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(isMC){
 	if(JEC_Version == "Fall17_17Nov2017_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Fall17_17Nov2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
-	else if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
-	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
+	else if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
+	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	
 	else cout << "In AnalysisModule_DiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
@@ -1471,7 +1471,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       else if (jetLabel == "AK8CHS" || jetLabel == "AK8PUPPI")dr_cut = 0.4;
       else throw runtime_error("TestModule.cxx: Invalid jet-label specified.");
 
-
       double dR_GenJet_GenParticle1;
       double dR_GenJet_GenParticle2;
       double flavor_barreljet = 0;
@@ -1517,7 +1516,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     	  if(debug) cout << "dR between GenJet " << i << " and RecoJet " << j << ": " << dR << endl;
     	  if(dR<dR_min){
     	    dR_min = dR; 
-    	    if(dR_min<0.1) idx_matching_jet = j;
+    	    if(dR_min<dr_cut) idx_matching_jet = j;
     	  }
     	}
     	idx_jet_matching_genjet[i] = idx_matching_jet;

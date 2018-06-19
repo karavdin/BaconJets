@@ -403,8 +403,18 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     //      h->GetYaxis()->SetLimits(0,0.8);
     // htemp_met_mc->SetMaximum(0.3);
     htemp_met_mc->SetLineWidth(3);
+
+    TF1 *tempFunc = new TF1("tempFunc","gaus");
+    htemp_met_mc->Fit(tempFunc);
+    TString textChi2NDF ="Chi2/NDF=";
+    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetChisquare());
+    textChi2NDF = textChi2NDF+"/";
+    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());    
+      
     htemp_met_mc->Draw("HIST");
+
     tex->DrawLatex(0.2,0.85,"MC, " + textPt);
+    tex->DrawLatex(0.2,0.4,textChi2NDF);
     //tex_lumi->DrawLatex(0.6,0.91,"MC");
     c5->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/METoverPt_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_" + pt_name + ".pdf");
     
@@ -447,8 +457,18 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     //      h->GetYaxis()->SetLimits(0,0.8);
     // htemp_met_data->SetMaximum(0.3);
     htemp_met_data->SetLineWidth(3);
+
+
+    TF1 *tempFunc = new TF1("tempFunc","gaus");
+    htemp_met_data->Fit(tempFunc);
+    TString textChi2NDF ="Chi2/NDF=";
+    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetChisquare());
+    textChi2NDF = textChi2NDF+"/";
+    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());    
+    
     htemp_met_data->Draw("HIST");
     tex->DrawLatex(0.2,0.85,"DATA, " + textPt);
+    tex->DrawLatex(0.2,0.4,textChi2NDF);
     //tex_lumi->DrawLatex(0.6,0.91,"DATA");
     c5->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/METoverPt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_" + pt_name + ".pdf");
     
@@ -579,8 +599,18 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
       htemp_rel_data->GetXaxis()->SetTitle("pt jet1");
       htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");      
       // htemp_rel_data->GetXaxis()->SetLimits(-1.2,1.2);
+
+
+    TF1 *tempFunc = new TF1("tempFunc","gaus");
+    htemp_rel_data->Fit(tempFunc);
+    TString textChi2NDF ="Chi2/NDF=";
+    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetChisquare());
+    textChi2NDF = textChi2NDF+"/";
+    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());    
+
       htemp_rel_data->Draw("EP");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
+    tex->DrawLatex(0.2,0.4,textChi2NDF);
       cFull_pt1->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/jet1_pt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+ ".pdf");
       delete cFull_pt1;
       delete htemp_rel_data;

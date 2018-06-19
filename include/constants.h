@@ -3,7 +3,7 @@
 #ifndef  CONSTANTS_H
 #define  CONSTANTS_H
 
-const double eta_cut = 100; //2.853-1e-5;
+const double eta_cut = 2.853-1e-5;
   
 const int n_eta_full = 37;
 
@@ -61,7 +61,7 @@ const TString pt_range_HF[n_pt_HF]={
 
 const int n_pt_Si = 12;
 
-/* //SingleJet triggers highest ------------- */
+/* //SingleJet triggers highest double checked with combined BCDEF------------- */
 const double pt_bins_Si[n_pt_Si] = {
   40 ,
   72 ,
@@ -139,16 +139,16 @@ constexpr static int n_pt_bins = 9;
  constexpr static float s_Pt_Ave500_cut  =606;
 
 //FIXME check the numbers below, are copy of central triggers atm
-  constexpr static float s_Pt_Ave40HF_cut   =40 ;
-  constexpr static float s_Pt_Ave60HF_cut   =72 ;
-  constexpr static float s_Pt_Ave80HF_cut   =95 ;
+  constexpr static float s_Pt_Ave40HF_cut  =40 ;
+  constexpr static float s_Pt_Ave60HF_cut  =60 ;
+  constexpr static float s_Pt_Ave80HF_cut  =72 ;
  constexpr static float s_Pt_Ave140HF_cut  =160;
- constexpr static float s_Pt_Ave200HF_cut  =226;
- constexpr static float s_Pt_Ave260HF_cut  =283;
- constexpr static float s_Pt_Ave320HF_cut  =344;
- constexpr static float s_Pt_Ave400HF_cut  =443;
- constexpr static float s_Pt_Ave450HF_cut  =577;
- constexpr static float s_Pt_Ave500HF_cut  =606;        	 	 
+ constexpr static float s_Pt_Ave200HF_cut  =190;
+ constexpr static float s_Pt_Ave260HF_cut  =290;
+ constexpr static float s_Pt_Ave320HF_cut  =310;
+ constexpr static float s_Pt_Ave400HF_cut  =390;
+ constexpr static float s_Pt_Ave450HF_cut  =444;
+ constexpr static float s_Pt_Ave500HF_cut  =480;   
 
 //from Di triggers 94X 17Nov2017
  constexpr static float d_Pt_AveMC_cut   =  51;

@@ -609,7 +609,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 	Rel[i][j] = new TCanvas(plotname_rel[i][j], plotname_rel[i][j], 800,700);
 	m_gStyle->SetOptTitle(0);
 
-       pol_rel[i][j] = new TF1("pol_rel","pol1",0.14,0.36);
+	pol_rel[i][j] = new TF1("pol_rel","pol1",0.1,0.4);//,0.14,0.36);
        if(j==0) continue;
        graph_rel_r[j][i] = new TGraphErrors(n_alpha,xbin_tgraph,ratio_al_rel_r[j][i],zero,err_ratio_al_rel_r[j][i]);
        graph_rel_r[j][i] = (TGraphErrors*)CleanEmptyPoints(graph_rel_r[j][i]);
@@ -740,7 +740,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
 	MPF[i][j] = new TCanvas(plotname2[i][j], plotname2[i][j], 800,700);
 	m_gStyle->SetOptTitle(0);
 
-       pol_mpf[i][j] = new TF1("pol_mpf","pol1",0.14,0.36);
+	pol_mpf[i][j] = new TF1("pol_mpf","pol1",0.1,0.4);//,0.14,0.36);
        if(j==0) continue;
        graph_mpf_r[j][i] = new TGraphErrors(n_alpha,xbin_tgraph,ratio_al_mpf_r[j][i],zero,err_ratio_al_mpf_r[j][i]);
        graph_mpf_r[j][i] = (TGraphErrors*)CleanEmptyPoints(graph_mpf_r[j][i]);
@@ -872,7 +872,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
      }
 
 
-     pol1[j] = new TF1("pol1","pol1",0.14,0.36);
+     pol1[j] = new TF1("pol1","pol1",0.1,0.4);//,0.14,0.36);
      pol1[j]->SetParameters(1.5,-0.5);
      if(j == 13){
        pol1[j]->SetParameters(0.985,0.05);  
@@ -981,7 +981,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        pTgraph_mpf_r[j]->GetXaxis()->SetTitle("cut on #alpha");
      }
 
-     pol1[j] = new TF1("pol1","pol1",0.14,0.36);  //TEST AK4
+     pol1[j] = new TF1("pol1","pol1",0.1,0.4);//,0.14,0.36);  //TEST AK4
      pol1[j]->SetParameters(0,0);
 
      if(!multigraph_mpf_empty[j]){

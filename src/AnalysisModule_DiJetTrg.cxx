@@ -401,8 +401,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
       if(isMC){
 	if(JEC_Version == "Fall17_17Nov2017_V4") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Fall17_17Nov2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
-	else if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
-	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
+	else if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
+	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	
 	else cout << "In AnalysisModule_DiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }

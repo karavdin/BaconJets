@@ -120,10 +120,10 @@ void CorrectionObject::Monitoring(bool SiRuns){
       for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-2 : n_pt-2 ) ; k++ ){
 	// cout<<"eta: "+eta_range_full[j]+" "+eta_range_full[j+1]+"   pT: "+(eta_cut_bool?pt_range_HF:pt_range)[k]+" "+(eta_cut_bool?pt_range_HF:pt_range)[k+1]<<endl;
         hist_A[i][j][k]    = (TH2D*)f_monitoring[i]->Get("Monitoring_Final/hist_data_A_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]);
-	hist_A[i][j][k]=(TH2D*)hist_A[i][j][k]->RebinX(4);
+	hist_A[i][j][k]=(TH2D*)hist_A[i][j][k]->RebinX(8);
 	pr_A[i][j][k]      = (TProfile*)hist_A[i][j][k] ->ProfileX(Form("prof_A_%i_%d_%d",i,j,k));
 	hist_B[i][j][k]    = (TH2D*)f_monitoring[i]    ->Get("Monitoring_Final/hist_data_B_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]);
-	hist_B[i][j][k]=(TH2D*)hist_B[i][j][k]->RebinX(4);
+	hist_B[i][j][k]=(TH2D*)hist_B[i][j][k]->RebinX(8);
 	pr_B[i][j][k]      = (TProfile*)hist_B[i][j][k] ->ProfileX(Form("prof_B_%i_%d_%d",i,j,k));
       }
     }
@@ -137,7 +137,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
     cout<<"Finish Load Hists"<<endl;
 
     int n_lumi = 0;
-    n_lumi = pr_B[i][1][1]->GetNbinsX()*4;
+    n_lumi = pr_B[i][1][1]->GetNbinsX()*8;
     
     double bin_width = 0; 
     bin_width = pr_B[i][1][1]->GetXaxis()->GetBinWidth(1);
@@ -250,11 +250,11 @@ void CorrectionObject::Monitoring(bool SiRuns){
   TLine* line4_ratio;
   TLine* line5_ratio;
   if(n_input>3){
-      line4_ratio = new TLine(Fit_range[3], 0.82, Fit_range[3],1.42);
+      line4_ratio = new TLine(Fit_range[3], 0.86, Fit_range[3],1.14);
       line4_ratio -> SetLineStyle(2);
   }
   if(n_input>4){
-      line5_ratio = new TLine(Fit_range[4], 0.82, Fit_range[4],1.42);
+      line5_ratio = new TLine(Fit_range[4], 0.86, Fit_range[4],1.14);
       line5_ratio -> SetLineStyle(2);
   }
   
@@ -287,6 +287,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
       gStyle->SetOptFit(00000);
       
       h->GetXaxis()->SetTitle("Luminosity");
+      h->GetXaxis()->SetNdivisions(1005);
       h->GetXaxis()->SetTitleSize(0.05);
       h->GetXaxis()->SetTitleOffset(0.80);
       h->GetXaxis()->SetLimits(Fit_range[0],Fit_range[n_input]);
@@ -333,6 +334,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
       c3->cd(2);
 
       d->GetXaxis()->SetTitle("Luminosity");
+      d->GetXaxis()->SetNdivisions(1005);
       d->GetXaxis()->SetTitleSize(0.1);
       d->GetXaxis()->SetTitleOffset(1.2);
       d->GetXaxis()->SetLimits(Fit_range[0],Fit_range[n_input]);
@@ -371,6 +373,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
       gStyle->SetOptFit(00000);
       
       h->GetXaxis()->SetTitle("Luminosity");
+      h->GetXaxis()->SetNdivisions(1005);
       h->GetXaxis()->SetTitleSize(0.05);
       h->GetXaxis()->SetTitleOffset(0.80);
       h->GetXaxis()->SetLimits(Fit_range[0],Fit_range[n_input]);
@@ -417,6 +420,7 @@ void CorrectionObject::Monitoring(bool SiRuns){
       c4->cd(2);
 
       d2->GetXaxis()->SetTitle("Luminosity");
+      d2->GetXaxis()->SetNdivisions(1005);
       d2->GetXaxis()->SetTitleSize(0.1);
       d2->GetXaxis()->SetTitleOffset(1.2);
       d2->GetXaxis()->SetLimits(Fit_range[0],Fit_range[n_input]);

@@ -150,23 +150,23 @@
 <!--      </InputData> -->
 
 
-<InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;">
-          &DATA_RunD_promptReco_2017;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-</InputData>
+<!-- <InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
+<!--           &DATA_RunD_promptReco_2017; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!-- </InputData> -->
 
-<InputData Lumi="76958681" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;">
-          &DATA_RunE_promptReco_2017;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-</InputData>
+<!-- <InputData Lumi="76958681" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
+<!--           &DATA_RunE_promptReco_2017; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!-- </InputData> -->
 
-<InputData Lumi="113430556" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_17Nov17_2017" Cacheable="&CACHEABLE;">
-          &DATA_RunF_promptReco_2017;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-</InputData>
+<!-- <InputData Lumi="113430556" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
+<!--           &DATA_RunF_promptReco_2017; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!-- </InputData> -->
 
 
     <UserConfig>

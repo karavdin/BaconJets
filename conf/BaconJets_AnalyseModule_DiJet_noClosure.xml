@@ -57,7 +57,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DEF_MC_DEFseperateWeigts"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_F_MC_smearingV1"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -135,17 +135,17 @@
 <!--           <OutputTree Name="AnalysisTree"/> -->
 <!--      </InputData> -->
 
-<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunD" Cacheable="&CACHEABLE;">
-          &QCDPt15to7000;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
+<!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunD" Cacheable="&CACHEABLE;"> -->
+<!--           &QCDPt15to7000; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!--      </InputData> -->
 
-<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunE" Cacheable="&CACHEABLE;">
-          &QCDPt15to7000;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
+<!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunE" Cacheable="&CACHEABLE;"> -->
+<!--           &QCDPt15to7000; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!--      </InputData> -->
 
 <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunF" Cacheable="&CACHEABLE;">
           &QCDPt15to7000;

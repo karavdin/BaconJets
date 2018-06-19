@@ -113,17 +113,17 @@ void CorrectionObject::Derive_Thresholds_SiJet(bool pt_check, bool useHF){
 
   cout<<"after central readers\n";
 
-  TTreeReaderValue<int> trg60_HF(myReader_DATA, "trigger60_fwd");
-  TTreeReaderValue<int> trg80_HF(myReader_DATA, "trigger80_fwd");
-  TTreeReaderValue<int> trg140_HF(myReader_DATA, "trigger140_fwd");  
-  TTreeReaderValue<int> trg200_HF(myReader_DATA, "trigger200_fwd");
-  TTreeReaderValue<int> trg260_HF(myReader_DATA, "trigger260_fwd");
-  TTreeReaderValue<int> trg320_HF(myReader_DATA, "trigger320_fwd");
-  TTreeReaderValue<int> trg400_HF(myReader_DATA, "trigger400_fwd");
-  TTreeReaderValue<int> trg450_HF(myReader_DATA, "trigger450_fwd");
-  TTreeReaderValue<int> trg500_HF(myReader_DATA, "trigger500_fwd");
+  TTreeReaderValue<int> trg60_HF(myReader_DATA, "trigger60_HF");
+  TTreeReaderValue<int> trg80_HF(myReader_DATA, "trigger80_HF");
+  TTreeReaderValue<int> trg140_HF(myReader_DATA, "trigger140_HF");  
+  TTreeReaderValue<int> trg200_HF(myReader_DATA, "trigger200_HF");
+  TTreeReaderValue<int> trg260_HF(myReader_DATA, "trigger260_HF");
+  TTreeReaderValue<int> trg320_HF(myReader_DATA, "trigger320_HF");
+  TTreeReaderValue<int> trg400_HF(myReader_DATA, "trigger400_HF");
+  TTreeReaderValue<int> trg450_HF(myReader_DATA, "trigger450_HF");
+  TTreeReaderValue<int> trg500_HF(myReader_DATA, "trigger500_HF");
 
-  cout<<"after fwd readers\n";  
+  cout<<"after HF readers\n";  
   
   TTreeReaderValue<Float_t> pt_ave_data(myReader_DATA, "pt_ave");
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");

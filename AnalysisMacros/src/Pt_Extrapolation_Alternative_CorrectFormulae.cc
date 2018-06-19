@@ -877,6 +877,7 @@ for(int j=0; j<n_eta-1; j++){
     else if(CorrectionObject::_runnr== "D") kfsr_fit_dijet->SetParameters(0.97,0.028,0.44); 
     else if(CorrectionObject::_runnr== "E") kfsr_fit_dijet->SetParameters(0.99,0.013,0.26);  
     else if(CorrectionObject::_runnr== "F") kfsr_fit_dijet->SetParameters(0.98,0.027,0.54);  
+    else if(CorrectionObject::_runnr== "BCDEFF") kfsr_fit_dijet->SetParameters(-235.,2.28997e+06,9.69587e+03);  
     else kfsr_fit_dijet->SetParameters(0.6,7,16);
     
     //Finally perform the fit 
