@@ -195,7 +195,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     uhh2bacon::Selection sel;
 
     bool debug;  
-  bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB;
+  bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB;
     double lumiweight;
     string jetLabel;
     TString dataset_version, JEC_Version;
@@ -335,6 +335,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(jetLabel == "AK4CHS"){
 	  IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V6)
 	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V4)
+	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
+	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V12)
        }
 
 	  else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
@@ -378,14 +380,18 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  //residuals
 	    IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V5)
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V6) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V7)  
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V7) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V12) 
 	    else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
 	  IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V4)
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V5)
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V6) 
-	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V7)  	 
+	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V7)  
+	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11) 
+	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V12)  		 
 
 	 else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
@@ -424,6 +430,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	else if(JEC_Version == "Fall17_17Nov2017_V5") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_2016_03Feb2017));
 	else if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
+	else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
+	else if(JEC_Version == "Fall17_17Nov2017_V12") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	
 	else cout << "In AnalysisModule_DiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
@@ -679,6 +687,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     
     apply_lumiweights = (ctx.get("Apply_Lumiweights") == "true" && isMC);
     apply_unflattening = (ctx.get("Apply_Unflattening") == "true" && isMC);
+    apply_smear = (ctx.get("Apply_MC_Smear")=="true" && isMC);
     if(apply_weights && apply_lumiweights) throw runtime_error("In AnalysisModule_SiJetTrg.cxx: 'apply_weights' and 'apply_lumiweights' are set 'true' simultaneously. This won't work, please decide on one");
 
     
@@ -859,7 +868,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     
     h_beforeJEC->fill(event);
     if(debug) std::cout <<" before jetleptoncleaner  "<<std::endl;
-    if(debug) std::cout <<"jetlepton cleaner is at "<<(jetleptoncleaner==0)<<std::endl;    
+    if(debug) std::cout <<"jetlepton cleaner is 0: "<<(jetleptoncleaner==0)<<std::endl;    
     // if(debug) std::cout <<jetleptoncleaner<<std::endl;
     
     std::cout<< std::flush;
@@ -876,9 +885,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       jet_corrector_C->process(event);
     }
     if(apply_D){
-    if(debug) std::cout <<" in apply D jet corrector "<<std::endl;    
+      if(debug) std::cout <<" in apply D jet corrector "<<std::endl;    
       JLC_D->process(event);
-    if(debug) std::cout <<" after D JLC "<<std::endl;       
+      if(debug) std::cout <<" after D JLC "<<std::endl;       
       jet_corrector_D->process(event);
     }
     if(apply_E){
@@ -890,7 +899,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       jet_corrector_F->process(event);
     }     
     if(apply_global){
+      if(debug)	std::cout <<"in apply global"<<std::endl;
       jetleptoncleaner->process(event);
+      if(debug)	std::cout <<"after jetleptoncleaner"<<std::endl;      
       jet_corrector->process(event);
     }
    
@@ -908,7 +919,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 //################################  Apply JER and MET  #########################################
 
     //Apply JER to all jet collections
-    if(jetER_smearer.get()) jetER_smearer->process(event);
+    if(apply_smear) if(jetER_smearer.get()) jetER_smearer->process(event);
     h_afterJER->fill(event); 
 
     if(eta_thresh_low==1.) eta_thresh_high=2.;

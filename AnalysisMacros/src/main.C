@@ -47,6 +47,7 @@ static void show_usage(std::string name)
        	      << "\t-F\t\tUse the F directory instead of the BCD directory.\n"      
   	      << "\t-mu\t\tDo the single muon threshold crosscheck.\n"
       	      << "\t-useHF\t\tIncludes the HF trigger.\n"
+      	      << "\t-kfsrXrange\t\tCheck the kFSR extrapolation fit range in the MC.\n"
       	      << "\t-calcMCW\t\tCalculate the weights for flat QCD MC.\n"
 	      << "\t-IGF\t\tCreate the Global Fit Input plots with standart eta bins.\n"
 	      << "\t-IGFw\t\tCreate the Global Fit Input plots with wider eta bins.\n"
@@ -124,7 +125,8 @@ int main(int argc,char *argv[]){
 				    "-IGF",
 				    "-IGFw",
 				    "--kfsrRange",
-				    "-MEPC"};
+				    "-MEPC",
+				    "-kfsrXrange"};
   
   TString run_nr = "B";
   TString dataname_end = "17Nov17_2017";
@@ -167,6 +169,7 @@ int main(int argc,char *argv[]){
   bool do_IGFw =false;
   bool do_MEPC=false;
   bool do_calcMCW=false;
+  bool kfsrXrange=false;
   TString input_path_="";
   double asym_cut = 0.;
   double kfsrRange = 5.19;
@@ -218,6 +221,9 @@ int main(int argc,char *argv[]){
 	  }	  
 	  else if(arg=="-useHF"){
 	    useHF=true;
+	  }	  
+	  else if(arg=="-kfsrXrange"){
+	    kfsrXrange=true;
 	  }	  
 	  else if(arg=="-derThreshSi"){
 	    do_deriveThresholdsSi=true;
@@ -321,7 +327,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange)){
     cout<<"No plots were specified! Only the existence of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -400,7 +406,8 @@ int main(int argc,char *argv[]){
  
     if(do_fullPlotsef) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();    
     if(do_trgControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
-    
+
+    if(kfsrXrange)for(unsigned int i=0; i<Objects.size(); i++) Objects[i].genJetLinearity();    
 
     if(do_deriveThresholdsSi) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet(false,useHF);
     if(do_deriveThresholdsSi_ptCheck) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Derive_Thresholds_SiJet(true,useHF);

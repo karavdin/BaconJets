@@ -110,6 +110,7 @@ using namespace std;
     void AdditionalAsymmetryPlots(bool eta_abs = true, bool si_trg=false);
     void triggerExclusivityCheck();
     void MakeEtaPhiCleanTxt();
+    void genJetLinearity();
     
 static bool make_path(std::string path_name){
     int status = 1;

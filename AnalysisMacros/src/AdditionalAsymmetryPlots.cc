@@ -404,17 +404,17 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     // htemp_met_mc->SetMaximum(0.3);
     htemp_met_mc->SetLineWidth(3);
 
-    TF1 *tempFunc = new TF1("tempFunc","gaus");
-    htemp_met_mc->Fit(tempFunc);
-    TString textChi2NDF ="Chi2/NDF=";
-    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetChisquare());
-    textChi2NDF = textChi2NDF+"/";
-    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());    
+    // TF1 *tempFunc = new TF1("tempFunc","gaus");
+    // htemp_met_mc->Fit(tempFunc);
+    // TString textChi2NDF ="Chi2/NDF=";
+    // textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetChisquare());
+    // textChi2NDF = textChi2NDF+"/";
+    // textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());    
       
     htemp_met_mc->Draw("HIST");
 
     tex->DrawLatex(0.2,0.85,"MC, " + textPt);
-    tex->DrawLatex(0.2,0.4,textChi2NDF);
+    // tex->DrawLatex(0.2,0.4,textChi2NDF);
     //tex_lumi->DrawLatex(0.6,0.91,"MC");
     c5->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/METoverPt_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_" + pt_name + ".pdf");
     
@@ -459,16 +459,16 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     htemp_met_data->SetLineWidth(3);
 
 
-    TF1 *tempFunc = new TF1("tempFunc","gaus");
-    htemp_met_data->Fit(tempFunc);
-    TString textChi2NDF ="Chi2/NDF=";
-    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetChisquare());
-    textChi2NDF = textChi2NDF+"/";
-    textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());    
+    // TF1 *tempFunc = new TF1("tempFunc","gaus");
+    // htemp_met_data->Fit(tempFunc);
+    // TString textChi2NDF ="Chi2/NDF=";
+    // textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetChisquare());
+    // textChi2NDF = textChi2NDF+"/";
+    // textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());    
     
     htemp_met_data->Draw("HIST");
     tex->DrawLatex(0.2,0.85,"DATA, " + textPt);
-    tex->DrawLatex(0.2,0.4,textChi2NDF);
+    // tex->DrawLatex(0.2,0.4,textChi2NDF);
     //tex_lumi->DrawLatex(0.6,0.91,"DATA");
     c5->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/METoverPt_DATA_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_" + pt_name + ".pdf");
     
@@ -818,11 +818,20 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1];
       TString legname = "p_{T} #in [" + (eta_cut_bool?pt_range_HF:pt_range)[j] + "," + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + "]";
       TString evname = "Tot.Events = ";
-     
+      
+      TF1 *tempFunc = new TF1("tempFunc","gaus");
+	 
       TString name_rel_data = "hist_data_A_"+eta_name+"_"+pt_name;
       htemp_rel_data = (TH1D*)f_rel_data->Get(name_rel_data);
       evname += htemp_rel_data->GetEntries();
       htemp_rel_data->Draw("E");
+	TString textChi2NDF ="Chi2/NDF=";
+      if(htemp_rel_data->GetEntries()){
+	htemp_rel_data->Fit(tempFunc);
+	textChi2NDF = textChi2NDF+Form("%.1f",tempFunc->GetChisquare());
+	textChi2NDF = textChi2NDF+"/";
+	textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());
+      }
       htemp_rel_data->GetXaxis()->SetTitle("A");
       htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");
       htemp_rel_data->GetYaxis()->SetTitleOffset(1.5);
@@ -830,11 +839,15 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       htemp_rel_data->Draw("EP");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       tex->DrawLatex(0.54,0.8,legname);		
-      tex->DrawLatex(0.58,0.75,evname);		
+      tex->DrawLatex(0.58,0.75,evname);
+      if(htemp_rel_data->GetEntries()) tex->DrawLatex(0.47,0.6,textChi2NDF);
+    
+      
       cFullA->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ (eta_cut_bool?pt_range_HF:pt_range)[j] + "_" + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + ".pdf");
       delete cFullA;
       delete htemp_rel_data;
-
+      
+      tempFunc = new TF1("tempFunc","gaus");
       TCanvas* cFullB = new TCanvas();
       tdrCanvas(cFullB,"cFullB",h,4,10,kSquare,CorrectionObject::_lumitag);
       TH1D* htemp_mpf_data;
@@ -843,6 +856,13 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       evname = "Tot.Events = ";
       evname += htemp_mpf_data->GetEntries();
       htemp_mpf_data->Draw("E");
+      textChi2NDF ="Chi2/NDF=";
+      if(htemp_mpf_data->GetEntries()){
+	htemp_mpf_data->Fit(tempFunc);
+	textChi2NDF = textChi2NDF+Form("%.1f",tempFunc->GetChisquare());
+	textChi2NDF = textChi2NDF+"/";
+	textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());
+      }
       htemp_mpf_data->GetXaxis()->SetTitle("B");
       htemp_mpf_data->GetYaxis()->SetTitle("Entries per Bin");
       htemp_mpf_data->GetYaxis()->SetTitleOffset(1.5);
@@ -852,11 +872,13 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       htemp_mpf_data->Draw("EP");		
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       tex->DrawLatex(0.54,0.8,legname);		
-      tex->DrawLatex(0.58,0.75,evname);		
+      tex->DrawLatex(0.58,0.75,evname);	
+       if(htemp_mpf_data->GetEntries()) tex->DrawLatex(0.47,0.6,textChi2NDF);	
       cFullB->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/B_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ (eta_cut_bool?pt_range_HF:pt_range)[j] + "_" + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + ".pdf");
     
       delete cFullB;
       delete htemp_mpf_data;
+
 
     }
   }
