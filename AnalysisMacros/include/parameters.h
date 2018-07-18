@@ -8,8 +8,8 @@
 
 using namespace std;
 
-// const double eta_cut = 2.853-1e-5;
-const double eta_cut = 100.; //central only
+const double eta_cut = 2.853-1e-5;
+// const double eta_cut = 100.; //central only
 
 const int nResponseBins = 100;
 const int n_etabarr=5; // needed for the normalization to 1 in the barrel. ???
@@ -65,29 +65,29 @@ const int n_pt_Si = 12;
 //DiJet triggers? -------------
 
 
-// const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin
-//   51,
-//   73,
-//   85,
-//   97,
-//   179,
-//   307,
-//   370,
-//   434,
-//   520,
-//   649,1000,2000};
+const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin
+  51,
+  73,
+  85,
+  97,
+  179,
+  307,
+  370,
+  434,
+  520,
+  649,1000,2000};
 
-// const TString pt_range[n_pt]={
-//   "51",
-//   "73",
-//   "85",
-//   "97",
-//   "179",
-//   "307",
-//   "370",
-//   "434",
-//   "520",
-//   "648","1000","2000"};
+const TString pt_range[n_pt]={
+  "51",
+  "73",
+  "85",
+  "97",
+  "179",
+  "307",
+  "370",
+  "434",
+  "520",
+  "648","1000","2000"};
 
 
 //for Di derived triggers 94X 17Nov2017
@@ -202,29 +202,29 @@ RunB      RunC  RunD  highest
 606       603     599  606
 */
 
-const double pt_bins[n_pt] = {
-40 ,
-72  ,
-95 ,
-160 ,
-226 ,
-283 ,
-344 ,
-443 ,
-577 ,
-606 ,1000,2000};
+// const double pt_bins[n_pt] = {
+// 40 ,
+// 72  ,
+// 95 ,
+// 160 ,
+// 226 ,
+// 283 ,
+// 344 ,
+// 443 ,
+// 577 ,
+// 606 ,1000,2000};
 
-const TString pt_range[n_pt]={
-  "40" ,
-  "72" ,
-  "95" ,
-  "160",
-  "226",
-  "283",
-  "344",
-  "443",
-  "577",
-  "606","1000","2000"};
+// const TString pt_range[n_pt]={
+//   "40" ,
+//   "72" ,
+//   "95" ,
+//   "160",
+//   "226",
+//   "283",
+//   "344",
+//   "443",
+//   "577",
+//   "606","1000","2000"};
 
 // const int n_pt_HF = 11;
 

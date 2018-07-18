@@ -378,11 +378,12 @@ for(int j=0; j<n_eta-1; j++){
     //Do the fit!
     if(graph_filled[j]){
     TFitResultPtr fitloglin;
-     if(j==17){
-      cout<<"Fixed slope parameter: "<< f1[j-1]->GetParameter(1.) <<endl;
-      double slope = f1[j-1]->GetParameter(1.);
-      f1[j]->FixParameter(1,slope); //fixing slope for last eta bin (Vidyo Meeting 07.07.2017)
-      }
+    //TODO / tryout dont fix the slope in the last eta bin to get a better closer
+     // if(j==17){
+     //  cout<<"Fixed slope parameter: "<< f1[j-1]->GetParameter(1.) <<endl;
+     //  double slope = f1[j-1]->GetParameter(1.);
+     //  f1[j]->FixParameter(1,slope); //fixing slope for last eta bin (Vidyo Meeting 07.07.2017)
+     //  }
       fitloglin =  graph1_mpf[j]->Fit(plotname[j]+"f1","SM","",55,1200);
       TMatrixDSym cov = fitloglin->GetCovarianceMatrix();
       Vcov[0][j] = cov(0,0);
@@ -568,8 +569,12 @@ for(int j=0; j<n_eta-1; j++){
     std::cout<<"!!! kFSR MPF fit !!!"<<std::endl;
     std::cout<<hist_kfsr_mpf->GetEntries()<<std::endl;
 
-    if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(1.,0.1,8.5);
-    else if(CorrectionObject::_runnr== "F") kfsr_fit_mpf->SetParameters(0.62,63.2,165.);
+    // if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(1.,0.1,8.5);
+    // if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(0.996,0.1,26.4);
+    if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(0.9666,2.215,65.54);
+    else if(CorrectionObject::_runnr== "C") kfsr_fit_mpf->SetParameters(0.6222,82.01,216.2);
+    // else if(CorrectionObject::_runnr== "F") kfsr_fit_mpf->SetParameters(0.883,47.2,400.8);
+    else if(CorrectionObject::_runnr== "F") kfsr_fit_mpf->SetParameters(0.936,36.07,565.06);
     
     hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,kfsr_fitrange);
 
@@ -873,11 +878,12 @@ for(int j=0; j<n_eta-1; j++){
     
     // kfsr_fit_dijet->SetParameters(1,0.03,0.5);//start parameters that wor for DEF dijet central+HF
     if(CorrectionObject::_runnr== "B") kfsr_fit_dijet->SetParameters(0.6,7,1.6);
-    else if(CorrectionObject::_runnr== "C") kfsr_fit_dijet->SetParameters(0.65,5.,14);
+    else if(CorrectionObject::_runnr== "C") kfsr_fit_dijet->SetParameters(0.94,0.187,2.34);
     else if(CorrectionObject::_runnr== "D") kfsr_fit_dijet->SetParameters(0.97,0.028,0.44); 
     else if(CorrectionObject::_runnr== "E") kfsr_fit_dijet->SetParameters(0.99,0.013,0.26);  
-    else if(CorrectionObject::_runnr== "F") kfsr_fit_dijet->SetParameters(0.98,0.027,0.54);  
-    else if(CorrectionObject::_runnr== "BCDEF") kfsr_fit_dijet->SetParameters(-235.,2.28997e+06,9.69587e+03);  
+    // else if(CorrectionObject::_runnr== "F") kfsr_fit_dijet->SetParameters(0.98,0.027,0.54);  
+    else if(CorrectionObject::_runnr== "F") kfsr_fit_dijet->SetParameters(-0.8046,186.98,102.76);  
+    else if(CorrectionObject::_runnr== "BCDEF") kfsr_fit_dijet->SetParameters(-227.,2.2887e+06,1.00177e+04);  
     else kfsr_fit_dijet->SetParameters(0.6,7,16);
     
     //Finally perform the fit 

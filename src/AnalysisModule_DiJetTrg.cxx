@@ -177,7 +177,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 
     bool debug;
     bool no_genp;
-    bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB;
+    bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB;
     double lumiweight;
     string jetLabel;
     TString dataset_version, JEC_Version;
@@ -315,6 +315,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
       if(jetLabel == "AK4CHS"){
 	  IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V6)
 	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V4)
+	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
        }
 
       else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
@@ -637,6 +638,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     
     apply_lumiweights = (ctx.get("Apply_Lumiweights") == "true" && isMC);
     apply_unflattening = (ctx.get("Apply_Unflattening") == "true" && isMC);
+    apply_smear = (ctx.get("Apply_MC_Smear")=="true" && isMC);
     if(apply_weights && apply_lumiweights) throw runtime_error("In AnalysisModule_DiJetTrg.cxx: 'apply_weights' and 'apply_lumiweights' are set 'true' simultaneously. This won't work, please decide on one");
     if(isMC){
       lumiweight = string2double(ctx.get("dataset_lumi"));
@@ -860,7 +862,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
       jet_corrector_F->process(event);
     }     
     if(apply_global){
+    if(debug) std::cout <<" before jetleptoncleaner "<<std::endl;
       jetleptoncleaner->process(event);
+    if(debug) std::cout <<" before jet_corrector "<<std::endl;
       jet_corrector->process(event);
     }
  
@@ -884,12 +888,13 @@ if(debug){
 
 
     //Apply JER to all jet collections
- if(jetER_smearer.get()){
+ if(apply_smear){  if(jetER_smearer.get()){
    if(debug) cout<<"jet smearing will be done\n";
    jetER_smearer->process(event);
    if(debug) cout<<"after jet smearing\n";
  }
-    
+ }
+ 
 if(debug){   
   cout<<"After JER, before MET"<<endl;
  cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
