@@ -492,56 +492,55 @@ else trigger500_fwd_sel.reset(new uhh2::AndSelection(ctx));
       //for MC
       if(jetLabel == "AK4CHS"){
 	if(!ClosureTest){
-	  //residualsif(JEC_Version == "Fall17_17Nov2017_V4"){
-	    JEC_corr               = JERFiles::Fall17_17Nov2017_V4_L123_AK4PFchs_MC;
-	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V4_L1RC_AK4PFchs_MC;	    
+	  if(JEC_Version == "Fall17_17Nov2017_V11"){
+	    JEC_corr               = JERFiles::Fall17_17Nov2017_V11_L123_AK4PFchs_MC;
+	    JEC_corr_L1RC          = JERFiles::Fall17_17Nov2017_V11_L1RC_AK4PFchs_MC;	    
 	  }
 	  
 	  else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
 	}
 	//closure
 	// else{
-
-	 else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for closure test on AK4CHS, MC specified.");
+	 throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for closure test on AK4CHS, MC specified.");
 	}
       // }
-    // }
+    }
     else { 
       //for DATA
       if(jetLabel == "AK4CHS"){
 	if(!ClosureTest){
 	  //residuals
-	 if(JEC_Version == "Fall17_17Nov2017_V4"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V4_D_L123_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V4_E_L123_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V4_F_L123_AK4PFchs_DATA;
+	 if(JEC_Version == "Fall17_17Nov2017_V11"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V11_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V11_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V11_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V11_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V11_F_L123_AK4PFchs_DATA;
 	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V4_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V4_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V4_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA;
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V11_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V11_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V11_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V11_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V11_F_L1RC_AK4PFchs_DATA;
 
-	    if(debug) cout<<"set JEC cor to Fall17_17Nov2017_V4 values\n";
+	    if(debug) cout<<"set JEC cor to Fall17_17Nov2017_V11 values\n";
 	    
 	  }	 
 	  else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
-	 if(JEC_Version == "Fall17_17Nov2017_V4"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V4_B_L123_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V4_C_L123_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V4_D_L123_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V4_E_L123_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V4_F_L123_AK4PFchs_DATA;
+	 if(JEC_Version == "Fall17_17Nov2017_V11"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V11_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V11_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V11_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V11_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V11_F_L123_AK4PFchs_DATA;
 	    
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V4_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V4_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V4_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V4_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V4_F_L1RC_AK4PFchs_DATA; 
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V11_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V11_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V11_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V11_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V11_F_L1RC_AK4PFchs_DATA; 
 	  }
 
 	 else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
