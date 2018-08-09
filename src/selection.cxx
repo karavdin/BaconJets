@@ -25,13 +25,6 @@ Selection::Selection(uhh2::Context & ctx) :
     context(ctx),
     event(0)
 {
-  // auto jetCollection = ctx.get("jetCollection");
-  // h_jets = ctx.declare_event_input<TClonesArray>(jetCollection);
-  // //    h_jets = context.declare_event_input<TClonesArray>("AK4PFCHS");
-  // // h_jets = context.declare_event_input<TClonesArray>("AK4PFPUPPI");
-  // h_eventInfo = context.declare_event_input<baconhep::TEventInfo>("Info");
-  // h_pv = context.declare_event_input<TClonesArray>("PV");
-
   tt_gen_pthat = ctx.declare_event_output<float>("gen_pthat");
   tt_gen_weight = ctx.declare_event_output<float>("gen_weight");
   tt_jet1_pt = ctx.declare_event_output<float>("jet1_pt");
@@ -59,43 +52,6 @@ Selection::Selection(uhh2::Context & ctx) :
   
   Cut_Dir = ctx.get("Cut_dir");
   dataset_version = ctx.get("dataset_version");
-
- // if(dataset_version.Contains("RunH")){
- //  cut_map = new TFile(Cut_Dir+"hotjets-17runH.root","READ");
- //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
- //  h_map->SetDirectory(0);
- //  cut_map->Close();
- //  }
- // else if(dataset_version.Contains("RunB")){
- //  cut_map = new TFile(Cut_Dir+"hotjets-17runB.root","READ");
- //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
- //  h_map->SetDirectory(0);
- //  cut_map->Close();
- //  }
- // else if(dataset_version.Contains("RunC")){
- //  cut_map = new TFile(Cut_Dir+"hotjets-17runC.root","READ");
- //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
- //  h_map->SetDirectory(0);
- //  cut_map->Close();
- //  }
- // else if(dataset_version.Contains("RunD")){
- //  cut_map = new TFile(Cut_Dir+"hotjets-17runD.root","READ");
- //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
- //  h_map->SetDirectory(0);
- //  cut_map->Close();
- //  }
- // else if(dataset_version.Contains("RunE")){
- //  cut_map = new TFile(Cut_Dir+"hotjets-17runE.root","READ");
- //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
- //  h_map->SetDirectory(0);
- //  cut_map->Close();
- //  }
- // else if(dataset_version.Contains("RunF")){
- //  cut_map = new TFile(Cut_Dir+"hotjets-17runF.root","READ");
- //  h_map = (TH2D*) cut_map->Get("h2hotfilter");
- //  h_map->SetDirectory(0);
- //  cut_map->Close();
- //  }
   
   cut_map = new TFile(Cut_Dir+"hotjets-17runBCDEF.root","READ");
   h_map = (TH2D*) cut_map->Get("h2hotfilter");
@@ -238,29 +194,8 @@ bool Selection::PtMC(uhh2::Event& evt)
     // cout<<"Selection::FindMatchingJet after switch, jet id: "<<jetid<<" th: "<<trigger_th<<endl; 
 
     if(jetid >= event->get(handle_sw).size()){
-      //DEBUG
-      // cout<<"get out with -1"<<endl;
       return -1;
     }
-
-    //DEBUG: pt order check!!!
-    // float _spt=10000.;
-    // for(unsigned int i = 0;i< event->get(handle_sw).size() ;i++){
-    //   if(_spt<event->get(handle_sw).at(jetid).pt()){
-    // 	cout<<"!!!! wrong pt ordering in trg obj !!!!!!";	
-    // 	return -20;
-    // 	throw runtime_error(" wrong pt ordering in trg obj");
-    //   }
-    //   _spt =event->get(handle_sw).at(jetid).pt();
-    // }
-    // cout<<"trg obj was pt ordered\n";
-
-    eta = event->get(handle_sw).at(jetid).eta();
-    // cout<<"got eta"<<endl; 
-    phi = event->get(handle_sw).at(jetid).phi();     
-
-    // DEBUG
-    // cout<<"eta phi "<<eta<<" "<<phi<<endl; 
 
     const unsigned int njets = event->jets->size();
     unsigned int jetid_new = -2;
@@ -268,11 +203,7 @@ bool Selection::PtMC(uhh2::Event& evt)
     float dR = 1000.;
     float dR_min_ = dR_min;
     for(unsigned int i = 0 ; i < njets ; i++){
-      //DEBUG
-      // cout<<i<<endl;
-      float deta = eta - event->jets->at(i).eta();
-      float dphi =  TVector2::Phi_mpi_pi(phi - event->jets->at(i).phi());
-      dR = TMath::Sqrt( deta*deta+dphi*dphi );
+      dR = uhh2::deltaR(event->jets->at(i), event->get(handle_sw).at(jetid));
       if(dR < dR_min_){
 	dR_min_ = dR;
 	jetid_new = i;
@@ -295,19 +226,6 @@ bool Selection::DiJet()
   bool Selection::DiJetAdvanced()
 {
     assert(event);
-
-
-  //   const TClonesArray & js = event->get(h_jets);
-//     const baconhep::TEventInfo & info = event->get(h_eventInfo);
-// //   const baconhep::TJet * jet = dynamic_cast<const baconhep::TJet*>(js[0]);
-// //   assert(jet);
-
-//     baconhep::TEventInfo* eventInfo= new baconhep::TEventInfo(info);
-//     assert(eventInfo);
-// //   const baconhep::TJet * jet = dynamic_cast<const baconhep::TJet*>(js[0]);
-// //   assert(jet);
-
-//     int njets = js.GetEntries();
 
     const int njets = event->jets->size();
     if (njets < 2) return false;
@@ -456,10 +374,6 @@ bool Selection::DiJet()
     double probejet_phi = event->get(tt_probejet_phi);
 
     for(int i=0; i<8; i++){
-//      cout<<"EtaPi Region: "<<EtaPhi_regions[i][0]<<"  "<<EtaPhi_regions[i][1]<<"  "<<EtaPhi_regions[i][2]<<"  "<<EtaPhi_regions[i][3]<<endl;
-//      cout<<"probejet_eta: "<<probejet_eta<<endl;
-//      cout<<"probejet_phi: "<<probejet_phi<<endl;
-
       if(probejet_eta > EtaPhi_regions[i][0] && probejet_eta < EtaPhi_regions[i][1] && probejet_phi > EtaPhi_regions[i][2] && probejet_phi < EtaPhi_regions[i][3]){
 //	cout<<"Event rejected!"<<endl<<endl;
 	return false;
@@ -520,15 +434,10 @@ bool Selection::DiJet()
     if(!_return){
       double dRmin = 100.;
       int dRmin_seed_idx = -1;
-      float deta, dphi, dR;
-
-      float eta = jet.eta();
-      float phi = jet.phi();
+      float dR;
       
       for(unsigned int i = 0; i<n_l1jets; i++){
-	deta = eta - l1jets->at(i).eta();
-        dphi =  TVector2::Phi_mpi_pi(phi - l1jets->at(i).phi());
-	dR = TMath::Sqrt( deta*deta+dphi*dphi );
+	dR=uhh2::deltaR(l1jets->at(i),jet);
 
 	if(dR < dRmin){
 	  dRmin=dR;
