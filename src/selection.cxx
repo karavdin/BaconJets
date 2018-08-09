@@ -119,7 +119,9 @@ bool isMC = (ctx.get("dataset_type") == "MC");
    }
  }
  bool no_genp = false;
- if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;   
+ if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;
+
+ handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds"); 
 }
 
 void Selection::SetEvent(uhh2::Event& evt)
@@ -423,19 +425,30 @@ bool Selection::DiJet()
 
   bool Selection::L1JetBXclean(Jet& jet){
     assert(event);
+
+    // std::cout<<"L1 Jet seed clean debug 1\n";
     
-    std::vector< L1Jet>* l1jets = event->L1J_seeds;
+    // std::vector< L1Jet>* l1jets = event->L1J_seeds;
+    std::vector< L1Jet>* l1jets = &event->get(handle_l1jet_seeds);
     bool _return = true;
 
+    // std::cout<<"L1 Jet seed clean debug 2\n";
+    // std::cout<<event->jets<<endl;  
+    // std::cout<<event->L1J_seeds<<endl;
+    // std::cout<<l1jets<<endl;  
     unsigned int n_l1jets = l1jets->size();
 
+    // std::cout<<n_l1jets<<endl;
+    // std::cout<<"L1 Jet seed clean debug 2.5\n";
     if(n_l1jets<2) _return = false;
         
+    // std::cout<<"L1 Jet seed clean debug 3\n";
     if(!_return){
       double dRmin = 100.;
       int dRmin_seed_idx = -1;
       float dR;
       
+      // std::cout<<"L1 Jet seed clean debug 4\n";
       for(unsigned int i = 0; i<n_l1jets; i++){
 	dR=uhh2::deltaR(l1jets->at(i),jet);
 
@@ -444,6 +457,7 @@ bool Selection::DiJet()
 	  dRmin_seed_idx = i;
 	}
       }
+      // std::cout<<"L1 Jet seed clean debug 5\n";
       _return *= (l1jets->at(dRmin_seed_idx).bx() != -1);
     }
 

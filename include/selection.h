@@ -6,6 +6,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/FlavorParticle.h"
 #include "UHH2/core/include/Jet.h"
+#include "UHH2/core/include/L1Jet.h"
 
 #include <TFile.h>
 #include <TH1D.h>
@@ -65,6 +66,8 @@ class Selection {
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger160_HF;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger220_HF;
   uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_trigger300_HF;
+  
+  uhh2::GenericEvent::Handle<std::vector<L1Jet>> handle_l1jet_seeds;
   
     public:
     Selection(uhh2::Context & ctx);

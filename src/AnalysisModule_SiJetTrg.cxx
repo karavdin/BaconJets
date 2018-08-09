@@ -1450,7 +1450,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     //L1 jet seed cleaning
     if(apply_L1seed_from_bx1_filter){
+      if(debug) cout << "before the L1 seed filter" << endl;
       sel.L1JetBXclean(*jet_probe);
+      if(debug) cout << "after the L1 seed filter" << endl;
     }
 
 //###############################################################################################
