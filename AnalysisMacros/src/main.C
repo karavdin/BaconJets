@@ -55,6 +55,7 @@ static void show_usage(std::string name)
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
 	      <<"\t--kfsrRange\t\tRneg to which the kFSR fit is performed.The default is 5.19.\n"
+	      <<"\t-useCombinedkfsr\t\tUse combined BCDEF kFSR for L2Res\.\n"
 	      <<"\t--inputMC\t\tPath to the input mc. Default is hard coded in main.C"
       	      <<"\t--input\t\tPath to the input data, if none is given following is used:\n"
 	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/17Nov2017/Residuals/Run17BCD_Data <_mode> /Run17 <run><_dname> .root\n\tThe completion script assumes the same file structure."	    
@@ -125,6 +126,7 @@ int main(int argc,char *argv[]){
 				    "-IGF",
 				    "-IGFw",
 				    "--kfsrRange",
+				    "-combinedkfsr",
 				    "-MEPC",
 				    "-kfsrXrange"};
   
@@ -170,6 +172,7 @@ int main(int argc,char *argv[]){
   bool do_MEPC=false;
   bool do_calcMCW=false;
   bool kfsrXrange=false;
+  bool do_useCombinedkSFR=false;
   TString input_path_="";
   double asym_cut = 0.;
   double kfsrRange = 5.19;
@@ -224,6 +227,9 @@ int main(int argc,char *argv[]){
 	  }	  
 	  else if(arg=="-kfsrXrange"){
 	    kfsrXrange=true;
+	  }	  
+	  else if(arg=="-combinedkfsr"){
+	    do_useCombinedkSFR=true;
 	  }	  
 	  else if(arg=="-derThreshSi"){
 	    do_deriveThresholdsSi=true;
@@ -327,7 +333,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange or do_useCombinedkSFR)){
     cout<<"No plots were specified! Only the existence of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -399,7 +405,7 @@ int main(int argc,char *argv[]){
  
     cout << "testobject is " << Objects[0] << endl;
 
-    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange);
+    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange, do_useCombinedkSFR);
     if(do_fullPlots or do_JEF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetEnergyFractions();
 
     if(do_calcMCW) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CalculateMCWeights();

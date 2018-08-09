@@ -361,7 +361,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V6) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V7) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V12) 
+	    // else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V12) 
 	    else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
@@ -370,7 +370,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V6) 
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V7)
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11)
-	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V12)
+	    // else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V12)
 	    else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }

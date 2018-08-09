@@ -36,7 +36,7 @@
 
 using namespace std;
 
-void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod,double kfsr_fitrange){
+void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod,double kfsr_fitrange, bool useCombinedkSFR){
   cout << "--------------- Starting Pt_Extrapolation() ---------------" << endl << endl;
   TStyle* m_gStyle = new TStyle();
   m_gStyle->SetOptFit(000);
@@ -544,6 +544,9 @@ for(int j=0; j<n_eta-1; j++){
 
   /* ++++++++++++++++++++++++++ Calculate L2Residuals MPF ++++++++++++++++++++++++++++++ */
 
+     TString input_base = CorrectionObject::_input_path;
+     input_base.Resize(input_base.Last('/')+1);
+     
   // get the kFSR file
   TCanvas* c_kfsr_fit = new TCanvas("c_kfsr_fit", "c_kfsr_fit",1);
   c_kfsr_fit->Update();
@@ -557,6 +560,35 @@ for(int j=0; j<n_eta-1; j++){
 	hist_kfsr_mpf = (TH1D*)kfsr_mpf->Get("kfsr_mpf");
     }
     else{
+      if(useCombinedkSFR and not (CorrectionObject::_runnr== "BCDEF") and not (CorrectionObject::_runnr== "DEF")){
+      kfsr_mpf = new TFile(input_base +"RunBCDEF_17Nov2017/"+"Histo_KFSR_MPF_"+CorrectionObject::_generator_tag+"_L1.root","READ");
+    hist_kfsr_mpf = (TH1D*)kfsr_mpf->Get("kfsr_mpf");
+
+    //fit the kFSR values
+    TF1 *kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19);  
+
+    //Finally perform the fit!
+    //Be carefull with the fit range!
+    kfsr_fit_mpf->SetLineColor(kRed+1);
+    std::cout<<"!!! kFSR MPF fit !!! with BCDEF kFSR"<<std::endl;
+    std::cout<<hist_kfsr_mpf->GetEntries()<<std::endl;
+    
+    hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,kfsr_fitrange);
+
+    std::cout<<"Create a histogram to hold the confidence intervals\n";
+    
+    hist_kfsr_fit_mpf = (TH1D*)hist_kfsr_mpf->Clone();
+    // hist_kfsr_fit_mpf = new TH1D("hist_kfsr_fit_mpf","",hist_kfsr_mpf->GetNbinsX(),hist_kfsr_mpf->GetMinimumBin(),hist_kfsr_mpf->GetMaximumBin());
+    (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hist_kfsr_fit_mpf);
+    //Now the "hist_kfsr_fit" histogram has the fitted function values as the
+    //bin contents and the confidence intervals as bin errors
+
+    hist_kfsr_fit_mpf->SetStats(kFALSE);
+    hist_kfsr_fit_mpf->SetFillColor(kRed-10);     
+    hist_kfsr_fit_mpf->SetName("hist_kfsr_fit_mpf");
+    hist_kfsr_fit_mpf->SetTitle("kfsr fit for mpf");
+  }
+  else{
     kfsr_mpf = new TFile(CorrectionObject::_outpath+"Histo_KFSR_MPF_"+CorrectionObject::_generator_tag+"_L1.root","READ");
     hist_kfsr_mpf = (TH1D*)kfsr_mpf->Get("kfsr_mpf");
 
@@ -590,6 +622,7 @@ for(int j=0; j<n_eta-1; j++){
     hist_kfsr_fit_mpf->SetFillColor(kRed-10);     
     hist_kfsr_fit_mpf->SetName("hist_kfsr_fit_mpf");
     hist_kfsr_fit_mpf->SetTitle("kfsr fit for mpf");
+  }
     }
 
     double flat[n_eta-1];
@@ -869,6 +902,38 @@ for(int j=0; j<n_eta-1; j++){
 	hist_kfsr_fit_dijet = (TH1D*)kfsr_dijet->Get("hist_kfsr_fit_dijet");
 	hist_kfsr_dijet = (TH1D*)kfsr_dijet->Get("kfsr_dijet");
     }
+      else{
+      if(useCombinedkSFR){
+	
+	cout<<"\n going into kFSR fitting with the BCDEF combined kFSR  \n"<<endl;
+	
+      kfsr_dijet = new TFile(input_base +"RunBCDEF_17Nov2017/"+"Histo_KFSR_DiJet_"+CorrectionObject::_generator_tag+"_L1.root","READ");
+    hist_kfsr_dijet = (TH1D*)kfsr_dijet->Get("kfsr_dijet");
+
+    //fit the kFSR values
+    TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19);  
+
+    //Finally perform the fit!
+    //Be carefull with the fit range!
+    kfsr_fit_dijet->SetLineColor(kRed+1);
+    std::cout<<"!!! kFSR DIJET fit !!! with BCDEF kFSR"<<std::endl;
+    std::cout<<hist_kfsr_dijet->GetEntries()<<std::endl;
+    
+    hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,kfsr_fitrange);
+
+    std::cout<<"Create a histogram to hold the confidence intervals\n";
+    
+    hist_kfsr_fit_dijet = (TH1D*)hist_kfsr_dijet->Clone();
+    // hist_kfsr_fit_dijet = new TH1D("hist_kfsr_fit_dijet","",hist_kfsr_dijet->GetNbinsX(),hist_kfsr_dijet->GetMinimumBin(),hist_kfsr_dijet->GetMaximumBin());
+    (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hist_kfsr_fit_dijet);
+    //Now the "hist_kfsr_fit" histogram has the fitted function values as the
+    //bin contents and the confidence intervals as bin errors
+
+    hist_kfsr_fit_dijet->SetStats(kFALSE);
+    hist_kfsr_fit_dijet->SetFillColor(kRed-10);     
+    hist_kfsr_fit_dijet->SetName("hist_kfsr_fit_dijet");
+    hist_kfsr_fit_dijet->SetTitle("kfsr fit for dijet");
+  }
     else{
     kfsr_dijet = new TFile(CorrectionObject::_outpath+"Histo_KFSR_DiJet_"+CorrectionObject::_generator_tag+"_L1.root","READ");
     hist_kfsr_dijet = (TH1D*)kfsr_dijet->Get("kfsr_dijet");
@@ -903,6 +968,7 @@ for(int j=0; j<n_eta-1; j++){
     hist_kfsr_fit_dijet->SetName("hist_kfsr_fit_dijet");
     hist_kfsr_fit_dijet->SetTitle("kfsr fit for dijet");
     }
+  }
 
     double flat[n_eta-1];
     double loglin[n_eta-1];

@@ -195,7 +195,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     uhh2bacon::Selection sel;
 
     bool debug;  
-  bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB;
+    bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB, apply_L1seed_from_bx1_filter;
     double lumiweight;
     string jetLabel;
     TString dataset_version, JEC_Version;
@@ -312,6 +312,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     apply_EtaPhi_cut = (ctx.get("EtaPhi_cut") == "true");
     JEC_Version = ctx.get("JEC_Version");
 
+    apply_L1seed_from_bx1_filter =  (ctx.get("Apply_L1Seed_From_BX1_Filter") == "true" && !isMC);
+
     split_JEC_MC   = false; //Different MC corrections only existed for Spring16_25ns_V8* 
     split_JEC_DATA = true; //TODO check the JEC!!!
 
@@ -380,9 +382,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	    IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V5)
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V6) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V7) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V12) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V13) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11)  
 	    else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
@@ -390,10 +390,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V5)
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V6) 
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V7)  
-	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11) 
-	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V12)
-	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V13)  		 
-
+	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11)  		 
 	 else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }
@@ -432,7 +429,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	else if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	// else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
-	else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
+	else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
 	
 	else cout << "In AnalysisModule_DiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
@@ -785,7 +782,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	return false;
       }
       else  h_lumisel->fill(event);
-    }
+    }    
  
     // MET filters   
     if(!isMC && !metfilters_sel->passes(event)) return false;   
@@ -1043,12 +1040,13 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	jet_barrel = jet2;
       }
     }
+
     
     if(debug) cout<<"before trigger pass checks\n";
     if(event.isRealData){
       float pt_ave_ = pt_ave;
       float probejet_eta = jet_probe->eta();
-      
+
       bool eta_cut_bool = abs(probejet_eta) <  eta_cut;     
       if(!trigger_fwd) eta_cut_bool = true;
             
@@ -1396,7 +1394,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
 //Pu_pt_hat/pt_hat Selection
     if(isMC){
-      if(!sel.PUpthat(event)) return false;
+      if(!sel.PUpthat()) return false;
     }
     // h_nocuts->fill(event);
     // h_lumi_nocuts->fill(event);
@@ -1405,11 +1403,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     if(apply_METoverPt_cut && event.get(tt_MET)/(event.get(tt_jets_pt)+event.get(tt_barreljet_pt)+event.get(tt_probejet_pt))>0.2) return false; //skip events with large MET contribution  
 
     //PhiEta Region cleaning
-    if(apply_EtaPhi_cut && (!sel.EtaPhiCleaning(event) || !sel.EtaPhi(event)) ) return false;
+    if(apply_EtaPhi_cut && (!sel.EtaPhiCleaning() || !sel.EtaPhi()) ) return false;
 
     if(!isMC){
           // if(! sel.EtaPtCut(event)) return false;
-	  if(! sel.ChEMFrakCut(event)) return false;
+	  if(! sel.ChEMFrakCut()) return false;
     }
 
     if(debug) cout << "after etaPhi sel" << endl;
@@ -1418,7 +1416,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     event.set(tt_lumiSec,0);
        
        //Advanced Selection: DiJet Events
-    if(!sel.DiJetAdvanced(event)) return false;   
+    if(!sel.DiJetAdvanced()) return false;   
     h_dijet->fill(event);
     h_lumi_dijet->fill(event);
     h_match->fill(event);
@@ -1455,6 +1453,16 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
        if(debug) cout << "after trg fills" << endl;
 //###############################################################################################
 
+
+    //L1 jet seed cleaning
+    if(apply_L1seed_from_bx1_filter){
+      sel.L1JetBXclean(*jet_probe);
+    }
+
+//###############################################################################################
+
+
+    
     if (event.get(tt_alpha) < 0.3) {
       h_sel->fill(event);
       // h_lumi_sel->fill(event);

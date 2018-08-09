@@ -113,16 +113,18 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
       else throw runtime_error("In constructor: Invalid RunNr. specified.");
     }
 
-void CorrectionObject::FullCycle_CorrectFormulae(double kfsr_fitrange){
+void CorrectionObject::FullCycle_CorrectFormulae(double kfsr_fitrange, bool useCombinedkSFR){
   std::cout<<"Doing the Full Cycle"<<std::endl;
   std::cout<<"\nStarting ControlPlots()\n"<<std::endl;
   CorrectionObject::ControlPlots();  
-  std::cout<<"\nStarting kFSR_CorrectFormulae()\n"<<std::endl;
-  CorrectionObject::kFSR_CorrectFormulae();
+  if(not useCombinedkSFR){
+    std::cout<<"\nStarting kFSR_CorrectFormulae()\n"<<std::endl;
+    CorrectionObject::kFSR_CorrectFormulae();
+  }
   std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(true) with fitrange "<< kfsr_fitrange <<" \n"<<std::endl;
-  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(true,kfsr_fitrange);
+  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(true,kfsr_fitrange, useCombinedkSFR);
   std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(false) with fitrange "<< kfsr_fitrange <<" \n"<<std::endl;
-  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(false,kfsr_fitrange);
+  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(false,kfsr_fitrange, useCombinedkSFR);
   std::cout<<"\nStarting L2ResOutput()\n"<<std::endl;
   CorrectionObject::L2ResOutput();
   std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;

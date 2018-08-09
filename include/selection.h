@@ -74,21 +74,37 @@ class Selection {
     // bool Trigger(uhh2::Event& evt);
     bool PtMC(uhh2::Event& evt); //apply lowest Pt cut on MC
     bool DiJet();
-    bool DiJetAdvanced(uhh2::Event& evt);
+  
+    bool DiJetAdvanced();
+    bool DiJetAdvanced(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return DiJetAdvanced();}
+  
     int goodPVertex();
     bool triggerFired(float bin1, float bin2);
 
     //  bool FullSelection();
     //Cut events with pthat in PU higher than pthat
-    bool PUpthat(uhh2::Event& evt);
-    bool EtaPtCut(uhh2::Event& evt);
-    bool EtaPhi(uhh2::Event& evt);
-    bool EtaPhiCleaning(uhh2::Event& evt);
-    bool ChEMFrakCut(uhh2::Event& evt);  
+    bool PUpthat();
+    bool PUpthat(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return PUpthat();}
+  
+    bool EtaPtCut();
+    bool EtaPtCut(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return EtaPtCut();}
+  
+    bool EtaPhi();
+    bool EtaPhi(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return EtaPhi();}
+  
+    bool EtaPhiCleaning();
+    bool EtaPhiCleaning(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return EtaPhiCleaning();}
+  
+    bool ChEMFrakCut();
+    bool ChEMFrakCut(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return ChEMFrakCut();}
+  
     //jetmatching, find the jet in the event that corresponds to the jetid-th jet in the trigger object of the trigger with threshold trigger_th
-  //returns -1 if the triggerobject does not contain less than jetid jets
-  //returns -2 if no jet is matched within dR
-  int FindMatchingJet(unsigned int jetid, unsigned int trigger_th, bool use_fwd = false);
+    //returns -1 if the triggerobject does not contain less than jetid jets
+    //returns -2 if no jet is matched within dR
+    int FindMatchingJet(unsigned int jetid, unsigned int trigger_th, bool use_fwd = false);
+
+  bool L1JetBXclean(Jet& jet);
+  
 };
 
 }

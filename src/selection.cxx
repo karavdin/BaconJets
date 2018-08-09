@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "UHH2/core/include/Jet.h"
+#include "UHH2/core/include/L1Jet.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/GenericEvent.h"
 #include "UHH2/core/include/PrimaryVertex.h"
@@ -173,7 +174,6 @@ void Selection::SetEvent(uhh2::Event& evt)
 
 bool Selection::PtMC(uhh2::Event& evt)
 {
-  assert(event);
   //  std::cout<<"evt.get(tt_pt_ave) = "<<evt.get(tt_pt_ave)<<" s_Pt_Ave40_cut = "<<s_Pt_Ave40_cut<<std::endl;
   if (evt.get(tt_pt_ave) < s_Pt_AveMC_cut) 
     return false;
@@ -292,7 +292,7 @@ bool Selection::DiJet()
     return njets >= 2;
 }
   
-bool Selection::DiJetAdvanced(uhh2::Event& evt)
+  bool Selection::DiJetAdvanced()
 {
     assert(event);
 
@@ -395,7 +395,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
 // }
 
 
-  bool Selection::PUpthat(uhh2::Event& evt)
+  bool Selection::PUpthat()
   {
     assert(event);
 
@@ -411,7 +411,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     return false;
   }
 
-  bool Selection::EtaPtCut(uhh2::Event& evt)
+  bool Selection::EtaPtCut()
   {
     assert(event);
     
@@ -425,7 +425,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     return true;
   }
 
-  bool Selection::ChEMFrakCut(uhh2::Event& evt)
+  bool Selection::ChEMFrakCut()
   {
     assert(event);
     
@@ -439,7 +439,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     return true;
   }
   
-  bool Selection::EtaPhi(uhh2::Event& evt)
+  bool Selection::EtaPhi()
   {
     assert(event);
 
@@ -471,7 +471,7 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
 
 
 
-  bool Selection::EtaPhiCleaning(uhh2::Event& evt)
+  bool Selection::EtaPhiCleaning()
   {
     assert(event);
 
@@ -500,13 +500,45 @@ bool Selection::DiJetAdvanced(uhh2::Event& evt)
     cutValue = h_map->GetBinContent(idx_x+1, idx_y+1);
 
     if(cutValue > 0) break;
-        
-     
  }
 
  if(cutValue > 0) return false;
- 
-    return true;
+ return true;
+  }
+
+
+  bool Selection::L1JetBXclean(Jet& jet){
+    assert(event);
+    
+    std::vector< L1Jet>* l1jets = event->L1J_seeds;
+    bool _return = true;
+
+    unsigned int n_l1jets = l1jets->size();
+
+    if(n_l1jets<2) _return = false;
+        
+    if(!_return){
+      double dRmin = 100.;
+      int dRmin_seed_idx = -1;
+      float deta, dphi, dR;
+
+      float eta = jet.eta();
+      float phi = jet.phi();
+      
+      for(unsigned int i = 0; i<n_l1jets; i++){
+	deta = eta - l1jets->at(i).eta();
+        dphi =  TVector2::Phi_mpi_pi(phi - l1jets->at(i).phi());
+	dR = TMath::Sqrt( deta*deta+dphi*dphi );
+
+	if(dR < dRmin){
+	  dRmin=dR;
+	  dRmin_seed_idx = i;
+	}
+      }
+      _return *= (l1jets->at(dRmin_seed_idx).bx() != -1);
+    }
+
+    return _return;
   }
 
   
