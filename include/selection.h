@@ -107,6 +107,7 @@ class Selection {
     int FindMatchingJet(unsigned int jetid, unsigned int trigger_th, bool use_fwd = false);
 
   bool L1JetBXclean(Jet& jet);
+  bool L1JetBXcleanFull();
   
 };
 

@@ -420,35 +420,24 @@ bool Selection::DiJet()
 
  if(cutValue > 0) return false;
  return true;
-  }
+ }
 
 
-  bool Selection::L1JetBXclean(Jet& jet){
+bool Selection::L1JetBXclean(Jet& jet){
     assert(event);
 
-    // std::cout<<"L1 Jet seed clean debug 1\n";
-    
-    // std::vector< L1Jet>* l1jets = event->L1J_seeds;
     std::vector< L1Jet>* l1jets = &event->get(handle_l1jet_seeds);
     bool _return = true;
 
-    // std::cout<<"L1 Jet seed clean debug 2\n";
-    // std::cout<<event->jets<<endl;  
-    // std::cout<<event->L1J_seeds<<endl;
-    // std::cout<<l1jets<<endl;  
     unsigned int n_l1jets = l1jets->size();
-
-    // std::cout<<n_l1jets<<endl;
-    // std::cout<<"L1 Jet seed clean debug 2.5\n";
+    
     if(n_l1jets<2) _return = false;
         
-    // std::cout<<"L1 Jet seed clean debug 3\n";
-    if(!_return){
+    if(_return){
       double dRmin = 100.;
       int dRmin_seed_idx = -1;
       float dR;
       
-      // std::cout<<"L1 Jet seed clean debug 4\n";
       for(unsigned int i = 0; i<n_l1jets; i++){
 	dR=uhh2::deltaR(l1jets->at(i),jet);
 
@@ -457,13 +446,42 @@ bool Selection::DiJet()
 	  dRmin_seed_idx = i;
 	}
       }
-      // std::cout<<"L1 Jet seed clean debug 5\n";
       _return *= (l1jets->at(dRmin_seed_idx).bx() != -1);
     }
-
     return _return;
-  }
+}
 
+bool Selection::L1JetBXcleanFull(){
+    assert(event);
+
+    std::vector< L1Jet>* l1jets = &event->get(handle_l1jet_seeds);
+    bool _return = true;
+
+    unsigned int n_l1jets = l1jets->size();
+    if(n_l1jets<2) _return = false;
+        
+    if(_return){
+      double dRmin = 100.;
+      int dRmin_seed_idx = -1;
+      float dR;
+
+      std::vector< Jet>* jets = event->jets;
+      unsigned int n_jets = jets->size();
+      
+      for(unsigned int j = 0; j<n_jets && _return ; j++){
+	for(unsigned int i = 0; i<n_l1jets && _return; i++){
+	  dR=uhh2::deltaR(l1jets->at(i),jets->at(j));
+
+	  if(dR < dRmin){
+	    dRmin=dR;
+	    dRmin_seed_idx = i;
+	  }
+	}
+	_return *= (l1jets->at(dRmin_seed_idx).bx() != -1);
+      }
+    }
+    return _return;
+}
   
 Selection::~Selection()
 {

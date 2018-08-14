@@ -1,4 +1,4 @@
-file_name=RunBCDEF_L2Res_V11_noClosure_wkFSRcombined
+file_name=RunBCDEF_L2Res_V11_noClosure_checkL1SeedFilter2_2
 if [ "$#" = "1" ]
    then file_name=controlplots${1}_trgM_31Jan
 fi
