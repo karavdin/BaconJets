@@ -242,7 +242,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     /* MET filters */ 
     metfilters_sel.reset(new uhh2::AndSelection(ctx, "metfilters")); 
     metfilters_sel->add<TriggerSelection>("1-good-vtx", "Flag_goodVertices"); 
-    metfilters_sel->add<TriggerSelection>("globalTightHalo2016Filter", "Flag_globalTightHalo2016Filter"); 
+    metfilters_sel->add<TriggerSelection>("globalSuperTightHalo2016Filter", "Flag_globalSuperTightHalo2016Filter"); 
     metfilters_sel->add<TriggerSelection>("HBHENoiseFilter", "Flag_HBHENoiseFilter");        
     metfilters_sel->add<TriggerSelection>("HBHENoiseIsoFilter", "Flag_HBHENoiseIsoFilter");
     metfilters_sel->add<TriggerSelection>("EcalDeadCellTriggerPrimitiveFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter"); 
@@ -1455,12 +1455,12 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(debug) cout << "L1 seed filtered" << endl;
 	return false;
       }
-      if(debug) cout << "after the fisrt L1 seed filter" << endl;
-      if(!sel.L1JetBXcleanFull()){
-	if(debug) cout << "L1 seed filtered" << endl;
-	return false;
-      }
-      if(debug) cout << "after the L1 seed filter" << endl;
+      if(debug) cout << "after the first L1 seed filter" << endl;
+      // if(!sel.L1JetBXcleanFull()){
+      // 	if(debug) cout << "L1 seed filtered" << endl;
+      // 	return false;
+      // }
+      // if(debug) cout << "after the L1 seed filter" << endl;
     }
 
 //###############################################################################################

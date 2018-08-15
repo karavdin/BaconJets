@@ -423,7 +423,7 @@ bool Selection::DiJet()
  }
 
 
-bool Selection::L1JetBXclean(Jet& jet){
+  bool Selection::L1JetBXclean(Jet& jet, bool usePtRatioFilter){
     assert(event);
 
     std::vector< L1Jet>* l1jets = &event->get(handle_l1jet_seeds);
@@ -446,42 +446,48 @@ bool Selection::L1JetBXclean(Jet& jet){
 	  dRmin_seed_idx = i;
 	}
       }
-      _return *= (l1jets->at(dRmin_seed_idx).bx() != -1);
+      if(l1jets->at(dRmin_seed_idx).bx() != 0){
+	if(usePtRatioFilter){
+	  _return = ( l1jets->at(dRmin_seed_idx).pt() / jet.pt() ) < 0.2;
+	}
+	else _return = false;
+      }
     }
+    
     return _return;
 }
 
+bool Selection::L1JetBXcleanSmart(){
+    assert(event);
+    bool _return = true;
+    
+      std::vector< Jet>* jets = event->jets;
+      unsigned int n_jets = jets->size();
+
+      n_jets = std::min(int(n_jets),3);
+      
+      for(unsigned int j = 0; j<n_jets && _return ; j++){
+	_return *=L1JetBXclean(jets->at(j), true);
+      }
+      
+      return _return;
+}
+  
 bool Selection::L1JetBXcleanFull(){
     assert(event);
-
-    std::vector< L1Jet>* l1jets = &event->get(handle_l1jet_seeds);
     bool _return = true;
-
-    unsigned int n_l1jets = l1jets->size();
-    if(n_l1jets<2) _return = false;
-        
-    if(_return){
-      double dRmin = 100.;
-      int dRmin_seed_idx = -1;
-      float dR;
-
+    
       std::vector< Jet>* jets = event->jets;
       unsigned int n_jets = jets->size();
       
       for(unsigned int j = 0; j<n_jets && _return ; j++){
-	for(unsigned int i = 0; i<n_l1jets && _return; i++){
-	  dR=uhh2::deltaR(l1jets->at(i),jets->at(j));
-
-	  if(dR < dRmin){
-	    dRmin=dR;
-	    dRmin_seed_idx = i;
-	  }
-	}
-	_return *= (l1jets->at(dRmin_seed_idx).bx() != -1);
+	_return *=L1JetBXclean(jets->at(j));
       }
-    }
-    return _return;
+      
+     return _return;
 }
+
+
   
 Selection::~Selection()
 {
