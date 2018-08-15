@@ -130,10 +130,12 @@ void Selection::SetEvent(uhh2::Event& evt)
    assert(event);
 }
 
-bool Selection::PtMC(uhh2::Event& evt)
+bool Selection::PtMC()
 {
+   assert(event);
+   
   //  std::cout<<"evt.get(tt_pt_ave) = "<<evt.get(tt_pt_ave)<<" s_Pt_Ave40_cut = "<<s_Pt_Ave40_cut<<std::endl;
-  if (evt.get(tt_pt_ave) < s_Pt_AveMC_cut) 
+  if (event->get(tt_pt_ave) < s_Pt_AveMC_cut) 
     return false;
   return true;
 }

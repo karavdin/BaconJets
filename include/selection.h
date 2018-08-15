@@ -74,9 +74,12 @@ class Selection {
     ~Selection();
 
     void SetEvent(uhh2::Event& evt);
-    // bool Trigger(uhh2::Event& evt);
-    bool PtMC(uhh2::Event& evt); //apply lowest Pt cut on MC
-    bool DiJet();
+
+  // bool Trigger(uhh2::Event& evt);
+    bool PtMC(); //apply lowest Pt cut on MC
+    bool PtMC(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return PtMC();} //apply lowest Pt cut on MC
+
+  bool DiJet();
   
     bool DiJetAdvanced();
     bool DiJetAdvanced(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return DiJetAdvanced();}

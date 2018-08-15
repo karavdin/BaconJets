@@ -1442,7 +1442,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(pass_trigger500_HFJEC) {h_trgHF500->fill(event); h_lumi_TrigHF500->fill(event);}
    }
     else{    
-      if(!sel.PtMC(event)) return false; // For MC only one Pt threshold
+      if(!sel.PtMC()) return false; // For MC only one Pt threshold
    }
        if(debug) cout << "after trg fills" << endl;
 //###############################################################################################
@@ -1451,16 +1451,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     //L1 jet seed cleaning
     if(apply_L1seed_from_bx1_filter){
       if(debug) cout << "before the L1 seed filter" << endl;
-      if(!sel.L1JetBXclean(*jet_probe)){
+      if(!sel.L1JetBXcleanSmart()){
       if(debug) cout << "L1 seed filtered" << endl;
 	return false;
       }
       if(debug) cout << "after the first L1 seed filter" << endl;
-      // if(!sel.L1JetBXcleanFull()){
-      // 	if(debug) cout << "L1 seed filtered" << endl;
-      // 	return false;
-      // }
-      // if(debug) cout << "after the L1 seed filter" << endl;
     }
 
 //###############################################################################################
