@@ -121,7 +121,13 @@ bool isMC = (ctx.get("dataset_type") == "MC");
  bool no_genp = false;
  if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;
 
- handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds"); 
+ try {
+   handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
+ }
+ catch(std::runtime_error& e){
+   std::cerr << e.what();
+ }
+ 
 }
 
 void Selection::SetEvent(uhh2::Event& evt)

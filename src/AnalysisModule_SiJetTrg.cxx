@@ -337,6 +337,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(jetLabel == "AK4CHS"){
 	  IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V6)
 	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
+	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V23)
        }
 
 	  else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
@@ -380,13 +381,15 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  //residuals
 	    IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V6) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V7) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11)  
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V23)  
 	    else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
 	  IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V6) 
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V7)  
-	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11)  		 
+	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11)  
+	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V23)  		   		 
 	 else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }
@@ -424,6 +427,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	// else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+	else if(JEC_Version == "Fall17_17Nov2017_V23") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
 	
 	else cout << "In AnalysisModule_DiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
