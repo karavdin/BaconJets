@@ -138,7 +138,7 @@ constexpr static int n_pt_bins = 9;
  constexpr static float s_Pt_Ave450_cut  =577;
  constexpr static float s_Pt_Ave500_cut  =606;
 
-//FIXME check the numbers below, are copy of central triggers atm
+//FIXME check the numbers below, are copy of central triggers atm, are they still?? does not look so...
   constexpr static float s_Pt_Ave40HF_cut  =40 ;
   constexpr static float s_Pt_Ave60HF_cut  =60 ;
   constexpr static float s_Pt_Ave80HF_cut  =72 ;

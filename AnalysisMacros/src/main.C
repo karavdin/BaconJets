@@ -56,6 +56,8 @@ static void show_usage(std::string name)
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
 	      <<"\t--kfsrRange\t\tRneg to which the kFSR fit is performed.The default is 5.19.\n"
 	      <<"\t-useCombinedkfsr\t\tUse combined BCDEF kFSR for L2Res\.\n"
+	      <<"\t-useStraightkfsr\t\tUse simpler kFSR for L2Res\.\n"
+	      <<"\t-l1bx\t\tDo the L1 jet seed bx check plots\.\n"
 	      <<"\t--inputMC\t\tPath to the input mc. Default is hard coded in main.C"
       	      <<"\t--input\t\tPath to the input data, if none is given following is used:\n"
 	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/17Nov2017/Residuals/Run17BCD_Data <_mode> /Run17 <run><_dname> .root\n\tThe completion script assumes the same file structure."	    
@@ -128,7 +130,9 @@ int main(int argc,char *argv[]){
 				    "--kfsrRange",
 				    "-combinedkfsr",
 				    "-MEPC",
-				    "-kfsrXrange"};
+				    "-useStraightkfsr"
+				    "-kfsrXrange",
+				    "-l1bx"};
   
   TString run_nr = "B";
   TString dataname_end = "17Nov17_2017";
@@ -173,6 +177,8 @@ int main(int argc,char *argv[]){
   bool do_calcMCW=false;
   bool kfsrXrange=false;
   bool do_useCombinedkSFR=false;
+  bool do_useStraightkfsr=false;
+  bool do_l1bx=false;
   TString input_path_="";
   double asym_cut = 0.;
   double kfsrRange = 5.19;
@@ -230,6 +236,9 @@ int main(int argc,char *argv[]){
 	  }	  
 	  else if(arg=="-combinedkfsr"){
 	    do_useCombinedkSFR=true;
+	  }	  
+	  else if(arg=="-useStraightkfsr"){
+	    do_useStraightkfsr=true;
 	  }	  
 	  else if(arg=="-derThreshSi"){
 	    do_deriveThresholdsSi=true;
@@ -299,6 +308,9 @@ int main(int argc,char *argv[]){
 	  else if(arg=="-F"){
 	    use_F=true;
 	  }	  
+	  else if(arg=="-l1bx"){
+	    do_l1bx=true;
+	  }	  
 	  else if(arg[1]=='-'){
 	    if(arg=="--mode"){
 	       mode = argv[i+1];
@@ -333,7 +345,7 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange or do_useCombinedkSFR)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange or do_useCombinedkSFR or do_l1bx)){
     cout<<"No plots were specified! Only the existence of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -404,8 +416,9 @@ int main(int argc,char *argv[]){
     Objects.emplace_back(CorrectionObject(run_nr, generator,collection, input_path, input_path_MC, weight_path, closure_test, trigger_fwd, trigger_central, outpath_postfix));
  
     cout << "testobject is " << Objects[0] << endl;
-
-    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange, do_useCombinedkSFR);
+    if(do_useStraightkfsr) std::cout<<"using the easier kFSR Definition\n";
+   
+    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange, do_useCombinedkSFR, do_useStraightkfsr);
     if(do_fullPlots or do_JEF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetEnergyFractions();
 
     if(do_calcMCW) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CalculateMCWeights();
@@ -463,6 +476,7 @@ int main(int argc,char *argv[]){
     if(do_IGF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit();
     if(do_IGFw) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit_eta_0_13();
     if(do_MEPC) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].MakeEtaPhiCleanTxt();  
+    if(do_l1bx) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L1jetSeedBXcheck();
      // // // //Macros to compare different Runs 
 // // //    // Objects[0].L2ResAllRuns();
 // // //    // Objects[0].L2ResOverlay(true);

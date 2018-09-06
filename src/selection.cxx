@@ -24,7 +24,7 @@ namespace uhh2bacon {
 Selection::Selection(uhh2::Context & ctx) :
     context(ctx),
     event(0)
-{
+{ 
   tt_gen_pthat = ctx.declare_event_output<float>("gen_pthat");
   tt_gen_weight = ctx.declare_event_output<float>("gen_weight");
   tt_jet1_pt = ctx.declare_event_output<float>("jet1_pt");
@@ -121,12 +121,7 @@ bool isMC = (ctx.get("dataset_type") == "MC");
  bool no_genp = false;
  if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;
 
- try {
-   handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
- }
- catch(std::runtime_error& e){
-   std::cerr << e.what();
- }
+ handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
  
 }
 
@@ -454,7 +449,7 @@ bool Selection::DiJet()
 	  dRmin_seed_idx = i;
 	}
       }
-      if(l1jets->at(dRmin_seed_idx).bx() != 0){
+      if(l1jets->at(dRmin_seed_idx).bx() == -1){
 	if(usePtRatioFilter){
 	  _return = ( l1jets->at(dRmin_seed_idx).pt() / jet.pt() ) < 0.2;
 	}

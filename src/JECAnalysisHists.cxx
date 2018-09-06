@@ -125,6 +125,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
 
   double weight = ev.weight;
   const int njets = ev.jets->size();
+  
   hist("N_jets")->Fill(njets, weight);
   try{
   if(!ev.isRealData)hist("pt_hat")->Fill(ev.get(tt_gen_pthat),weight);

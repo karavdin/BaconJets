@@ -6,10 +6,10 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V11_noClosure/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure/">
 
-<!ENTITY b_closuretest       "false">
-<!ENTITY jec_version         "Fall17_17Nov2017_V11">
+<!ENTITY b_closuretest       "true">
+<!ENTITY jec_version         "Fall17_17Nov2017_V23">
 <!ENTITY APPLY_WEIGHTS       "true">
 <!ENTITY WEIGHT_PATH         "/nfs/dust/cms/user/garbersc/JEC_Fall17_ForWeights/"> 
 <!ENTITY Cut_PATH            "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/BaconJets/data/hotjets/17-17Nov17ReReco/">
@@ -25,6 +25,7 @@
 <!ENTITY USE_SINGLE_TRIGGER "false" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
 <!ENTITY APPLY_MC_SMEAR  "false">
+<!ENTITY APPLY_L1SEED_FROM_BX1_FILTER  "true">
 
 
 <!ENTITY QCDPt50to80_pythia8_AK4CHS           SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/MC_QCD_Ptbinned_50to80_woHOTVR_woXCONE.xml">
@@ -44,11 +45,17 @@
 
 
 
-<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunD_17Nov2017_wCHSMETfixed.xml">
+<!-- <!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunD_17Nov2017_wCHSMETfixed.xml"> -->
 
-<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunE_17Nov2017_wCHSMETfixed.xml">
+<!-- <!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunE_17Nov2017_wCHSMETfixed.xml"> -->
 
-<!ENTITY DATA_RunF_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunF_17Nov2017_wCHSMETfixed.xml">
+<!-- <!ENTITY DATA_RunF_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunF_17Nov2017_wCHSMETfixed.xml"> -->
+
+<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v2/DATA_JetHT_Run2017D_withL1seeds_withL1prescales_DUST.xml">
+
+<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v2/DATA_JetHT_Run2017E_withL1seeds_withL1prescales_DUST.xml">
+
+<!ENTITY DATA_RunF_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v2/DATA_JetHT_Run2017F_withL1seeds_withL1prescales_DUST.xml">
 
 
 
@@ -59,7 +66,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_MC_noSmear"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunDEF_xcheckWdijet_with_V2_branch_correctedMETCorrection3_withoutL1bxclean"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -149,30 +156,30 @@
 <!--           <OutputTree Name="AnalysisTree"/> -->
 <!--      </InputData> -->
 
-<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunF" Cacheable="&CACHEABLE;">
-          &QCDPt15to7000;
+<!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunF" Cacheable="&CACHEABLE;"> -->
+<!--           &QCDPt15to7000; -->
+<!--           <InputTree Name="AnalysisTree"/> -->
+<!--           <OutputTree Name="AnalysisTree"/> -->
+<!--      </InputData> -->
+
+
+<InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;">
+          &DATA_RunD_promptReco_2017;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
-     </InputData>
+</InputData>
 
+<InputData Lumi="76958681" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;">
+          &DATA_RunE_promptReco_2017;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+</InputData>
 
-<!-- <InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
-<!--           &DATA_RunD_promptReco_2017; -->
-<!--           <InputTree Name="AnalysisTree"/> -->
-<!--           <OutputTree Name="AnalysisTree"/> -->
-<!-- </InputData> -->
-
-<!-- <InputData Lumi="76958681" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
-<!--           &DATA_RunE_promptReco_2017; -->
-<!--           <InputTree Name="AnalysisTree"/> -->
-<!--           <OutputTree Name="AnalysisTree"/> -->
-<!-- </InputData> -->
-
-<!-- <InputData Lumi="113430556" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_17Nov17_2017" Cacheable="&CACHEABLE;"> -->
-<!--           &DATA_RunF_promptReco_2017; -->
-<!--           <InputTree Name="AnalysisTree"/> -->
-<!--           <OutputTree Name="AnalysisTree"/> -->
-<!-- </InputData> -->
+<InputData Lumi="113430556" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_17Nov17_2017" Cacheable="&CACHEABLE;">
+          &DATA_RunF_promptReco_2017;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+</InputData>
 
 
     <UserConfig>
@@ -232,6 +239,7 @@
 	<!-- Systematic uncertainties -->
 	<Item Name="jersmear_direction" Value="nominal"/> <!--nominal/down/up -->
 
+
 	<Item Name="Apply_Lumiweights"  Value="&APPLY_LUMIWEIGHTS;"/>
 	<Item Name="Apply_Unflattening" Value="&APPLY_UNFLATTENING;"/>
 	<Item Name="Apply_Weights" Value="&APPLY_WEIGHTS;"/>
@@ -247,6 +255,7 @@
 	<Item Name="Only_BtB"               Value="&ONLY_BACK_TO_BACK;"/>
 
 	<Item Name="Apply_MC_Smear" Value="&APPLY_MC_SMEAR;"/>
+	<Item Name="Apply_L1Seed_From_BX1_Filter" Value="&APPLY_L1SEED_FROM_BX1_FILTER;"/>
 	
 	<!-- always apply MET smearing -->
 

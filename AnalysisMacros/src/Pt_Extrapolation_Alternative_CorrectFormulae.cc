@@ -36,7 +36,7 @@
 
 using namespace std;
 
-void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod,double kfsr_fitrange, bool useCombinedkSFR){
+void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod,double kfsr_fitrange, bool useCombinedkSFR, bool useStraightkFSR){
   cout << "--------------- Starting Pt_Extrapolation() ---------------" << endl << endl;
   TStyle* m_gStyle = new TStyle();
   m_gStyle->SetOptFit(000);
@@ -561,18 +561,27 @@ for(int j=0; j<n_eta-1; j++){
     }
     else{
       if(useCombinedkSFR and not (CorrectionObject::_runnr== "BCDEF") and not (CorrectionObject::_runnr== "DEF")){
-      kfsr_mpf = new TFile(input_base +"RunBCDEF_17Nov2017/"+"Histo_KFSR_MPF_"+CorrectionObject::_generator_tag+"_L1.root","READ");
+      // kfsr_mpf = new TFile(input_base +"RunBCDEF_17Nov17_2017_L1seedCleaned_wL1seedCleaned/"+"Histo_KFSR_MPF_"+CorrectionObject::_generator_tag+"_L1.root","READ");
+
+      kfsr_mpf = new TFile((CorrectionObject::_outpath+"Histo_KFSR_MPF_"+CorrectionObject::_generator_tag+"_L1.root").ReplaceAll(TString("Run")+CorrectionObject::_runnr+"_",TString("RunBCDEF_")),"READ");
+      
     hist_kfsr_mpf = (TH1D*)kfsr_mpf->Get("kfsr_mpf");
 
     //fit the kFSR values
-    TF1 *kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19);  
-
+    TF1 *kfsr_fit_mpf;
+    // if(useStraightkFSR)
+      kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]",0,5.19);
+    // else kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19);
+    if(useStraightkFSR) std::cout<<"\nUse the easier kFSR defintion!\n";
     //Finally perform the fit!
     //Be carefull with the fit range!
     kfsr_fit_mpf->SetLineColor(kRed+1);
     std::cout<<"!!! kFSR MPF fit !!! with BCDEF kFSR"<<std::endl;
     std::cout<<hist_kfsr_mpf->GetEntries()<<std::endl;
     
+    // if(useStraightkFSR)
+      kfsr_fit_mpf->SetParameters(1.,0.,0.); 
+    // else kfsr_fit_mpf->SetParameters(9.96041e-01, 4.45590e-03, 3.68620e-01);  
     hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,kfsr_fitrange);
 
     std::cout<<"Create a histogram to hold the confidence intervals\n";
@@ -593,8 +602,12 @@ for(int j=0; j<n_eta-1; j++){
     hist_kfsr_mpf = (TH1D*)kfsr_mpf->Get("kfsr_mpf");
 
     //fit the kFSR values
-    TF1 *kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19);  
-
+    TF1 *kfsr_fit_mpf;  
+    // if(useStraightkFSR)
+      kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]",0,5.19);
+    // else kfsr_fit_mpf = new TF1("kfsr_fit_mpf","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19);
+    if(useStraightkFSR) std::cout<<"\nUse the easier kFSR defintion!\n";
+    
     //Finally perform the fit!
     //Be carefull with the fit range!
     kfsr_fit_mpf->SetLineColor(kRed+1);
@@ -603,10 +616,12 @@ for(int j=0; j<n_eta-1; j++){
 
     // if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(1.,0.1,8.5);
     // if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(0.996,0.1,26.4);
-    if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(0.9666,2.215,65.54);
-    else if(CorrectionObject::_runnr== "C") kfsr_fit_mpf->SetParameters(0.6222,82.01,216.2);
-    // else if(CorrectionObject::_runnr== "F") kfsr_fit_mpf->SetParameters(0.883,47.2,400.8);
-    else if(CorrectionObject::_runnr== "F") kfsr_fit_mpf->SetParameters(0.936,36.07,565.06);
+    // if(useStraightkFSR)
+      kfsr_fit_mpf->SetParameters(1.,0.,0.); 
+    // else if(CorrectionObject::_runnr== "B") kfsr_fit_mpf->SetParameters(0.9666,2.215,65.54);
+    // else if(CorrectionObject::_runnr== "C") kfsr_fit_mpf->SetParameters(0.6222,82.01,216.2);
+    // // else if(CorrectionObject::_runnr== "E") kfsr_fit_mpf->SetParameters( , , );
+    // else if(CorrectionObject::_runnr== "F") kfsr_fit_mpf->SetParameters(0.936,36.07,565.06);
     
     hist_kfsr_mpf->Fit("kfsr_fit_mpf","S","",0,kfsr_fitrange);
 
@@ -907,7 +922,10 @@ for(int j=0; j<n_eta-1; j++){
 	
 	cout<<"\n going into kFSR fitting with the BCDEF combined kFSR  \n"<<endl;
 	
-      kfsr_dijet = new TFile(input_base +"RunBCDEF_17Nov2017/"+"Histo_KFSR_DiJet_"+CorrectionObject::_generator_tag+"_L1.root","READ");
+      // kfsr_dijet = new TFile(input_base +"RunBCDEF_17Nov17_2017_L1seedCleaned_wL1seedCleaned/"+"Histo_KFSR_DiJet_"+CorrectionObject::_generator_tag+"_L1.root","READ");
+
+      kfsr_dijet = new TFile((CorrectionObject::_outpath+"Histo_KFSR_DiJet_"+CorrectionObject::_generator_tag+"_L1.root").ReplaceAll(TString("Run")+CorrectionObject::_runnr+"_",TString("RunBCDEF_")),"READ");
+      
     hist_kfsr_dijet = (TH1D*)kfsr_dijet->Get("kfsr_dijet");
 
     //fit the kFSR values
@@ -918,14 +936,16 @@ for(int j=0; j<n_eta-1; j++){
     kfsr_fit_dijet->SetLineColor(kRed+1);
     std::cout<<"!!! kFSR DIJET fit !!! with BCDEF kFSR"<<std::endl;
     std::cout<<hist_kfsr_dijet->GetEntries()<<std::endl;
-    
-    hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,kfsr_fitrange);
+
+    if(useStraightkFSR) kfsr_fit_dijet->SetParameters(1.0 , 0., 0.);
+    else kfsr_fit_dijet->SetParameters(-2.49041e+02 , 2.27766e+06, 9.10832e+03);  
+    if(!useStraightkFSR) hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,kfsr_fitrange);
 
     std::cout<<"Create a histogram to hold the confidence intervals\n";
     
     hist_kfsr_fit_dijet = (TH1D*)hist_kfsr_dijet->Clone();
     // hist_kfsr_fit_dijet = new TH1D("hist_kfsr_fit_dijet","",hist_kfsr_dijet->GetNbinsX(),hist_kfsr_dijet->GetMinimumBin(),hist_kfsr_dijet->GetMaximumBin());
-    (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hist_kfsr_fit_dijet);
+    if(!useStraightkFSR) (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hist_kfsr_fit_dijet);
     //Now the "hist_kfsr_fit" histogram has the fitted function values as the
     //bin contents and the confidence intervals as bin errors
 
@@ -942,10 +962,10 @@ for(int j=0; j<n_eta-1; j++){
     TF1 *kfsr_fit_dijet = new TF1("kfsr_fit_dijet","[0]+([1]*TMath::CosH(x))/(1+[2]*TMath::CosH(x))",0,5.19); //Range: 0,5. by default
     
     // kfsr_fit_dijet->SetParameters(1,0.03,0.5);//start parameters that wor for DEF dijet central+HF
-    if(CorrectionObject::_runnr== "B") kfsr_fit_dijet->SetParameters(0.6,7,1.6);
-    else if(CorrectionObject::_runnr== "C") kfsr_fit_dijet->SetParameters(0.94,0.187,2.34);
+    if(CorrectionObject::_runnr== "B") kfsr_fit_dijet->SetParameters( 9.80547e-01, 2.18850e-02, 3.26559e-01);
+    else if(CorrectionObject::_runnr== "C") kfsr_fit_dijet->SetParameters( 9.74741e-01, 3.79674e-02, 6.87868e-01);
     else if(CorrectionObject::_runnr== "D") kfsr_fit_dijet->SetParameters(0.97,0.028,0.44); 
-    else if(CorrectionObject::_runnr== "E") kfsr_fit_dijet->SetParameters(0.99,0.013,0.26);  
+    else if(CorrectionObject::_runnr== "E") kfsr_fit_dijet->SetParameters( -4.70108e-01, 1.20219e+02, 8.09427e+01);  
     // else if(CorrectionObject::_runnr== "F") kfsr_fit_dijet->SetParameters(0.98,0.027,0.54);  
     else if(CorrectionObject::_runnr== "F") kfsr_fit_dijet->SetParameters(-0.8046,186.98,102.76);  
     else if(CorrectionObject::_runnr== "BCDEF") kfsr_fit_dijet->SetParameters(-227.,2.2887e+06,1.00177e+04);  
@@ -954,12 +974,12 @@ for(int j=0; j<n_eta-1; j++){
     //Finally perform the fit 
     kfsr_fit_dijet->SetLineColor(kBlue+1);
     std::cout<<"------ !!! kFSR pT-balance fit !!! ------"<<std::endl;
-    hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,kfsr_fitrange);
+    if(!useStraightkFSR) hist_kfsr_dijet->Fit("kfsr_fit_dijet","S","",0,kfsr_fitrange);
  
     //Create a histogram to hold the confidence intervals
     // hist_kfsr_fit_dijet = new TH1D("hist_kfsr_fit_dijet","",hist_kfsr_dijet->GetNbinsX(),hist_kfsr_dijet->GetMinimumBin(),hist_kfsr_dijet->GetMaximumBin());
     hist_kfsr_fit_dijet = (TH1D*)hist_kfsr_dijet->Clone();
-    (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hist_kfsr_fit_dijet);
+    if(!useStraightkFSR) (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hist_kfsr_fit_dijet);
     //Now the "hist_kfsr_fit" histogram has the fitted function values as the
     //bin contents and the confidence intervals as bin errors
 

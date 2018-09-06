@@ -6,6 +6,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/EventHelper.h"
 #include "UHH2/core/include/Jet.h"
+#include "UHH2/core/include/L1Jet.h"
 #include "UHH2/core/include/Utils.h"
 #include "../include/JECAnalysisHists.h"
 #include "../include/JECCrossCheckHists.h"
@@ -164,6 +165,10 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     Event::Handle<int> tt_run; 
     Event::Handle<int> tt_evID;
     Event::Handle<int> tt_lumiSec;
+  
+    Event::Handle<int> tt_jet1_l1bx; 
+    Event::Handle<int> tt_jet2_l1bx; 
+    Event::Handle<int> tt_jet3_l1bx;  
  
     std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
     std::unique_ptr<JECAnalysisHists> h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg500;
@@ -177,7 +182,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 
     bool debug;
     bool no_genp;
-    bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB;
+    bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB, apply_L1seed_from_bx1_filter;
     double lumiweight;
     string jetLabel;
     TString dataset_version, JEC_Version;
@@ -197,6 +202,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     double L1METptThresh;
     double eta_thresh_low;
     double eta_thresh_high;
+
+  uhh2::GenericEvent::Handle<std::vector<L1Jet>> handle_l1jet_seeds;
+  
   };
 
   AnalysisModule_DiJetTrg::AnalysisModule_DiJetTrg(uhh2::Context & ctx) :
@@ -291,6 +299,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     apply_EtaPhi_cut = (ctx.get("EtaPhi_cut") == "true");
     JEC_Version = ctx.get("JEC_Version");
 
+    apply_L1seed_from_bx1_filter =  (ctx.get("Apply_L1Seed_From_BX1_Filter") == "true" && !isMC);
+
     split_JEC_MC   = false; //Different MC corrections only existed for Spring16_25ns_V8* 
     split_JEC_DATA = true; //TODO check the JEC!!!
 
@@ -315,6 +325,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
       if(jetLabel == "AK4CHS"){
 	  IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V6)
 	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
+	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V23)
        }
 
       else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
@@ -359,14 +370,14 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V6) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V7) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
-	    // else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V12) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V23) 
 	    else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
 	    IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V6) 
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V7)
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11)
-	    // else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V12)
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V23)
 	    else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }
@@ -511,6 +522,10 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     tt_run = ctx.declare_event_output<int>("run");
     tt_evID = ctx.declare_event_output<int>("eventID");
     tt_lumiSec = ctx.declare_event_output<int>("lumi_sec");
+
+    tt_jet1_l1bx = ctx.declare_event_output<int>("jet1_l1bx");
+    tt_jet2_l1bx = ctx.declare_event_output<int>("jet1_l2bx");
+    tt_jet3_l1bx = ctx.declare_event_output<int>("jet1_l3bx");
     
     tt_trigger40 = ctx.declare_event_output<int>("trigger40");
     tt_trigger60 = ctx.declare_event_output<int>("trigger60");
@@ -682,6 +697,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     }
     upper_binborders_runnrs.push_back(last_entry); //this is not exactly an UPPER limit because it is equal to the highest possible entry, not greater than it...created exception for this case.
     lumi_in_bins.push_back(ilumi_current_bin);
+
+    handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
 
     cout<<"end of AnalyseModule Constructor\n";
     
@@ -1418,7 +1435,7 @@ if(debug){
 //Pu_pt_hat/pt_hat Selection
     //  if(!event.isRealData && !no_genp){
     if(isMC){
-      if(!sel.PUpthat(event)) return false;
+      if(!sel.PUpthat()) return false;
       // if((gen_pthat-genjet1_pt)/gen_pthat<-0.4) return false;
     }
     if(debug) cout<<"After PUpthat! "<<endl;
@@ -1432,7 +1449,7 @@ if(debug){
 
     //PhiEta Region cleaning
     if(!isMC)
-      if(apply_EtaPhi_cut && (!sel.EtaPhiCleaning(event)  || !sel.EtaPhi(event)
+      if(apply_EtaPhi_cut && (!sel.EtaPhiCleaning()  || !sel.EtaPhi()
 			      )) return false;
     
 //     I was looking at the material you prepare some time ago [0]
@@ -1445,7 +1462,7 @@ if(debug){
     //TODO let them get apply_xxx bools from the xml-config
     if(!isMC){
           // if(! sel.EtaPtCut(event)) return false;
-	  if(! sel.ChEMFrakCut(event)) return false;
+	  if(! sel.ChEMFrakCut()) return false;
     }
 
     
@@ -1460,11 +1477,12 @@ if(debug){
     //   return false;
     // }
     // else{
-    event.set(tt_run,0);
-    event.set(tt_evID,0);
-    event.set(tt_lumiSec,0);
-      // return false;
-    // }
+    // event.set(tt_run,0);
+    // event.set(tt_evID,0);
+    // event.set(tt_lumiSec,0);
+    event.set(tt_run,event.run);
+    event.set(tt_evID,event.event);
+    event.set(tt_lumiSec,event.luminosityBlock);
     
     
     if(debug){
@@ -1473,7 +1491,7 @@ if(debug){
    }
 
 //Advanced Selection: DiJet Events
-    if(!sel.DiJetAdvanced(event)) return false;
+    if(!sel.DiJetAdvanced()) return false;
     h_dijet->fill(event);
     h_lumi_dijet->fill(event);
     h_match->fill(event);
@@ -1502,9 +1520,90 @@ if(debug){
 	cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
       }
 
-      if(!sel.PtMC(event)) return false; // For MC only one Pt threshold
+      if(!sel.PtMC()) return false; // For MC only one Pt threshold
     }
 //######################################################################################################################################
+       
+
+    // L1 jet seed cleaning
+    if(apply_L1seed_from_bx1_filter){
+      if(debug) cout << "before the L1 seed filter" << endl;
+      if(!sel.L1JetBXcleanSmart()){
+      if(debug) cout << "L1 seed filtered" << endl;
+    	return false;
+      }
+      if(debug) cout << "after the first L1 seed filter" << endl;
+    }
+
+    //get the corresponding L1 Jet and save the bx
+    std::vector< L1Jet>* l1jets = &event.get(handle_l1jet_seeds);
+
+    if(debug) cout << "declared L1Jet seeds" << endl;
+    
+    int jet1_l1bx, jet2_l1bx, jet3_l1bx;
+    
+    unsigned int n_l1jets =l1jets->size();
+    if(debug) cout << "l1jets size is "<<n_l1jets<<endl;
+    if(n_l1jets>0){
+      double dRmin = 100.;
+      int dRmin_seed_idx = -1;
+      float dR;
+      if(debug) cout << "before first L1Jet seeds dR loop" << endl;
+      for(unsigned int i = 0; i<n_l1jets; i++){
+	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(0));
+
+	if(dR < dRmin){
+	  dRmin=dR;
+	  dRmin_seed_idx = i;
+	}
+      }
+      if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet1_l1bx = -10;
+      else jet1_l1bx = l1jets->at(dRmin_seed_idx).bx();
+    }
+    else jet1_l1bx = 10;
+    
+    if(n_l1jets>1){
+      double dRmin = 100.;
+      int dRmin_seed_idx = -1;
+      float dR;
+      for(unsigned int i = 0; i<n_l1jets; i++){
+	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(1));
+
+	if(dR < dRmin){
+	  dRmin=dR;
+	  dRmin_seed_idx = i;
+	}
+      }
+      if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet2_l1bx = -10;
+      else jet2_l1bx = l1jets->at(dRmin_seed_idx).bx();
+    }
+    else jet2_l1bx = 10;
+
+    if(event.jets->size()>2){
+    if(n_l1jets>2){
+      double dRmin = 100.;
+      int dRmin_seed_idx = -1;
+      float dR;
+      for(unsigned int i = 0; i<n_l1jets; i++){
+	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(2));
+
+	if(dR < dRmin){
+	  dRmin=dR;
+	  dRmin_seed_idx = i;
+	}
+      }
+      if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet3_l1bx = -10;
+      else jet3_l1bx = l1jets->at(dRmin_seed_idx).bx();
+    }
+    else jet3_l1bx = 10;
+    }
+    else jet3_l1bx = 10;
+
+    event.set(tt_jet1_l1bx,jet1_l1bx);
+    event.set(tt_jet2_l1bx,jet2_l1bx);
+    event.set(tt_jet3_l1bx,jet3_l1bx);
+
+//###############################################################################################
 
     if (event.get(tt_alpha) < 0.3) {
       h_sel->fill(event);

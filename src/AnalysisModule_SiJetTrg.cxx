@@ -6,6 +6,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/EventHelper.h"
 #include "UHH2/core/include/Jet.h"
+#include "UHH2/core/include/L1Jet.h"
 #include "UHH2/core/include/Utils.h"
 #include "UHH2/core/include/Selection.h"
 #include "../include/JECAnalysisHists.h"
@@ -182,7 +183,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     Event::Handle<int> tt_run; 
     Event::Handle<int> tt_evID;
-    Event::Handle<int> tt_lumiSec;  
+    Event::Handle<int> tt_lumiSec;
+  
+    Event::Handle<int> tt_jet1_l1bx; 
+    Event::Handle<int> tt_jet2_l1bx; 
+    Event::Handle<int> tt_jet3_l1bx;  
   
     std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
     std::unique_ptr<JECAnalysisHists> h_trgSiMu ,h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg450,h_trg500;
@@ -215,6 +220,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     double L1METptThresh;
     double eta_thresh_low;
     double eta_thresh_high;
+
+  uhh2::GenericEvent::Handle<std::vector<L1Jet>> handle_l1jet_seeds;
+  
   };
 
   AnalysisModule_SiJetTrg::AnalysisModule_SiJetTrg(uhh2::Context & ctx) :
@@ -534,6 +542,10 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     tt_run = ctx.declare_event_output<int>("run");
     tt_evID = ctx.declare_event_output<int>("eventID");
     tt_lumiSec = ctx.declare_event_output<int>("lumi_sec");
+
+    tt_jet1_l1bx = ctx.declare_event_output<int>("jet1_l1bx");
+    tt_jet2_l1bx = ctx.declare_event_output<int>("jet1_l2bx");
+    tt_jet3_l1bx = ctx.declare_event_output<int>("jet1_l3bx");
     
     tt_triggerSiMu = ctx.declare_event_output<int>("triggerSiMu");
 
@@ -657,22 +669,22 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     if (debug) cout<<"Apply Weights: "<<apply_weights<<endl;
     if(apply_weights){
       if(isMC && dataset_version.Contains("RunB")){
-    	  name_weights += "MC_ReWeights_RunB.root";
+    	  name_weights += "MC_ReWeights_RunB_17Nov17_2017_withL1BXsaved_METCorrectionCorrected__ptBinned.root";
       }
       else if(isMC && dataset_version.Contains("RunC")){
-    	  name_weights += "MC_ReWeights_RunC.root";
+    	  name_weights += "MC_ReWeights_RunC_17Nov17_2017_withL1BXsaved_METCorrectionCorrected__ptBinned.root";
       }
       else if(isMC && dataset_version.Contains("RunD")){
-    	  name_weights += "MC_ReWeights_RunD.root";
+    	  name_weights += "MC_ReWeights_RunD_17Nov17_2017_withL1BXsaved_METCorrectionCorrected__ptBinned.root";
       }
       else if(isMC && dataset_version.Contains("RunE")){
-    	  name_weights += "MC_ReWeights_RunE.root";
+    	  name_weights += "MC_ReWeights_RunE_17Nov17_2017_withL1BXsaved_METCorrectionCorrected__ptBinned.root";
       }
       else if(isMC && dataset_version.Contains("RunF")){
 	if(dataset_version.Contains("QCDPt15to7000")){
     	  name_weights += "MC_ReWeights_RunF.root";
 	}
-	else  name_weights += "MC_ReWeights_RunF_17Nov17_2017_newerEtaPhiClean_noEtaPtCut__QCDPtBinned.root";
+	else  name_weights += "MC_ReWeights_RunF_17Nov17_2017_withL1BXsaved_METCorrectionCorrected__ptBinned.root";
       }
       else{
 	cout<<"No MC weights found? dataset_version is "<<dataset_version<<endl;
@@ -685,6 +697,10 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     apply_unflattening = (ctx.get("Apply_Unflattening") == "true" && isMC);
     apply_smear = (ctx.get("Apply_MC_Smear")=="true" && isMC);
     if(apply_weights && apply_lumiweights) throw runtime_error("In AnalysisModule_SiJetTrg.cxx: 'apply_weights' and 'apply_lumiweights' are set 'true' simultaneously. This won't work, please decide on one");
+    if(isMC){
+      lumiweight = string2double(ctx.get("dataset_lumi")); //TODO this is not the lumiweight but lust the lumi, normalisation to it is commented out at the moment
+      cout<<"will be scaled my lumi "<<lumiweight<<endl;
+    }
 
     
     string lumifile = ctx.get("lumi_file");
@@ -730,6 +746,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     }
     upper_binborders_runnrs.push_back(last_entry); //this is not exactly an UPPER limit because it is equal to the highest possible entry, not greater than it...created exception for this case.
     lumi_in_bins.push_back(ilumi_current_bin);
+
+    handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
   };
 
 
@@ -756,6 +774,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     //Dump Input
     h_input->fill(event);
 
+        
     //LEPTON selection
 
     if(debug) cout<<"before muon cleaning\n";
@@ -1005,7 +1024,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     double trg_thresh[10] = {s_Pt_Ave40_cut,s_Pt_Ave60_cut,s_Pt_Ave80_cut,s_Pt_Ave140_cut,s_Pt_Ave200_cut,s_Pt_Ave260_cut,s_Pt_Ave320_cut,s_Pt_Ave400_cut, s_Pt_Ave450_cut, s_Pt_Ave500_cut};
 
-    double trgHF_thresh[10] = {s_Pt_Ave40HF_cut,s_Pt_Ave60HF_cut,s_Pt_Ave80HF_cut,s_Pt_Ave140HF_cut,s_Pt_Ave200HF_cut,s_Pt_Ave260HF_cut,s_Pt_Ave320HF_cut,s_Pt_Ave400HF_cut, s_Pt_Ave450HF_cut, s_Pt_Ave500HF_cut};
+    double trgHF_thresh[10] = {s_Pt_Ave40_cut,s_Pt_Ave60_cut,s_Pt_Ave80_cut,s_Pt_Ave140_cut,s_Pt_Ave200_cut,s_Pt_Ave260_cut,s_Pt_Ave320_cut,s_Pt_Ave400_cut, s_Pt_Ave450_cut, s_Pt_Ave500_cut};//{s_Pt_Ave40HF_cut,s_Pt_Ave60HF_cut,s_Pt_Ave80HF_cut,s_Pt_Ave140HF_cut,s_Pt_Ave200HF_cut,s_Pt_Ave260HF_cut,s_Pt_Ave320HF_cut,s_Pt_Ave400HF_cut, s_Pt_Ave450HF_cut, s_Pt_Ave500HF_cut};
 
 
     Jet* jet_probe = jet1;
@@ -1114,7 +1133,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(pass_trigger450_HFJEC){ n_trig++; trigger450_HF = 1;}
 
     h_afterTriggerData->fill(event);
-
+    if(debug) cout<<"after triggering: njet: "<<event.jets->size()<<endl;
+    
+    
     if(onlyBtB){
      //turn jet2 around and check dR to jet1
      float eta1 = jet1->eta();
@@ -1217,6 +1238,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
 //###########################################  Obtain weights from MC reweighting  ###############################
     if(apply_weights && isMC){
+      if(debug) cout<<"in apply weights\n";
+      if(debug) cout<<"  weight before: "<<event.weight<<endl;      
+      
       // TH2D* h_weights = (TH2D*)f_weights->Get("pt_ave_data");
       // int idx_x=0;
       // int idx_y=0;
@@ -1240,17 +1264,22 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	if(debug) cout<<"did not found the MC reweighting bin for pt_ave/eta "<<pt_ave<<"/"<<probejet_eta<<endl;
 	return false;}
       event.weight *= h_weights->GetBinContent(h_weights->FindBin(pt_ave<2000?pt_ave:(2000-1e-7),probejet_eta));
+      if(debug) cout<<"  weight after: "<<event.weight<<endl;  
     }
 
     // h_afterPtEtaReweight->fill(event);
 //################################################################################################################
 //#############################################  scale to Lumi  ##############################################
-    if(isMC && lumiweight != 0){
-      event.weight *= 1./lumiweight;
-    }
+    // if(isMC && (lumiweight != 0)){
+    //   if(debug) cout<<"in apply lumiweights\n";
+    //   if(debug) cout<<"  weight before: "<<event.weight<<endl;      
+    //   event.weight *= 1./lumiweight;
+    //   if(debug) cout<<"  weight after: "<<event.weight<<endl;  
+    // }
 
 
 
+    if(debug) cout<<"before afterUnflat fill: njet: "<<event.jets->size()<<endl;
     
    h_afterUnflat->fill(event);
     
@@ -1409,9 +1438,12 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     }
 
     if(debug) cout << "after etaPhi sel" << endl;
-    event.set(tt_run,0);
-    event.set(tt_evID,0);
-    event.set(tt_lumiSec,0);
+    // event.set(tt_run,0);
+    // event.set(tt_evID,0);
+    // event.set(tt_lumiSec,0);
+    event.set(tt_run,event.run);
+    event.set(tt_evID,event.event);
+    event.set(tt_lumiSec,event.luminosityBlock);
        
        //Advanced Selection: DiJet Events
     if(!sel.DiJetAdvanced()) return false;   
@@ -1450,17 +1482,85 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
    }
        if(debug) cout << "after trg fills" << endl;
 //###############################################################################################
+       
 
-
-    //L1 jet seed cleaning
+    // L1 jet seed cleaning
     if(apply_L1seed_from_bx1_filter){
       if(debug) cout << "before the L1 seed filter" << endl;
       if(!sel.L1JetBXcleanSmart()){
       if(debug) cout << "L1 seed filtered" << endl;
-	return false;
+    	return false;
       }
       if(debug) cout << "after the first L1 seed filter" << endl;
     }
+
+    //get the corresponding L1 Jet and save the bx
+    std::vector< L1Jet>* l1jets = &event.get(handle_l1jet_seeds);
+
+    if(debug) cout << "declared L1Jet seeds" << endl;
+    
+    int jet1_l1bx, jet2_l1bx, jet3_l1bx;
+    
+    unsigned int n_l1jets =l1jets->size();
+    if(debug) cout << "l1jets size is "<<n_l1jets<<endl;
+    if(n_l1jets>0){
+      double dRmin = 100.;
+      int dRmin_seed_idx = -1;
+      float dR;
+      if(debug) cout << "before first L1Jet seeds dR loop" << endl;
+      for(unsigned int i = 0; i<n_l1jets; i++){
+	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(0));
+
+	if(dR < dRmin){
+	  dRmin=dR;
+	  dRmin_seed_idx = i;
+	}
+      }
+      if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet1_l1bx = -10;
+      else jet1_l1bx = l1jets->at(dRmin_seed_idx).bx();
+    }
+    else jet1_l1bx = 10;
+    
+    if(n_l1jets>1){
+      double dRmin = 100.;
+      int dRmin_seed_idx = -1;
+      float dR;
+      for(unsigned int i = 0; i<n_l1jets; i++){
+	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(1));
+
+	if(dR < dRmin){
+	  dRmin=dR;
+	  dRmin_seed_idx = i;
+	}
+      }
+      if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet2_l1bx = -10;
+      else jet2_l1bx = l1jets->at(dRmin_seed_idx).bx();
+    }
+    else jet2_l1bx = 10;
+
+    if(event.jets->size()>2){
+    if(n_l1jets>2){
+      double dRmin = 100.;
+      int dRmin_seed_idx = -1;
+      float dR;
+      for(unsigned int i = 0; i<n_l1jets; i++){
+	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(2));
+
+	if(dR < dRmin){
+	  dRmin=dR;
+	  dRmin_seed_idx = i;
+	}
+      }
+      if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet3_l1bx = -10;
+      else jet3_l1bx = l1jets->at(dRmin_seed_idx).bx();
+    }
+    else jet3_l1bx = 10;
+    }
+    else jet3_l1bx = 10;
+
+    event.set(tt_jet1_l1bx,jet1_l1bx);
+    event.set(tt_jet2_l1bx,jet2_l1bx);
+    event.set(tt_jet3_l1bx,jet3_l1bx);
 
 //###############################################################################################
 
@@ -1470,7 +1570,10 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       h_sel->fill(event);
       // h_lumi_sel->fill(event);
     }
+    
+    if(debug) cout<<"before the final histogram fill\n";
     h_final->fill(event);
+
     h_lumi_final->fill(event);
 
     h_monitoring_final->fill(event);
