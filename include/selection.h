@@ -15,6 +15,12 @@
 
 namespace uhh2bacon {
 
+  struct run_lumi_ev {
+    int run;
+    int lumiblock;
+    long long event;
+  };
+  
 class Selection {
 
     private:
@@ -112,6 +118,8 @@ class Selection {
   bool L1JetBXclean(Jet& jet, bool usePtRatioFilter = false);
   bool L1JetBXcleanFull();
   bool L1JetBXcleanSmart();
+  
+  bool Unprefirable(std::vector<run_lumi_ev> rlsev);
   
 };
 

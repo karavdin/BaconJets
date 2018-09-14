@@ -74,50 +74,50 @@ Selection::Selection(uhh2::Context & ctx) :
  // //DEBUG
  // cout<<"\n!!!!!!!! selection diJetTrg "<<diJetTrg<<endl<<endl;
 bool isMC = (ctx.get("dataset_type") == "MC"); 
- if (!isMC){
-   if(!diJetTrg){
-     handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet40" );
-     handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet60" );
-     handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet80" );
-     handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet140" );
-     handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet200" );
-     handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet260" );
-     handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet320" );
-     handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
-     handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet450" );
-     handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
-     //dummies
-     handle_trigger60_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
-     handle_trigger80_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
-     handle_trigger100_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
-     handle_trigger160_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
-     handle_trigger220_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
-     handle_trigger300_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
-   }
-   else{
-     if(central){
-       handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve40" );
-       handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60" );
-       handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80" );
-       handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve140" );
-       handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve200" );
-       handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve260" );
-       handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve320" );
-       handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve400" );
-       handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve500" );
-       //as dummy
-       handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
-     }
-     if(fwd){
-       handle_trigger60_HF = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60ForHFJEC" );
-       handle_trigger80_HF = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80ForHFJEC" );
-       handle_trigger100_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve100ForHFJEC" );
-       handle_trigger160_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve160ForHFJEC" );     
-       handle_trigger220_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve220ForHFJEC" );
-       handle_trigger300_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve300ForHFJEC" );     
-     }
-   }
- }
+ // if (!isMC){
+ //   if(!diJetTrg){
+ //     handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet40" );
+ //     handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet60" );
+ //     handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltSinglePFJet80" );
+ //     handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet140" );
+ //     handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet200" );
+ //     handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet260" );
+ //     handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet320" );
+ //     handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
+ //     handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet450" );
+ //     handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+ //     //dummies
+ //     handle_trigger60_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+ //     handle_trigger80_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+ //     handle_trigger100_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+ //     handle_trigger160_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+ //     handle_trigger220_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+ //     handle_trigger300_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet500" );
+ //   }
+ //   else{
+ //     if(central){
+ //       handle_trigger40 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve40" );
+ //       handle_trigger60 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60" );
+ //       handle_trigger80 = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80" );
+ //       handle_trigger140 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve140" );
+ //       handle_trigger200 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve200" );
+ //       handle_trigger260 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve260" );
+ //       handle_trigger320 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve320" );
+ //       handle_trigger400 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve400" );
+ //       handle_trigger500 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve500" );
+ //       //as dummy
+ //       handle_trigger450 = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltSinglePFJet400" );
+ //     }
+ //     if(fwd){
+ //       handle_trigger60_HF = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve60ForHFJEC" );
+ //       handle_trigger80_HF = ctx.declare_event_input< vector< FlavorParticle > >(  "triggerObjects_hltDiPFJetAve80ForHFJEC" );
+ //       handle_trigger100_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve100ForHFJEC" );
+ //       handle_trigger160_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve160ForHFJEC" );     
+ //       handle_trigger220_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve220ForHFJEC" );
+ //       handle_trigger300_HF = ctx.declare_event_input< vector< FlavorParticle > >("triggerObjects_hltDiPFJetAve300ForHFJEC" );     
+ //     }
+ //   }
+ // }
  bool no_genp = false;
  if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;
 
@@ -155,46 +155,46 @@ bool Selection::PtMC()
     
     uhh2::GenericEvent::Handle<std::vector<FlavorParticle>> handle_sw;
 
-    if(use_fwd){
-      switch(trigger_th){
-      case 60: handle_sw = handle_trigger60_HF;
-	break;
-      case 80: handle_sw = handle_trigger80_HF;
-	break;
-      case 100: handle_sw = handle_trigger100_HF;
-	break;
-      case 160: handle_sw = handle_trigger160_HF;
-	break;
-      case 220: handle_sw = handle_trigger220_HF;
-	break;
-      case 300: handle_sw = handle_trigger300_HF;
-	break;
-      }
-    }
-    else{
-    switch(trigger_th){
-    case 40: handle_sw = handle_trigger40;
-      break;
-    case 60: handle_sw = handle_trigger60;
-      break;
-    case 80: handle_sw = handle_trigger80;
-      break;
-    case 140: handle_sw = handle_trigger140;
-      break;
-    case 200: handle_sw = handle_trigger200;
-      break;
-    case 260: handle_sw = handle_trigger260;
-      break;
-    case 320: handle_sw = handle_trigger320;
-      break;
-    case 450: handle_sw = handle_trigger450;
-      break;
-    case 400: handle_sw = handle_trigger400;
-      break;
-    case 500: handle_sw = handle_trigger500;
-      break;
-    }
-    }
+    // if(use_fwd){
+    //   switch(trigger_th){
+    //   case 60: handle_sw = handle_trigger60_HF;
+    // 	break;
+    //   case 80: handle_sw = handle_trigger80_HF;
+    // 	break;
+    //   case 100: handle_sw = handle_trigger100_HF;
+    // 	break;
+    //   case 160: handle_sw = handle_trigger160_HF;
+    // 	break;
+    //   case 220: handle_sw = handle_trigger220_HF;
+    // 	break;
+    //   case 300: handle_sw = handle_trigger300_HF;
+    // 	break;
+    //   }
+    // }
+    // else{
+    // switch(trigger_th){
+    // case 40: handle_sw = handle_trigger40;
+    //   break;
+    // case 60: handle_sw = handle_trigger60;
+    //   break;
+    // case 80: handle_sw = handle_trigger80;
+    //   break;
+    // case 140: handle_sw = handle_trigger140;
+    //   break;
+    // case 200: handle_sw = handle_trigger200;
+    //   break;
+    // case 260: handle_sw = handle_trigger260;
+    //   break;
+    // case 320: handle_sw = handle_trigger320;
+    //   break;
+    // case 450: handle_sw = handle_trigger450;
+    //   break;
+    // case 400: handle_sw = handle_trigger400;
+    //   break;
+    // case 500: handle_sw = handle_trigger500;
+    //   break;
+    // }
+    // }
     //DEBUG
     // cout<<"Selection::FindMatchingJet after switch, jet id: "<<jetid<<" th: "<<trigger_th<<endl; 
 
@@ -490,7 +490,19 @@ bool Selection::L1JetBXcleanFull(){
      return _return;
 }
 
-
+bool Selection::Unprefirable(std::vector<run_lumi_ev> rlsev){
+    assert(event);
+    bool _return = false;
+    
+    for(size_t i=0; i< rlsev.size(); i++){
+      _return = rlsev[i].run == event->run;
+      _return *= rlsev[i].lumiblock == event->luminosityBlock;
+      _return *= rlsev[i].event == event->event;
+      if(_return) break;
+    }
+    
+    return _return;
+}
   
 Selection::~Selection()
 {
