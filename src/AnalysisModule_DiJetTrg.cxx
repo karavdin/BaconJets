@@ -203,6 +203,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     double eta_thresh_low;
     double eta_thresh_high;
 
+  std::vector<uhh2bacon::run_lumi_ev>  unprefirableSummary;
+    bool useUnprefireable;
+
   uhh2::GenericEvent::Handle<std::vector<L1Jet>> handle_l1jet_seeds;
   
   };
@@ -225,6 +228,41 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     }
 
     cout << "start" << endl;
+    
+    try{
+      useUnprefireable = ctx.get("UseUnprefirable") == "true";
+    }
+    catch(const runtime_error& error){
+      useUnprefireable = false;
+    }
+    if(useUnprefireable){
+      cout<<"prepare the list of unprefireable events"<<endl;
+      string unprefFile="/nfs/dust/cms/user/karavdia/CMSSW_9_4_3/src/UHH2/TriggersExamination/data/UnprefirableEventList_JetHT_Run2017BtoF.root";
+	cout<<"  will use the file "<< unprefFile <<endl;
+
+	TFile* file_FilteredEvents = new TFile(unprefFile.c_str(),"READ","unprefirableEventSummary");
+      TTree * filtered_tree = dynamic_cast<TTree*>(file_FilteredEvents->Get("tree"));
+      // fetch branches we need
+      TBranch * brun = filtered_tree->GetBranch("run");
+      TBranch * blumiblock = filtered_tree->GetBranch("lumi");
+      TBranch * beventid = filtered_tree->GetBranch("event");
+      
+      uhh2bacon::run_lumi_ev rle;
+      brun->SetAddress(&rle.run);
+      blumiblock->SetAddress(&rle.lumiblock);
+      beventid->SetAddress(&rle.event);
+
+      auto ientries = filtered_tree->GetEntries();
+      for(auto ientry = 0l; ientry < ientries; ientry++){
+	for(auto b : {brun, blumiblock, beventid}){
+	  b->GetEntry(ientry);
+	}
+	unprefirableSummary.push_back(rle);
+      }
+      cout<<"list of unprefireable events is prepared, found "<<unprefirableSummary.size()<<" events"<<endl;
+    }
+    
+    
     isMC = (ctx.get("dataset_type") == "MC");
     if(isMC && no_genp) cout<<"!!! WARNING, no genparticle are used! !!!"<<endl;
     //// COMMON MODULES
@@ -371,6 +409,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V7) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V23) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V24) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V25) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V26) 
 	    else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
@@ -378,6 +419,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V7)
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11)
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V23)
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V24)
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V25)
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V26)
 	    else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }
@@ -1523,7 +1567,11 @@ if(debug){
       if(!sel.PtMC()) return false; // For MC only one Pt threshold
     }
 //######################################################################################################################################
-       
+ 
+    if(useUnprefireable){
+	 if(!sel.Unprefirable(unprefirableSummary)) return false;
+    }
+      
 
     // L1 jet seed cleaning
     if(apply_L1seed_from_bx1_filter){
