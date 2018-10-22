@@ -8,8 +8,8 @@
 
 using namespace std;
 
-/* const double eta_cut = 2.853-1e-5; */
-const double eta_cut = 100.; //central only
+const double eta_cut = 2.853-1e-5;
+// const double eta_cut = 100.; //central only
 
 const int nResponseBins = 100;
 const int n_etabarr=5; // needed for the normalization to 1 in the barrel. ???
@@ -39,70 +39,70 @@ const int triggerValSi_HF[n_triggerSi_HF]  = {60,80,140,200,260,320,400,450,500}
 const int n_pt = 12;
 const int n_pt_Si = 12;
 
-/* // //for Si derived trigger */
-/* const TString pt_range[n_pt]= {"40", */
-/* 			       "62", */
-/* 			       "85", */
-/* 			       "153", */
-/* 			       "222", */
-/* 			       "290", */
-/* 			       "359", */
-/* 			       "443", */
-/* 			       "486", */
-/* 			       "536", */
-/* 			       "1000", */
-/* 			       "2000"}; */
+// // //for Si derived trigger
+// const TString pt_range[n_pt]= {"40",
+// 			       "62",
+// 			       "85",
+// 			       "153",
+// 			       "222",
+// 			       "290",
+// 			       "359",
+// 			       "443",
+// 			       "486",
+// 			       "536",
+// 			       "1000",
+// 			       "2000"};
 
 
 
 
-/* for Di derived triggers */
-/* const double pt_bins[n_pt] = {51, 51, 74, 96, 148, 214, 285, 346, 426, 525, 1000, 2000}; */
-/* const TString pt_range[n_pt]= {"51", "51", "74", "96", "148", "214", "285", "346", "426", "525", "1000", "2000"}; */
+//for Di derived triggers
+// const double pt_bins[n_pt] = {51, 51, 74, 96, 148, 214, 285, 346, 426, 525, 1000, 2000};
+// const TString pt_range[n_pt]= {"51", "51", "74", "96", "148", "214", "285", "346", "426", "525", "1000", "2000"};
 
 
-/* //for Di derived triggers 94X 17Nov2017 */
-/* //DiJet triggers? ------------- */
+//for Di derived triggers 94X 17Nov2017
+//DiJet triggers? -------------
 
 
-/* const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin */
-/*   51, */
-/*   73, */
-/*   85, */
-/*   97, */
-/*   179, */
-/*   307, */
-/*   370, */
-/*   434, */
-/*   520, */
-/*   649,1000,2000}; */
+const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin
+  51,
+  73,
+  85,
+  97,
+  179,
+  307,
+  370,
+  434,
+  520,
+  649,1000,2000};
 
-/* const TString pt_range[n_pt]={ */
-/*   "51", */
-/*   "73", */
-/*   "85", */
-/*   "97", */
-/*   "179", */
-/*   "307", */
-/*   "370", */
-/*   "434", */
-/*   "520", */
-/*   "648","1000","2000"}; */
+const TString pt_range[n_pt]={
+  "51",
+  "73",
+  "85",
+  "97",
+  "179",
+  "307",
+  "370",
+  "434",
+  "520",
+  "648","1000","2000"};
 
 
-/* // //for Di derived triggers 94X 17Nov2017 */
+// //for Di derived triggers 94X 17Nov2017
 
-/* const int n_pt_HF = 8; */
+const int n_pt_HF = 8;
 
-/* const double pt_bins_HF[n_pt_HF] = { */
-/*   73, */
-/*   93, */
-/*   113, */
-/*   176, */
-/*   239, */
-/*   318,1000,2000}; */
+const double pt_bins_HF[n_pt_HF] = {
+  73,
+  93,
+  113,
+  176,
+  239,
+  318,1000,2000};
 
-/* const TString pt_range_HF[n_pt_HF]={"73","93","113","176","239","318","1000","2000"}; */
+const TString pt_range_HF[n_pt_HF]={"73","93","113","176","239","318","1000","2000"};
 
 
 /* use central instead of HF for consitency check of new HF code */
@@ -202,53 +202,53 @@ RunB      RunC  RunD  highest
 606       603     599  606
 */
 
-const double pt_bins[n_pt] = {
-40 ,
-72  ,
-95 ,
-160 ,
-226 ,
-283 ,
-344 ,
-443 ,
-577 ,
-606 ,1000,2000};
+// const double pt_bins[n_pt] = {
+// 40 ,
+// 72  ,
+// 95 ,
+// 160 ,
+// 226 ,
+// 283 ,
+// 344 ,
+// 443 ,
+// 577 ,
+// 606 ,1000,2000};
 
-const TString pt_range[n_pt]={
-  "40" ,
-  "72" ,
-  "95" ,
-  "160",
-  "226",
-  "283",
-  "344",
-  "443",
-  "577",
-  "606","1000","2000"};
+// const TString pt_range[n_pt]={
+//   "40" ,
+//   "72" ,
+//   "95" ,
+//   "160",
+//   "226",
+//   "283",
+//   "344",
+//   "443",
+//   "577",
+//   "606","1000","2000"};
 
-const int n_pt_HF = 11;
+// const int n_pt_HF = 11;
 
-const double pt_bins_HF[n_pt_HF] = {
- 60  ,
- 72  ,
- 160 ,
- 190 ,
- 290 ,
- 310 ,
- 390,
- 444,
- 480,
-  1000,2000};
+// const double pt_bins_HF[n_pt_HF] = {
+//  60  ,
+//  72  ,
+//  160 ,
+//  190 ,
+//  290 ,
+//  310 ,
+//  390,
+//  444,
+//  480,
+//   1000,2000};
 
-const TString pt_range_HF[n_pt_HF]={"60",
-				    "72",
-				    "160",
-				    "190",
-				    "290",
-				    "310",
-				    "390",
-				    "444",
-				    "480","1000","2000"};
+// const TString pt_range_HF[n_pt_HF]={"60",
+// 				    "72",
+// 				    "160",
+// 				    "190",
+// 				    "290",
+// 				    "310",
+// 				    "390",
+// 				    "444",
+// 				    "480","1000","2000"};
 
 
 /* // [END]SingleJet triggers? ------------- */

@@ -720,7 +720,7 @@ for(int j=0; j<n_eta-1; j++){
 		     << " " << hist_kfsr_mpf->GetBinError(j-1) / loglin_norm  
 		     << " " <<Vcov[0][j-1] <<" "<<Vcov[1][j-1]<<" "<<Vcov[2][j-1]<<endl; 
       
-      if(j>12 && j<16){
+      if(j==18||(j>14&&j>12)){
 	output_hybrid << fixed << std::setprecision(6)  << "  -" << eta_range[j]<< " -" << eta_range[j-1] << "   11   10 6500   55   " << ptave_data[j-1]->FindLastBinAbove(100.)*10 << "   " << 1/flat_norm << " " << hist_kfsr_mpf->GetBinContent(j) << "   " << f2[j-1]->GetParameter(0) << " 0   1 0.0000 0.0" << endl;
 
 	uncerts_hybrid << fixed << std::setprecision(6) << "-" << eta_range[j] << " -" << eta_range[j-1] << "  3    55    " 
@@ -756,7 +756,8 @@ for(int j=0; j<n_eta-1; j++){
 		     << ptave_data[j]->FindLastBinAbove(100.)*10 << " " 
 		     << hist_kfsr_mpf->GetBinError(j)/loglin_norm<< " "<< Vcov[0][j]<<" "<< Vcov[1][j]<<" "<< Vcov[2][j] << endl; 
 
-      if(j>11 && j<15){
+      // if(j>11 && j<15){      
+	if(j==18||(j>14&&j>12)){
 	output_hybrid << fixed << std::setprecision(6)  << "   " << eta_range[j]<< "  " << eta_range[j+1] << "   11   10 6500   55   " 
 	     << ptave_data[j]->FindLastBinAbove(100.)*10 << "   " << 1/flat_norm << " " << hist_kfsr_mpf->GetBinContent(j+1) 
 	     << "   " << f2[j]->GetParameter(0) << " 0   1 0.0000 0.0"  << endl;

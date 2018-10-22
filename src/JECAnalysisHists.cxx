@@ -127,6 +127,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
   const int njets = ev.jets->size();
   
   hist("N_jets")->Fill(njets, weight);
+
   try{
   if(!ev.isRealData)hist("pt_hat")->Fill(ev.get(tt_gen_pthat),weight);
     }
@@ -134,6 +135,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
 	  std::cout<<"Problem with gen in JECAnalysishists.cxx"<<std::endl;
 	  std::cout<<error.what();
   }
+
   for (int i=0; i<njets; i++){
     Jet* jets = &ev.jets->at(i);
     hist("pt")->Fill(jets->pt(), weight);
@@ -169,6 +171,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
   hist("pt_2")->Fill(jet2->pt(), weight);
   hist("eta_2")->Fill(jet2->eta(), weight);
   // float ratio_pt = 0.;
+
   try{ 
      float ratio_pt = (ev.get(tt_pt_ave) - ev.get(tt_gen_pthat))/ev.get(tt_gen_pthat);
   }
@@ -176,9 +179,10 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
 	  std::cout<<"Problem with gen in JECAnalysishists.cxx"<<std::endl;
 	  std::cout<<error.what();
   }  
+
   hist("pt_ave")          ->Fill(ev.get(tt_pt_ave), weight);
-  hist("pt_ave_pthat")   ->Fill(ev.get(tt_pt_ave), weight);
-  hist("pt_ave_rebin") ->Fill(ev.get(tt_pt_ave), weight);
+  hist("pt_ave_pthat")   ->Fill(ev.get(tt_pt_ave), weight); //FIXME why is this filled with pt_ave?
+  hist("pt_ave_rebin") ->Fill(ev.get(tt_pt_ave), weight);  //FIXME why is this filled with pt_ave?
   hist("ptRaw_barrel")    ->Fill(ev.get(tt_barreljet_ptRaw), weight);
   hist("ptRaw_probe")     ->Fill(ev.get(tt_probejet_ptRaw) , weight);
   hist("pt_barrel")   ->Fill(ev.get(tt_barreljet_pt), weight);
@@ -190,7 +194,6 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
   hist("mpf")         ->Fill(ev.get(tt_mpf_r), weight);
   hist("asym")        ->Fill(ev.get(tt_asymmetry), weight);
   hist("r_rel")       ->Fill(ev.get(tt_rel_r), weight);
-
 
   ((TH2D*)hist("mpf_vs_etaProbe"))->Fill(ev.get(tt_probejet_eta),ev.get(tt_mpf_r),weight);
   ((TH2D*)hist("r_rel_vs_etaProbe"))->Fill(ev.get(tt_probejet_eta),ev.get(tt_rel_r),weight);
@@ -209,6 +212,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
     hist("pt_rel")->Fill(ev.get(tt_jet3_pt)/(0.5*(ev.get(tt_barreljet_pt) + ev.get(tt_probejet_pt) )),weight);
 
   }
+
 }
 
 JECAnalysisHists::~JECAnalysisHists(){}

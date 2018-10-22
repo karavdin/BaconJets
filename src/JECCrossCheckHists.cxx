@@ -59,8 +59,9 @@ JECCrossCheckHists::JECCrossCheckHists(Context & ctx, const string & dirname): H
 
     book<TH1F>("asym","asymmetry jet 1 and jet 2; Asymmetry",150,-1.5,1.5);
 
-    //    no_genp = false;
-    //    if(no_genp) cout<<"!!! WARNING, no genparticle are used! !!!"<<endl;
+    //FIXME: commented in for madgraph samples because the genInfo seems to be missing!
+       no_genp = true;
+       if(no_genp) cout<<"!!! WARNING, no genparticle are used! !!!"<<endl;
 }
 
 void JECCrossCheckHists::fill(const uhh2::Event & ev){
@@ -73,12 +74,11 @@ void JECCrossCheckHists::fill(const uhh2::Event & ev, const int rand){
   // use histogram pointers as members as in 'UHH2/common/include/ElectronHists.h'
   // Don't forget to always use the weight when filling.
 
-
   double weight = ev.weight;
   const int njets = ev.jets->size();
   hist("N_jets")->Fill(njets, weight);
-  //  if(!ev.isRealData && !no_genp){
-  if(!ev.isRealData){
+   if(!ev.isRealData && !no_genp){
+  // if(!ev.isRealData){
     double pt_hat = ev.genInfo->binningValues()[0];
     double PU_pt_hat = ev.genInfo->PU_pT_hat_max();
     hist("pt_hat")->Fill(pt_hat,weight);
@@ -99,8 +99,8 @@ void JECCrossCheckHists::fill(const uhh2::Event & ev, const int rand){
   }
   hist("MET")->Fill(ev.met->pt(), weight);
   double nPU = 0;
-  //  if(!ev.isRealData && !no_genp) nPU = ev.genInfo->pileup_TrueNumInteractions();
-  if(!ev.isRealData) nPU = ev.genInfo->pileup_TrueNumInteractions();
+   if(!ev.isRealData && !no_genp) nPU = ev.genInfo->pileup_TrueNumInteractions();
+  // if(!ev.isRealData) nPU = ev.genInfo->pileup_TrueNumInteractions();
   hist("nPu")->Fill(nPU, weight);
   hist("weight_histo")->Fill(weight, 1);
   

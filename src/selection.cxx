@@ -118,7 +118,7 @@ bool isMC = (ctx.get("dataset_type") == "MC");
  //     }
  //   }
  // }
- bool no_genp = false;
+ bool no_genp = true;
  if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;
 
  handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
@@ -247,6 +247,9 @@ bool Selection::DiJet()
     // |asymm| < 0.7
     if (fabs((event->get(tt_jet2_pt) - event->get(tt_jet1_pt)) / (event->get(tt_jet2_pt) + event->get(tt_jet1_pt))) > s_asymm) return false;
 
+
+    no_genp=true; //FIXME needed for madgraph, should already be set globally, no idea why it does not work...
+    
     //(pTgen1 < 1.5*pThat || pTreco1 < 1.5* pTgen1)
     if(!event->isRealData && !no_genp){
       if(event->genjets->size() < 1) return false;
@@ -322,7 +325,7 @@ bool Selection::DiJet()
   {
     assert(event);
 
-    //   if(no_genp) return false;
+      if(no_genp) return true;
     
    double  pt_hat = event->genInfo->binningValues()[0];
    double  PU_pt_hat = event->genInfo->PU_pT_hat_max();
@@ -444,16 +447,18 @@ bool Selection::DiJet()
       for(unsigned int i = 0; i<n_l1jets; i++){
 	dR=uhh2::deltaR(l1jets->at(i),jet);
 
-	if(dR < dRmin){
+	if(dR<0.4 && dR < dRmin){
 	  dRmin=dR;
 	  dRmin_seed_idx = i;
 	}
       }
-      if(l1jets->at(dRmin_seed_idx).bx() == -1){
-	if(usePtRatioFilter){
-	  _return = ( l1jets->at(dRmin_seed_idx).pt() / jet.pt() ) < 0.2;
+      if(dRmin_seed_idx>0){
+	if(l1jets->at(dRmin_seed_idx).bx() == -1){
+	  if(usePtRatioFilter){
+	    _return = ( l1jets->at(dRmin_seed_idx).pt() / jet.pt() ) < 0.2;
+	  }
+	  else _return = false;
 	}
-	else _return = false;
       }
     }
     

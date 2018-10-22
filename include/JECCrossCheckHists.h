@@ -25,5 +25,5 @@ private:
     TH2F * PU_vs_pt_hat;   
     TH2F * Weight_vs_pt_hat;
     TH2F * Weight_vs_pt_hat_zoom;
-    //    bool no_genp;
+       bool no_genp;
 };

@@ -382,8 +382,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     if(isMC){
       //for MC
       if(jetLabel == "AK4CHS"){
-	  IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V6)
-	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
+	IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
 	  else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V23)
        }
 
@@ -426,23 +425,23 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(jetLabel == "AK4CHS"){
 	if(!ClosureTest){
 	  //residuals
-	    IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V6) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V7) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V23) 
+	  IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
+	  else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V23) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V24)
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V25) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V26)   
+	      else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V25) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V26) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V27)  
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V28)   
 	    else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
-	  IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V6) 
-	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V7)  
-	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11)  
+	  IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11)  
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V23) 
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V24) 
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V25) 
-	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V26)     		   		
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V26) 
+	      else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V27)
+	      else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V28)     		   		
 	 else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }
@@ -476,11 +475,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     
 //JER Smearing for corresponding JEC-Version
       if(isMC){
-	if(JEC_Version == "Fall17_17Nov2017_V6") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
-	else if(JEC_Version == "Fall17_17Nov2017_V7") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
-	// else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
-	else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
-	else if(JEC_Version == "Fall17_17Nov2017_V23") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+	// else if(JEC_Version == "Fall17_17Nov2017_V27") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
+	// else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+	if(JEC_Version == "Fall17_17Nov2017_V23") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
 	
 	else cout << "In AnalysisModule_SiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
@@ -1217,11 +1214,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     float gen_weight = 0;
     if(!event.isRealData){
       gen_weight = event.weight;
-      gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph
+      // gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph FIXME: commnted out for madgraph
     }
     float nvertices = event.pvs->size(); 
     float nPU = 0 ;//todo for data?
-    if(!event.isRealData) nPU = event.genInfo->pileup_TrueNumInteractions();
+    // if(!event.isRealData) nPU = event.genInfo->pileup_TrueNumInteractions(); FIXME: commnted out for madgraph
 
     float matchJetId_0 = -10.;
     float matchJetId_1 = -10.;
@@ -1336,7 +1333,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     if(debug) cout<<"before the main event.set's\n";
     
-    if(!event.isRealData) pu_pthat = event.genInfo->PU_pT_hat_max();
+    // if(!event.isRealData) pu_pthat = event.genInfo->PU_pT_hat_max(); FIXME: commnted out for madgraph
     event.set(tt_matchJetId_0,-10.);
     event.set(tt_matchJetId_1,-10.);
 
@@ -1464,9 +1461,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     h_nocuts->fill(event);
     h_lumi_nocuts->fill(event);
 
-//Pu_pt_hat/pt_hat Selection
+//Pu_pt_hat/pt_hat Selection 
     if(isMC){
-      if(!sel.PUpthat()) return false;
+      //FIXME
+      cout<<"PUpthat selction skipped for Madgraph MC\n";
+      // if(!sel.PUpthat()) return false;
     }
     // h_nocuts->fill(event);
     // h_lumi_nocuts->fill(event);
