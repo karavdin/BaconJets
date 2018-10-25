@@ -71,6 +71,8 @@ void CorrectionObject::Monitoring(bool SiRuns){
   int Fit_range[n_input+1];
   TString Name_range[n_input];
 
+  int rebinFaktor = 16;
+  
   int n_pt_ = max(n_pt,n_pt_HF);
   bool eta_cut_bool;
   int n_pt_cutted;
@@ -120,10 +122,10 @@ void CorrectionObject::Monitoring(bool SiRuns){
       for(int k= 0 ; k <  ( eta_cut_bool ?  n_pt_HF-2 : n_pt-2 ) ; k++ ){
 	// cout<<"eta: "+eta_range_full[j]+" "+eta_range_full[j+1]+"   pT: "+(eta_cut_bool?pt_range_HF:pt_range)[k]+" "+(eta_cut_bool?pt_range_HF:pt_range)[k+1]<<endl;
         hist_A[i][j][k]    = (TH2D*)f_monitoring[i]->Get("Monitoring_Final/hist_data_A_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]);
-	hist_A[i][j][k]=(TH2D*)hist_A[i][j][k]->RebinX(8);
+	hist_A[i][j][k]=(TH2D*)hist_A[i][j][k]->RebinX(rebinFaktor);
 	pr_A[i][j][k]      = (TProfile*)hist_A[i][j][k] ->ProfileX(Form("prof_A_%i_%d_%d",i,j,k));
 	hist_B[i][j][k]    = (TH2D*)f_monitoring[i]    ->Get("Monitoring_Final/hist_data_B_eta_"+eta_range_full[j]+"_"+eta_range_full[j+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1]);
-	hist_B[i][j][k]=(TH2D*)hist_B[i][j][k]->RebinX(8);
+	hist_B[i][j][k]=(TH2D*)hist_B[i][j][k]->RebinX(rebinFaktor);
 	pr_B[i][j][k]      = (TProfile*)hist_B[i][j][k] ->ProfileX(Form("prof_B_%i_%d_%d",i,j,k));
       }
     }
