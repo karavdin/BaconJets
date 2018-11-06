@@ -1012,8 +1012,8 @@ if(debug){
       std::cout<<"jets with pt<"<<L1METptThresh<<" are excluded from MET correction if their eta ["<<eta_thresh_low<<", "<<eta_thresh_high<<"] "<<std::endl;
     }
     //correct MET only AFTER smearing the jets
-    bool chsMET = false;
-    //    bool chsMET = true;
+    //    bool chsMET = false;
+    bool chsMET = true;
     if(apply_B){
       jet_corrector_B->correct_met(event,chsMET,L1METptThresh,  eta_thresh_low, eta_thresh_high);
     }
