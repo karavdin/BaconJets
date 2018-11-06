@@ -112,7 +112,8 @@ using namespace std;
     void MakeEtaPhiCleanTxt();
     void genJetLinearity();
     void L1jetSeedBXcheck();
-    
+    void FlavorCorrection_TTree();
+    void GenResponsePlots();
 static bool make_path(std::string path_name){
     int status = 1;
 
