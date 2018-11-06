@@ -1,4 +1,4 @@
-#include "UHH2/BaconJets/include/JECCrossCheckHists.h"
+#include "UHH2/BaconJets/include/JECCrossCheckHistsXCONE.h"
 #include "UHH2/BaconJets/include/constants.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Jet.h"
@@ -20,7 +20,7 @@
 using namespace std;
 using namespace uhh2;
 //using namespace baconhep;
-JECCrossCheckHists::JECCrossCheckHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
+JECCrossCheckHistsXCONE::JECCrossCheckHistsXCONE(Context & ctx, const string & dirname): Hists(ctx, dirname){
     // book all histograms here
     // jets
     TH1::SetDefaultSumw2();
@@ -66,10 +66,10 @@ JECCrossCheckHists::JECCrossCheckHists(Context & ctx, const string & dirname): H
        if(no_genp) cout<<"!!! WARNING, no genparticle are used! !!!"<<endl;
 }
 
-void JECCrossCheckHists::fill(const uhh2::Event & ev){
+void JECCrossCheckHistsXCONE::fill(const uhh2::Event & ev){
   fill(ev, 0);
 }
-void JECCrossCheckHists::fill(const uhh2::Event & ev, const int rand){
+void JECCrossCheckHistsXCONE::fill(const uhh2::Event & ev, const int rand){
   // fill the histograms. Please note the comments in the header file:
   // 'hist' is used here a lot for simplicity, but it will be rather
   // slow when you have many histograms; therefore, better
@@ -77,7 +77,7 @@ void JECCrossCheckHists::fill(const uhh2::Event & ev, const int rand){
   // Don't forget to always use the weight when filling.
 
   double weight = ev.weight;
-  const int njets = ev.jets->size();
+  const int njets = ev.topjets->size();
   hist("N_jets")->Fill(njets, weight);
    if(!ev.isRealData && !no_genp){
   // if(!ev.isRealData){
@@ -91,7 +91,7 @@ void JECCrossCheckHists::fill(const uhh2::Event & ev, const int rand){
   }
     
   for (int i=0; i<njets; i++){
-    Jet* jets = &ev.jets->at(i);
+    Jet* jets = &ev.topjets->at(i);
     hist("pt")->Fill(jets->pt(), weight);
     if(jets->eta()>2.650&&jets->eta()<3.139)
       hist("pt_modT1METjets")->Fill(jets->pt(), weight);
@@ -112,13 +112,13 @@ void JECCrossCheckHists::fill(const uhh2::Event & ev, const int rand){
     
   
   if(njets > 0){
-    Jet* jet1 = &ev.jets->at(0);
+    Jet* jet1 = &ev.topjets->at(0);
     hist("pt_1")->Fill(jet1->pt(), weight);
     hist("eta_1")->Fill(jet1->eta(), weight);
   }
   if(njets >1){
-    Jet* jet1 = &ev.jets->at(0);
-    Jet* jet2 = &ev.jets->at(1);
+    Jet* jet1 = &ev.topjets->at(0);
+    Jet* jet2 = &ev.topjets->at(1);
     hist("pt_2")->Fill(jet2->pt(), weight);
     hist("eta_2")->Fill(jet2->eta(), weight);
     double pt_ave = (jet1->pt()+jet2->pt())/2;
@@ -128,11 +128,11 @@ void JECCrossCheckHists::fill(const uhh2::Event & ev, const int rand){
     hist("asym")         ->Fill(A, weight);
   }
   if (njets > 2){
-    Jet* jet3 = &ev.jets->at(2);
+    Jet* jet3 = &ev.topjets->at(2);
     hist("pt_3")->Fill(jet3->pt(), weight);
     hist("eta_3")->Fill(jet3->eta(), weight);
 
   }
 }
 
-JECCrossCheckHists::~JECCrossCheckHists(){}
+JECCrossCheckHistsXCONE::~JECCrossCheckHistsXCONE(){}

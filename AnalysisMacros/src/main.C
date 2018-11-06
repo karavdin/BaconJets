@@ -476,7 +476,7 @@ int main(int argc,char *argv[]){
     if(do_IGF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit();
     if(do_IGFw) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].InputForGlobalFit_eta_0_13();
     if(do_MEPC) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].MakeEtaPhiCleanTxt();  
-    if(do_l1bx) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L1jetSeedBXcheck();
+    //    if(do_l1bx) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L1jetSeedBXcheck();
      // // // //Macros to compare different Runs 
 // // //    // Objects[0].L2ResAllRuns();
 // // //    // Objects[0].L2ResOverlay(true);

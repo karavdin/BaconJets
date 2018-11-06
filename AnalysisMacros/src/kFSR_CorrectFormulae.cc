@@ -664,7 +664,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
       }
       h_chi2_kFSR_rel->SetBinContent(bincounter ,chi2ndf_kFSR_rel);
 
-     Rel[i][j]->Print(CorrectionObject::_outpath+"plots/kFSR_Pt_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1]+".pdf");
+     Rel[i][j]->Print(CorrectionObject::_outpath+"plots/control/kFSR_Pt_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1]+".pdf");
      delete tex2_rel;
      delete tex_rel;
      bincounter++;
@@ -689,7 +689,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    h_kFSR_pt_rel[i]->GetYaxis()->SetTitle("kFSR");
    h_kFSR_pt_rel[i]->GetXaxis()->SetTitle("p_{T}");
    h_kFSR_pt_rel[i]->Draw("E");
-   Pt_dep_rel[i]->Print(CorrectionObject::_outpath+"plots/kFSR_Pt_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+".pdf");
+   Pt_dep_rel[i]->Print(CorrectionObject::_outpath+"plots/control/kFSR_Pt_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+".pdf");
  }
 
  
@@ -791,7 +791,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        chi2ndf_kFSR_mpf = pol_mpf[i][j]->GetChisquare() / pol_mpf[i][j]->GetNDF();
       }
       h_chi2_kFSR_mpf->SetBinContent(bincounter,chi2ndf_kFSR_mpf);
-      MPF[i][j]->Print(CorrectionObject::_outpath+"plots/kFSR_MPF_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1]+".pdf");
+      MPF[i][j]->Print(CorrectionObject::_outpath+"plots/control/kFSR_MPF_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+"_pT_"+(eta_cut_bool?pt_range_HF:pt_range)[j]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[j+1]+".pdf");
 
      delete tex2_mpf;
      delete tex_mpf;
@@ -817,7 +817,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    h_kFSR_pt_mpf[i]->GetYaxis()->SetTitle("kFSR");
    h_kFSR_pt_mpf[i]->GetXaxis()->SetTitle("p_{T}");
    h_kFSR_pt_mpf[i]->Draw("");
-   Pt_dep_mpf[i]->Print(CorrectionObject::_outpath+"plots/kFSR_MPF_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+".pdf");
+   Pt_dep_mpf[i]->Print(CorrectionObject::_outpath+"plots/control/kFSR_MPF_eta_"+eta_range2[i]+"_"+eta_range2[i+1]+".pdf");
  }
 
  
@@ -932,8 +932,8 @@ void CorrectionObject::kFSR_CorrectFormulae(){
        tex2->SetTextSize(0.035); 
        tex2->DrawLatex(0.64,0.35,chi2_loglin);
      }
-     cout << "Printing kFSR plots to " << CorrectionObject::_outpath+"plots/kFSR_Pt_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf" << endl;
-     a[j]->Print(CorrectionObject::_outpath+"plots/kFSR_Pt_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
+     cout << "Printing kFSR plots to " << CorrectionObject::_outpath+"plots/control/kFSR_Pt_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf" << endl;
+     a[j]->Print(CorrectionObject::_outpath+"plots/control/kFSR_Pt_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
 
 
      //delete stuff
@@ -1039,8 +1039,8 @@ void CorrectionObject::kFSR_CorrectFormulae(){
      }
 
      //save the plots
-     cout << "Saving the MPF plots to " << CorrectionObject::_outpath + "plots/kFSR_MPF_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf" << endl;
-     b[j]->Print(CorrectionObject::_outpath + "plots/kFSR_MPF_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
+     cout << "Saving the MPF plots to " << CorrectionObject::_outpath + "plots/control/kFSR_MPF_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf" << endl;
+     b[j]->Print(CorrectionObject::_outpath + "plots/control/kFSR_MPF_"+CorrectionObject::_generator_tag+"_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
 
      //delete stuff
      delete tex2;

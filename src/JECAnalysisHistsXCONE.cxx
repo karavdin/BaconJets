@@ -1,4 +1,4 @@
-#include "UHH2/BaconJets/include/JECAnalysisHists.h"
+#include "UHH2/BaconJets/include/JECAnalysisHistsXCONE.h"
 #include "UHH2/BaconJets/include/constants.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Jet.h"
@@ -19,7 +19,7 @@ using namespace std;
 using namespace uhh2;
 //using namespace baconhep;
 //    uhh2::Event::Handle<TClonesArray> h_pv;
-JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
+JECAnalysisHistsXCONE::JECAnalysisHistsXCONE(Context & ctx, const string & dirname): Hists(ctx, dirname){
     // book all histograms here
     // jets
     TH1::SetDefaultSumw2();
@@ -113,10 +113,10 @@ JECAnalysisHists::JECAnalysisHists(Context & ctx, const string & dirname): Hists
     tt_matchJetId_1 =ctx.get_handle<int>("matchJetId_1");    
 }
 
-void JECAnalysisHists::fill(const uhh2::Event & ev){
+void JECAnalysisHistsXCONE::fill(const uhh2::Event & ev){
   fill(ev, 0);
 }
-void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
+void JECAnalysisHistsXCONE::fill(const uhh2::Event & ev, const int rand){
   // fill the histograms. Please note the comments in the header file:
   // 'hist' is used here a lot for simplicity, but it will be rather
   // slow when you have many histograms; therefore, better
@@ -125,7 +125,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
 
 
   double weight = ev.weight;
-  const int njets = ev.jets->size();
+  const int njets = ev.topjets->size();
   
   hist("N_jets")->Fill(njets, weight);
 
@@ -138,7 +138,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
   }
 
   for (int i=0; i<njets; i++){
-    Jet* jets = &ev.jets->at(i);
+    Jet* jets = &ev.topjets->at(i);
     hist("pt")->Fill(jets->pt(), weight);
     if(jets->eta()>2.650&&jets->eta()<3.139)
       hist("pt_modT1METjets")->Fill(jets->pt(), weight);    
@@ -166,10 +166,10 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
     
   
 
-  Jet* jet1 = &ev.jets->at(0);
+  Jet* jet1 = &ev.topjets->at(0);
   hist("pt_1")->Fill(jet1->pt(), weight);
   hist("eta_1")->Fill(jet1->eta(), weight);
-  Jet* jet2 = &ev.jets->at(1);
+  Jet* jet2 = &ev.topjets->at(1);
   hist("pt_2")->Fill(jet2->pt(), weight);
   hist("eta_2")->Fill(jet2->eta(), weight);
   // float ratio_pt = 0.;
@@ -208,7 +208,7 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
   ((TH2D*)hist("dPhi_vs_alpha"))->Fill(ev.get(tt_alpha),deltaPhi, weight);
 
   if (njets > 2){
-    Jet* jet3 = &ev.jets->at(2);
+    Jet* jet3 = &ev.topjets->at(2);
     hist("pt_3")->Fill(ev.get(tt_jet3_pt), weight);
     hist("eta_3")->Fill(jet3->eta(), weight);
     hist("pt_rel")->Fill(ev.get(tt_jet3_pt)/(0.5*(ev.get(tt_barreljet_pt) + ev.get(tt_probejet_pt) )),weight);
@@ -217,4 +217,4 @@ void JECAnalysisHists::fill(const uhh2::Event & ev, const int rand){
 
 }
 
-JECAnalysisHists::~JECAnalysisHists(){}
+JECAnalysisHistsXCONE::~JECAnalysisHistsXCONE(){}
