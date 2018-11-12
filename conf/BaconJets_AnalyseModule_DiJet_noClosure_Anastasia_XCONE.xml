@@ -346,7 +346,7 @@
          <Item Name="eta_thresh_low" Value="2.650" />
          <!-- <Item Name="L1METptThresh" Value="15" /> -->
          <!-- <Item Name="eta_thresh_low" Value="0." /> -->
-	 
+	<Item Name="minJetPt" Value="15" />	 
         <Item Name="Debug" Value="false" />	    
 
         </UserConfig>

@@ -14,11 +14,12 @@
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V11_noClosure_noJER_slimmedMETs_PFMET_wL1L2L3minusL1RC/"> -->
 
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_CHSMET_wL1L2L3minusL1RC/"> -->
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV/"> -->
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_minJetPt15/">
+ <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_Summer16_23Sep2016_V4_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV/">
+<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_minJetPt15/">-->
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSMET_wL1L2L3minusL1RC/"> -->
 <!ENTITY b_closuretest       "false">
-<!ENTITY jec_version         "Fall17_17Nov2017_V23">
+<!ENTITY jec_version         "Summer16_23Sep2016V4">
+<!-- <!ENTITY jec_version         "Fall17_17Nov2017_V23"> -->
 <!-- <!ENTITY jec_version         "Fall17_17Nov2017_V11"> -->
 <!-- <!ENTITY APPLY_WEIGHTS       "true"> -->
 <!ENTITY APPLY_WEIGHTS       "false">
@@ -144,7 +145,7 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
-
+<!--
 <InputData Lumi="1.000828512" NEventsMax="&NEVT;" Type="MC" Version="QCDPt50to80_pythia8_AK4CHS" Cacheable="&CACHEABLE;">
           &QCDPt50to80_pythia8_AK4CHS;
           <InputTree Name="AnalysisTree"/>
@@ -210,7 +211,7 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
-
+-->
 <!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunD" Cacheable="&CACHEABLE;">
           &QCDPt15to7000;
           <InputTree Name="AnalysisTree"/>
@@ -244,13 +245,13 @@
 </InputData>
 
 -->
-
+<!--
 <InputData Lumi="13540" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunF_promptReco_2017;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
 </InputData>
-
+-->
 
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
@@ -263,8 +264,8 @@
       <Item Name="JetCollection"           Value="slimmedJets"/>
       <Item Name="JetLabel"                Value="AK4CHS"/> 
       <Item Name="GenJetCollection"        Value="slimmedGenJets"/>    
-      <Item Name="METName"                 Value="slimmedMETs"/>
-<!--      <Item Name="METName"                 Value="slimmedMETsModifiedMET"/> -->
+<!--      <Item Name="METName"                 Value="slimmedMETs"/> -->
+      <Item Name="METName"                 Value="slimmedMETsModifiedMET"/>
 
 
       <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/data/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.root"/>
