@@ -99,7 +99,7 @@ TGraphErrors* CleanEmptyPoints(TGraphErrors* input){
   int count=0;
   vector<double> Xnew,Ynew,Xerrornew,Yerrornew;
   for(int i=0;i<input->GetN();i++){
-    //cout << "Yval[" << i << "] = " << Yval[i] <<" ± "<<YvalError[i]<< endl;
+    //    cout << "Yval[" << i << "] = " << Yval[i] <<" ± "<<YvalError[i]<< endl;
     if(YvalError[i]<1e-4 || Yval[i]==0) continue;
     //    if(Yval[i]==0 ) continue;
        count++;
