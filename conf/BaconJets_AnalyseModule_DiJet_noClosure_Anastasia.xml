@@ -13,8 +13,10 @@
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V11_noClosure_noJER_slimmedMETs_CHSMET_wL1L2L3minusL1FastJet/"> -->
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V11_noClosure_noJER_slimmedMETs_PFMET_wL1L2L3minusL1RC/"> -->
 
+<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_CHSMET_wL1L2L3minusL1RC/"> -->
+<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV/"> -->
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_minJetPt15/">
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSMET_wL1L2L3minusL1RC/"> -->
- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV/">
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Fall17_17Nov2017_V23">
 <!-- <!ENTITY jec_version         "Fall17_17Nov2017_V11"> -->
@@ -83,8 +85,8 @@
 
 
 <!--
-<ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunDEF_xcheckWdijet_with_V2_branch_correctedMETCorrection3_woL1bxclean_noClosure_slimmedMETs_V11_L1RC"/>
+<ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunDEF_xcheckWdijet_with_V2_branch_correctedMETCorrection3_woL1bxclean_noClosure_slimmedMETs_V11_L1RC_METtest_GENtest_15GeV"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -92,10 +94,9 @@
     <Library Name="libSUHH2BaconJets"/>
     <Package Name="SUHH2BaconJets.par" />
 
- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="8317" > 
+ <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="13540" > 
 <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="4553" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="15" > -->
 
-<!--
 <InputData Lumi="2.750" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT100to200_MadGraph_AK4CHS" Cacheable="&CACHEABLE;">
           &QCD_HT100to200_MadGraph_AK4CHS;
           <InputTree Name="AnalysisTree"/>
@@ -143,9 +144,7 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
--->
 
-<!--
 <InputData Lumi="1.000828512" NEventsMax="&NEVT;" Type="MC" Version="QCDPt50to80_pythia8_AK4CHS" Cacheable="&CACHEABLE;">
           &QCDPt50to80_pythia8_AK4CHS;
           <InputTree Name="AnalysisTree"/>
@@ -211,7 +210,6 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
--->
 
 <!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunD" Cacheable="&CACHEABLE;">
           &QCDPt15to7000;
@@ -230,8 +228,8 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
--->
 
+-->
 <!--
 <InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunD_promptReco_2017;
@@ -247,7 +245,7 @@
 
 -->
 
-<InputData Lumi="113430556" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_17Nov17_2017" Cacheable="&CACHEABLE;">
+<InputData Lumi="13540" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunF_promptReco_2017;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
@@ -265,9 +263,9 @@
       <Item Name="JetCollection"           Value="slimmedJets"/>
       <Item Name="JetLabel"                Value="AK4CHS"/> 
       <Item Name="GenJetCollection"        Value="slimmedGenJets"/>    
-<!--      <Item Name="METName"                 Value="slimmedMETs"/> -->
-      <Item Name="METName"                 Value="slimmedMETsModifiedMET"/> 
-<!--      <Item Name="METName"                 Value="slimmedMETs"/> -->
+      <Item Name="METName"                 Value="slimmedMETs"/>
+<!--      <Item Name="METName"                 Value="slimmedMETsModifiedMET"/> -->
+
 
       <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/data/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.root"/>
      
@@ -284,8 +282,8 @@
       <Item Name="lumihists_lumi_per_bin" Value="250."/>
 
 
-<!--      <Item Name="use_sframe_weight" Value="true"/> -->  <!--false-->
-      <Item Name="use_sframe_weight" Value="false"/>
+      <Item Name="use_sframe_weight" Value="true"/>  <!--false-->
+<!--      <Item Name="use_sframe_weight" Value="false"/> -->
 
       <Item Name="trigger40" Value="HLT_DiPFJetAve40_v*"/>
       <Item Name="trigger60" Value="HLT_DiPFJetAve60_v*"/>
@@ -344,7 +342,7 @@
          <Item Name="eta_thresh_low" Value="2.650" />
          <!-- <Item Name="L1METptThresh" Value="15" /> -->
          <!-- <Item Name="eta_thresh_low" Value="0." /> -->
-	 
+	 <Item Name="minJetPt" Value="15" />
         <Item Name="Debug" Value="false" />	    
 
         </UserConfig>

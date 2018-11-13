@@ -134,7 +134,10 @@ void CorrectionObject::FullCycle_CorrectFormulae(double kfsr_fitrange, bool useC
 
   std::cout<<"\nStarting FlavorCorrection_TTree\n"<<std::endl;
   CorrectionObject::FlavorCorrection_TTree();
-
+  std::cout<<"\nStarting GenResponsePlots\n"<<std::endl;
+  CorrectionObject::GenResponsePlots();
+  std::cout<<"\nStarting MatchingPlots\n"<<std::endl;
+  CorrectionObject::MatchingPlots();
 }
 
 //Full cycle to calculate L2Res with extended eta range. negative Values
@@ -146,9 +149,9 @@ void CorrectionObject::FullCycle_CorrectFormulae_eta(){
   CorrectionObject::L2ResOutput_eta();
   CorrectionObject::FinalControlPlots_CorrectFormulae_eta();
 
-  //For GEN based studies: 
-  CorrectionObject::FlavorCorrection_TTree();
-  CorrectionObject::GenResponsePlots();
-  //END GEN based studies ----
+  // //For GEN based studies: 
+  // CorrectionObject::FlavorCorrection_TTree();
+  // CorrectionObject::GenResponsePlots();
+  // //END GEN based studies ----
 }
 

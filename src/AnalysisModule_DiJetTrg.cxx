@@ -56,6 +56,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
    std::unique_ptr<JetLeptonCleaner> jetleptoncleaner;
    std::unique_ptr<JetLeptonCleaner>  JLC_B, JLC_C, JLC_D, JLC_E, JLC_F;
    std::unique_ptr<JetCleaner> jetcleaner;
+   std::unique_ptr<JetCleaner> jetcleaner2;
    std::unique_ptr<MuonCleaner>     muoSR_cleaner;   
    std::unique_ptr<ElectronCleaner> eleSR_cleaner;    
 
@@ -87,6 +88,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     //// Data/MC scale factors
     std::unique_ptr<uhh2::AnalysisModule> pileupSF;
   unique_ptr<AnalysisModule>  Jet_printer;
+  unique_ptr<AnalysisModule>  GenJet_printer;
   unique_ptr<AnalysisModule> GenParticles_printer;
   
     Event::Handle<float> tt_jet1_ptGen;  Event::Handle<float> tt_jet2_ptGen;  Event::Handle<float> tt_jet3_ptGen;
@@ -201,6 +203,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     vector<double> lumi_in_bins;
 
     double L1METptThresh;
+    double minJetPt;
     double eta_thresh_low;
     double eta_thresh_high;
 
@@ -291,6 +294,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     // Jet_PFID = JetPFID(JetPFID::WP_LOOSE); //not updated yet
     Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
+    //remove low pt jets
+    minJetPt = stod(ctx.get("minJetPt"));
+    jetcleaner2.reset(new JetCleaner(ctx, minJetPt, 5.2));
 
 //Lepton cleaner
     const     MuonId muoSR(AndId<Muon>    (MuonID(Muon::CutBasedIdTight),PtEtaCut  (15, 2.4)));
@@ -368,7 +374,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
   if(isMC){
       //for MC
       if(jetLabel == "AK4CHS"){
-	IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
+	//	IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
+	IF_MAKE_JEC_VARS_MC(Summer16_23Sep2016V4)
 	else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V23)
        }
 
@@ -481,6 +488,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	}
 	//MC	
 	else if(isMC){
+	  //	  cout<<"JEC_corr: "<<JEC_corr<<endl;
 	  jet_corrector.reset(new JetCorrector(ctx, JEC_corr, JEC_corr_L1RC));
 	  jetleptoncleaner.reset(new JetLeptonCleaner(ctx, JEC_corr));
 	  /*	  jet_corrector.reset(new JetCorrector(ctx, JEC_corr, JEC_corr_L1FastJet));
@@ -695,6 +703,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     h_monitoring_final.reset(new LumiHists(ctx, "Monitoring_Final"));
     
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
+    GenJet_printer.reset(new GenJetPrinter("GenJet-Printer", 0));
     
     if(!no_genp) 
       GenParticles_printer.reset(new GenParticlesPrinter(ctx));
@@ -887,7 +896,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
   
 //####################  Select and Apply proper JEC-Versions for every Run ##################
 
-    const int jet_n = event.jets->size();
+//    const int jet_n = event.jets->size();
+    int jet_n = event.jets->size();
     if(jet_n<2) return false;
     h_2jets->fill(event); 
 
@@ -971,10 +981,10 @@ if(debug){
       cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
       cout<< "MET: "<< event.met->pt() <<endl;
       cout<<"number of jets: "<<event.jets->size() <<endl;
-      for(unsigned int i=0;i<event.jets->size();i++){
-	Jet* jet = &event.jets->at(i);
-	std::cout<<"jet #"<<i<<" with eta = "<<jet->eta()<<" and corrected pt = "<<jet->pt()<<std::endl<<endl;
-     }
+     //  for(unsigned int i=0;i<event.jets->size();i++){
+     // 	Jet* jet = &event.jets->at(i);
+     // 	std::cout<<"jet #"<<i<<" with eta = "<<jet->eta()<<" and corrected pt = "<<jet->pt()<<std::endl<<endl;
+     // }
    }
 
 
@@ -985,15 +995,19 @@ if(debug){
    if(debug) cout<<"after jet smearing\n";
  }
  }
- 
+ jetcleaner2->process(event); //remove low pt jets
+ n_jets_afterCleaner = event.jets->size();
+ if(debug) cout<<"#jets after cleanining low pt jets "<<n_jets_afterCleaner<<endl;   
+ if(n_jets_afterCleaner<2) return false;
+ jet_n = n_jets_afterCleaner;
 if(debug){   
   cout<<"After JER, before MET"<<endl;
  cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
- cout<< "MET: PF MET = "<< event.met->pt() <<" unccor CHS MET = "<<hypot(event.met->rawCHS_px(),event.met->rawCHS_py())<<endl;
-      for(unsigned int i=0;i<event.jets->size();i++){
-	Jet* jet = &event.jets->at(i);
-	std::cout<<"jet #"<<i<<" with eta = "<<jet->eta()<<" and corrected pt = "<<jet->pt()<<std::endl<<endl;
-     }
+ cout<< "MET: PF MET = "<< event.met->pt() <<" uncorr PF MET = "<<event.met->uncorr_v4().Pt()<<" unccor CHS MET = "<<hypot(event.met->rawCHS_px(),event.met->rawCHS_py())<<endl;
+     //  for(unsigned int i=0;i<event.jets->size();i++){
+     // 	Jet* jet = &event.jets->at(i);
+     // 	std::cout<<"jet #"<<i<<" with eta = "<<jet->eta()<<" and corrected pt = "<<jet->pt()<<std::endl<<endl;
+     // }
    }
 
     h_afterJER->fill(event); 
@@ -1035,15 +1049,17 @@ if(debug){
     }
 
     h_afterMET->fill(event); 
-    DeltaMET = -event.met->pt();//= difference between before and after TypeI correction
+    DeltaMET -= event.met->pt();//= difference between before and after TypeI correction
+
 if(debug){ 
   cout << "After MET"<<endl;
-  cout<< "MET: "<< event.met->pt() <<endl;
+  cout<< "MET: "<< event.met->pt() <<" DeltaMET = "<<DeltaMET<<" DeltaMET/MET = "<<DeltaMET/event.met->pt()<<endl;
+  if(DeltaMET/event.met->pt()>5.0) cout<<"AAAAAA, DeltaMET/MET is too large!"<<endl;
       cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
-      for(unsigned int i=0;i<event.jets->size();i++){
-	Jet* jet = &event.jets->at(i);
-	std::cout<<"jet #"<<i<<" with eta = "<<jet->eta()<<" and corrected pt = "<<jet->pt()<<std::endl;
-     }
+     //  for(unsigned int i=0;i<event.jets->size();i++){
+     // 	Jet* jet = &event.jets->at(i);
+     // 	std::cout<<"jet #"<<i<<" with eta = "<<jet->eta()<<" and corrected pt = "<<jet->pt()<<std::endl;
+     // }
    }
    
 //############################################################################################################    
@@ -1307,8 +1323,10 @@ if(debug){
     float B = (met.Px()*pt.Px() + met.Py()*pt.Py())/((probejet_pt + barreljet_pt) * sqrt(pt.Px()*pt.Px() + pt.Py()*pt.Py())); //vec_MET*vec_ptbarr/(2ptave*ptbarr)
 
     float jets_pt = 0;
-    for(int i=2;i<jet_n;i++){
-      jets_pt += ((Jet*)&event.jets->at(i))->pt();
+    if(jet_n>2){
+      for(int i=2;i<jet_n;i++){
+	jets_pt += ((Jet*)&event.jets->at(i))->pt();
+      }
     }
 //###############################################################################################
 //###########################################  Obtain weights from MC reweighting  ###############################
@@ -1733,9 +1751,11 @@ if(debug){
       if(event.electrons->size()>0) cout<<"ele1 pt = "<<event.electrons->at(0).pt()<<endl;      
       cout<<" "<<endl; 
     }
-
-    if(debug && isMC){
+    if(debug){
       Jet_printer->process(event);
+    }
+    if(debug && isMC){
+      GenJet_printer->process(event);
       GenParticles_printer->process(event);
     }
  if(isMC){    
@@ -1843,7 +1863,7 @@ if(debug){
  	  if(idx_genp_min<4) idx_parton_genJet[idx_genp_min] = idx_j;
  	  if(idx_jet_matching_genjet[idx_j] >= 0) idx_matched_jets[idx_jet_matching_genjet[idx_j]] = idx_genp_min;
  	}
-	cout << "HAHA: dR of genjet " << idx_j << " and genparticle " << idx_genp_min << " of flavor " << event.genparticles->at(idx_genp_min).flavor() << " : dR = " << dr_min << ". " <<  endl; 
+	//	cout << "HAHA: dR of genjet " << idx_j << " and genparticle " << idx_genp_min << " of flavor " << event.genparticles->at(idx_genp_min).flavor() << " : dR = " << dr_min << ". " <<  endl; 
  	idx_j++;
       }
       }

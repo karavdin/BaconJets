@@ -26,6 +26,7 @@ using namespace std;
 
 void CorrectionObject::GenResponsePlots(){
   cout << "--------------- Starting GenResponsePlots() ---------------" << endl << endl;
+  CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/GenResponsePlots/");
   gStyle->SetOptStat(0);
   TString flavorLabel = "";
   //Table with number of events in each pT- and eta-bin
@@ -55,18 +56,18 @@ void CorrectionObject::GenResponsePlots(){
 
   TH2D *hmc_nGoodvertices[n_eta-1];
   TH2D *hmc_nvertices[n_eta-1];
-  TH2D *hmc_Xpv[n_eta-1];
-  TH2D *hmc_Ypv[n_eta-1];
-  TH2D *hmc_Zpv[n_eta-1];
+  // TH2D *hmc_Xpv[n_eta-1];
+  // TH2D *hmc_Ypv[n_eta-1];
+  // TH2D *hmc_Zpv[n_eta-1];
   TH2D *hmc_Ngenjet[n_eta-1];
   TH2D *hmc_Nptcl[n_eta-1];
   TH2D *hmc_rho[n_eta-1];
 
   TProfile *pr_nGoodvertices[n_eta-1];
   TProfile *pr_nvertices[n_eta-1];
-  TProfile *pr_Xpv[n_eta-1];
-  TProfile *pr_Ypv[n_eta-1];
-  TProfile *pr_Zpv[n_eta-1];
+  // TProfile *pr_Xpv[n_eta-1];
+  // TProfile *pr_Ypv[n_eta-1];
+  // TProfile *pr_Zpv[n_eta-1];
   TProfile *pr_Ngenjet[n_eta-1];
   TProfile *pr_Nptcl[n_eta-1];
   TProfile *pr_rho[n_eta-1];
@@ -74,9 +75,9 @@ void CorrectionObject::GenResponsePlots(){
  
   TString name21 = "hist_nGoodvertices_";
   TString name22 = "hist_nvertices_";
-  TString name23 = "hist_Xpv_";
-  TString name24 = "hist_Ypv_";
-  TString name25 = "hist_Zpv_";
+  // TString name23 = "hist_Xpv_";
+  // TString name24 = "hist_Ypv_";
+  // TString name25 = "hist_Zpv_";
   TString name26 = "hist_Ngenjet_";
   TString name27 = "hist_Nptcl_";
   TString name30 = "hist_rho";
@@ -114,12 +115,12 @@ void CorrectionObject::GenResponsePlots(){
       hmc_nGoodvertices[j] = new TH2D(name2, "# Good Vertices; p_{T}^{ave} [GeV]; good Vertices", n_pt-1,pt_bins,80,0,80);
       name2 = name22 + eta_name;
       hmc_nvertices[j] = new TH2D(name2, "# vertices; p_{T}^{ave} [GeV]; vertices", n_pt-1, pt_bins, 80,0,80);
-      name2 = name23 + eta_name;
-      hmc_Xpv[j] = new TH2D(name2, "PV X; p_{T}^{ave} [GeV]; PV X", n_pt-1, pt_bins, 10,-1,1);
-      name2 = name24 + eta_name;
-      hmc_Ypv[j] = new TH2D(name2, "PV Y; p_{T}^{ave} [GeV]; PV Y", n_pt-1, pt_bins, 10,-1,1);
-      name2 = name25 + eta_name;
-      hmc_Zpv[j] = new TH2D(name2, "PV Z; p_{T}^{ave} [GeV]; PV Z", n_pt-1, pt_bins, 60,-30,30);
+      // name2 = name23 + eta_name;
+      // hmc_Xpv[j] = new TH2D(name2, "PV X; p_{T}^{ave} [GeV]; PV X", n_pt-1, pt_bins, 10,-1,1);
+      // name2 = name24 + eta_name;
+      // hmc_Ypv[j] = new TH2D(name2, "PV Y; p_{T}^{ave} [GeV]; PV Y", n_pt-1, pt_bins, 10,-1,1);
+      // name2 = name25 + eta_name;
+      // hmc_Zpv[j] = new TH2D(name2, "PV Z; p_{T}^{ave} [GeV]; PV Z", n_pt-1, pt_bins, 60,-30,30);
       name2 = name26 + eta_name;
       hmc_Ngenjet[j] = new TH2D(name2, "# Gen Jets; p_{T}^{ave}; #Gen Jets", n_pt-1, pt_bins, 20,0,20);
       name2 = name27 + eta_name;
@@ -216,9 +217,9 @@ void CorrectionObject::GenResponsePlots(){
 
   TTreeReaderValue<Int_t> nGoodvertices_mc(myReader_MC, "nGoodvertices");
   TTreeReaderValue<Int_t> nvertices_mc(myReader_MC, "nvertices");
-  TTreeReaderValue<Float_t> Xpv_mc(myReader_MC, "Xpv");
-  TTreeReaderValue<Float_t> Ypv_mc(myReader_MC, "Ypv");
-  TTreeReaderValue<Float_t> Zpv_mc(myReader_MC, "Zpv");
+  // TTreeReaderValue<Float_t> Xpv_mc(myReader_MC, "Xpv");
+  // TTreeReaderValue<Float_t> Ypv_mc(myReader_MC, "Ypv");
+  // TTreeReaderValue<Float_t> Zpv_mc(myReader_MC, "Zpv");
   TTreeReaderValue<Int_t> Ngenjet_mc(myReader_MC, "Ngenjet");
   TTreeReaderValue<Int_t> Nptcl_mc(myReader_MC, "Nptcl");
   TTreeReaderValue<Float_t> rho_mc(myReader_MC, "rho");
@@ -232,6 +233,7 @@ void CorrectionObject::GenResponsePlots(){
 
   while (myReader_MC.Next()) {
     double pt_binning_var = 0.5*(*barreljet_ptgen_mc+*probejet_ptgen_mc);//bin in pt_ave, GEN
+    //    cout<<"pt_binning_var = "<<pt_binning_var<<endl;
     if(*alpha_mc>alpha_cut) continue;
    for(int j=0; j<n_eta-1; j++){
 	if(fabs(*probejet_eta_mc)>eta_bins[j+1] || fabs(*probejet_eta_mc)<eta_bins[j]) continue;
@@ -244,9 +246,9 @@ void CorrectionObject::GenResponsePlots(){
 	    // Plot average over pT (like response)
 	    hmc_nGoodvertices[j]->Fill(*pt_ave_mc, *nGoodvertices_mc, *weight_mc);
 	    hmc_nvertices[j]->Fill(*pt_ave_mc, *nvertices_mc, *weight_mc);
-	    hmc_Xpv[j]->Fill(*pt_ave_mc, *Xpv_mc, *weight_mc);
-	    hmc_Ypv[j]->Fill(*pt_ave_mc, *Ypv_mc, *weight_mc);
-	    hmc_Zpv[j]->Fill(*pt_ave_mc, *Zpv_mc, *weight_mc);
+	    // hmc_Xpv[j]->Fill(*pt_ave_mc, *Xpv_mc, *weight_mc);
+	    // hmc_Ypv[j]->Fill(*pt_ave_mc, *Ypv_mc, *weight_mc);
+	    // hmc_Zpv[j]->Fill(*pt_ave_mc, *Zpv_mc, *weight_mc);
 	    hmc_Ngenjet[j]->Fill(*pt_ave_mc, *Ngenjet_mc, *weight_mc);
 	    hmc_Nptcl[j]->Fill(*pt_ave_mc, *Nptcl_mc, *weight_mc);
 	    hmc_rho[j]->Fill(*pt_ave_mc, *rho_mc, *weight_mc);
@@ -271,18 +273,18 @@ void CorrectionObject::GenResponsePlots(){
 	    bool flavor_sel=false;
 	    if(*flavorProbejet_mc>0 && *flavorProbejet_mc<6 && *flavorTagjet_mc>0 && *flavorTagjet_mc<6){
 	      hmc_QQevents[k][j]->Fill(1,*weight_mc);
-	      // flavorLabel = "QQ";
-	      // flavor_sel=true;//QQ
+	      flavorLabel = "QQ";
+	      flavor_sel=true;//QQ
 	    }
 	    if(*flavorTagjet_mc==21 && *flavorProbejet_mc>0 && *flavorProbejet_mc<6 ){
 	      hmc_GQevents[k][j]->Fill(1,*weight_mc);
-	      // flavorLabel = "GQ";
-	      // flavor_sel=true;//GQ
+	      flavorLabel = "GQ";
+	      flavor_sel=true;//GQ
 	    }
 	    if(*flavorTagjet_mc==21 && *flavorProbejet_mc==21){
 	      hmc_GGevents[k][j]->Fill(1,*weight_mc);
-	      // flavorLabel = "GG";
-	      // flavor_sel=true;//GG
+	      flavorLabel = "GG";
+	      flavor_sel=true;//GG
 	    }
 	    if(*flavorTagjet_mc>0 && *flavorTagjet_mc<6 && *flavorProbejet_mc==21){
 	      hmc_QGevents[k][j]->Fill(1,*weight_mc);
@@ -373,9 +375,9 @@ void CorrectionObject::GenResponsePlots(){
   for(int j=0; j<n_eta-1; j++){
     pr_nGoodvertices[j] = (TProfile*)hmc_nGoodvertices[j]->ProfileX();
     pr_nvertices[j] = (TProfile*)hmc_nvertices[j]->ProfileX();
-    pr_Xpv[j] = (TProfile*)hmc_Xpv[j]->ProfileX();
-    pr_Ypv[j] = (TProfile*)hmc_Ypv[j]->ProfileX();
-    pr_Zpv[j] = (TProfile*)hmc_Zpv[j]->ProfileX();
+    // pr_Xpv[j] = (TProfile*)hmc_Xpv[j]->ProfileX();
+    // pr_Ypv[j] = (TProfile*)hmc_Ypv[j]->ProfileX();
+    // pr_Zpv[j] = (TProfile*)hmc_Zpv[j]->ProfileX();
     pr_Ngenjet[j] = (TProfile*)hmc_Ngenjet[j]->ProfileX();
     pr_Nptcl[j] = (TProfile*)hmc_Nptcl[j]->ProfileX();
     pr_rho[j] = (TProfile*)hmc_rho[j]->ProfileX();
@@ -383,18 +385,18 @@ void CorrectionObject::GenResponsePlots(){
 
     hmc_nGoodvertices[j]->Write();
     hmc_nvertices[j]->Write();
-    hmc_Xpv[j]->Write();
-    hmc_Ypv[j]->Write();
-    hmc_Zpv[j]->Write();
+    // hmc_Xpv[j]->Write();
+    // hmc_Ypv[j]->Write();
+    // hmc_Zpv[j]->Write();
     hmc_Ngenjet[j]->Write();
     hmc_Nptcl[j]->Write();
     hmc_rho[j]->Write();
 
     pr_nGoodvertices[j]->Write();
     pr_nvertices[j]->Write();
-    pr_Xpv[j]->Write();
-    pr_Ypv[j]->Write();
-    pr_Zpv[j]->Write();
+    // pr_Xpv[j]->Write();
+    // pr_Ypv[j]->Write();
+    // pr_Zpv[j]->Write();
     pr_Ngenjet[j]->Write();
     pr_Nptcl[j]->Write();
     pr_rho[j]->Write();
@@ -423,35 +425,35 @@ void CorrectionObject::GenResponsePlots(){
        c_dummy2->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Vertices_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy2;
 
-       TCanvas* c_dummy3 = new TCanvas();
-       pr_Xpv[j]->Draw();
-       c_dummy3->SetLogx();
-       pr_Xpv[j]->GetYaxis()->SetTitle("X PV");
-       pr_Xpv[j]->SetLineWidth(2);
-       pr_Xpv[j]->SetMinimum(-1);
-       pr_Xpv[j]->SetMaximum(1);
-       c_dummy3->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Xpv_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
-       delete c_dummy3;
+      //  TCanvas* c_dummy3 = new TCanvas();
+      //  pr_Xpv[j]->Draw();
+      //  c_dummy3->SetLogx();
+      //  pr_Xpv[j]->GetYaxis()->SetTitle("X PV");
+      //  pr_Xpv[j]->SetLineWidth(2);
+      //  pr_Xpv[j]->SetMinimum(-1);
+      //  pr_Xpv[j]->SetMaximum(1);
+      //  c_dummy3->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Xpv_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
+      //  delete c_dummy3;
 
-      TCanvas* c_dummy4 = new TCanvas();
-       pr_Ypv[j]->Draw();
-       c_dummy4->SetLogx();
-       pr_Ypv[j]->GetYaxis()->SetTitle("Y PV");
-       pr_Ypv[j]->SetLineWidth(2);
-       pr_Ypv[j]->SetMinimum(-1);
-       pr_Ypv[j]->SetMaximum(1);
-       c_dummy4->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Ypv_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
-       delete c_dummy4;
+      // TCanvas* c_dummy4 = new TCanvas();
+      //  pr_Ypv[j]->Draw();
+      //  c_dummy4->SetLogx();
+      //  pr_Ypv[j]->GetYaxis()->SetTitle("Y PV");
+      //  pr_Ypv[j]->SetLineWidth(2);
+      //  pr_Ypv[j]->SetMinimum(-1);
+      //  pr_Ypv[j]->SetMaximum(1);
+      //  c_dummy4->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Ypv_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
+      //  delete c_dummy4;
   
-       TCanvas* c_dummy5 = new TCanvas();
-       pr_Zpv[j]->Draw();
-       c_dummy5->SetLogx();
-       pr_Zpv[j]->GetYaxis()->SetTitle("Z PV");
-       pr_Zpv[j]->SetLineWidth(2);
-       pr_Zpv[j]->SetMinimum(-30);
-       pr_Zpv[j]->SetMaximum(30);
-       c_dummy5->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Zpv_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
-       delete c_dummy5;
+      //  TCanvas* c_dummy5 = new TCanvas();
+      //  pr_Zpv[j]->Draw();
+      //  c_dummy5->SetLogx();
+      //  pr_Zpv[j]->GetYaxis()->SetTitle("Z PV");
+      //  pr_Zpv[j]->SetLineWidth(2);
+      //  pr_Zpv[j]->SetMinimum(-30);
+      //  pr_Zpv[j]->SetMaximum(30);
+      //  c_dummy5->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Zpv_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
+      //  delete c_dummy5;
        
        TCanvas* c_dummy6 = new TCanvas();
        pr_Ngenjet[j]->Draw();

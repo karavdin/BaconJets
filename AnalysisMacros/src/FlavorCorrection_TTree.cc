@@ -1,5 +1,7 @@
 #include "../include/parameters.h"
 #include "../include/tdrstyle_mod15.h"
+#include "../include/CorrectionObject.h"
+
 #include <iostream>
 #include <cmath>
 #include "TString.h"
@@ -29,8 +31,9 @@ using namespace std;
 
 
 void CorrectionObject::FlavorCorrection_TTree(){
-
-  TString path="/nfs/dust/cms/user/karavdia/JERC/FlavorStudy/PFfractions_2017_MadGraph_AK4CHS/";
+  cout << "--------------- FlavorCorrection_TTree() ---------------" << endl << endl;
+  CorrectionObject::make_path(CorrectionObject::_outpath+"/plots/control/Flavor/");
+  //  TString path="/nfs/dust/cms/user/karavdia/JERC/FlavorStudy/PFfractions_2017_MadGraph_AK4CHS/";
   //  TString _MCfile="/nfs/dust/cms/user/multh/JEC/2016Legacy/ClosureTest/Summer16_07Aug2017_V6/AK4CHS/MC_NoReweighted_NewHF_Binning/uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_AK4CHS_RunBCDEFGH.root";
   TString jettag=CorrectionObject::_jettag;
   TString txttag=CorrectionObject::_generator_tag; 
@@ -443,7 +446,7 @@ void CorrectionObject::FlavorCorrection_TTree(){
     tex->DrawLatex(0.22,0.57,Latextext1);
     tex->DrawLatex(0.22,0.53,Latextext2);
  
-    c_stack->SaveAs(path+"plots/Flavor/PFEnergyFractions_"+jettag+"_"+txttag+ "_eta_" + eta_range2[j] + "_" + eta_range2[j+1]+".pdf");
+    c_stack->SaveAs(CorrectionObject::_outpath+"/plots/control/Flavor/PFEnergyFractions_"+jettag+"_"+txttag+ "_eta_" + eta_range2[j] + "_" + eta_range2[j+1]+".pdf");
     delete stack;
     delete c_stack;
 
@@ -505,7 +508,7 @@ void CorrectionObject::FlavorCorrection_TTree(){
     tex->DrawLatex(0.15,0.27,Latextext1);
     tex->DrawLatex(0.15,0.23,Latextext2);
  
-    c_stack_relud->SaveAs(path+"plots/Flavor/PFEnergyFractions_RelToUD_"+jettag+"_"+txttag+ "_eta_" + eta_range2[j] + "_" + eta_range2[j+1]+".pdf");
+    c_stack_relud->SaveAs(CorrectionObject::_outpath+"/plots/control/Flavor/PFEnergyFractions_RelToUD_"+jettag+"_"+txttag+ "_eta_" + eta_range2[j] + "_" + eta_range2[j+1]+".pdf");
     delete stack_relud;
     delete c_stack_relud;
 
@@ -537,7 +540,7 @@ void CorrectionObject::FlavorCorrection_TTree(){
     tex->DrawLatex(0.22,0.57,Latextext1);
     tex->DrawLatex(0.22,0.53,Latextext2);
  
-    c_response->SaveAs(path+"plots/Flavor/ResponsesFlavor_"+jettag+"_"+txttag+ "_eta_" + eta_range2[j] + "_" + eta_range2[j+1]+".pdf");
+    c_response->SaveAs(CorrectionObject::_outpath+"/plots/control/Flavor/ResponsesFlavor_"+jettag+"_"+txttag+ "_eta_" + eta_range2[j] + "_" + eta_range2[j+1]+".pdf");
     delete response;
     delete c_response;
 

@@ -56,6 +56,7 @@ class AnalysisModule_DiJetTrg_XCONE: public uhh2::AnalysisModule {
    std::unique_ptr<JetLeptonCleaner> jetleptoncleaner;
    std::unique_ptr<JetLeptonCleaner>  JLC_B, JLC_C, JLC_D, JLC_E, JLC_F;
    std::unique_ptr<JetCleaner> jetcleaner;
+   std::unique_ptr<JetCleaner> jetcleaner2;
    std::unique_ptr<MuonCleaner>     muoSR_cleaner;   
    std::unique_ptr<ElectronCleaner> eleSR_cleaner;    
 
@@ -86,7 +87,8 @@ class AnalysisModule_DiJetTrg_XCONE: public uhh2::AnalysisModule {
   
     //// Data/MC scale factors
     std::unique_ptr<uhh2::AnalysisModule> pileupSF;
-  unique_ptr<AnalysisModule>  Jet_printer;
+  unique_ptr<AnalysisModule>  TopJet_printer;
+  unique_ptr<AnalysisModule>  GenTopJet_printer;
   unique_ptr<AnalysisModule> GenParticles_printer;
   
     Event::Handle<float> tt_jet1_ptGen;  Event::Handle<float> tt_jet2_ptGen;  Event::Handle<float> tt_jet3_ptGen;
@@ -185,6 +187,7 @@ class AnalysisModule_DiJetTrg_XCONE: public uhh2::AnalysisModule {
     bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB, apply_L1seed_from_bx1_filter;
     double lumiweight;
     string jetLabel;
+    double   minJetPt;
     TString dataset_version, JEC_Version;
     JetId Jet_PFID;
     int n_evt;
@@ -290,7 +293,9 @@ class AnalysisModule_DiJetTrg_XCONE: public uhh2::AnalysisModule {
     // Jet_PFID = JetPFID(JetPFID::WP_LOOSE); //not updated yet
     Jet_PFID = JetPFID(JetPFID::WP_TIGHT);
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
-
+    minJetPt = stod(ctx.get("minJetPt"));                                                                                                                             
+    jetcleaner2.reset(new JetCleaner(ctx, minJetPt, 5.2));
+ 
 //Lepton cleaner
     const     MuonId muoSR(AndId<Muon>    (MuonID(Muon::CutBasedIdTight),PtEtaCut  (15, 2.4)));
     const ElectronId eleSR(AndId<Electron>(ElectronID_MVA_Fall17_loose_noIso , PtEtaSCCut(15, 2.4)));  
@@ -690,7 +695,8 @@ class AnalysisModule_DiJetTrg_XCONE: public uhh2::AnalysisModule {
 
     h_monitoring_final.reset(new LumiHists(ctx, "Monitoring_Final"));
     
-    Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
+    TopJet_printer.reset(new TopJetPrinter("FatJet-Printer", 0));
+    GenTopJet_printer.reset(new GenTopJetPrinter("GenFatJet-Printer", 0));
     
     if(!no_genp) 
       GenParticles_printer.reset(new GenParticlesPrinter(ctx));
@@ -883,7 +889,8 @@ class AnalysisModule_DiJetTrg_XCONE: public uhh2::AnalysisModule {
   
 //####################  Select and Apply proper JEC-Versions for every Run ##################
 
-    const int jet_n = event.topjets->size();
+//
+    int jet_n = event.topjets->size();
     if(jet_n<2) return false;
     h_2jets->fill(event); 
 
@@ -981,7 +988,12 @@ if(debug){
    if(debug) cout<<"after jet smearing\n";
  }
  }
- 
+ jetcleaner2->process(event); //remove low pt jets
+ n_jets_afterCleaner = event.jets->size();                                                                                                                            
+ if(debug) cout<<"#jets after cleanining low pt jets "<<n_jets_afterCleaner<<endl;            
+ if(n_jets_afterCleaner<2) return false; 
+ jet_n = n_jets_afterCleaner;  
+
 if(debug){   
   cout<<"After JER, before MET"<<endl;
  cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
@@ -1735,7 +1747,8 @@ if(debug){
     }
 
     if(debug && isMC){
-      Jet_printer->process(event);
+      TopJet_printer->process(event);
+      GenTopJet_printer->process(event);
       if(!no_genp) GenParticles_printer->process(event);
     }
  if(isMC){    
