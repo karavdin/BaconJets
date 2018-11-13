@@ -17,13 +17,13 @@ const int n_etabarr=5; // needed for the normalization to 1 in the barrel. ???
 const int n_enough_entries = 100;
 
 //Alpha: 
-/* const double alpha_cut = 0.3; */
-/* const TString s_alpha_cut = "0.3"; */
-/* const TString s_alpha_cut_name = "03"; */
+const double alpha_cut = 0.3;
+const TString s_alpha_cut = "0.3";
+const TString s_alpha_cut_name = "03";
 
-const double alpha_cut = 1.0;
-const TString s_alpha_cut = "1.0";
-const TString s_alpha_cut_name = "10";
+/* const double alpha_cut = 1.0; */
+/* const TString s_alpha_cut = "1.0"; */
+/* const TString s_alpha_cut_name = "10"; */
 
 
 
