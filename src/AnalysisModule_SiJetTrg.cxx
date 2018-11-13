@@ -1328,7 +1328,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     }
 
 
-
     if(debug) cout<<"before afterUnflat fill: njet: "<<event.jets->size()<<endl;
     
    h_afterUnflat->fill(event);
@@ -1472,8 +1471,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 //Pu_pt_hat/pt_hat Selection 
     if(isMC){
       //FIXME
-      cout<<"PUpthat selction skipped for Madgraph MC\n";
-      // if(!sel.PUpthat()) return false;
+      // cout<<"PUpthat selction skipped for Madgraph MC\n";
+      if(!sel.PUpthat()) return false;
     }
     // h_nocuts->fill(event);
     // h_lumi_nocuts->fill(event);

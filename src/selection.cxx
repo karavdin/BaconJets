@@ -244,7 +244,7 @@ bool Selection::DiJet()
     double deltaPhi = std::abs(TVector2::Phi_mpi_pi(jet1->phi() - jet2->phi()));
     if (deltaPhi < s_delta_phi) return false;
 
-    // |asymm| < 0.7
+    // |asymm| < 0.7, set on 1. at the moment
     if (fabs((event->get(tt_jet2_pt) - event->get(tt_jet1_pt)) / (event->get(tt_jet2_pt) + event->get(tt_jet1_pt))) > s_asymm) return false;
 
 
@@ -325,9 +325,11 @@ bool Selection::DiJet()
   {
     assert(event);
 
-      if(no_genp) return true;
+      // if(no_genp) return true;
     
-   double  pt_hat = event->genInfo->binningValues()[0];
+   // double  pt_hat = event->genInfo->binningValues()[0];
+    
+   double  pt_hat = event->genInfo->qScale();      
    double  PU_pt_hat = event->genInfo->PU_pT_hat_max();
   
    double Ratio = PU_pt_hat/pt_hat;
