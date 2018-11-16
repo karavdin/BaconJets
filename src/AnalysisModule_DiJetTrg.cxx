@@ -367,16 +367,15 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 				       				\
   JEC_corr_L1RC          = JERFiles::jecv##_L1RC_AK4PFchs_MC;	\
 	\
-  JEC_corr_L1FastJet          = JERFiles::jecv##_L1FastJet_AK4PFchs_MC;	\
-	\
   }									\
 
   if(isMC){
       //for MC
       if(jetLabel == "AK4CHS"){
 	//	IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
-	IF_MAKE_JEC_VARS_MC(Summer16_23Sep2016V4)
-	else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V23)
+	// IF_MAKE_JEC_VARS_MC(Summer16_23Sep2016V4)
+	// else 
+	  IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V23)
        }
 
       else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
@@ -397,14 +396,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
   JEC_corr_E_L1RC          = JERFiles::jecv##_E_L1RC_AK4PFchs_DATA;	\
   JEC_corr_F_L1RC          = JERFiles::jecv##_F_L1RC_AK4PFchs_DATA;	\
 								\
-  JEC_corr_B_L1FastJet          = JERFiles::jecv##_B_L1FastJet_AK4PFchs_DATA;	\
-  JEC_corr_C_L1FastJet          = JERFiles::jecv##_C_L1FastJet_AK4PFchs_DATA;	\
-  JEC_corr_D_L1FastJet          = JERFiles::jecv##_D_L1FastJet_AK4PFchs_DATA;	\
-  JEC_corr_E_L1FastJet          = JERFiles::jecv##_E_L1FastJet_AK4PFchs_DATA;	\
-  JEC_corr_F_L1FastJet          = JERFiles::jecv##_F_L1FastJet_AK4PFchs_DATA;	\
-								       \
   }									\
 
+      
 #define IF_MAKE_JEC_VARS_NO_CLOSURE(jecv)					\
   if(JEC_Version == #jecv){			    \
   JEC_corr_B               = JERFiles::jecv##_B_L123_noRes_AK4PFchs_DATA; \
@@ -419,12 +413,6 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
   JEC_corr_E_L1RC          = JERFiles::jecv##_E_L1RC_AK4PFchs_DATA;	\
   JEC_corr_F_L1RC          = JERFiles::jecv##_F_L1RC_AK4PFchs_DATA;	\
  								\
-  JEC_corr_B_L1FastJet          = JERFiles::jecv##_B_L1FastJet_AK4PFchs_DATA;	\
-  JEC_corr_C_L1FastJet          = JERFiles::jecv##_C_L1FastJet_AK4PFchs_DATA;	\
-  JEC_corr_D_L1FastJet          = JERFiles::jecv##_D_L1FastJet_AK4PFchs_DATA;	\
-  JEC_corr_E_L1FastJet          = JERFiles::jecv##_E_L1FastJet_AK4PFchs_DATA;	\
-  JEC_corr_F_L1FastJet          = JERFiles::jecv##_F_L1FastJet_AK4PFchs_DATA;	\
-								 \
   }\      
       
       //for DATA
@@ -703,7 +691,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     h_monitoring_final.reset(new LumiHists(ctx, "Monitoring_Final"));
     
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
-    GenJet_printer.reset(new GenJetPrinter("GenJet-Printer", 0));
+    // GenJet_printer.reset(new GenJetPrinter("GenJet-Printer", 0));
     
     if(!no_genp) 
       GenParticles_printer.reset(new GenParticlesPrinter(ctx));
@@ -1755,7 +1743,7 @@ if(debug){
       Jet_printer->process(event);
     }
     if(debug && isMC){
-      GenJet_printer->process(event);
+      // GenJet_printer->process(event);
       GenParticles_printer->process(event);
     }
  if(isMC){    

@@ -24,7 +24,7 @@
 
 using namespace std;
 
-void CorrectionObject::kFSR_CorrectFormulae(){
+void CorrectionObject::kFSR_CorrectFormulae(float pt_min){
   cout << "--------------- Starting kFSR() ---------------" << endl << endl;
   TStyle* m_gStyle = new TStyle();
   m_gStyle->SetOptFit(0);
@@ -128,11 +128,13 @@ void CorrectionObject::kFSR_CorrectFormulae(){
   TTreeReaderValue<Float_t> asymmetry_data(myReader_DATA, "asymmetry");
   TTreeReaderValue<Float_t> B_data(myReader_DATA, "B");   
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
+  TTreeReaderValue<Float_t> jet3_pt_data(myReader_DATA, "jet3_pt");
   int idx = 0;
   
   cout << "starting to loop over DATA events." << endl;
 
   while (myReader_DATA.Next()) {
+    if(*jet3_pt_data > 0. && *jet3_pt_data < pt_min) continue;
     for(int j=0; j<n_eta-1; j++){
       if(fabs(*probejet_eta_data)>eta_bins[j+1] || fabs(*probejet_eta_data)<eta_bins[j]) continue;
       for(int i=0; i<n_alpha; i++){
@@ -159,10 +161,12 @@ void CorrectionObject::kFSR_CorrectFormulae(){
    TTreeReaderValue<Float_t> asymmetry_mc(myReader_MC, "asymmetry");
    TTreeReaderValue<Float_t> B_mc(myReader_MC, "B");
    TTreeReaderValue<Float_t> weight_mc(myReader_MC, "weight");
+  TTreeReaderValue<Float_t> jet3_pt_mc(myReader_MC, "jet3_pt");
    idx = 0;
 
    //TODO make a option to load MC rel responses instead of calculating them every time
    while (myReader_MC.Next()) {
+    if(*jet3_pt_mc > 0. && *jet3_pt_mc < pt_min) continue;
      for(int j=0; j<n_eta-1; j++){
        if(fabs(*probejet_eta_mc)>eta_bins[j+1] || fabs(*probejet_eta_mc)<eta_bins[j]) continue;
        for(int i=0; i<n_alpha; i++){
@@ -388,6 +392,7 @@ void CorrectionObject::kFSR_CorrectFormulae(){
     TString name_mpf_r[n_eta-1][n_pt_-1];
  
     for(int j=0; j<n_eta-1; j++){
+      eta_cut_bool = fabs(eta_bins[j])>eta_cut;
       for(int k = 1 ; k <  ( eta_cut_bool ?  n_pt_HF-1 : n_pt-1 ) ; k++ ){ 
         graph_rel_r_mc[k][j] = new TGraphErrors(n_alpha,xbin_tgraph,rel_r_mc[k][j],zero,err_rel_r_mc[k][j]);
         graph_rel_r_mc[k][j] = (TGraphErrors*)CleanEmptyPoints(graph_rel_r_mc[k][j]);

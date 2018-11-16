@@ -1,4 +1,4 @@
-file_name=L2Res_madgraphVSpowhegMC_wJERSFV2_wQScaleCut
+file_name=L2Res_RunB_differentPtminCuts_fullResponseVsAlphaPlots
 # QCDPtBinned_METCorrectionCorrected
 if [ "$#" = "1" ]
    then file_name=controlplots${1}_trgM_31Jan
@@ -8,7 +8,9 @@ rm ${file_name}.tex
 # py_out=$(./generate_texRunBCDEF_closureCheck.py "$file_name")
 # py_out=$(./generate_tex_time.py "$file_name")
 # py_out=$(./generate_texRunDEFL2Res.py "$file_name")
-py_out=$(./generate_texPowhegVsMadGraph.py "$file_name")
+# py_out=$(./generate_texPowhegVsMadGraph.py "$file_name")
+py_out=$(./generate_madgraphMinPtCutsComparison.py "$file_name")
+# py_out=$(./generate_texDifferentHTBins.py "$file_name")
 # py_out=$(./generate_texRunFL2Res_rerecoCheck.py "$file_name")
 pdflatex ${file_name}.tex
 pdflatex ${file_name}.tex #to get slide numbers

@@ -36,7 +36,7 @@
 
 using namespace std;
 
-void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod,double kfsr_fitrange, bool useCombinedkSFR, bool useStraightkFSR){
+void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod,double kfsr_fitrange, bool useCombinedkSFR, bool useStraightkFSR, float pt_min){
   cout << "--------------- Starting Pt_Extrapolation() ---------------" << endl << endl;
   TStyle* m_gStyle = new TStyle();
   m_gStyle->SetOptFit(000);
@@ -155,8 +155,10 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
   TTreeReaderValue<Float_t> asymmetry_data(myReader_DATA, "asymmetry");
   TTreeReaderValue<Float_t> B_data(myReader_DATA, "B");   
   TTreeReaderValue<Float_t> weight_data(myReader_DATA, "weight");
+  TTreeReaderValue<Float_t> jet3_pt_data(myReader_DATA, "jet3_pt");
    
   while (myReader_DATA.Next()) {
+    if(*jet3_pt_data > 0. && *jet3_pt_data < pt_min) continue;
     if(*alpha_data>alpha_cut) continue;
     for(int j=0; j<n_eta-1; j++){     
       if(fabs(*probejet_eta_data)>eta_bins[j+1] || fabs(*probejet_eta_data)<eta_bins[j]) continue;
@@ -186,8 +188,11 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
   TTreeReaderValue<Float_t> asymmetry_mc(myReader_MC, "asymmetry");
   TTreeReaderValue<Float_t> B_mc(myReader_MC, "B");
   TTreeReaderValue<Float_t> weight_mc(myReader_MC, "weight");
+  TTreeReaderValue<Float_t> jet3_pt_mc(myReader_MC, "jet3_pt");
+
 
   while (myReader_MC.Next()) {
+    if(*jet3_pt_mc > 0. && *jet3_pt_mc < pt_min) continue;
     if(*alpha_mc>alpha_cut) continue;
     for(int j=0; j<n_eta-1; j++){
       if(fabs(*probejet_eta_mc)>eta_bins[j+1] || fabs(*probejet_eta_mc)<eta_bins[j]) continue;

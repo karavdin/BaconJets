@@ -55,6 +55,7 @@ static void show_usage(std::string name)
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
 	      <<"\t--kfsrRange\t\tRneg to which the kFSR fit is performed.The default is 5.19.\n"
+	      <<"\t--ptMin\t\tUse a jet3 pt min cut for the kFSR and L2Res estimations. Be careful, this is not used for all controlplots. The default is 0.\n"
 	      <<"\t-useCombinedkfsr\t\tUse combined BCDEF kFSR for L2Res\.\n"
 	      <<"\t-useStraightkfsr\t\tUse simpler kFSR for L2Res\.\n"
 	      <<"\t-l1bx\t\tDo the L1 jet seed bx check plots\.\n"
@@ -128,6 +129,7 @@ int main(int argc,char *argv[]){
 				    "-IGF",
 				    "-IGFw",
 				    "--kfsrRange",
+				    "--ptMin",
 				    "-combinedkfsr",
 				    "-MEPC",
 				    "-useStraightkfsr"
@@ -182,6 +184,7 @@ int main(int argc,char *argv[]){
   TString input_path_="";
   double asym_cut = 0.;
   double kfsrRange = 5.19;
+  double ptMin = 0.;
   for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
 	if(arg=="-h"||arg=="--help"){
@@ -341,6 +344,9 @@ int main(int argc,char *argv[]){
 	      else if(arg=="--kfsrRange"){
 		kfsrRange = stod(argv[i+1]);
 	      }
+	      else if(arg=="--ptMin"){
+		ptMin = stod(argv[i+1]);
+	      }
 	  }
 	}
   }
@@ -418,7 +424,7 @@ int main(int argc,char *argv[]){
     cout << "testobject is " << Objects[0] << endl;
     if(do_useStraightkfsr) std::cout<<"using the easier kFSR Definition\n";
    
-    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange, do_useCombinedkSFR, do_useStraightkfsr);
+    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange, do_useCombinedkSFR, do_useStraightkfsr,ptMin);
     if(do_fullPlots or do_JEF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetEnergyFractions();
 
     if(do_calcMCW) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CalculateMCWeights();
