@@ -114,6 +114,7 @@ using namespace std;
     void L1jetSeedBXcheck();
     void FlavorCorrection_TTree();
     void GenResponsePlots();
+    void GenResponsePlots_AllPtbinningOnePlot(TString flavor);
 static bool make_path(std::string path_name){
     int status = 1;
 

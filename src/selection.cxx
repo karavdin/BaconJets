@@ -327,8 +327,6 @@ bool Selection::DiJet()
 
       // if(no_genp) return true;
     
-   // double  pt_hat = event->genInfo->binningValues()[0];
-    
    double  pt_hat = event->genInfo->qScale();      
    double  PU_pt_hat = event->genInfo->PU_pT_hat_max();
   
@@ -336,6 +334,21 @@ bool Selection::DiJet()
 
     if(Ratio < 1) return true;
 
+    return false;
+  }
+
+bool Selection::PtaveVsQScale()
+  {
+    assert(event);
+
+      if(no_genp) return true;
+    
+   double  pt_hat = event->genInfo->qScale();
+   double ptave = event->get(tt_pt_ave);
+  
+   double Ratio = ptave/pt_hat;
+
+    if(Ratio < 2) return true;
     return false;
   }
 

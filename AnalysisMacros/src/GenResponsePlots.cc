@@ -232,6 +232,7 @@ void CorrectionObject::GenResponsePlots(){
 
 
   while (myReader_MC.Next()) {
+    //    if(icount>10000000) break;
     double pt_binning_var = 0.5*(*barreljet_ptgen_mc+*probejet_ptgen_mc);//bin in pt_ave, GEN
     //    cout<<"pt_binning_var = "<<pt_binning_var<<endl;
     if(*alpha_mc>alpha_cut) continue;
@@ -273,6 +274,7 @@ void CorrectionObject::GenResponsePlots(){
 	    bool flavor_sel=false;
 	    if(*flavorProbejet_mc>0 && *flavorProbejet_mc<6 && *flavorTagjet_mc>0 && *flavorTagjet_mc<6){
 	      hmc_QQevents[k][j]->Fill(1,*weight_mc);
+	      //	      cout<<"*weight_mc = "<<*weight_mc<<endl;
 	      flavorLabel = "QQ";
 	      flavor_sel=true;//QQ
 	    }
@@ -461,7 +463,7 @@ void CorrectionObject::GenResponsePlots(){
        pr_Ngenjet[j]->GetYaxis()->SetTitle("N Gen Jets");
        pr_Ngenjet[j]->SetLineWidth(2);
        pr_Ngenjet[j]->SetMinimum(0);
-       pr_Ngenjet[j]->SetMaximum(4);
+       pr_Ngenjet[j]->SetMaximum(10);
        c_dummy6->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Ngenjet_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy6;
 
@@ -471,7 +473,7 @@ void CorrectionObject::GenResponsePlots(){
        pr_Nptcl[j]->GetYaxis()->SetTitle("N Particle");
        pr_Nptcl[j]->SetLineWidth(2);
        pr_Nptcl[j]->SetMinimum(0);
-       pr_Nptcl[j]->SetMaximum(4);
+       pr_Nptcl[j]->SetMaximum(10);
        c_dummy7->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Nptcl_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy7;
 
@@ -575,13 +577,17 @@ void CorrectionObject::GenResponsePlots(){
   for(int i=0; i<n_eta-1; i++){
     for(int j=0; j<n_pt-1; j++){
       hmc_QQevents[j][i]->Print();
-      val_QQ[i][j] = hmc_QQevents[j][i]->Integral();
+      //      val_QQ[i][j] = hmc_QQevents[j][i]->Integral();
+      val_QQ[i][j] = hmc_QQevents[j][i]->GetEntries();
       err_QQ[i][j] = 1e-3;
-      val_GG[i][j] = hmc_GGevents[j][i]->Integral();
+      //      val_GG[i][j] = hmc_GGevents[j][i]->Integral();
+      val_GG[i][j] = hmc_GGevents[j][i]->GetEntries();
       err_GG[i][j] = 1e-3;
-      val_QG[i][j] = hmc_QGevents[j][i]->Integral();
+      //      val_QG[i][j] = hmc_QGevents[j][i]->Integral();
+      val_QG[i][j] = hmc_QGevents[j][i]->GetEntries();
       err_QG[i][j] = 1e-3;
-      val_GQ[i][j] = hmc_GQevents[j][i]->Integral();
+      //      val_GQ[i][j] = hmc_GQevents[j][i]->Integral();
+      val_GQ[i][j] = hmc_GQevents[j][i]->GetEntries();
       err_GQ[i][j] = 1e-3;
 
       val_SUM[i][j] = val_QQ[i][j]+val_GG[i][j]+val_QG[i][j]+val_GQ[i][j];
@@ -590,8 +596,11 @@ void CorrectionObject::GenResponsePlots(){
       val_GG[i][j] = val_GG[i][j]/val_SUM[i][j];
       val_QG[i][j] = val_QG[i][j]/val_SUM[i][j];
       val_GQ[i][j] = val_GQ[i][j]/val_SUM[i][j];
-      if(j>8)
-	cout<<"J= "<<j<<" val_QQ[i][j] = "<<val_QQ[i][j]<<"  val_GG[i][j] = "<< val_GG[i][j]<<" val_QG[i][j] = "<<val_QG[i][j]<<" val_GQ[i][j] = "<<val_GQ[i][j]<<endl; 
+      // if(j>8)
+      cout<<"J= "<<j<<" val_QQ[i][j] = "<<val_QQ[i][j]<<"  val_GG[i][j] = "<< val_GG[i][j]<<" val_QG[i][j] = "<<val_QG[i][j]<<" val_GQ[i][j] = "<<val_GQ[i][j]<<endl; 
+      }
+      else{
+	cout<<"val_SUM[i][j] = "<<val_SUM[i][j]<<" val_QQ[i][j] = "<<val_QQ[i][j]<<endl;
       }
          //Get <response> and error on <response>
       pair <double,double> A_mc = GetValueAndError(hmc_A[j][i]);

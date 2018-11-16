@@ -57,6 +57,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
    std::unique_ptr<JetLeptonCleaner>  JLC_B, JLC_C, JLC_D, JLC_E, JLC_F;
    std::unique_ptr<JetCleaner> jetcleaner;
    std::unique_ptr<JetCleaner> jetcleaner2;
+   std::unique_ptr<GenJetCleaner> genjetcleaner;
    std::unique_ptr<MuonCleaner>     muoSR_cleaner;   
    std::unique_ptr<ElectronCleaner> eleSR_cleaner;    
 
@@ -204,6 +205,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 
     double L1METptThresh;
     double minJetPt;
+    double minGenJetPt;
     double eta_thresh_low;
     double eta_thresh_high;
 
@@ -296,7 +298,9 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     jetcleaner.reset(new JetCleaner(ctx, Jet_PFID));
     //remove low pt jets
     minJetPt = stod(ctx.get("minJetPt"));
+    minGenJetPt = stod(ctx.get("minGenJetPt"));
     jetcleaner2.reset(new JetCleaner(ctx, minJetPt, 5.2));
+    genjetcleaner.reset(new GenJetCleaner(ctx, minGenJetPt, 5.2));
 
 //Lepton cleaner
     const     MuonId muoSR(AndId<Muon>    (MuonID(Muon::CutBasedIdTight),PtEtaCut  (15, 2.4)));
@@ -1256,6 +1260,7 @@ if(debug){
     float gen_weight = 0;
     if(!event.isRealData){
       gen_weight = event.weight;
+      gen_pthat = event.genInfo->qScale();
       //      gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph
     }
     float nvertices = event.pvs->size(); 
@@ -1527,12 +1532,14 @@ if(debug){
     h_lumi_nocuts->fill(event);
 
 //Pu_pt_hat/pt_hat Selection
-    //  if(!event.isRealData && !no_genp){
-    // if(isMC){
-    //   if(!sel.PUpthat()) return false;
-    //   // if((gen_pthat-genjet1_pt)/gen_pthat<-0.4) return false;
-    // }
-    // if(debug) cout<<"After PUpthat! "<<endl;
+    if(!event.isRealData && !no_genp){
+      //      if(isMC){
+	if(!sel.PUpthat()) return false;
+	if(!sel.PtaveVsQScale()) return false;
+	// if((gen_pthat-genjet1_pt)/gen_pthat<-0.4) return false;
+	//      }
+    }
+    if(debug) cout<<"After PUpthat! "<<endl;
     // h_nocuts->fill(event);
     // h_lumi_nocuts->fill(event);
 

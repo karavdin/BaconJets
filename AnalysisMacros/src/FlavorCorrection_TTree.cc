@@ -96,8 +96,12 @@ void CorrectionObject::FlavorCorrection_TTree(){
     response_g[j] = new TH1D("response_g_"+add,"",100,0,10);
     response_unm[j] = new TH1D("response_unm_"+add,"",100,0,10);
   }
-
+  //  int test_ev = 0;
   while (myReader_MC.Next()) {
+    // while (test_ev<100) {
+    // test_ev++;
+    // myReader_MC.Next();
+
     if(*alpha>al_cut) continue;
         
     double flavor_leadingjet = 0;
@@ -110,8 +114,8 @@ void CorrectionObject::FlavorCorrection_TTree(){
       //      if((*probejet_pt)>50) continue;
       //      if((*probejet_pt)>150 || (*probejet_pt)<50) continue;
       //      if((*probejet_pt)<150) continue;
-      //      if((*barreljet_pt)<150) continue;
-      if((*barreljet_pt)>50) continue;
+      if(((*barreljet_pt)+(*probejet_pt))<250) continue;
+      //if((*barreljet_pt)>50) continue;
       //if((*barreljet_pt)>150 || (*barreljet_pt)<50) continue;
       if(fabs(*probejet_eta)>eta_bins[j+1] || fabs(*probejet_eta)<eta_bins[j]) continue;
       //      cout<<"probejet_pt = "<<(*probejet_pt)<<endl;
@@ -196,6 +200,13 @@ void CorrectionObject::FlavorCorrection_TTree(){
     TH1D* h_muon_Efraction_relud = new TH1D("h_muon_Efraction_relud","Muon energy fraction (relative to u);Flavor (Physics);Probe jet PF energy fraction",7,0,7);
 
     TH1D* h_response = new TH1D("h_response","Response;Flavor (Physics);pt_{REC}/pt_{GEN}",7,0,7);
+    h_response->GetXaxis()->SetBinLabel(1,"u");
+    h_response->GetXaxis()->SetBinLabel(2,"d");
+    h_response->GetXaxis()->SetBinLabel(3,"g");
+    h_response->GetXaxis()->SetBinLabel(4,"c");
+    h_response->GetXaxis()->SetBinLabel(5,"b");
+    h_response->GetXaxis()->SetBinLabel(6,"s");
+    h_response->GetXaxis()->SetBinLabel(7,"unmatch");
 
     for(int i=0; i<5; i++) {
       sum_fractions_u += energy_fractions_u[i][j]->GetMean();
@@ -513,21 +524,48 @@ void CorrectionObject::FlavorCorrection_TTree(){
     delete c_stack_relud;
 
 
+    //dummy for tdrCanvas
+    TH1D *h = new TH1D("h","Response;Flavor (Physics);pt_{REC}/pt_{GEN}",7,0,7);
+    // h->SetMaximum(1.2);
+    // h->SetMinimum(0.8);
+    h->GetXaxis()->SetBinLabel(1,"u");
+    h->GetXaxis()->SetBinLabel(2,"d");
+    h->GetXaxis()->SetBinLabel(3,"g");
+    h->GetXaxis()->SetBinLabel(4,"c");
+    h->GetXaxis()->SetBinLabel(5,"b");
+    h->GetXaxis()->SetBinLabel(6,"s");
+    h->GetXaxis()->SetBinLabel(7,"unmatch");
 
     TCanvas* c_response =  new TCanvas("c_response","c_response",1);
-    // draw response
-    //  THStack* response = new THStack("response",";Flavor;Relative to ud PF energy fraction: (frac^{i} - frac^{ud})/frac_{ud}");
-    THStack* response = new THStack("response",";Flavor;pt_{REC}/pt_{GEN}");
+    tdrCanvas(c_response,"c_response",h,4,10,true,CorrectionObject::_lumitag);
+    h->SetMarkerColor(2);
+    h->SetLineColor(2);
+    h->SetMarkerStyle(20);
+    h->GetYaxis()->SetRangeUser(0.75,1.20);
+    h->GetYaxis()->SetTitle("pt_{REC}/pt_{GEN}");
+    h->GetXaxis()->SetTitle("Flavor");
     h_response->SetMarkerColor(2);
+    h->GetYaxis()->SetRangeUser(0.75,1.20);
     h_response->SetLineColor(2);
     h_response->SetMarkerStyle(20);
-    h_response->GetYaxis()->SetRangeUser(0.75,1.20);
-    response->Add(h_response);
-    //    response->GetYaxis()->SetRangeUser(0.75,1.25);
-    response->Draw("nostack"); //as 'same'
-    //    c_response->Update();
-    //  response->Draw("nostackb"); //draw next to each other
-    //  stack->Draw("E");
+    //    h_response->GetYaxis()->SetRangeUser(0.75,1.20);
+    h_response->Draw("P SAME");
+
+    // // draw response
+    // //  THStack* response = new THStack("response",";Flavor;Relative to ud PF energy fraction: (frac^{i} - frac^{ud})/frac_{ud}");
+    // THStack* response = new THStack("response",";Flavor;pt_{REC}/pt_{GEN}");
+    // h_response->SetMarkerColor(2);
+    // h_response->SetLineColor(2);
+    // h_response->SetMarkerStyle(20);
+    // h_response->GetYaxis()->SetRangeUser(0.75,1.20);
+    // response->Add(h_response);
+    // //    response->GetYaxis()->SetRangeUser(0.75,1.20);
+
+    // response->Draw("nostack"); //as 'same'
+    // response->GetYaxis()->SetRangeUser(0.75,1.20);
+    // //    c_response->Update();
+    // //  response->Draw("nostackb"); //draw next to each other
+    // //  stack->Draw("E");
 
     TLegend* leg4 =  new TLegend(0.70,0.88,0.99,0.99);
     leg4 -> AddEntry(h_response, "response");
@@ -537,11 +575,11 @@ void CorrectionObject::FlavorCorrection_TTree(){
     leg4 -> SetLineColor(1);
     leg4 -> SetTextFont(42);
     leg4 -> Draw();
-    tex->DrawLatex(0.22,0.57,Latextext1);
-    tex->DrawLatex(0.22,0.53,Latextext2);
+    tex->DrawLatex(0.22,0.27,Latextext1);
+    tex->DrawLatex(0.22,0.23,Latextext2);
  
     c_response->SaveAs(CorrectionObject::_outpath+"/plots/control/Flavor/ResponsesFlavor_"+jettag+"_"+txttag+ "_eta_" + eta_range2[j] + "_" + eta_range2[j+1]+".pdf");
-    delete response;
+    //    delete response;
     delete c_response;
 
   }

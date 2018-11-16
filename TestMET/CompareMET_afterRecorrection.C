@@ -17,9 +17,18 @@ void CompareMET_afterRecorrection(){
  bool isWeights = false;
 
  //Files after UHH2/BaconJet (dijet back to back) selection
- TString path = "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_Summer16_23Sep2016_V4_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV/";
+ TString path = "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_Summer16_23Sep2016_V4_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV_v3Test_local/";
+ TString name = "uhh2.AnalysisModuleRunner.MC.QCD_local_MadGraph_AK4CHS.root";
+ TString gl_label = "QCDHT_slimmedMETsModifiedMET";
+
+ /* // TString path = "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_Summer16_23Sep2016_V4_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV_v3Test/";
+ TString path = "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_Summer16_23Sep2016_V4_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV_v3Test_minJetPt30/";
  TString name = "uhh2.AnalysisModuleRunner.MC.QCD_HT_MadGraph_AK4CHS.root";
  TString gl_label = "QCDHT_slimmedMETsModifiedMET";
+ */
+ // TString path = "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_Summer16_23Sep2016_V4_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV/";
+ // TString name = "uhh2.AnalysisModuleRunner.MC.QCD_HT_MadGraph_AK4CHS.root";
+ // TString gl_label = "QCDHT_slimmedMETsModifiedMET";
 
 
  /* TString path = "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_PFMET_jetRaw15GeV/";
