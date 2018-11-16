@@ -114,28 +114,34 @@ CorrectionObject::CorrectionObject(const TString & runnr, const TString & genera
     }
 
 void CorrectionObject::FullCycle_CorrectFormulae(double kfsr_fitrange, bool useCombinedkSFR, bool useStraightkFSR){
-  // std::cout<<"Doing the Full Cycle"<<std::endl;
-  // std::cout<<"\nStarting ControlPlots()\n"<<std::endl;
-  // CorrectionObject::ControlPlots();  
-  // if(not useCombinedkSFR){
-  //   std::cout<<"\nStarting kFSR_CorrectFormulae()\n"<<std::endl;
-  //   CorrectionObject::kFSR_CorrectFormulae();
-  // }
-  // std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(true) with fitrange "<< kfsr_fitrange <<" \n"<<useStraightkFSR<<std::endl;
+  std::cout<<"Doing the Full Cycle"<<std::endl;
+  std::cout<<"\nStarting ControlPlots()\n"<<std::endl;
+  CorrectionObject::ControlPlots();  
+  if(not useCombinedkSFR){
+    std::cout<<"\nStarting kFSR_CorrectFormulae()\n"<<std::endl;
+    CorrectionObject::kFSR_CorrectFormulae();
+  }
+  std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(true) with fitrange "<< kfsr_fitrange <<" \n"<<useStraightkFSR<<std::endl;
   
-  // if(useStraightkFSR) std::cout<<"using the easier kFSR Definition\n";
-  // CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(true,kfsr_fitrange, useCombinedkSFR, useStraightkFSR);
-  // std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(false) with fitrange "<< kfsr_fitrange <<" \n"<<std::endl;
-  // CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(false,kfsr_fitrange, useCombinedkSFR, useStraightkFSR);
-  // std::cout<<"\nStarting L2ResOutput()\n"<<std::endl;
-  // CorrectionObject::L2ResOutput();
-  // std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;
-  // CorrectionObject::FinalControlPlots_CorrectFormulae();
+  if(useStraightkFSR) std::cout<<"using the easier kFSR Definition\n";
+  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(true,kfsr_fitrange, useCombinedkSFR, useStraightkFSR);
+  std::cout<<"\nStarting Pt_Extrapolation_Alternative_CorrectFormulae(false) with fitrange "<< kfsr_fitrange <<" \n"<<std::endl;
+  CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(false,kfsr_fitrange, useCombinedkSFR, useStraightkFSR);
+  std::cout<<"\nStarting L2ResOutput()\n"<<std::endl;
+  CorrectionObject::L2ResOutput();
+  std::cout<<"\nStarting FinalControlPlots_CorrectFormulae()\n"<<std::endl;
+  CorrectionObject::FinalControlPlots_CorrectFormulae();
 
-  // std::cout<<"\nStarting FlavorCorrection_TTree\n"<<std::endl;
-  // CorrectionObject::FlavorCorrection_TTree();
-  // std::cout<<"\nStarting GenResponsePlots\n"<<std::endl;
-  // CorrectionObject::GenResponsePlots();
+  std::cout<<"\nStarting FlavorCorrection_TTree\n"<<std::endl;
+  CorrectionObject::FlavorCorrection_TTree();
+  std::cout<<"\nStarting GenResponsePlots\n"<<std::endl;
+  CorrectionObject::GenResponsePlots();
+  std::cout<<"\nStarting GenResponsePlots_AllPtbinningOnePlot\n"<<std::endl;
+  CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("All");
+  // CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("QQ");
+  // CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("QG");
+  // CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("GQ");
+  // CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("GG");
   std::cout<<"\nStarting MatchingPlots\n"<<std::endl;
   CorrectionObject::MatchingPlots();
 }

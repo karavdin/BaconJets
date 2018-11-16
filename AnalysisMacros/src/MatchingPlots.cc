@@ -136,6 +136,8 @@ void CorrectionObject::MatchingPlots(){
   TTreeReaderValue<Float_t> dR_jet3_probejet_mc(myReader_MC, "dR_jet3_probejet");  
   TTreeReaderValue<Float_t> dR_jet3_barreljet_mc(myReader_MC, "dR_jet3_barreljet");  
 
+  TTreeReaderValue<Int_t> flavor_3rdjet_mc(myReader_MC, "flavor3rdjet");
+
   //  cout<<"alpha_cut="<<alpha_cut<<endl;
   while (myReader_MC.Next()) {
     if(*alpha_mc>alpha_cut) continue;
@@ -146,7 +148,8 @@ void CorrectionObject::MatchingPlots(){
       for(int j=0; j<n_eta-1; j++){
 	if(fabs(*probejet_eta_mc)>eta_bins[j+1] || fabs(*probejet_eta_mc)<eta_bins[j]) continue;
 	else{
-	  if(*probejet_ptgen_mc<0 || *barreljet_ptgen_mc<0){ //not matched
+	  //	  if(*probejet_ptgen_mc<0 || *barreljet_ptgen_mc<0){ //not matched
+	  if(*flavor_3rdjet_mc<0){ //3rd jet not matched
 	  }
 	  else{ //matched
 	    hmc_asymmetry_matched[k][j]->Fill(*asymmetry_mc,*weight_mc);
@@ -595,7 +598,7 @@ void CorrectionObject::MatchingPlots(){
       h->GetYaxis()->SetTitleOffset(1.5);
       h->GetXaxis()->SetLimits(0,pt_bins[j+1]);
       h->SetMinimum(0.00001);
-      h->SetMaximum(0.35);
+      h->SetMaximum(0.45);
       htemp_mpf_data->SetLineColor(kBlack);
       htemp_mpf_data->SetMarkerColor(kBlack);
       htemp_mpf_data->SetFillColorAlpha(kBlack, 0.25);
@@ -605,12 +608,15 @@ void CorrectionObject::MatchingPlots(){
 
       TCanvas* ctmp = new TCanvas();
       tdrCanvas(ctmp,"ctmp",h,4,10,kSquare,CorrectionObject::_lumitag);
-      TLegend leg2 = tdrLeg(0.35,0.6,0.85,0.81);
-      leg2.SetHeader(text);
+      TLegend leg2 = tdrLeg(0.20,0.6,0.85,0.81);
+      leg2.SetHeader(text+" "+legname);
       //      leg2.SetNColumns(2);
-      leg2.AddEntry(htemp_mpf_mc, legname+" MC, all", "l");
-      leg2.AddEntry(htemp_mpf_mc_matched, legname+" MC, matched", "l");
-      leg2.AddEntry(htemp_mpf_data, legname+" DATA", "l");
+      // leg2.AddEntry(htemp_mpf_mc, legname+" MC, all", "l");
+      // leg2.AddEntry(htemp_mpf_mc_matched, legname+" MC, 3rd jet matched to parton", "l");
+      // leg2.AddEntry(htemp_mpf_data, legname+" DATA", "l");
+      leg2.AddEntry(htemp_mpf_mc, "MC, all", "l");
+      leg2.AddEntry(htemp_mpf_mc_matched, "MC, 3rd jet matched to parton", "l");
+      leg2.AddEntry(htemp_mpf_data, "DATA", "l");
       //      gPad->SetLogx();
       //      if(n_ev>0) 
       htemp_mpf_mc->Draw("HIST SAME");
@@ -692,7 +698,7 @@ for(int i=0; i<n_eta-1; i++){
       h->GetYaxis()->SetTitleOffset(1.5);
       h->GetXaxis()->SetLimits(0,1.5);
       h->SetMinimum(0.00001);
-      h->SetMaximum(0.35);
+      h->SetMaximum(0.45);
       htemp_mpf_data->SetLineColor(kBlack);
       htemp_mpf_data->SetMarkerColor(kBlack);
       htemp_mpf_data->SetFillColorAlpha(kBlack, 0.25);
@@ -702,12 +708,15 @@ for(int i=0; i<n_eta-1; i++){
 
       TCanvas* ctmp = new TCanvas();
       tdrCanvas(ctmp,"ctmp",h,4,10,kSquare,CorrectionObject::_lumitag);
-      TLegend leg2 = tdrLeg(0.35,0.6,0.85,0.81);
-      leg2.SetHeader(text);
+      TLegend leg2 = tdrLeg(0.20,0.6,0.85,0.81);
+      leg2.SetHeader(text+" "+legname);
       //      leg2.SetNColumns(2);
-      leg2.AddEntry(htemp_mpf_mc, legname+" MC, all", "l");
-      leg2.AddEntry(htemp_mpf_mc_matched, legname+" MC, matched", "l");
-      leg2.AddEntry(htemp_mpf_data, legname+" DATA", "l");
+      // leg2.AddEntry(htemp_mpf_mc, legname+" MC, all", "l");
+      // leg2.AddEntry(htemp_mpf_mc_matched, legname+" MC, 3rd jet matched to parton", "l");
+      // leg2.AddEntry(htemp_mpf_data, legname+" DATA", "l");
+      leg2.AddEntry(htemp_mpf_mc,"MC, all", "l");
+      leg2.AddEntry(htemp_mpf_mc_matched,"MC, 3rd jet matched to parton", "l");
+      leg2.AddEntry(htemp_mpf_data,"DATA", "l");
       //      gPad->SetLogx();
       //      if(n_ev>0) 
       htemp_mpf_mc->Draw("HIST SAME");
@@ -790,7 +799,7 @@ for(int i=0; i<n_eta-1; i++){
       h->GetYaxis()->SetTitleOffset(1.5);
       h->GetXaxis()->SetLimits(0,10.0);
       h->SetMinimum(0.00001);
-      h->SetMaximum(0.11);
+      h->SetMaximum(0.21);
       htemp_dR3barrel_data->SetLineColor(kBlack);
       htemp_dR3barrel_data->SetMarkerColor(kBlack);
       htemp_dR3barrel_data->SetFillColorAlpha(kBlack, 0.25);
@@ -800,12 +809,15 @@ for(int i=0; i<n_eta-1; i++){
 
       TCanvas* ctmp = new TCanvas();
       tdrCanvas(ctmp,"ctmp",h,4,10,kSquare,CorrectionObject::_lumitag);
-      TLegend leg2 = tdrLeg(0.35,0.6,0.85,0.81);
+      TLegend leg2 = tdrLeg(0.20,0.6,0.85,0.81);
       //      leg2.SetNColumns(2);
-      leg2.SetHeader(text);
-      leg2.AddEntry(htemp_dR3barrel_mc, legname+" MC, all", "l");
-      leg2.AddEntry(htemp_dR3barrel_mc_matched, legname+" MC, matched", "l");
-      leg2.AddEntry(htemp_dR3barrel_data, legname+" DATA", "l");
+      leg2.SetHeader(text+""+legname);
+      // leg2.AddEntry(htemp_dR3barrel_mc, legname+" MC, all", "l");
+      // leg2.AddEntry(htemp_dR3barrel_mc_matched, legname+" MC, 3rd jet matched to parton", "l");
+      // leg2.AddEntry(htemp_dR3barrel_data, legname+" DATA", "l");
+      leg2.AddEntry(htemp_dR3barrel_mc,"MC, all", "l");
+      leg2.AddEntry(htemp_dR3barrel_mc_matched,"MC, 3rd jet matched to parton", "l");
+      leg2.AddEntry(htemp_dR3barrel_data,"DATA", "l");
       //      gPad->SetLogx();
 
       //      if(n_ev>0) 
@@ -887,7 +899,7 @@ for(int i=0; i<n_eta-1; i++){
       h->GetYaxis()->SetTitleOffset(1.5);
       h->GetXaxis()->SetLimits(0,10.0);
       h->SetMinimum(0.00001);
-      h->SetMaximum(0.11);
+      h->SetMaximum(0.21);
       htemp_dR3probe_data->SetLineColor(kBlack);
       htemp_dR3probe_data->SetMarkerColor(kBlack);
       htemp_dR3probe_data->SetFillColorAlpha(kBlack, 0.25);
@@ -897,12 +909,15 @@ for(int i=0; i<n_eta-1; i++){
 
       TCanvas* ctmp = new TCanvas();
       tdrCanvas(ctmp,"ctmp",h,4,10,kSquare,CorrectionObject::_lumitag);
-      TLegend leg2 = tdrLeg(0.35,0.6,0.85,0.81);
+      TLegend leg2 = tdrLeg(0.20,0.6,0.85,0.81);
       //      leg2.SetNColumns(2);
-      leg2.SetHeader(text);
-      leg2.AddEntry(htemp_dR3probe_mc, legname+" MC, all", "l");
-      leg2.AddEntry(htemp_dR3probe_mc_matched, legname+" MC, matched", "l");
-      leg2.AddEntry(htemp_dR3probe_data, legname+" DATA", "l");
+      leg2.SetHeader(text+" "+legname);
+      // leg2.AddEntry(htemp_dR3probe_mc, legname+" MC, all", "l");
+      // leg2.AddEntry(htemp_dR3probe_mc_matched, legname+" MC, 3rd jet matched to parton", "l");
+      // leg2.AddEntry(htemp_dR3probe_data, legname+" DATA", "l");
+      leg2.AddEntry(htemp_dR3probe_mc,"MC, all", "l");
+      leg2.AddEntry(htemp_dR3probe_mc_matched,"MC, 3rd jet matched to parton", "l");
+      leg2.AddEntry(htemp_dR3probe_data,"DATA", "l");
       //      gPad->SetLogx();
       //      if(n_ev>0) 
       htemp_dR3probe_mc->Draw("HIST SAME");
