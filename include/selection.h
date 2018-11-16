@@ -97,6 +97,8 @@ class Selection {
     //Cut events with pthat in PU higher than pthat
     bool PUpthat();
     bool PUpthat(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return PUpthat();}
+    bool PtaveVsQScale();
+    bool PtaveVsQScale(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return PUpthat();}
   
     bool EtaPtCut();
     bool EtaPtCut(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return EtaPtCut();}

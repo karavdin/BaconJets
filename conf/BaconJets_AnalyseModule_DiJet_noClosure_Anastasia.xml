@@ -15,7 +15,7 @@
 
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_CHSMET_wL1L2L3minusL1RC/"> -->
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV/"> -->
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_minJetPt15/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_minGenJetPt15_minJetPt20/">
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSMET_wL1L2L3minusL1RC/"> -->
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Fall17_17Nov2017_V23">
@@ -86,7 +86,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunDEF_xcheckWdijet_with_V2_branch_correctedMETCorrection3_woL1bxclean_noClosure_slimmedMETs_V11_L1RC_METtest_GENtest_15GeV"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunDEF_xcheckWdijet_with_V2_branch_correctedMETCorrection3_woL1bxclean_noClosure_slimmedMETs_V11_L1RC_METtest_GENtest_15GeV_20GeV"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -342,7 +342,8 @@
          <Item Name="eta_thresh_low" Value="2.650" />
          <!-- <Item Name="L1METptThresh" Value="15" /> -->
          <!-- <Item Name="eta_thresh_low" Value="0." /> -->
-	 <Item Name="minJetPt" Value="15" />
+	 <Item Name="minJetPt" Value="20" />
+	 <Item Name="minGenJetPt" Value="15" />
         <Item Name="Debug" Value="false" />	    
 
         </UserConfig>
