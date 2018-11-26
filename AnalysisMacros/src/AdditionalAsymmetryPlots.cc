@@ -141,7 +141,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   int myCount = 0;
   int myCount_cut = 0;
   while (myReader_DATA.Next()) {
-    if(*alpha_data>alpha_cut){
+    if(*alpha_data>alpha_cut || *alpha_data<0){
       myCount_cut++;
       continue;
     }
@@ -194,7 +194,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   myCount = 0;
   myCount_cut = 0;
   while (myReader_MC.Next()) {
-    if(*alpha_mc>alpha_cut){
+    if(*alpha_mc>alpha_cut || *alpha_mc<0){
       myCount_cut++;
       continue;
     }
@@ -825,13 +825,26 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       htemp_rel_data = (TH1D*)f_rel_data->Get(name_rel_data);
       evname += htemp_rel_data->GetEntries();
       htemp_rel_data->Draw("E");
-	TString textChi2NDF ="Chi2/NDF=";
+      TString textChi2NDF ="Chi2/NDF=";
+      TString textMean ="Mean=";
+      TString textMeanGaus ="Gauss Mean=";
       if(htemp_rel_data->GetEntries()){
 	htemp_rel_data->Fit(tempFunc);
 	textChi2NDF = textChi2NDF+Form("%.1f",tempFunc->GetChisquare());
 	textChi2NDF = textChi2NDF+"/";
 	textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());
+	textMean+=Form("%.3f",htemp_rel_data->GetMean());
+	textMean+=", R=";
+	double response = 1+htemp_rel_data->GetMean()/(1-htemp_rel_data->GetMean());
+	textMean+=Form("%.3f",response);
+	textMeanGaus+=Form("%.3f",tempFunc->GetParameter(1));
+	textMeanGaus+=", R=";
+	response = 1+tempFunc->GetParameter(1)/(1-tempFunc->GetParameter(1));
+	textMeanGaus+=Form("%.3f",response);
+
       }
+
+
       htemp_rel_data->GetXaxis()->SetTitle("A");
       htemp_rel_data->GetYaxis()->SetTitle("Entries per Bin");
       htemp_rel_data->GetYaxis()->SetTitleOffset(1.5);
@@ -840,7 +853,9 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       tex->DrawLatex(0.54,0.8,legname);		
       tex->DrawLatex(0.58,0.75,evname);
-      if(htemp_rel_data->GetEntries()) tex->DrawLatex(0.47,0.6,textChi2NDF);
+      if(htemp_rel_data->GetEntries()) tex->DrawLatex(0.17,0.6,textChi2NDF);
+      if(htemp_rel_data->GetEntries()) tex->DrawLatex(0.17,0.55,textMeanGaus);
+      if(htemp_rel_data->GetEntries()) tex->DrawLatex(0.17,0.48,textMean);
     
       
       cFullA->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/A_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ (eta_cut_bool?pt_range_HF:pt_range)[j] + "_" + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + ".pdf");
@@ -857,12 +872,23 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       evname += htemp_mpf_data->GetEntries();
       htemp_mpf_data->Draw("E");
       textChi2NDF ="Chi2/NDF=";
+      textMean ="Mean=";
+      textMeanGaus ="Gauss Mean=";
       if(htemp_mpf_data->GetEntries()){
 	htemp_mpf_data->Fit(tempFunc);
 	textChi2NDF = textChi2NDF+Form("%.1f",tempFunc->GetChisquare());
 	textChi2NDF = textChi2NDF+"/";
 	textChi2NDF = textChi2NDF+Form("%d",tempFunc->GetNDF());
+	textMean+=Form("%.3f",htemp_mpf_data->GetMean());
+	textMean+=", R=";
+	double response = 1+htemp_mpf_data->GetMean()/(1-htemp_mpf_data->GetMean());
+	textMean+=Form("%.3f",response);
+	textMeanGaus+=Form("%.3f",tempFunc->GetParameter(1));
+	textMeanGaus+=", R=";
+	response = 1+tempFunc->GetParameter(1)/(1-tempFunc->GetParameter(1));
+	textMeanGaus+=Form("%.3f",response);
       }
+
       htemp_mpf_data->GetXaxis()->SetTitle("B");
       htemp_mpf_data->GetYaxis()->SetTitle("Entries per Bin");
       htemp_mpf_data->GetYaxis()->SetTitleOffset(1.5);
@@ -873,7 +899,9 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
       tex->DrawLatex(0.47,0.85,"Data, " + text);
       tex->DrawLatex(0.54,0.8,legname);		
       tex->DrawLatex(0.58,0.75,evname);	
-       if(htemp_mpf_data->GetEntries()) tex->DrawLatex(0.47,0.6,textChi2NDF);	
+      if(htemp_mpf_data->GetEntries()) tex->DrawLatex(0.17,0.6,textChi2NDF);	
+      if(htemp_mpf_data->GetEntries()) tex->DrawLatex(0.17,0.55,textMeanGaus);	
+      if(htemp_mpf_data->GetEntries()) tex->DrawLatex(0.17,0.48,textMean);	
       cFullB->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/B_DATA_" + CorrectionObject::_generator_tag + "_eta_" + (eta_abs ? eta_range2 : eta_range2_full)[i] + "_" + (eta_abs ? eta_range2 : eta_range2_full)[i+1]+"_pt_"+ (eta_cut_bool?pt_range_HF:pt_range)[j] + "_" + (eta_cut_bool?pt_range_HF:pt_range)[j+1] + ".pdf");
     
       delete cFullB;

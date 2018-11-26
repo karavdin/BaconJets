@@ -120,13 +120,13 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
     TString eta_name = "eta_"+eta_range2[j]+"_"+eta_range2[j+1];
     
     TString name = name1 + eta_name;
-    hdata_asymmetry[j] = new TH2D(name,"",n_pt_cutted,pt_bins,nResponseBins, -1.2, 1.2);
+    hdata_asymmetry[j] = new TH2D(name,"",n_pt_cutted,pt_bins,nResponseBins, Response_min, Response_max);
     name = name2 + eta_name;
-    hdata_B[j] = new TH2D(name,"",n_pt_cutted,pt_bins,nResponseBins, -1.2, 1.2);
+    hdata_B[j] = new TH2D(name,"",n_pt_cutted,pt_bins,nResponseBins, Response_min, Response_max);
     name = name3 + eta_name;
-    hmc_asymmetry[j] = new TH2D(name,"",n_pt_cutted,pt_bins,nResponseBins, -1.2, 1.2);
+    hmc_asymmetry[j] = new TH2D(name,"",n_pt_cutted,pt_bins,nResponseBins, Response_min, Response_max);
     name = name4 + eta_name;
-    hmc_B[j] = new TH2D(name,"",n_pt_cutted,pt_bins,nResponseBins, -1.2, 1.2);
+    hmc_B[j] = new TH2D(name,"",n_pt_cutted,pt_bins,nResponseBins, Response_min, Response_max);
      
     for(int k=0; k<n_pt_cutted; k++){
       TString pt_name = "pt_"+(eta_cut_bool?pt_range_HF:pt_range)[k]+"_"+(eta_cut_bool?pt_range_HF:pt_range)[k+1];

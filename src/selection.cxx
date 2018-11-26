@@ -349,7 +349,7 @@ bool Selection::PtaveVsQScale()
   
    double Ratio = ptave/pt_hat;
 
-    if(Ratio < 2) return true;
+    if(Ratio < 1.2) return true;
     return false;
   }
 

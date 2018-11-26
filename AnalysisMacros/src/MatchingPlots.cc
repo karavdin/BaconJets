@@ -38,6 +38,10 @@ void CorrectionObject::MatchingPlots(){
   TH1D *hmc_jet3pt[n_pt-1][n_eta-1];   // jet3 pt for MC, matched
   TH1D *hdata_jet3pt[n_pt-1][n_eta-1];   // jet3 pt for DATA
 
+  TH1D *hmc_jet3eta_matched[n_pt-1][n_eta-1];   // jet3 pt for MC, matched
+  TH1D *hmc_jet3eta[n_pt-1][n_eta-1];   // jet3 pt for MC, matched
+  TH1D *hdata_jet3eta[n_pt-1][n_eta-1];   // jet3 pt for DATA
+
   TH1D *hmc_alpha_matched[n_pt-1][n_eta-1];   // jet3 pt/pt,ave for MC, matched
   TH1D *hmc_alpha[n_pt-1][n_eta-1];   // jet3 pt/pt,ave for MC, matched
   TH1D *hdata_alpha[n_pt-1][n_eta-1];   // jet3 pt/pt,ave for DATA
@@ -62,6 +66,8 @@ void CorrectionObject::MatchingPlots(){
   TString name10 = "hist_data_dR_jet3_probejet_";
   TString name11 = "hist_mc_alpha_";
   TString name12 = "hist_data_alpha_";
+  TString name5b = "hist_mc_jet3eta_";
+  TString name6b = "hist_data_jet3eta_";
 
 
  
@@ -83,6 +89,12 @@ void CorrectionObject::MatchingPlots(){
       hmc_jet3pt_matched[k][j] = new TH1D(name,"",50,0,pt_bins[k+1]);
       name = name6 + eta_name + "_" + pt_name;
       hdata_jet3pt[k][j] = new TH1D(name,"",50,0,pt_bins[k+1]);
+      name = name5b + eta_name + "_" + pt_name;
+      hmc_jet3eta[k][j] = new TH1D(name,"",n_eta-1,eta_bins);
+      name +="_matched";
+      hmc_jet3eta_matched[k][j] = new TH1D(name,"",n_eta-1,eta_bins);
+      name = name6b + eta_name + "_" + pt_name;
+      hdata_jet3eta[k][j] = new TH1D(name,"",n_eta-1,eta_bins);
 
       name = name7 + eta_name + "_" + pt_name;
       hmc_dR_jet3_barreljet[k][j] = new TH1D(name,"",100,0,10.0);
@@ -98,11 +110,11 @@ void CorrectionObject::MatchingPlots(){
       hdata_dR_jet3_probejet[k][j] = new TH1D(name,"",100,0,10.0);
 
       name = name11 + eta_name + "_" + pt_name;
-      hmc_alpha[k][j] = new TH1D(name,"",30,0,1.5);
+      hmc_alpha[k][j] = new TH1D(name,"",24,-0.1,1.1);
       name +="_matched";
-      hmc_alpha_matched[k][j] = new TH1D(name,"",30,0,1.5);
+      hmc_alpha_matched[k][j] = new TH1D(name,"",24,-0.1,1.1);
       name = name12 + eta_name + "_" + pt_name;
-      hdata_alpha[k][j] = new TH1D(name,"",30,0,1.5);
+      hdata_alpha[k][j] = new TH1D(name,"",24,-0.1,1.1);
 
       count++;
     }
@@ -123,6 +135,7 @@ void CorrectionObject::MatchingPlots(){
   TTreeReaderValue<Float_t> MET_mc(myReader_MC, "MET");
   TTreeReaderValue<Float_t> sum_jets_pt_mc(myReader_MC, "sum_jets_pt");
   TTreeReaderValue<Float_t> jet3_pt_mc(myReader_MC, "jet3_pt");
+  TTreeReaderValue<Float_t> jet3_eta_mc(myReader_MC, "jet3_eta");
   TTreeReaderValue<Float_t> probejet_neutEmEF_mc(myReader_MC, "probejet_neutEmEF");
   TTreeReaderValue<Float_t> probejet_neutHadEF_mc(myReader_MC, "probejet_neutHadEF");
   TTreeReaderValue<Float_t> probejet_chEmEF_mc(myReader_MC, "probejet_chEmEF");
@@ -155,6 +168,7 @@ void CorrectionObject::MatchingPlots(){
 	    hmc_asymmetry_matched[k][j]->Fill(*asymmetry_mc,*weight_mc);
 	    hmc_B_matched[k][j]->Fill(*B_mc,*weight_mc);
 	    hmc_jet3pt_matched[k][j]->Fill(*jet3_pt_mc,*weight_mc);
+	    hmc_jet3eta_matched[k][j]->Fill(fabs(*jet3_eta_mc),*weight_mc);
 	    hmc_alpha_matched[k][j]->Fill((*jet3_pt_mc)/(*pt_ave_mc),*weight_mc);
 	    hmc_dR_jet3_barreljet_matched[k][j]->Fill(*dR_jet3_barreljet_mc,*weight_mc);
 	    hmc_dR_jet3_probejet_matched[k][j]->Fill(*dR_jet3_probejet_mc,*weight_mc);
@@ -167,6 +181,7 @@ void CorrectionObject::MatchingPlots(){
 	  hmc_asymmetry[k][j]->Fill(*asymmetry_mc,*weight_mc);
 	  hmc_B[k][j]->Fill(*B_mc,*weight_mc);
 	  hmc_jet3pt[k][j]->Fill(*jet3_pt_mc,*weight_mc);
+	  hmc_jet3eta[k][j]->Fill(fabs(*jet3_eta_mc),*weight_mc);
 	  hmc_alpha[k][j]->Fill((*jet3_pt_mc)/(*pt_ave_mc),*weight_mc);
 	}
       }
@@ -188,6 +203,7 @@ void CorrectionObject::MatchingPlots(){
   TTreeReaderValue<Float_t> MET_data(myReader_DATA, "MET");
   TTreeReaderValue<Float_t> sum_jets_pt_data(myReader_DATA, "sum_jets_pt");
   TTreeReaderValue<Float_t> jet3_pt_data(myReader_DATA, "jet3_pt");
+  TTreeReaderValue<Float_t> jet3_eta_data(myReader_DATA, "jet3_eta");
   TTreeReaderValue<Float_t> dR_jet3_probejet_data(myReader_DATA, "dR_jet3_probejet");  
   TTreeReaderValue<Float_t> dR_jet3_barreljet_data(myReader_DATA, "dR_jet3_barreljet");  
 
@@ -201,6 +217,7 @@ void CorrectionObject::MatchingPlots(){
 	if(fabs(*probejet_eta_data)>eta_bins[j+1] || fabs(*probejet_eta_data)<eta_bins[j]) continue;
 	else{
 	  hdata_jet3pt[k][j]->Fill(*jet3_pt_data,*weight_data);
+	  hdata_jet3eta[k][j]->Fill(fabs(*jet3_eta_data),*weight_data);
 	  hdata_alpha[k][j]->Fill(*jet3_pt_data/(*pt_ave_data),*weight_data);
 	  //	    cout<<"(*jet3_pt_mc)/(*pt_ave_mc) = "<<(*jet3_pt_mc)/(*pt_ave_mc)<<endl;
 	  hdata_dR_jet3_barreljet[k][j]->Fill(*dR_jet3_barreljet_data,*weight_data);
@@ -295,10 +312,13 @@ void CorrectionObject::MatchingPlots(){
       hmc_asymmetry_matched[k][j]->Write();
       hmc_jet3pt[k][j]->Write();
       hmc_jet3pt_matched[k][j]->Write();
+      hmc_jet3eta[k][j]->Write();
+      hmc_jet3eta_matched[k][j]->Write();
       hmc_alpha[k][j]->Write();
       hmc_alpha_matched[k][j]->Write();
 
       hdata_jet3pt[k][j]->Write(); 
+      hdata_jet3eta[k][j]->Write(); 
       hdata_alpha[k][j]->Write();
       hmc_dR_jet3_barreljet_matched[k][j]->Write();
       hmc_dR_jet3_probejet_matched[k][j]->Write();
@@ -557,8 +577,9 @@ void CorrectionObject::MatchingPlots(){
       htemp_mpf_mc->Print();
 
       int n_ev = htemp_mpf_mc->GetEntries();
-      if(htemp_mpf_mc->Integral() > 0) htemp_mpf_mc->Scale(1/htemp_mpf_mc->Integral());
-      else cout<<"htemp_mpf_mc->Integral = "<<htemp_mpf_mc->Integral()<<endl;
+      if(htemp_mpf_mc->Integral("width") > 0) htemp_mpf_mc->Scale(1/htemp_mpf_mc->Integral("width"));
+      //      else 
+      cout<<"htemp_mpf_mc->Integral = "<<htemp_mpf_mc->Integral("width")<<endl;
 
       h->GetXaxis()->SetTitle("jet3 pT");
       h->GetYaxis()->SetTitle("Normalized entries");
@@ -575,8 +596,8 @@ void CorrectionObject::MatchingPlots(){
       name_mpf_mc = "hist_mc_jet3pt_"+eta_name+"_"+pt_name+"_matched";
       htemp_mpf_mc_matched = (TH1D*)f_rel_mc->Get(name_mpf_mc);
       n_ev = htemp_mpf_mc_matched->GetEntries();
-      if(htemp_mpf_mc_matched->Integral() > 0) htemp_mpf_mc_matched->Scale(1/htemp_mpf_mc_matched->Integral());
-      else cout<<"htemp_mpf_mc_matched->Integral = "<<htemp_mpf_mc_matched->Integral()<<endl;
+      if(htemp_mpf_mc_matched->Integral("width") > 0) htemp_mpf_mc_matched->Scale(1/htemp_mpf_mc_matched->Integral("width"));
+      else cout<<"htemp_mpf_mc_matched->Integral = "<<htemp_mpf_mc_matched->Integral("width")<<endl;
       h->GetXaxis()->SetTitle("jet3 pT");
       h->GetYaxis()->SetTitle("Normalized entries");
       h->GetYaxis()->SetTitleOffset(1.5);
@@ -592,7 +613,7 @@ void CorrectionObject::MatchingPlots(){
       name_mpf_mc = "hist_data_jet3pt_"+eta_name+"_"+pt_name;
       htemp_mpf_data = (TH1D*)f_rel_mc->Get(name_mpf_mc);
       n_ev = htemp_mpf_data->GetEntries();
-      if(htemp_mpf_data->Integral() > 0) htemp_mpf_data->Scale(1/htemp_mpf_data->Integral());
+      if(htemp_mpf_data->Integral("width") > 0) htemp_mpf_data->Scale(1/htemp_mpf_data->Integral("width"));
       h->GetXaxis()->SetTitle("jet3 pT");
       h->GetYaxis()->SetTitle("Normalized entries");
       h->GetYaxis()->SetTitleOffset(1.5);
@@ -630,6 +651,90 @@ void CorrectionObject::MatchingPlots(){
 		   +"_" +pt_name +".pdf");
     }
 
+    //plot jet3 eta
+    for(int j=0; j<n_pt-1; j++){   ///j=0 j<pt_n-1
+      TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
+      TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
+      TString name_mpf_mc = "hist_mc_jet3eta_"+eta_name+"_"+pt_name;
+      htemp_mpf_mc = (TH1D*)f_rel_mc->Get(name_mpf_mc);
+      htemp_mpf_mc->Print();
+
+      int n_ev = htemp_mpf_mc->GetEntries();
+      if(htemp_mpf_mc->Integral("width") > 0) htemp_mpf_mc->Scale(1/htemp_mpf_mc->Integral("width"));
+      else cout<<"htemp_mpf_mc->Integral = "<<htemp_mpf_mc->Integral("width")<<endl;
+
+      h->GetXaxis()->SetTitle("jet3 #eta");
+      h->GetYaxis()->SetTitle("Normalized entries");
+      h->GetYaxis()->SetTitleOffset(1.5);
+      h->GetXaxis()->SetLimits(0,5.2);
+      h->SetMinimum(0.00001);
+      h->SetMaximum(0.55);
+      htemp_mpf_mc->SetLineColor(kRed+1);
+      htemp_mpf_mc->SetMarkerColor(kRed+1);
+      htemp_mpf_mc->SetFillColorAlpha(kRed+1, 0.35);
+      htemp_mpf_mc->SetLineWidth(3);
+      htemp_mpf_mc->SetMarkerStyle(20);
+
+      name_mpf_mc = "hist_mc_jet3eta_"+eta_name+"_"+pt_name+"_matched";
+      htemp_mpf_mc_matched = (TH1D*)f_rel_mc->Get(name_mpf_mc);
+      n_ev = htemp_mpf_mc_matched->GetEntries();
+      if(htemp_mpf_mc_matched->Integral("width") > 0) htemp_mpf_mc_matched->Scale(1/htemp_mpf_mc_matched->Integral("width"));
+      //      else 
+      cout<<"htemp_mpf_mc_matched->Integral = "<<htemp_mpf_mc_matched->Integral("width")<<endl;
+      h->GetXaxis()->SetTitle("jet3 #eta");
+      h->GetYaxis()->SetTitle("Normalized entries");
+      h->GetYaxis()->SetTitleOffset(1.5);
+      h->GetXaxis()->SetLimits(0,5.2);
+      h->SetMinimum(0.00001);
+      h->SetMaximum(0.55);
+      htemp_mpf_mc_matched->SetLineColor(kBlue+1);
+      htemp_mpf_mc_matched->SetMarkerColor(kBlue+1);
+      htemp_mpf_mc_matched->SetLineWidth(3);
+      htemp_mpf_mc_matched->SetLineStyle(3);
+      htemp_mpf_mc_matched->SetMarkerStyle(23);
+
+      name_mpf_mc = "hist_data_jet3eta_"+eta_name+"_"+pt_name;
+      htemp_mpf_data = (TH1D*)f_rel_mc->Get(name_mpf_mc);
+      n_ev = htemp_mpf_data->GetEntries();
+      if(htemp_mpf_data->Integral("width") > 0) htemp_mpf_data->Scale(1/htemp_mpf_data->Integral("width"));
+      h->GetXaxis()->SetTitle("jet3 #eta");
+      h->GetYaxis()->SetTitle("Normalized entries");
+      h->GetYaxis()->SetTitleOffset(1.5);
+      h->GetXaxis()->SetLimits(0,5.2);
+      h->SetMinimum(0.00001);
+      h->SetMaximum(0.55);
+      htemp_mpf_data->SetLineColor(kBlack);
+      htemp_mpf_data->SetMarkerColor(kBlack);
+      htemp_mpf_data->SetFillColorAlpha(kBlack, 0.25);
+      htemp_mpf_data->SetLineWidth(3);
+      //      htemp_mpf_data->SetLineStyle(9);
+      htemp_mpf_data->SetMarkerStyle(23);
+
+      TCanvas* ctmp = new TCanvas();
+      tdrCanvas(ctmp,"ctmp",h,4,10,kSquare,CorrectionObject::_lumitag);
+      TLegend leg2 = tdrLeg(0.20,0.6,0.85,0.81);
+      leg2.SetHeader(text+" "+legname);
+      //      leg2.SetNColumns(2);
+      // leg2.AddEntry(htemp_mpf_mc, legname+" MC, all", "l");
+      // leg2.AddEntry(htemp_mpf_mc_matched, legname+" MC, 3rd jet matched to parton", "l");
+      // leg2.AddEntry(htemp_mpf_data, legname+" DATA", "l");
+      leg2.AddEntry(htemp_mpf_mc, "MC, all", "l");
+      leg2.AddEntry(htemp_mpf_mc_matched, "MC, 3rd jet matched to parton", "l");
+      leg2.AddEntry(htemp_mpf_data, "DATA", "l");
+      //      gPad->SetLogx();
+      //      if(n_ev>0) 
+      htemp_mpf_mc->Draw("HIST SAME");
+      //      if(n_ev>0) 
+      htemp_mpf_mc_matched->Draw("HIST SAME");
+      //      if(n_ev>0) 
+      htemp_mpf_data->Draw("HIST SAME");
+      leg2.Draw();
+      //      gPad->SetLogy(); 
+      ctmp->SaveAs(CorrectionObject::_outpath+"plots/control/MatchingPlots/Matched_Jet3eta_NormDistribution_MC_" +"alpha_"+s_alpha_cut_name+"_"+ CorrectionObject::_generator_tag+ "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] 
+		   +"_" +pt_name +".pdf");
+    }
+    //plot jet3 eta END
+
   }
 
 
@@ -659,7 +764,7 @@ for(int i=0; i<n_eta-1; i++){
       htemp_mpf_mc->Print();
 
       int n_ev = htemp_mpf_mc->GetEntries();
-      if(htemp_mpf_mc->Integral() > 0) htemp_mpf_mc->Scale(1/htemp_mpf_mc->Integral());
+      if(htemp_mpf_mc->Integral("width") > 0) htemp_mpf_mc->Scale(1/htemp_mpf_mc->Integral("width"));
 
       h->GetXaxis()->SetTitle("#alpha");
       h->GetYaxis()->SetTitle("Normalized entries");
@@ -676,7 +781,7 @@ for(int i=0; i<n_eta-1; i++){
       name_mpf_mc = "hist_mc_alpha_"+eta_name+"_"+pt_name+"_matched";
       htemp_mpf_mc_matched = (TH1D*)f_rel_mc->Get(name_mpf_mc);
       n_ev = htemp_mpf_mc_matched->GetEntries();
-      if(htemp_mpf_mc_matched->Integral() > 0) htemp_mpf_mc_matched->Scale(1/htemp_mpf_mc_matched->Integral());
+      if(htemp_mpf_mc_matched->Integral("width") > 0) htemp_mpf_mc_matched->Scale(1/htemp_mpf_mc_matched->Integral("width"));
       h->GetXaxis()->SetTitle("#alpha");
       h->GetYaxis()->SetTitle("Normalized entries");
       h->GetYaxis()->SetTitleOffset(1.5);
@@ -692,7 +797,7 @@ for(int i=0; i<n_eta-1; i++){
       name_mpf_mc = "hist_data_alpha_"+eta_name+"_"+pt_name;
       htemp_mpf_data = (TH1D*)f_rel_mc->Get(name_mpf_mc);
       n_ev = htemp_mpf_data->GetEntries();
-      if(htemp_mpf_data->Integral() > 0) htemp_mpf_data->Scale(1/htemp_mpf_data->Integral());
+      if(htemp_mpf_data->Integral("width") > 0) htemp_mpf_data->Scale(1/htemp_mpf_data->Integral("width"));
       h->GetXaxis()->SetTitle("#alpha");
       h->GetYaxis()->SetTitle("Normalized entries");
       h->GetYaxis()->SetTitleOffset(1.5);
@@ -759,8 +864,8 @@ for(int i=0; i<n_eta-1; i++){
       htemp_dR3barrel_mc = (TH1D*)f_rel_mc->Get(name_dR3barrel_mc);
       htemp_dR3barrel_mc->Print();
       int n_ev = htemp_dR3barrel_mc->GetEntries();
-      if(htemp_dR3barrel_mc->Integral() > 0) htemp_dR3barrel_mc->Scale(1/htemp_dR3barrel_mc->Integral());
-      else cout<<"htemp_dR3barrel_mc->Integral = "<<htemp_dR3barrel_mc->Integral()<<endl;
+      if(htemp_dR3barrel_mc->Integral("width") > 0) htemp_dR3barrel_mc->Scale(1/htemp_dR3barrel_mc->Integral("width"));
+      else cout<<"htemp_dR3barrel_mc->Integral = "<<htemp_dR3barrel_mc->Integral("width")<<endl;
       cout<<"htemp_dR3barrel_mc->GetBinContent(10) = "<<htemp_dR3barrel_mc->GetBinContent(10)<<" n_ev = "<<n_ev<<endl;
       h->GetXaxis()->SetTitle("dR_jet3_barreljet");
       h->GetYaxis()->SetTitle("Normalized entries");
@@ -777,7 +882,7 @@ for(int i=0; i<n_eta-1; i++){
       name_dR3barrel_mc = "hist_mc_dR_jet3_barreljet_"+eta_name+"_"+pt_name+"_matched";
       htemp_dR3barrel_mc_matched = (TH1D*)f_rel_mc->Get(name_dR3barrel_mc);
       n_ev = htemp_dR3barrel_mc_matched->GetEntries();
-      if(htemp_dR3barrel_mc_matched->Integral() > 0)htemp_dR3barrel_mc_matched->Scale(1/htemp_dR3barrel_mc_matched->Integral());
+      if(htemp_dR3barrel_mc_matched->Integral("width") > 0)htemp_dR3barrel_mc_matched->Scale(1/htemp_dR3barrel_mc_matched->Integral("width"));
       h->GetXaxis()->SetTitle("dR_jet3_barreljet");
       h->GetYaxis()->SetTitle("Normalized entries");
       h->GetYaxis()->SetTitleOffset(1.5);
@@ -793,7 +898,7 @@ for(int i=0; i<n_eta-1; i++){
       name_dR3barrel_mc = "hist_data_dR_jet3_barreljet_"+eta_name+"_"+pt_name;
       htemp_dR3barrel_data = (TH1D*)f_rel_mc->Get(name_dR3barrel_mc);
       n_ev = htemp_dR3barrel_data->GetEntries();
-      if(htemp_dR3barrel_data->Integral() > 0) htemp_dR3barrel_data->Scale(1/htemp_dR3barrel_data->Integral());
+      if(htemp_dR3barrel_data->Integral("width") > 0) htemp_dR3barrel_data->Scale(1/htemp_dR3barrel_data->Integral("width"));
       h->GetXaxis()->SetTitle("dR(jet3, barrel)");
       h->GetYaxis()->SetTitle("Normalized entries");
       h->GetYaxis()->SetTitleOffset(1.5);
@@ -859,8 +964,8 @@ for(int i=0; i<n_eta-1; i++){
       htemp_dR3probe_mc = (TH1D*)f_rel_mc->Get(name_dR3probe_mc);
       htemp_dR3probe_mc->Print();
       int n_ev = htemp_dR3probe_mc->GetEntries();
-      if(htemp_dR3probe_mc->Integral() > 0) htemp_dR3probe_mc->Scale(1/htemp_dR3probe_mc->Integral());
-      else cout<<"htemp_dR3probe_mc->Integral = "<<htemp_dR3probe_mc->Integral()<<endl;
+      if(htemp_dR3probe_mc->Integral("width") > 0) htemp_dR3probe_mc->Scale(1/htemp_dR3probe_mc->Integral("width"));
+      else cout<<"htemp_dR3probe_mc->Integral = "<<htemp_dR3probe_mc->Integral("width")<<endl;
 
       h->GetXaxis()->SetTitle("dR_jet3_probejet");
       h->GetYaxis()->SetTitle("Normalized entries");
@@ -877,7 +982,7 @@ for(int i=0; i<n_eta-1; i++){
       name_dR3probe_mc = "hist_mc_dR_jet3_probejet_"+eta_name+"_"+pt_name+"_matched";
       htemp_dR3probe_mc_matched = (TH1D*)f_rel_mc->Get(name_dR3probe_mc);
       n_ev = htemp_dR3probe_mc_matched->GetEntries();
-      if(htemp_dR3probe_mc_matched->Integral() > 0)htemp_dR3probe_mc_matched->Scale(1/htemp_dR3probe_mc_matched->Integral());
+      if(htemp_dR3probe_mc_matched->Integral("width") > 0)htemp_dR3probe_mc_matched->Scale(1/htemp_dR3probe_mc_matched->Integral("width"));
       h->GetXaxis()->SetTitle("dR_jet3_probejet");
       h->GetYaxis()->SetTitle("Normalized entries");
       h->GetYaxis()->SetTitleOffset(1.5);
@@ -893,7 +998,7 @@ for(int i=0; i<n_eta-1; i++){
       name_dR3probe_mc = "hist_data_dR_jet3_probejet_"+eta_name+"_"+pt_name;
       htemp_dR3probe_data = (TH1D*)f_rel_mc->Get(name_dR3probe_mc);
       n_ev = htemp_dR3probe_data->GetEntries();
-      if(htemp_dR3probe_data->Integral() > 0) htemp_dR3probe_data->Scale(1/htemp_dR3probe_data->Integral());
+      if(htemp_dR3probe_data->Integral("width") > 0) htemp_dR3probe_data->Scale(1/htemp_dR3probe_data->Integral("width"));
       h->GetXaxis()->SetTitle("dR(jet3, probe)");
       h->GetYaxis()->SetTitle("Normalized entries");
       h->GetYaxis()->SetTitleOffset(1.5);

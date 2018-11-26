@@ -59,13 +59,13 @@ void CorrectionObject::kFSR_CorrectFormulae_eta(){
       }
       
       TString name = name1; name+=count;
-      hdata_asymmetry[j][i] = new TH2D(name,"A in DATA; p_{T}^{ave} [GeV]; A",n_pt-1,pt_bins,nResponseBins, -1.2, 1.2);
+      hdata_asymmetry[j][i] = new TH2D(name,"A in DATA; p_{T}^{ave} [GeV]; A",n_pt-1,pt_bins,nResponseBins, Response_min, Response_max);
       name = name2;name+=count;
-      hdata_B[j][i] = new TH2D(name,"B in DATA;p_{T}^{ave} [GeV];B",n_pt-1,pt_bins,nResponseBins, -1.2, 1.2);
+      hdata_B[j][i] = new TH2D(name,"B in DATA;p_{T}^{ave} [GeV];B",n_pt-1,pt_bins,nResponseBins, Response_min, Response_max);
       name = name3; name+=count;
-      hmc_asymmetry[j][i] = new TH2D(name,"A in MC;p_{T}^{ave} [GeV];A",n_pt-1,pt_bins,nResponseBins, -1.2, 1.2);
+      hmc_asymmetry[j][i] = new TH2D(name,"A in MC;p_{T}^{ave} [GeV];A",n_pt-1,pt_bins,nResponseBins, Response_min, Response_max);
       name = name4; name+=count;
-      hmc_B[j][i] = new TH2D(name,"B in MC;p_{T}^{ave} [GeV];B",n_pt-1,pt_bins,nResponseBins, -1.2, 1.2);
+      hmc_B[j][i] = new TH2D(name,"B in MC;p_{T}^{ave} [GeV];B",n_pt-1,pt_bins,nResponseBins, Response_min, Response_max);
   
       count++;
     }
