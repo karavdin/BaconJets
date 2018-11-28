@@ -48,7 +48,7 @@ const int triggerValSi_HF[n_triggerSi_HF]  = {60,80,140,200,260,320,400,450,500}
 
 // const int n_pt = 11;
 
-const int n_pt = 15;
+const int n_pt = 14;
 const int n_pt_Si = 15;
 
 
@@ -94,7 +94,7 @@ const TString pt_range[n_pt]={
 
 const int n_pt_HF = 7;
 
-
+*/
 //for Di derived triggers 94X 17Nov2017
 //DiJet triggers? -------------
 
@@ -108,7 +108,6 @@ const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin
   179,
   240,
   307,
-  340,
   370,
   434,
   520,
@@ -123,7 +122,6 @@ const TString pt_range[n_pt]={
   "179",
   "240",
   "307",
-  "340",
   "370",
   "434",
   "520",
