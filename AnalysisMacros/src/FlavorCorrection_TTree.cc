@@ -114,7 +114,7 @@ void CorrectionObject::FlavorCorrection_TTree(){
       //      if((*probejet_pt)>50) continue;
       //      if((*probejet_pt)>150 || (*probejet_pt)<50) continue;
       //      if((*probejet_pt)<150) continue;
-      if(((*barreljet_pt)+(*probejet_pt))<250) continue;
+      //      if(((*barreljet_pt)+(*probejet_pt))<250) continue;
       //if((*barreljet_pt)>50) continue;
       //if((*barreljet_pt)>150 || (*barreljet_pt)<50) continue;
       if(fabs(*probejet_eta)>eta_bins[j+1] || fabs(*probejet_eta)<eta_bins[j]) continue;

@@ -12,6 +12,9 @@ const double eta_cut = 2.853-1e-5;
 // const double eta_cut = 100.; //central only
 
 const int nResponseBins = 100;
+const double Response_min = -1.2; //min of asymmetry hist
+const double Response_max = 1.2; //max of asymmetry hist
+
 const int n_etabarr=5; // needed for the normalization to 1 in the barrel. ???
 
 const int n_enough_entries = 100;
@@ -20,18 +23,19 @@ const int n_enough_entries = 100;
 const double alpha_cut = 0.3;
 const TString s_alpha_cut = "0.3";
 const TString s_alpha_cut_name = "03";
-
+const double jet3pt_min=15;//jets with pt below were disregarded during processing
 /* const double alpha_cut = 1.0; */
 /* const TString s_alpha_cut = "1.0"; */
 /* const TString s_alpha_cut_name = "10"; */
 
 
 
-const int n_alpha = 9;
-const TString alpha_range[n_alpha] = {"a005", "a010", "a015", "a020", "a025", "a030", "a035", "a040", "a045"};
-const double alpha_bins[n_alpha] = {0.050, 0.100, 0.150, 0.200, 0.250, 0.300, 0.350,  0.400, 0.450};
+const int n_alpha = 11;
+const TString alpha_range[n_alpha] = {"a005", "a010", "a015", "a020", "a025", "a030", "a035", "a040", "a045","a050","a055"};
+const double alpha_bins[n_alpha] = {0.050, 0.100, 0.150, 0.200, 0.250, 0.300, 0.350,  0.400, 0.450,0.50,0.55};
 
 //Pt bins:
+
 
 const int n_triggerDi = 9;
 const int n_triggerDi_HF = 6;
@@ -43,8 +47,10 @@ const int triggerValDi_HF[n_triggerDi_HF]  = {60,80,100,160,220,300};
 const int triggerValSi_HF[n_triggerSi_HF]  = {60,80,140,200,260,320,400,450,500};
 
 // const int n_pt = 11;
+
 const int n_pt = 15;
 const int n_pt_Si = 15;
+
 
 // // //for Si derived trigger
 // const TString pt_range[n_pt]= {"40",
@@ -66,6 +72,27 @@ const int n_pt_Si = 15;
 //for Di derived triggers
 // const double pt_bins[n_pt] = {51, 51, 74, 96, 148, 214, 285, 346, 426, 525, 1000, 2000};
 // const TString pt_range[n_pt]= {"51", "51", "74", "96", "148", "214", "285", "346", "426", "525", "1000", "2000"};
+
+/*
+//Brutal cut of pt bins above 307 GeV
+const int n_pt = 7;
+const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin
+  51,
+  73,
+  85,
+  97,
+  179,
+  307,1000};
+
+const TString pt_range[n_pt]={
+  "51",
+  "73",
+  "85",
+  "97",
+  "179",
+  "307","1000"};
+
+const int n_pt_HF = 7;
 
 
 //for Di derived triggers 94X 17Nov2017
@@ -103,21 +130,21 @@ const TString pt_range[n_pt]={
   "648","1000","2000"};
 
 
+
 // // //for Di derived triggers 94X 17Nov2017
 
 const int n_pt_HF = 9;
 
 const double pt_bins_HF[n_pt_HF] = {
+  51,
   73,
   93,
   113,
-  140,
   176,
   239,
   318,1000,2000};
 
-const TString pt_range_HF[n_pt_HF]={"73","93","113","140","176","239","318","1000","2000"};
-
+const TString pt_range_HF[n_pt_HF]={"51","73","93","113","176","239","318","1000","2000"};
 
 /* use central instead of HF for consitency check of new HF code */
 // const int n_pt_HF = 12;
