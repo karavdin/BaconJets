@@ -18,6 +18,7 @@ static void show_usage(std::string name)
               << "\t--dnameSi\t\tSuffix for the input and output path. For functions that need Si and Di Jet data like L2ResAllRuns.\n"
 	      << "\t--outSuffix\t\Additional output suffix.\n"
               << "\t--run\t\tRun Nr, default is B, used in the input path\n"
+	      << "\t -kFSR\tRun only kFSR macro"
 	      << "\t-FP\t\tRun all main control plots.\n"
  	      << "\t-FPeta\t\tRun all main control plots with signed eta.\n"     
  	      << "\t-FCP\t\tRun all final control plots.\n"     
@@ -93,6 +94,7 @@ int main(int argc,char *argv[]){
   // }
 
   std::vector<std:: string> argl = {"-FP" ,
+				    "-kFSR",
 				   "-FPeta",
 				   "-FCP",
 				   "-tCP",
@@ -160,6 +162,7 @@ int main(int argc,char *argv[]){
   bool do_L2AR=false;
   bool do_L2JER=false;
   bool do_fullPlots=false;
+  bool do_kFSR=false;
   bool do_fullPlotsef=false;
   bool do_trgControlPlots=false;
   bool do_lumiControlPlots=false;
@@ -228,6 +231,9 @@ int main(int argc,char *argv[]){
 	  } 
 	  else if(arg=="-FPeta"){
 	       do_fullPlotsef=true;
+	  }
+	  else if(arg=="-kFSR"){
+	       do_kFSR=true;
 	  }
 	  else if(arg=="-FCP"){
 	    do_finalControlPlots=true;
@@ -382,7 +388,8 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange or do_useCombinedkSFR or do_l1bx or do_L2AR or do_L2JER)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange or do_useCombinedkSFR or do_l1bx or do_kFSR or do_L2AR or do_L2JER)){
+
     cout<<"No plots were specified! Only the existence of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -467,6 +474,7 @@ int main(int argc,char *argv[]){
  
     if(do_fullPlotsef) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();    
     if(do_trgControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
+    if(do_kFSR) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
 
     if(kfsrXrange)for(unsigned int i=0; i<Objects.size(); i++) Objects[i].genJetLinearity();    
 

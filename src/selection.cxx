@@ -348,7 +348,9 @@ bool Selection::PtaveVsQScale(double cutValue)
   
    double Ratio = ptave/pt_hat;
 
+
     if(Ratio < cutValue) return true;
+
     return false;
   }
 

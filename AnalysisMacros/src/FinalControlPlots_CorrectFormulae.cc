@@ -104,16 +104,16 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
 
       
       TString name = name1 + eta_name + "_" + pt_name; 
-      hdata_asymmetry[k][j] = new TH1D(name,"",nResponseBins, -1.2, 1.2);
+      hdata_asymmetry[k][j] = new TH1D(name,"",nResponseBins, Response_min, Response_max);
       name = name2 + eta_name + "_" + pt_name;
-      hdata_B[k][j] = new TH1D(name,"",nResponseBins, -1.2, 1.2);
+      hdata_B[k][j] = new TH1D(name,"",nResponseBins, Response_min, Response_max);
       name = name5 + eta_name + "_" + pt_name;
       hdata_METoverJetsPt[k][j] = new TH1D(name,"",60,0,1.2);
     
       name = name3 + eta_name + "_" + pt_name;
-      hmc_asymmetry[k][j] = new TH1D(name,"",nResponseBins, -1.2, 1.2);
+      hmc_asymmetry[k][j] = new TH1D(name,"",nResponseBins, Response_min, Response_max);
       name = name4 + eta_name + "_" + pt_name;
-      hmc_B[k][j] = new TH1D(name,"",nResponseBins, -1.2, 1.2);
+      hmc_B[k][j] = new TH1D(name,"",nResponseBins, Response_min, Response_max);
       name = name6 + eta_name + "_" + pt_name;
       hmc_METoverJetsPt[k][j] = new TH1D(name,"",50,0,1.2);
 
@@ -548,6 +548,7 @@ void CorrectionObject::FinalControlPlots_CorrectFormulae(double abs_asymmetry_cu
       res_data_rel_r.second = 2/(pow((1-A_data.first),2)) * A_data.second;
 
       val_rel_mc[i][j] = res_mc_rel_r.first;
+      cout<<"---- HEY! eta="<<eta_bins[i]<<" rel_r="<<res_mc_rel_r.first<<endl;
       err_rel_mc[i][j] = res_mc_rel_r.second;
       val_mpf_mc[i][j] = res_mc_mpf_r.first;
       err_mpf_mc[i][j] = res_mc_mpf_r.second;

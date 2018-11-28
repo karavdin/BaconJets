@@ -275,22 +275,22 @@ void CorrectionObject::GenResponsePlots(){
 	    if(*flavorProbejet_mc>0 && *flavorProbejet_mc<6 && *flavorTagjet_mc>0 && *flavorTagjet_mc<6){
 	      hmc_QQevents[k][j]->Fill(1,*weight_mc);
 	      //	      cout<<"*weight_mc = "<<*weight_mc<<endl;
-	      flavorLabel = "QQ";
+	      //	      flavorLabel = "QQ";
 	      flavor_sel=true;//QQ
 	    }
 	    if(*flavorTagjet_mc==21 && *flavorProbejet_mc>0 && *flavorProbejet_mc<6 ){
 	      hmc_GQevents[k][j]->Fill(1,*weight_mc);
-	      flavorLabel = "GQ";
+	      //	      flavorLabel = "GQ";
 	      flavor_sel=true;//GQ
 	    }
 	    if(*flavorTagjet_mc==21 && *flavorProbejet_mc==21){
 	      hmc_GGevents[k][j]->Fill(1,*weight_mc);
-	      flavorLabel = "GG";
+	      //	      flavorLabel = "GG";
 	      flavor_sel=true;//GG
 	    }
 	    if(*flavorTagjet_mc>0 && *flavorTagjet_mc<6 && *flavorProbejet_mc==21){
 	      hmc_QGevents[k][j]->Fill(1,*weight_mc);
-	      flavorLabel = "QG";
+	      //	      flavorLabel = "QG";
 	      flavor_sel=true;//QG
 	    }
 
@@ -336,15 +336,22 @@ void CorrectionObject::GenResponsePlots(){
 	  hmc_taggenjetpt[k][j]->Fill(taggenjetpt_norm,*weight_mc);
 	  double tagpartonjetpt_norm = (*barreljet_ptparton_mc)/pt_binning_var;
 	  hmc_tagpartonjetpt[k][j]->Fill(tagpartonjetpt_norm,*weight_mc);
-
-	  double assymetry = ((*probejet_pt_mc)-(*barreljet_pt_mc))/((*probejet_pt_mc)+(*barreljet_pt_mc));
-	  hmc_A[k][j]->Fill(assymetry,*weight_mc);
-	  hmc_B[k][j]->Fill(*B_mc,*weight_mc);
-
-	  double assymetry_GEN = ((*probejet_ptgen_mc)-(*barreljet_ptgen_mc))/((*probejet_ptgen_mc)+(*barreljet_ptgen_mc));
-	  hmc_A_GEN[k][j]->Fill(assymetry_GEN,*weight_mc);
-	  double assymetry_PARTON = ((*probejet_ptparton_mc)-(*barreljet_ptparton_mc))/((*probejet_ptparton_mc)+(*barreljet_ptparton_mc));
-	  hmc_A_PARTON[k][j]->Fill(assymetry_PARTON,*weight_mc);
+	  double assymetry=-1, assymetry_GEN=-1, assymetry_PARTON=-1;
+	  if((*probejet_pt_mc)>0 && (*barreljet_pt_mc)>0){
+	    assymetry = ((*probejet_pt_mc)-(*barreljet_pt_mc))/((*probejet_pt_mc)+(*barreljet_pt_mc));
+	    hmc_A[k][j]->Fill(assymetry,*weight_mc);
+	    hmc_B[k][j]->Fill(*B_mc,*weight_mc);
+	  }
+	  if((*probejet_ptgen_mc)>0 && (*barreljet_ptgen_mc)>0){
+	    assymetry_GEN = ((*probejet_ptgen_mc)-(*barreljet_ptgen_mc))/((*probejet_ptgen_mc)+(*barreljet_ptgen_mc));
+	    hmc_A_GEN[k][j]->Fill(assymetry_GEN,*weight_mc);
+	  }
+	  if ((*probejet_ptparton_mc)>0 && (*barreljet_ptparton_mc)>0){
+	    assymetry_PARTON = ((*probejet_ptparton_mc)-(*barreljet_ptparton_mc))/((*probejet_ptparton_mc)+(*barreljet_ptparton_mc));
+	    //	    cout<<" *probejet_ptparton_mc = "<<*probejet_ptparton_mc<<" *barreljet_ptparton_mc="<<*barreljet_ptparton_mc<<" assymetry_PARTON="
+	    //		<<assymetry_PARTON<<" response PARTON="<<(1-assymetry_PARTON)/(1+assymetry_PARTON)<<endl;
+	    hmc_A_PARTON[k][j]->Fill(assymetry_PARTON,*weight_mc);
+	  }
 	  }
 	  int jet1_genID_mc_val = *jet1_genID_mc;
 	  if(jet1_genID_mc_val>-1){
@@ -403,27 +410,36 @@ void CorrectionObject::GenResponsePlots(){
     pr_Nptcl[j]->Write();
     pr_rho[j]->Write();
     
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.045); 
+    TString text = eta_range[j] + " < |#eta| < " + eta_range[j+1];
+
+
+
        TCanvas* c_dummy1 = new TCanvas();
-  cout<<"Hello its me!"<<endl;
+       //  cout<<"Hello its me!"<<endl;
        pr_nGoodvertices[j]->Draw();
-  cout<<"Hello its me!"<<endl;
+       //  cout<<"Hello its me!"<<endl;
        c_dummy1->SetLogx();
-       pr_nGoodvertices[j]->GetYaxis()->SetTitle("N Good Vertices");
+       pr_nGoodvertices[j]->GetYaxis()->SetTitle("N Good Vertices (not matched events)");
        pr_nGoodvertices[j]->SetLineWidth(2);
-  cout<<"Hello its me!"<<endl;
+       //  cout<<"Hello its me!"<<endl;
        pr_nGoodvertices[j]->SetMinimum(0);
-       pr_nGoodvertices[j]->SetMaximum(20);
-  cout<<"Hello its me!"<<endl;
+       pr_nGoodvertices[j]->SetMaximum(80);
+       //  cout<<"Hello its me!"<<endl;
+       tex->DrawLatex(0.47,0.85,"MC, " + text);
        c_dummy1->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GoodVertices_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy1;
        cout<<"Hello its me!"<<endl;
        TCanvas* c_dummy2 = new TCanvas();
        pr_nvertices[j]->Draw();
        c_dummy2->SetLogx();
-       pr_nvertices[j]->GetYaxis()->SetTitle("Vertices");
+       pr_nvertices[j]->GetYaxis()->SetTitle("Vertices (not matched events)");
        pr_nvertices[j]->SetLineWidth(2);
-       pr_nvertices[j]->SetMinimum(10);
-       pr_nvertices[j]->SetMaximum(30);
+       pr_nvertices[j]->SetMinimum(0);
+       pr_nvertices[j]->SetMaximum(80);
+       tex->DrawLatex(0.47,0.85,"MC, " + text);
        c_dummy2->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Vertices_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy2;
 
@@ -460,10 +476,11 @@ void CorrectionObject::GenResponsePlots(){
        TCanvas* c_dummy6 = new TCanvas();
        pr_Ngenjet[j]->Draw();
        c_dummy6->SetLogx();
-       pr_Ngenjet[j]->GetYaxis()->SetTitle("N Gen Jets");
+       pr_Ngenjet[j]->GetYaxis()->SetTitle("N Gen Jets (not matched events)");
        pr_Ngenjet[j]->SetLineWidth(2);
        pr_Ngenjet[j]->SetMinimum(0);
        pr_Ngenjet[j]->SetMaximum(10);
+       tex->DrawLatex(0.47,0.85,"MC, " + text);
        c_dummy6->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Ngenjet_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy6;
 
@@ -474,16 +491,18 @@ void CorrectionObject::GenResponsePlots(){
        pr_Nptcl[j]->SetLineWidth(2);
        pr_Nptcl[j]->SetMinimum(0);
        pr_Nptcl[j]->SetMaximum(10);
+       tex->DrawLatex(0.47,0.85,"MC, " + text);
        c_dummy7->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Nptcl_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy7;
 
        TCanvas* c_dummy8 = new TCanvas();
        pr_rho[j]->Draw();
        c_dummy8->SetLogx();
-       pr_rho[j]->GetYaxis()->SetTitle("Rho");
+       pr_rho[j]->GetYaxis()->SetTitle("Rho (not matched events)");
        pr_rho[j]->SetLineWidth(2);
        pr_rho[j]->SetMinimum(0);
        pr_rho[j]->SetMaximum(60);
+       tex->DrawLatex(0.47,0.85,"MC, " + text);
        c_dummy8->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Rho_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy8;
 
@@ -576,7 +595,7 @@ void CorrectionObject::GenResponsePlots(){
 
   for(int i=0; i<n_eta-1; i++){
     for(int j=0; j<n_pt-1; j++){
-      hmc_QQevents[j][i]->Print();
+      //      hmc_QQevents[j][i]->Print();
       //      val_QQ[i][j] = hmc_QQevents[j][i]->Integral();
       val_QQ[i][j] = hmc_QQevents[j][i]->GetEntries();
       err_QQ[i][j] = 1e-3;
@@ -597,10 +616,10 @@ void CorrectionObject::GenResponsePlots(){
       val_QG[i][j] = val_QG[i][j]/val_SUM[i][j];
       val_GQ[i][j] = val_GQ[i][j]/val_SUM[i][j];
       // if(j>8)
-      cout<<"J= "<<j<<" val_QQ[i][j] = "<<val_QQ[i][j]<<"  val_GG[i][j] = "<< val_GG[i][j]<<" val_QG[i][j] = "<<val_QG[i][j]<<" val_GQ[i][j] = "<<val_GQ[i][j]<<endl; 
+      //      cout<<"J= "<<j<<" val_QQ[i][j] = "<<val_QQ[i][j]<<"  val_GG[i][j] = "<< val_GG[i][j]<<" val_QG[i][j] = "<<val_QG[i][j]<<" val_GQ[i][j] = "<<val_GQ[i][j]<<endl; 
       }
       else{
-	cout<<"val_SUM[i][j] = "<<val_SUM[i][j]<<" val_QQ[i][j] = "<<val_QQ[i][j]<<endl;
+	//	cout<<"val_SUM[i][j] = "<<val_SUM[i][j]<<" val_QQ[i][j] = "<<val_QQ[i][j]<<endl;
       }
          //Get <response> and error on <response>
       pair <double,double> A_mc = GetValueAndError(hmc_A[j][i]);
@@ -689,6 +708,7 @@ void CorrectionObject::GenResponsePlots(){
       pair<double,double> tmp1; tmp1.first = val_probegenjet_pt[i][j]; tmp1.second = err_probegenjet_pt[i][j];
       pair<double,double> tmp2; tmp2.first = val_probepartonjet_pt[i][j]; tmp2.second = err_probepartonjet_pt[i][j];
       err_probeGEN_probePARTON[i][j] = ErrorPropagation_AoverB(tmp1,tmp2);
+      cout<<"val_probegenjet_pt[i][j] = "<<val_probegenjet_pt[i][j]<<" val_probepartonjet_pt[i][j] = "<<val_probepartonjet_pt[i][j]<<"  err_probeGEN_probePARTON[i][j] = "<<err_probeGEN_probePARTON[i][j]<<" val_probeGEN_probePARTON[i][j] = "<<val_probeGEN_probePARTON[i][j]<<endl;
       }
       else{
 	val_probeGEN_probePARTON[i][j] = 0;  err_probeGEN_probePARTON[i][j] =0;
@@ -795,7 +815,7 @@ void CorrectionObject::GenResponsePlots(){
     h->GetXaxis()->SetTitle(pt_binning_var_str);
     h->GetXaxis()->SetTitleSize(0.05);
     h->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
-    h->GetYaxis()->SetRangeUser(0.70,1.30);
+    h->GetYaxis()->SetRangeUser(0.7,1.1);
     graph_rel_A_mc->Draw("P SAME");
     graph_rel_B_mc->Draw("P SAME");
     graph_probeRECO_probeGEN->Draw("P SAME");
@@ -804,7 +824,7 @@ void CorrectionObject::GenResponsePlots(){
 
     gPad->SetLogx();
     TLegend *leg_rel;
-    leg_rel = new TLegend(0.45,0.15,0.91,0.49,"","brNDC");//x+0.1
+    leg_rel = new TLegend(0.25,0.15,0.71,0.49,"","brNDC");//x+0.1
     leg_rel->SetBorderSize(0);
     leg_rel->SetTextSize(0.030);
     leg_rel->SetFillColor(10);
@@ -938,7 +958,7 @@ void CorrectionObject::GenResponsePlots(){
     // graph_rel_A_GEN_mc->GetXaxis()->SetTitleSize(0.05);
     // graph_rel_A_GEN_mc->GetXaxis()->SetTitleOffset(0.80);
     // graph_rel_A_GEN_mc->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
-    // graph_rel_A_GEN_mc->GetYaxis()->SetRangeUser(0.70,1.30);
+    // graph_rel_A_GEN_mc->GetYaxis()->SetRangeUser(0.0,2.00);
     graph_rel_A_GEN_mc->SetMarkerColor(kOrange+7);
     graph_rel_A_GEN_mc->SetMarkerStyle(29);
     graph_rel_A_GEN_mc->SetMarkerSize(1.7);
@@ -958,12 +978,13 @@ void CorrectionObject::GenResponsePlots(){
 
     TGraphErrors *graph_probeGEN_probePARTON   = new TGraphErrors(n_pt-1, xbin_tgraph, val_probeGEN_probePARTON[i], zero, err_probeGEN_probePARTON[i]);
     graph_probeGEN_probePARTON   = (TGraphErrors*)CleanEmptyPoints(graph_probeGEN_probePARTON);
-    //    cout<<"graph_probeGEN_probePARTON"<<endl;
-    //    graph_probeGEN_probePARTON->Print();
+    cout<<"graph_probeGEN_probePARTON"<<endl;
+    graph_probeGEN_probePARTON->Print();
     graph_probeGEN_probePARTON->SetTitle("");
     graph_probeGEN_probePARTON->SetMarkerColor(kRed);
     graph_probeGEN_probePARTON->SetMarkerStyle(20);
     graph_probeGEN_probePARTON->SetLineColor(kRed);
+    graph_probeGEN_probePARTON->SetMarkerSize(1.7);
     TString axistitle_mc_probeprobe = "<p^{probe,GEN}_{T}>/<p^{probe,PARTON}_{T}>";
 
     TGraphErrors *graph_probeGEN_tagGEN   = new TGraphErrors(n_pt-1, xbin_tgraph, val_probeGEN_tagGEN[i], zero, err_probeGEN_tagGEN[i]);
@@ -984,7 +1005,7 @@ void CorrectionObject::GenResponsePlots(){
     graph_tagGEN_tagPARTON->SetTitle("");
     graph_tagGEN_tagPARTON->SetMarkerColor(kBlue);
     graph_tagGEN_tagPARTON->SetMarkerStyle(20);
-    //    graph_tagGEN_tagPARTON->SetMarkerSize(1.7);
+    graph_tagGEN_tagPARTON->SetMarkerSize(1.7);
     graph_tagGEN_tagPARTON->SetLineColor(kBlue);
     TString axistitle_mc_tagtag = "<p^{tag,GEN}_{T}>/<p^{tag,PARTON}_{T}>";
 
@@ -998,7 +1019,7 @@ void CorrectionObject::GenResponsePlots(){
     h->GetXaxis()->SetTitle(pt_binning_var_str);
     h->GetXaxis()->SetTitleSize(0.05);
     h->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
-    h->GetYaxis()->SetRangeUser(0.70,1.30);
+    h->GetYaxis()->SetRangeUser(0.7,1.1);
     h->GetYaxis()->SetTitle("");
     graph_rel_A_GEN_mc->Draw("P SAME");
     graph_rel_A_PARTON_mc->Draw("P SAME");
@@ -1008,7 +1029,7 @@ void CorrectionObject::GenResponsePlots(){
 
     gPad->SetLogx();
     TLegend *leg_rel;
-    leg_rel = new TLegend(0.45,0.15,0.91,0.49,"","brNDC");//x+0.1
+    leg_rel = new TLegend(0.25,0.15,0.71,0.49,"","brNDC");//x+0.1
     leg_rel->SetBorderSize(0);
     leg_rel->SetTextSize(0.030);
     leg_rel->SetFillColor(10);
