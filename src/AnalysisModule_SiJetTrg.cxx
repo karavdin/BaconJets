@@ -203,7 +203,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB, apply_L1seed_from_bx1_filter;
     double lumiweight;
     string jetLabel;
-    TString dataset_version, JEC_Version;
+  TString dataset_version, JEC_Version, MC_SF_JER_name;
     JetId Jet_PFID;
     int n_evt;
     std::unique_ptr<TFile> f_weights;
@@ -428,7 +428,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
 	  else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V23) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V24)
-	      else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V25) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V25) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V26) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V27)  
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V28)   
@@ -441,7 +441,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 	  else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V25) 
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V26) 
 	      else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V27)
-	      else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V28)     		   		
+	      else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V28) 
+	      else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V31)      		   		
 	 else throw runtime_error("In AnalysisModule_SiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }
@@ -477,8 +478,12 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
       if(isMC){
 	// else if(JEC_Version == "Fall17_17Nov2017_V27") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
 	// else if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
-	if(JEC_Version == "Fall17_17Nov2017_V23") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
-	
+	if(JEC_Version == "Fall17_17Nov2017_V23"){
+	  if(MC_SF_JER_name == "Fall17_V2_RunBC") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17_V2_RunBC,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+	  else if(MC_SF_JER_name == "Fall17_V2_RunDE") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17_V2_RunDE,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+	  else if(MC_SF_JER_name == "Fall17_V2_RunF") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17_V2_RunF,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+	  else jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17_V2_RunBCDEF,"Fall17_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+	}
 	else cout << "In AnalysisModule_SiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
      
@@ -738,6 +743,9 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     apply_lumiweights = (ctx.get("Apply_Lumiweights") == "true" && isMC);
     apply_unflattening = (ctx.get("Apply_Unflattening") == "true" && isMC);
     apply_smear = (ctx.get("Apply_MC_Smear")=="true" && isMC);
+    
+    MC_SF_JER_name = ctx.get("MC_Sf_Jer");
+    
     if(apply_weights && apply_lumiweights) throw runtime_error("In AnalysisModule_SiJetTrg.cxx: 'apply_weights' and 'apply_lumiweights' are set 'true' simultaneously. This won't work, please decide on one");
     if(isMC){
       lumiweight = string2double(ctx.get("dataset_lumi")); //TODO this is not the lumiweight but lust the lumi, normalisation to it is commented out at the moment

@@ -452,6 +452,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V26)
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V27)
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V28)
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V31)
 	    else throw runtime_error("In AnalysisModule_DiJetTrg.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }

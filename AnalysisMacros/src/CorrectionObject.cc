@@ -136,12 +136,14 @@ void CorrectionObject::FullCycle_CorrectFormulae(double kfsr_fitrange, bool useC
   CorrectionObject::FlavorCorrection_TTree();
   std::cout<<"\nStarting GenResponsePlots\n"<<std::endl;
   CorrectionObject::GenResponsePlots();
+
   std::cout<<"\nStarting GenResponsePlots_AllPtbinningOnePlot\n"<<std::endl;
   CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("All");
   // CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("QQ");
   // CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("QG");
   // CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("GQ");
   // CorrectionObject::GenResponsePlots_AllPtbinningOnePlot("GG");
+
   std::cout<<"\nStarting MatchingPlots\n"<<std::endl;
   CorrectionObject::MatchingPlots();
 }
