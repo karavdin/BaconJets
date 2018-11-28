@@ -25,6 +25,8 @@
 <!ENTITY TRIGGER_SINGLEMUON  "false"> <!--Trigger Flag -->
 <!ENTITY TRIGGER_SINGLEMUON_NAME  "Mu27"> <!--Trigger Flag -->
 
+<!ENTITY APPLY_MC_SMEAR  "true">
+
 <!ENTITY ONLY_BACK_TO_BACK "false" >
 <!ENTITY DO_TRG_OBJ_JET_MATCHING "false" >
 
@@ -157,6 +159,8 @@
 
 	<Item Name="Trigger_Single"        Value="&USE_SINGLE_TRIGGER;"/>	
 	<Item Name="Only_BtB"               Value="&ONLY_BACK_TO_BACK;"/>
+	
+	<Item Name="Apply_MC_Smear" Value="&APPLY_MC_SMEAR;"/>	
 	<Item Name="Do_TOJM"          Value="&DO_TRG_OBJ_JET_MATCHING;"/>
         <Item Name="AnalysisModule" Value="AnalysisModule_noPtBinning" /> 
 	    
