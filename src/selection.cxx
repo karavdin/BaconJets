@@ -337,18 +337,18 @@ bool Selection::DiJet()
     return false;
   }
 
-bool Selection::PtaveVsQScale()
+bool Selection::PtaveVsQScale(double cutValue)
   {
     assert(event);
 
-      if(no_genp) return true;
+      // if(no_genp) return true;
     
    double  pt_hat = event->genInfo->qScale();
    double ptave = event->get(tt_pt_ave);
   
    double Ratio = ptave/pt_hat;
 
-    if(Ratio < 2) return true;
+    if(Ratio < cutValue) return true;
     return false;
   }
 
