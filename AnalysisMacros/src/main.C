@@ -15,6 +15,7 @@ static void show_usage(std::string name)
               << "\t-h,--help\t\tShow this help message\n"
               << "\t--mode\t\tMode in which the plots was created, used in the input path.\n"
               << "\t--dname\t\tSuffix for the input and output path.\n"
+              << "\t--dnameSi\t\tSuffix for the input and output path. For functions that need Si and Di Jet data like L2ResAllRuns.\n"
 	      << "\t--outSuffix\t\Additional output suffix.\n"
               << "\t--run\t\tRun Nr, default is B, used in the input path\n"
 	      << "\t -kFSR\tRun only kFSR macro"
@@ -53,15 +54,21 @@ static void show_usage(std::string name)
 	      << "\t-IGF\t\tCreate the Global Fit Input plots with standart eta bins.\n"
 	      << "\t-IGFw\t\tCreate the Global Fit Input plots with wider eta bins.\n"
 	      << "\t-MEPC\t\tMake eta phi cleaning txt.\n"
+	      << "\t-L2AR\t\tMake Plots with all L2Res IOV's.\n"
+	      << "\t-L2JER\t\tMake Plots with nominal,up,down JER comparison for L2Res IOV's.\n"      
 	      << "\t--muTrg\t\tTrigger name used for the single muon threshold crosscheck.\n"
 	      << "\t--asym_cut\t\tCut Value with which some of the final control plots will be made.\n"
 	      <<"\t--kfsrRange\t\tRneg to which the kFSR fit is performed.The default is 5.19.\n"
+	      <<"\t--ptMin\t\tUse a jet3 pt min cut for the kFSR and L2Res estimations. Be careful, this is not used for all controlplots. The default is 0.\n"
 	      <<"\t-useCombinedkfsr\t\tUse combined BCDEF kFSR for L2Res\.\n"
 	      <<"\t-useStraightkfsr\t\tUse simpler kFSR for L2Res\.\n"
 	      <<"\t-l1bx\t\tDo the L1 jet seed bx check plots\.\n"
 	      <<"\t--inputMC\t\tPath to the input mc. Default is hard coded in main.C"
       	      <<"\t--input\t\tPath to the input data, if none is given following is used:\n"
-	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/17Nov2017/Residuals/Run17BCD_Data <_mode> /Run17 <run><_dname> .root\n\tThe completion script assumes the same file structure."	    
+      	      <<"\t--inputSi\t\tPath to the input single jet triggered data.\n"
+      	      <<"\t--inputDi\t\tPath to the input  dijet triggered data.\n"
+	      << "\tThe input path is created as /nfs/dust/cms/user/"<<getenv("USER")<<"/forBaconJets/17Nov2017/Residuals/Run17BCD_Data <_mode> /Run17 <run><_dname> .root\n\tThe completion script assumes the same file structure."
+	      <<"\t--inputSi\t\tPath to the input single jet triggered data. Used for combined plots that need single and dijet trigger data like L2ResAllRuns\n"     
               << std::endl;
 }
 
@@ -115,6 +122,7 @@ int main(int argc,char *argv[]){
 				   "-mu",
 				   "--mode",
 				   "--dname",
+				   "--dnameSi",
 				   "--run",
 				   "--muTrg",
 				   "--asym_cut" ,
@@ -130,19 +138,29 @@ int main(int argc,char *argv[]){
 				    "-IGF",
 				    "-IGFw",
 				    "--kfsrRange",
+				    "--ptMin",
 				    "-combinedkfsr",
 				    "-MEPC",
 				    "-useStraightkfsr"
 				    "-kfsrXrange",
-				    "-l1bx"};
+				    "-l1bx",
+				    "-L2AR",
+				    "-L2JER",
+				    "--inputSi",
+				    "--inputDi"};
   
   TString run_nr = "B";
   TString dataname_end = "17Nov17_2017";
+  TString dataname_endSi = "17Nov17_2017";
   TString outSuf = "";
   bool muonCrosscheck = false;
   TString muonTriggerName = "HLT_Mu17";
   TString mode ="";
   TString inputMC_="";
+  TString inputSi_="";
+  TString inputDi_="";
+  bool do_L2AR=false;
+  bool do_L2JER=false;
   bool do_fullPlots=false;
   bool do_kFSR=false;
   bool do_fullPlotsef=false;
@@ -185,6 +203,7 @@ int main(int argc,char *argv[]){
   TString input_path_="";
   double asym_cut = 0.;
   double kfsrRange = 5.19;
+  double ptMin = 0.;
   for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
 	if(arg=="-h"||arg=="--help"){
@@ -200,6 +219,12 @@ int main(int argc,char *argv[]){
 	  } 
 	  else if(arg=="-FP"){
 	       do_fullPlots=true;
+	  }  
+	  else if(arg=="-L2AR"){
+	       do_L2AR=true;
+	  } 
+	  else if(arg=="-L2JER"){
+	       do_L2JER=true;
 	  } 
 	  else if(arg=="-calcMCW"){
 	       do_calcMCW=true;
@@ -324,6 +349,9 @@ int main(int argc,char *argv[]){
 	      else if(arg=="--dname"){
 		dataname_end = argv[i+1];
 	      }
+	      else if(arg=="--dnameSi"){
+		dataname_endSi = argv[i+1];
+	      }
 	      else if(arg=="--outSuffix"){
 		outSuf = argv[i+1];
 	      }	    
@@ -341,17 +369,27 @@ int main(int argc,char *argv[]){
 	      else if(arg=="--inputMC"){
 		inputMC_ = argv[i+1];
 	      }
+	      else if(arg=="--inputSi"){
+		inputSi_ = argv[i+1];
+	      }
+	      else if(arg=="--inputDi"){
+		inputDi_ = argv[i+1];
+	      }
 	      else if(arg=="--input"){
 		input_path_ = argv[i+1];
 	      }
 	      else if(arg=="--kfsrRange"){
 		kfsrRange = stod(argv[i+1]);
 	      }
+	      else if(arg=="--ptMin"){
+		ptMin = stod(argv[i+1]);
+	      }
 	  }
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange or do_useCombinedkSFR or do_l1bx or do_kFSR)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange or do_useCombinedkSFR or do_l1bx or do_kFSR or do_L2AR or do_L2JER)){
+
     cout<<"No plots were specified! Only the existence of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
@@ -399,7 +437,7 @@ int main(int argc,char *argv[]){
   // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_forRun"+run_nr+"_v1.root";
   // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/uhh2.AnalysisModuleRunner.MC.QCDPt15to7000_forRun"+run_nr+"_v1.root";
   // input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/QCDPt15to7000_pythia8_AK4CHS_forRun"+run_nr+"_nextModType1MET.root";
-  input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/QCDPt15to7000_pythia8_AK4CHS_forRunF_nextModType1MET.root";
+  input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17BCDEF_Data_JEC_V23_SiTrg_noClosure/MC.QCDPtBinned_JERnominalV2_qscaleCut.root";
   // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/QCDPt15to7000_forRun"+run_nr+"_noT1MET.root";
   // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/QCD_flat_17Nov17_JEC_V6_wWeightsApplied_nowForReal/QCDPt15to7000_forRun"+run_nr+"_noT1MET.root";
   // TString input_path_MC = "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals//Run17DEF_Data_JEC_V6_noClosure/RunF_17Nov17_2017_23Apr.root";
@@ -420,11 +458,16 @@ int main(int argc,char *argv[]){
     vector<CorrectionObject> Objects;
   
     Objects.emplace_back(CorrectionObject(run_nr, generator,collection, input_path, input_path_MC, weight_path, closure_test, trigger_fwd, trigger_central, outpath_postfix));
- 
+
+    if(dataname_end!=TString("")) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].set_dname(dataname_end);
+    if(dataname_endSi!=TString("")) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].set_dnameSi(dataname_endSi);
+    if(inputSi_!=TString("")) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].set_input_pathSi(inputSi_);
+    if(inputDi_!=TString("")) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].set_input_pathDi(inputDi_);
+    
     cout << "testobject is " << Objects[0] << endl;
     if(do_useStraightkfsr) std::cout<<"using the easier kFSR Definition\n";
    
-    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange, do_useCombinedkSFR, do_useStraightkfsr);
+    if(do_fullPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae(kfsrRange, do_useCombinedkSFR, do_useStraightkfsr,ptMin);
     if(do_fullPlots or do_JEF) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].JetEnergyFractions();
 
     if(do_calcMCW) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].CalculateMCWeights();
@@ -449,7 +492,10 @@ int main(int argc,char *argv[]){
 
     if(do_asymControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FinalControlPlots_CorrectFormulae(0.,true);
 
-      if(do_NPVEtaPlot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].NPVtoEtaPlots();  
+    if(do_NPVEtaPlot) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].NPVtoEtaPlots();
+
+    if(do_L2AR) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L2ResAllRuns();  
+    if(do_L2JER) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].L2ResOverlay_JEC();
     
     if(do_lumiControlPlots){
       if(run_nr=="B"){

@@ -32,6 +32,10 @@ using namespace std;
     inline TString runnr(){ return _runnr;}
     inline TString collection(){ return _collection;}
     inline TString input_path(){return _input_path;}
+    inline TString input_pathSi(){return _input_pathSi;}
+    inline TString input_pathDi(){return _input_pathDi;}
+    inline TString dnameSi(){return _dnameSi;}
+    inline TString dname(){return _dname;}
     inline TString input_path_MC(){return _input_path_MC;}    
     inline TString weight_path(){return _weight_path;}
     inline TString generator(){ return _generator;}
@@ -45,7 +49,11 @@ using namespace std;
     inline TString lumitag(){return _lumitag;}
     inline const TString runnr() const{return _runnr;}
     inline const TString collection() const{return _collection;}
+    inline const TString dnameSi()const{return _dnameSi;}
+    inline const TString dname()const{return _dname;}
     inline const TString input_path()const{return _input_path;}
+    inline const TString input_pathSi()const{return _input_pathSi;}
+    inline const TString input_pathDi()const{return _input_pathDi;}
     inline const TString input_path_MC()const{return _input_path_MC;}
     inline const TString weight_path()const{return _weight_path;}
     inline const TString generator() const{return _generator;}
@@ -61,6 +69,10 @@ using namespace std;
     inline void set_outpath_postfix(TString x){_outpath_postfix = x;}    
     inline void set_collection(TString x){_collection = x;}
     inline void set_input_path(TString x){_input_path = x;}
+    inline void set_input_pathSi(TString x){_input_pathSi = x;}
+    inline void set_input_pathDi(TString x){_input_pathDi = x;}
+    inline void set_dnameSi(TString x){_dnameSi = x;}
+    inline void set_dname(TString x){_dname = x;}
     inline void set_weight_path(TString x){_weight_path = x;}
     inline void set_generator(TString x){_generator = x;}
     inline void set_jettag(TString x){_jettag = x;}
@@ -80,16 +92,17 @@ using namespace std;
     void NPVtoEtaPlots();
     void Monitoring(bool SiRuns=false);
     void kFSR();
-    void kFSR_CorrectFormulae();
+    void kFSR_CorrectFormulae(float pt_min = 0.0);
     void kFSR_CorrectFormulae_eta();
     void Pt_Extrapolation(bool mpfMethod = true);
     void Pt_Extrapolation_Alternative(bool mpfMethod = true);
-    void Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod = true, double kfsr_fitrange = 5.19, bool useCombinedkSFR=false, bool useStraightkFSR=false);
+    void Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMethod = true, double kfsr_fitrange = 5.19, bool useCombinedkSFR=false, bool useStraightkFSR=false, float pt_min = 0.0);
     void Pt_Extrapolation_Alternative_CorrectFormulae_eta(bool mpfMethod = true);
     void L2ResOutput();
     void L2ResOutput_eta();
     void L2ResAllRuns();
     void L2Res_JEC();
+    void L2ResOverlay_JEC();
     void L2ResOverlay(bool is_MPF);
     void InputForGlobalFit();
     void InputForGlobalFit_eta_0_13();
@@ -99,7 +112,7 @@ using namespace std;
     void FinalControlPlots_CorrectFormulae_eta();
     void CalculateMCWeights();
     void CalculateMCWeights_TriggerThresholds(bool CentralTriggers);
-    void FullCycle_CorrectFormulae(double kfsr_fitrange=5.19, bool useCombinedkSFR=false, bool useStraightkFSR = false);
+    void FullCycle_CorrectFormulae(double kfsr_fitrange=5.19, bool useCombinedkSFR=false, bool useStraightkFSR = false, float pt_min=0.0);
     void FullCycle_CorrectFormulae_eta();
     void MatchingPlots();
     void Lumi_Plots();
@@ -146,6 +159,10 @@ static bool make_path(TString path_name){
     TString _collection;
     TString _generator, _generator_tag;
     TString _input_path;
+    TString _input_pathSi;
+    TString _dnameSi;
+    TString _dname;
+    TString _input_pathDi;
     TString _input_path_MC;   
     TString _weight_path;
     TString _jettag;

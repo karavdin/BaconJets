@@ -6,20 +6,21 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17CDEF_Data_V4_DeriveThresholds_SiTrg_fwd/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/garbersc/forBaconJets/17Nov2017/Residuals/Run17BCDEF_Data_V23_DeriveThresholds_SiTrg_no18/">
 
 <!ENTITY b_closuretest       "false">
-<!ENTITY jec_version         "Fall17_17Nov2017_V4"> 
+<!ENTITY jec_version         "Fall17_17Nov2017_V23"> 
 <!ENTITY APPLY_WEIGHTS       "false">
-<!ENTITY WEIGHT_PATH         "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/MC_Reweighted_chsMET_NewTriggerSetup_ForWeights/"> <!-- Change Weight-Path: CENTRAL/FWD -->
-<!ENTITY Cut_PATH            "/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V3/AK4CHS/EtaPhiCut/">
+<!ENTITY WEIGHT_PATH         "/nfs/dust/cms/user/garbersc/JEC_Fall17_ForWeights/"> 
+
+<!ENTITY Cut_PATH            "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/BaconJets/data/hotjets/17-17Nov17ReReco/">
 
 <!ENTITY APPLY_METoverPTcut  "false">  <!--Apply MET Cut-->
-<!ENTITY APPLY_EtaPhi_cut    "false">   <!--Apply Eta Phi cleaning during ECAL problems -->
+<!ENTITY APPLY_EtaPhi_cut    "true">   <!--Apply Eta Phi cleaning during ECAL problems -->
 <!ENTITY APPLY_LUMIWEIGHTS   "false"> 
 <!ENTITY APPLY_UNFLATTENING  "false">
-<!ENTITY TRIGGER_CENTRAL     "false">  <!--Trigger Flag -->
-<!ENTITY TRIGGER_FWD         "true"> <!--Trigger Flag -->
+<!ENTITY TRIGGER_CENTRAL     "true">  <!--Trigger Flag -->
+<!ENTITY TRIGGER_FWD         "false"> <!--Trigger Flag -->
 
 <!ENTITY TRIGGER_SINGLEMUON  "false"> <!--Trigger Flag -->
 <!ENTITY TRIGGER_SINGLEMUON_NAME  "Mu27"> <!--Trigger Flag -->
@@ -27,26 +28,26 @@
 <!ENTITY ONLY_BACK_TO_BACK "true" >
 <!ENTITY DO_TRG_OBJ_JET_MATCHING "false" >
 
+<!ENTITY APPLY_MC_SMEAR  "false">
 <!ENTITY USE_SINGLE_TRIGGER "true" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
 
-<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunB_17Nov2017_wCHSMETfixed.xml">
+<!ENTITY DATA_RunB_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v2/DATA_JetHT_Run2017B_wHLTobjects.xml">
 
-<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunC_17Nov2017_wCHSMETfixed.xml">
+<!ENTITY DATA_RunC_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v2/DATA_JetHT_Run2017C_wHLTobjects.xml">
 
-<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunD_17Nov2017_wCHSMETfixed.xml">
+<!ENTITY DATA_RunD_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v2/DATA_JetHT_Run2017D_wHLTobjects.xml">
 
-<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunE_17Nov2017_wCHSMETfixed.xml">
+<!ENTITY DATA_RunE_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v2/DATA_JetHT_Run2017E_wHLTobjects.xml">
 
-<!ENTITY DATA_RunF_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v1_woHOTVR_woXCONE/DATA_JetHT_RunF_17Nov2017_wCHSMETfixed.xml">
-
+<!ENTITY DATA_RunF_promptReco_2017 SYSTEM "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/datasets/RunII_94X_v2/DATA_JetHT_Run2017F_wHLTobjects.xml">
 
 ]>
 
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17CDEF_deriveThresholds_SiTrg_fwd"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="Data_Run17BCDEF_deriveThresholds_SiTrg_nov18"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -56,6 +57,13 @@
 
  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="8317" > 
 <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="4553" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="15" > -->
+
+
+<InputData Lumi="62988012" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_17Nov17_2017" Cacheable="&CACHEABLE;">
+          &DATA_RunB_promptReco_2017;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+</InputData>
 
 <InputData Lumi="96264601" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunC_promptReco_2017;
@@ -93,8 +101,8 @@
 
       <Item Name="GenJetCollection"        Value="slimmedGenJets"/>
       <Item Name="METName"                 Value="slimmedMETs"/>     
-     
-       <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/data/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.root"/>
+
+       <Item Name="lumi_file" Value="/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/common/data/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.root"/>     
        
        <Item Name="lumihists_lumi_per_bin" Value="250."/>
 
@@ -104,7 +112,7 @@
       <Item Name="triggerSiMu" Value="HLT_&TRIGGER_SINGLEMUON_NAME;_v*"/>
       <Item Name="triggerSiMu_DirName" Value="HLT_&TRIGGER_SINGLEMUON_NAME;"/>
       
-      <Item Name="minBias" Value="HLT_L1MinimumBiasHF_OR_v*"/>
+      <!-- <Item Name="minBias" Value="HLT_L1MinimumBiasHF_OR_v*"/> -->
       <Item Name="trigger40" Value="HLT_PFJet40_v*"/>
       <Item Name="trigger60" Value="HLT_PFJet60_v*"/>
       <Item Name="trigger80" Value="HLT_PFJet80_v*"/>
@@ -168,9 +176,14 @@
 
 	<Item Name="Trigger_Single"        Value="&USE_SINGLE_TRIGGER;"/>	
 	<Item Name="Only_BtB"               Value="&ONLY_BACK_TO_BACK;"/>
+	
+	<Item Name="Apply_MC_Smear" Value="&APPLY_MC_SMEAR;"/>	
+	
 	<Item Name="Do_TOJM"          Value="&DO_TRG_OBJ_JET_MATCHING;"/>
         <Item Name="AnalysisModule" Value="AnalysisModule_noPtBinning" />
-	
+	    
+         <Item Name="L1METptThresh" Value="75" />
+         <Item Name="eta_thresh_low" Value="2.650" />
         <Item Name="Debug" Value="false" />	
 
         </UserConfig>

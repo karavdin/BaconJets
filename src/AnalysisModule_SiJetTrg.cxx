@@ -221,6 +221,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     double eta_thresh_low;
     double eta_thresh_high;
 
+    double ptave_qscale_cut_value;
+
   std::vector<uhh2bacon::run_lumi_ev>  unprefirableSummary;
     bool useUnprefireable;
 
@@ -284,6 +286,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     
     L1METptThresh = stod(ctx.get("L1METptThresh"));
     eta_thresh_low = stod(ctx.get("eta_thresh_low"));
+    ptave_qscale_cut_value= stod(ctx.get("PtAve_QScale_cut_value"));
       
     if(!isMC) lumi_sel.reset(new LumiSelection(ctx));
     /* MET filters */ 
@@ -1222,7 +1225,7 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     float gen_weight = 0;
     if(!event.isRealData){
       gen_weight = event.weight;
-      // gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph FIXME: commnted out for madgraph
+      gen_pthat = event.genInfo->qScale();//binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph FIXME: commnted out for madgraph
     }
     float nvertices = event.pvs->size(); 
     float nPU = 0 ;//todo for data?
@@ -1328,7 +1331,6 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     }
 
 
-
     if(debug) cout<<"before afterUnflat fill: njet: "<<event.jets->size()<<endl;
     
    h_afterUnflat->fill(event);
@@ -1341,7 +1343,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 
     if(debug) cout<<"before the main event.set's\n";
     
-    // if(!event.isRealData) pu_pthat = event.genInfo->PU_pT_hat_max(); FIXME: commnted out for madgraph
+    if(!event.isRealData) pu_pthat = event.genInfo->PU_pT_hat_max();
+    
     event.set(tt_matchJetId_0,-10.);
     event.set(tt_matchJetId_1,-10.);
 
@@ -1472,9 +1475,11 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
 //Pu_pt_hat/pt_hat Selection 
     if(isMC){
       //FIXME
-      cout<<"PUpthat selction skipped for Madgraph MC\n";
-      // if(!sel.PUpthat()) return false;
+      // cout<<"PUpthat selction skipped for Madgraph MC\n";
+      if(!sel.PUpthat()) return false;
+      if(!sel.PtaveVsQScale(ptave_qscale_cut_value)) return false;    
     }
+    
     // h_nocuts->fill(event);
     // h_lumi_nocuts->fill(event);
 
