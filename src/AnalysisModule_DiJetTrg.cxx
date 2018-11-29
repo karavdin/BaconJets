@@ -1167,7 +1167,7 @@ if(debug){
       if(!trigger_central) eta_cut_bool_HF = true;      
       
       //pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1] && (eta_cut_bool));//ToDo: remove requirement on eta_bool, add one more bin in forward region in 
-      pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);//ToDo: remove requirement on eta_bool, add one more bin in forward region
+      pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);//remove requirement on eta_bool = add one more bin in forward region
       pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2] &&  (eta_cut_bool));
       pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]&&( eta_cut_bool)); 
       pass_trigger140 = (trigger140_sel->passes(event) && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]&&( eta_cut_bool)); 
@@ -1537,7 +1537,7 @@ if(debug){
     if(!event.isRealData && !no_genp){
       //      if(isMC){
 	if(!sel.PUpthat()) return false;
-	if(!sel.PtaveVsQScale()) return false;
+	if(!sel.PtaveVsQScale(1.5)) return false;
 	// if((gen_pthat-genjet1_pt)/gen_pthat<-0.4) return false;
 	//      }
     }
@@ -1563,12 +1563,13 @@ if(debug){
 // [1] https://indico.cern.ch/event/722467/contributions/2971253/attachments/1635662/2609542/MetStudyInZ_18Apr2018_SamuelMay.pdf
 // [2] https://indico.cern.ch/event/726656/contributions/2990422/attachments/1642997/2626523/MetStudyInZ_3May2018.pdf
     //TODO let them get apply_xxx bools from the xml-config
-    if(!isMC){
-          // if(! sel.EtaPtCut(event)) return false;
-	  if(! sel.ChEMFrakCut()) return false;
-    }
+    // if(!isMC){
+    //       // if(! sel.EtaPtCut(event)) return false;
+    // 	  if(! sel.ChEMFrakCut()) return false;
+    // }
 
-    
+    if(! sel.EnergyEtaCut()) return false;
+
     // //### fast and dirty eta phi clean ##### change it to the EtaPhi function in selection.cxx at some point
     // bool cutEtaPhi = false;
  
