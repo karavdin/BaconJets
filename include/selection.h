@@ -99,7 +99,9 @@ class Selection {
     bool PUpthat(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return PUpthat();}
     bool PtaveVsQScale(double cutValue=2.);
     bool PtaveVsQScale(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return PUpthat();}
-  
+
+    bool EnergyEtaCut();// cut away events with jets containing energy more than sqrt(s)/2
+
     bool EtaPtCut();
     bool EtaPtCut(uhh2::Event& evt){std::cerr<<"selection.C: The event in the argument is not needed! The private event variable will be used anyways.\n"; return EtaPtCut();}
   

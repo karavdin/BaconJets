@@ -1588,12 +1588,13 @@ if(debug){
 // [1] https://indico.cern.ch/event/722467/contributions/2971253/attachments/1635662/2609542/MetStudyInZ_18Apr2018_SamuelMay.pdf
 // [2] https://indico.cern.ch/event/726656/contributions/2990422/attachments/1642997/2626523/MetStudyInZ_3May2018.pdf
     //TODO let them get apply_xxx bools from the xml-config
-    if(!isMC){
-          // if(! sel.EtaPtCut(event)) return false;
-	  if(! sel.ChEMFrakCut()) return false;
-    }
+    // if(!isMC){
+    //       // if(! sel.EtaPtCut(event)) return false;
+    // 	  if(! sel.ChEMFrakCut()) return false;
+    // }
 
-    
+    if(! sel.EnergyEtaCut()) return false;
+
     // //### fast and dirty eta phi clean ##### change it to the EtaPhi function in selection.cxx at some point
     // bool cutEtaPhi = false;
  
