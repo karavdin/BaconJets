@@ -198,7 +198,9 @@ void CorrectionObject::CalculateMCWeights(){
   for(int k=0; k<idx_runing; k++){
     if(fabs(h_pt_ave_binned_data->GetBinContent(k)-(h_pt_ave_binned_mc->GetBinContent(k)*SF->GetBinContent(k)))>0.5){
       cout<<"Bin "<<k<<" data: "<<h_pt_ave_binned_data->GetBinContent(k)<<" unscaled MC: "<<h_pt_ave_binned_mc->GetBinContent(k)<<" SF: "<<SF->GetBinContent(k)<<" scaled MC: "<<h_pt_ave_binned_mc->GetBinContent(k)*SF->GetBinContent(k)<<endl<<endl;
-      throw runtime_error("did not pass dummy crosscheck");
+      if(int(h_pt_ave_binned_mc->GetBinContent(k))){
+	throw runtime_error("did not pass dummy crosscheck");
+      }
     }
   }
   cout<<"after dummy crosscheck"<<endl;

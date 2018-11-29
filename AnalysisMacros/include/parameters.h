@@ -8,8 +8,8 @@
 
 using namespace std;
 
-const double eta_cut = 2.853-1e-5;
-// const double eta_cut = 100.; //central only
+// const double eta_cut = 2.853-1e-5;
+const double eta_cut = 100.; //central only
 
 const int nResponseBins = 100;
 const double Response_min = -1.2; //min of asymmetry hist
@@ -99,50 +99,50 @@ const int n_pt_HF = 7;
 //DiJet triggers? -------------
 
 
-const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin
-  51,
-  73,
-  85,
-  97,
-  140,
-  179,
-  240,
-  307,
-  370,
-  434,
-  520,
-  649,1000,2000};
+// const double pt_bins[n_pt] = {//TODO check which code assumed the "min Bias" bin
+//   51,
+//   73,
+//   85,
+//   97,
+//   140,
+//   179,
+//   240,
+//   307,
+//   370,
+//   434,
+//   520,
+//   649,1000,2000};
 
-const TString pt_range[n_pt]={
-  "51",
-  "73",
-  "85",
-  "97",
-  "140",
-  "179",
-  "240",
-  "307",
-  "370",
-  "434",
-  "520",
-  "648","1000","2000"};
+// const TString pt_range[n_pt]={
+//   "51",
+//   "73",
+//   "85",
+//   "97",
+//   "140",
+//   "179",
+//   "240",
+//   "307",
+//   "370",
+//   "434",
+//   "520",
+//   "648","1000","2000"};
 
 
 
-// // //for Di derived triggers 94X 17Nov2017
+// // // //for Di derived triggers 94X 17Nov2017
 
-const int n_pt_HF = 9;
+// const int n_pt_HF = 9;
 
-const double pt_bins_HF[n_pt_HF] = {
-  51,
-  73,
-  93,
-  113,
-  176,
-  239,
-  318,1000,2000};
+// const double pt_bins_HF[n_pt_HF] = {
+//   51,
+//   73,
+//   93,
+//   113,
+//   176,
+//   239,
+//   318,1000,2000};
 
-const TString pt_range_HF[n_pt_HF]={"51","73","93","113","176","239","318","1000","2000"};
+// const TString pt_range_HF[n_pt_HF]={"51","73","93","113","176","239","318","1000","2000"};
 
 /* use central instead of HF for consitency check of new HF code */
 // const int n_pt_HF = 12;
@@ -241,59 +241,59 @@ RunB      RunC  RunD  highest
 606       603     599  606
 */
 
-// const double pt_bins[n_pt_Si] = {
-// 40 ,
-// 72  ,
-// 95 ,
-// 130,
-// 160 ,
-// 190,
-// 226 ,
-// 250,
-// 283 ,
-// 344 ,
-// 443 ,
-// 577 ,
-// 606 ,1000,2000};
+const double pt_bins[n_pt_Si] = {
+40 ,
+72  ,
+95 ,
+130,
+160 ,
+190,
+226 ,
+250,
+283 ,
+344 ,
+443 ,
+577 ,
+606 ,1000,2000};
 
-// const TString pt_range[n_pt_Si]={
-//   "40" ,
-//   "72" ,
-//   "95" ,
-//   "130",
-//   "160",
-//   "190",
-//   "226",
-//   "250",
-//   "283",
-//   "344",
-//   "443",
-//   "577",
-//   "606","1000","2000"};
+const TString pt_range[n_pt_Si]={
+  "40" ,
+  "72" ,
+  "95" ,
+  "130",
+  "160",
+  "190",
+  "226",
+  "250",
+  "283",
+  "344",
+  "443",
+  "577",
+  "606","1000","2000"};
 
-// const int n_pt_HF = 11;
+const int n_pt_HF = 11;
 
-// const double pt_bins_HF[n_pt_HF] = {
-//  60  ,
-//  72  ,
-//  160 ,
-//  190 ,
-//  290 ,
-//  310 ,
-//  390,
-//  444,
-//  480,
-//   1000,2000};
+const double pt_bins_HF[n_pt_HF] = {
+ 60  ,
+ 72  ,
+ 160 ,
+ 190 ,
+ 290 ,
+ 310 ,
+ 390,
+ 444,
+ 480,
+  1000,2000};
 
-// const TString pt_range_HF[n_pt_HF]={"60",
-// 				    "72",
-// 				    "160",
-// 				    "190",
-// 				    "290",
-// 				    "310",
-// 				    "390",
-// 				    "444",
-// 				    "480","1000","2000"};
+const TString pt_range_HF[n_pt_HF]={"60",
+				    "72",
+				    "160",
+				    "190",
+				    "290",
+				    "310",
+				    "390",
+				    "444",
+				    "480","1000","2000"};
 
 
 /* // [END]SingleJet triggers? ------------- */
