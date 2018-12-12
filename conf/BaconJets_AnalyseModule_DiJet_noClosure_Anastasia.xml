@@ -15,7 +15,7 @@
 
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_CHSMET_wL1L2L3minusL1RC/"> -->
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV/"> -->
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale15_minGenJetPt15_minJetPt15/">
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale15_minGenJetPt15_minJetPt20_EnergyEtaCut/">
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSMET_wL1L2L3minusL1RC/"> -->
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Fall17_17Nov2017_V23">
@@ -38,7 +38,7 @@
 <!ENTITY APPLY_MC_SMEAR  "false">
 <!ENTITY APPLY_L1SEED_FROM_BX1_FILTER  "false">
 
-
+<!ENTITY QCDPt30to50_pythia8_AK4CHS           SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_9_4_9/src/UHH2/common/datasets/RunII_94X_v2/MC_QCD_Pt-50to80_TuneCP5_Flat2017_13TeV_pythia8_withLowPtJets.xml">
 <!ENTITY QCDPt50to80_pythia8_AK4CHS           SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_9_4_9/src/UHH2/common/datasets/RunII_94X_v2/MC_QCD_Pt-50to80_TuneCP5_Flat2017_13TeV_pythia8_withLowPtJets.xml">
 <!ENTITY QCDPt80to120_pythia8_AK4CHS          SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_9_4_9/src/UHH2/common/datasets/RunII_94X_v2/MC_QCD_Pt-80to120_TuneCP5_Flat2017_13TeV_pythia8_withLowPtJets.xml">
 <!ENTITY QCDPt120to170_pythia8_AK4CHS         SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_9_4_9/src/UHH2/common/datasets/RunII_94X_v2/MC_QCD_Pt-120to170_TuneCP5_Flat2017_13TeV_pythia8_withLowPtJets.xml">
@@ -145,11 +145,18 @@
           <OutputTree Name="AnalysisTree"/>
      </InputData>
 
+<InputData Lumi="0.1400073794" NEventsMax="&NEVT;" Type="MC" Version="QCDPt30to50_pythia8_AK4CHS" Cacheable="&CACHEABLE;">
+          &QCDPt30to50_pythia8_AK4CHS;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+
 <InputData Lumi="1.000828512" NEventsMax="&NEVT;" Type="MC" Version="QCDPt50to80_pythia8_AK4CHS" Cacheable="&CACHEABLE;">
           &QCDPt50to80_pythia8_AK4CHS;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
+
 <InputData Lumi="10.42080991" NEventsMax="&NEVT;" Type="MC" Version="QCDPt80to120_pythia8_AK4CHS" Cacheable="&CACHEABLE;">
           &QCDPt80to120_pythia8_AK4CHS;
           <InputTree Name="AnalysisTree"/>
@@ -342,7 +349,7 @@
          <Item Name="eta_thresh_low" Value="2.650" />
          <!-- <Item Name="L1METptThresh" Value="15" /> -->
          <!-- <Item Name="eta_thresh_low" Value="0." /> -->
-	 <Item Name="minJetPt" Value="15" />
+	 <Item Name="minJetPt" Value="20" />
 	 <Item Name="minGenJetPt" Value="15" />
         <Item Name="Debug" Value="false" />	    
 
