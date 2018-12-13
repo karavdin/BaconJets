@@ -131,18 +131,20 @@ const int n_pt_HF = 7;
 
 // // // //for Di derived triggers 94X 17Nov2017
 
-// const int n_pt_HF = 9;
 
-// const double pt_bins_HF[n_pt_HF] = {
-//   51,
-//   73,
-//   93,
-//   113,
-//   176,
-//   239,
-//   318,1000,2000};
+const int n_pt_HF = 10;
 
-// const TString pt_range_HF[n_pt_HF]={"51","73","93","113","176","239","318","1000","2000"};
+const double pt_bins_HF[n_pt_HF] = {
+  51,
+  73,
+  93,
+  113,
+  176,
+  239,
+  318,370,1000,2000};
+
+const TString pt_range_HF[n_pt_HF]={"51","73","93","113","176","239","318","370","1000","2000"};
+
 
 /* use central instead of HF for consitency check of new HF code */
 // const int n_pt_HF = 12;

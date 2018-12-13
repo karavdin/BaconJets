@@ -213,7 +213,9 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     }
 
     //fill histos in bins of pt and eta
-    for(int k=0; k<n_pt-1; k++){
+    //    for(int k=0; k<n_pt-1; k++){
+    for(int k=n_pt-5; k<n_pt-1; k++){//only last 4
+      //      if(*pt_ave_data<pt_bins[7]) continue; //plot only high pt staff
       if(*pt_ave_data<pt_bins[k] || *pt_ave_data>pt_bins[k+1]) continue;
       for(int j=0; j<n_eta-1; j++){
 	if(fabs(*probejet_eta_data)>eta_bins[j+1] || fabs(*probejet_eta_data)<eta_bins[j]) continue;
@@ -271,7 +273,9 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
 
 
     //fill histos in bins of pt and eta
-    for(int k=0; k<n_pt-1; k++){
+    //    for(int k=0; k<n_pt-1; k++){
+    for(int k=n_pt-5; k<n_pt-1; k++){//only last 4
+      //      if(*pt_ave_mc<pt_bins[7]) continue; //plot only high pt staff
       if(*pt_ave_mc<pt_bins[k] || *pt_ave_mc>pt_bins[k+1]) continue;
       for(int j=0; j<n_eta-1; j++){
 	if(fabs(*probejet_eta_mc)>eta_bins[j+1] || fabs(*probejet_eta_mc)<eta_bins[j]) continue;
@@ -372,8 +376,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     TH1D* htemp_probejet_neutEmEF_mc;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
-  
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
       TString legname = "p_{T} #in [" + pt_range[j] + "," + pt_range[j+1] + "]";
       TString name_probejet_neutEmEF_mc = "hist_mc_probejet_neutEmEF_"+eta_name+"_"+pt_name;
@@ -387,12 +391,12 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // h->SetMaximum(0.3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      h->GetYaxis()->SetLimits(0,0.8);
-      hEF->SetMaximum(0.8);
+      hEF->SetMaximum(1.3);
       // hEF->SetMaximum(3);
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_neutEmEF_mc->SetLineColor(j+1);
       else    htemp_probejet_neutEmEF_mc->SetLineColor(j+31);
-      htemp_probejet_neutEmEF_mc->SetLineWidth(3);
+      htemp_probejet_neutEmEF_mc->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_neutEmEF_mc->Draw("HIST SAME");
       leg7.AddEntry(htemp_probejet_neutEmEF_mc, legname,"l");
     }
@@ -411,7 +415,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     TH1D* htemp_probejet_neutEmEF_data;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -430,7 +435,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // hEF->SetMaximum(3);
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_neutEmEF_data->SetLineColor(j+1);
-      else    htemp_probejet_neutEmEF_data->SetLineColor(j+31);      htemp_probejet_neutEmEF_data->SetLineWidth(3);
+      else    htemp_probejet_neutEmEF_data->SetLineColor(j+31);      htemp_probejet_neutEmEF_data->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_neutEmEF_data->Draw("HIST SAME");
       leg8.AddEntry(htemp_probejet_neutEmEF_data, legname);
     }
@@ -447,7 +452,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     TH1D* htemp_probejet_neutHadEF_mc;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -465,10 +471,10 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       //      hEF->GetYaxis()->SetLimits(0,0.1);
       // hEF->SetMaximum(3);
       hEF->SetMinimum(0.001);
-      hEF->SetMaximum(0.8);
+      hEF->SetMaximum(1.3);
       if(j<9) htemp_probejet_neutHadEF_mc->SetLineColor(j+1);
       else    htemp_probejet_neutHadEF_mc->SetLineColor(j+31);
-      htemp_probejet_neutHadEF_mc->SetLineWidth(3);
+      htemp_probejet_neutHadEF_mc->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_neutHadEF_mc->Draw("HIST SAME");
       leg9.AddEntry(htemp_probejet_neutHadEF_mc, legname,"l");
     }
@@ -486,7 +492,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     TH1D* htemp_probejet_neutHadEF_data;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -504,10 +511,10 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       //      hEF->GetYaxis()->SetLimits(0,0.1);
       // hEF->SetMaximum(3);
       hEF->SetMinimum(0.001);
-      hEF->SetMaximum(0.8);
+      hEF->SetMaximum(1.3);
       if(j<9) htemp_probejet_neutHadEF_data->SetLineColor(j+1);
       else    htemp_probejet_neutHadEF_data->SetLineColor(j+31);
-      htemp_probejet_neutHadEF_data->SetLineWidth(3);
+      htemp_probejet_neutHadEF_data->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_neutHadEF_data->Draw("HIST SAME");
       leg10.AddEntry(htemp_probejet_neutHadEF_data, legname);
     }
@@ -526,7 +533,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     TH1D* htemp_probejet_chEmEF_mc;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -547,7 +555,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_chEmEF_mc->SetLineColor(j+1);
       else    htemp_probejet_chEmEF_mc->SetLineColor(j+31);
-      htemp_probejet_chEmEF_mc->SetLineWidth(3);
+      htemp_probejet_chEmEF_mc->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_chEmEF_mc->Draw("HIST SAME");
       leg11.AddEntry(htemp_probejet_chEmEF_mc, legname,"l");
     }
@@ -564,7 +572,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     TH1D* htemp_probejet_chEmEF_data;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -585,7 +594,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_chEmEF_data->SetLineColor(j+1);
       else    htemp_probejet_chEmEF_data->SetLineColor(j+31);
-      htemp_probejet_chEmEF_data->SetLineWidth(3);
+      htemp_probejet_chEmEF_data->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_chEmEF_data->Draw("HIST SAME");
       leg12.AddEntry(htemp_probejet_chEmEF_data, legname);
     }
@@ -602,7 +611,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     TH1D* htemp_probejet_chHadEF_mc;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -623,7 +633,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_chHadEF_mc->SetLineColor(j+1);
       else    htemp_probejet_chHadEF_mc->SetLineColor(j+31);
-      htemp_probejet_chHadEF_mc->SetLineWidth(3);
+      htemp_probejet_chHadEF_mc->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_chHadEF_mc->Draw("HIST SAME");
       leg13.AddEntry(htemp_probejet_chHadEF_mc, legname,"l");
     }
@@ -639,7 +649,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     TH1D* htemp_probejet_chHadEF_data;
 
     gPad->SetLogy();
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -660,7 +671,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
      hEF->SetMinimum(0.001);
       if(j<9) htemp_probejet_chHadEF_data->SetLineColor(j+1);
       else    htemp_probejet_chHadEF_data->SetLineColor(j+31);
-      htemp_probejet_chHadEF_data->SetLineWidth(3);
+      htemp_probejet_chHadEF_data->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_chHadEF_data->Draw("HIST SAME");
       leg14.AddEntry(htemp_probejet_chHadEF_data, legname);
     }
@@ -674,7 +685,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     tdrCanvas(c15,"c15",hEF,4,10,kSquare,"MC");
     TLegend leg15 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_photonEF_mc;
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -691,10 +703,10 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       // hEF->SetMaximum(3);
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
-           hEF->SetMaximum(0.8);
+           hEF->SetMaximum(1.3);
       if(j<9) htemp_probejet_photonEF_mc->SetLineColor(j+1);
       else    htemp_probejet_photonEF_mc->SetLineColor(j+31);
-      htemp_probejet_photonEF_mc->SetLineWidth(3);
+      htemp_probejet_photonEF_mc->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_photonEF_mc->Draw("HIST SAME");
       leg15.AddEntry(htemp_probejet_photonEF_mc, legname,"l");
     }
@@ -707,7 +719,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     tdrCanvas(c16,"c16",hEF,4,10,kSquare,"DATA");
     TLegend leg16 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_photonEF_data;
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -724,10 +737,10 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
       // hEF->SetMaximum(3);
-      hEF->SetMaximum(0.8);
+      hEF->SetMaximum(1.3);
       if(j<9) htemp_probejet_photonEF_data->SetLineColor(j+1);
       else    htemp_probejet_photonEF_data->SetLineColor(j+31);
-      htemp_probejet_photonEF_data->SetLineWidth(3);
+      htemp_probejet_photonEF_data->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_photonEF_data->Draw("HIST SAME");
       leg16.AddEntry(htemp_probejet_photonEF_data, legname);
     }
@@ -741,7 +754,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     tdrCanvas(c17,"c17",hEF,4,10,kSquare,"MC");
     TLegend leg17 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_muonEF_mc;
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -758,10 +772,10 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->GetXaxis()->SetLimits(0,1.1);
       //      hEF->GetYaxis()->SetLimits(0,0.1);
       // hEF->SetMaximum(3);
-      hEF->SetMaximum(0.8);
+      hEF->SetMaximum(1.3);
       if(j<9) htemp_probejet_muonEF_mc->SetLineColor(j+1);
       else    htemp_probejet_muonEF_mc->SetLineColor(j+31);
-      htemp_probejet_muonEF_mc->SetLineWidth(3);
+      htemp_probejet_muonEF_mc->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_muonEF_mc->Draw("HIST SAME");
       leg17.AddEntry(htemp_probejet_muonEF_mc, legname,"l");
     }
@@ -774,7 +788,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     tdrCanvas(c18,"c18",hEF,4,10,kSquare,"DATA");
     TLegend leg18 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_muonEF_data;
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -794,7 +809,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->SetMaximum(0.5);
       if(j<9) htemp_probejet_muonEF_data->SetLineColor(j+1);
       else    htemp_probejet_muonEF_data->SetLineColor(j+31);
-      htemp_probejet_muonEF_data->SetLineWidth(3);
+      htemp_probejet_muonEF_data->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_muonEF_data->Draw("HIST SAME");
       leg18.AddEntry(htemp_probejet_muonEF_data, legname);
     }
@@ -808,7 +823,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     tdrCanvas(c19,"c19",hEF,4,10,kSquare,"MC");
     TLegend leg19 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_phi_mc;
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -826,10 +842,10 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->GetXaxis()->SetLimits(-3.15,3.15);
       hEF->GetYaxis()->SetLimits(0,0.1);
       //      hEF->SetMaximum(3);
-      // hEF->SetMaximum(0.8);
+      // hEF->SetMaximum(1.3);
       if(j<9) htemp_probejet_phi_mc->SetLineColor(j+1);
       else    htemp_probejet_phi_mc->SetLineColor(j+31);
-      htemp_probejet_phi_mc->SetLineWidth(3);
+      htemp_probejet_phi_mc->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_phi_mc->Draw("HIST SAME");
       leg19.AddEntry(htemp_probejet_phi_mc, legname,"l");
     }
@@ -842,7 +858,8 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
     tdrCanvas(c20,"c20",hEF,4,10,kSquare,"DATA");
     TLegend leg20 = tdrLeg(0.45,0.46,0.70,0.81);
     TH1D* htemp_probejet_phi_data;
-    for(int j=0; j<n_pt-1; j++){
+    //    for(int j=0; j<n_pt-1; j++){
+    for(int j=n_pt-5; j<n_pt-1; j++){//only last 3
     //    for(int j=0; j<5; j++){ //TEST
     //    for(int j=5; j<n_pt-1; j++){//TEST
       TString pt_name = "pt_"+pt_range[j]+"_"+pt_range[j+1];
@@ -860,10 +877,10 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
       hEF->GetXaxis()->SetLimits(-3.15,3.15);
       hEF->GetYaxis()->SetLimits(0,0.1);
       //      hEF->SetMaximum(3);
-      //hEF->SetMaximum(0.8);
+      //hEF->SetMaximum(1.3);
       if(j<9) htemp_probejet_phi_data->SetLineColor(j+1);
       else    htemp_probejet_phi_data->SetLineColor(j+31);
-      htemp_probejet_phi_data->SetLineWidth(3);
+      htemp_probejet_phi_data->SetLineWidth(2+j*0.1);
       if(n_ev>100) htemp_probejet_phi_data->Draw("HIST SAME");
       leg20.AddEntry(htemp_probejet_phi_data, legname);
     }
