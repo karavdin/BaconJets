@@ -429,7 +429,8 @@ int main(int argc,char *argv[]){
   }
 
 
-  TString weight_path  = "/nfs/dust/cms/user/garbersc/JEC_Fall17_ForWeights/"; //used as output path of CalculateMCWeights_TriggerThresholds
+  // TString weight_path  = "/nfs/dust/cms/user/garbersc/JEC_Fall17_ForWeights/"; //used as output path of CalculateMCWeights_TriggerThresholds
+  TString weight_path  = "/nfs/dust/cms/user/garbersc/JEC_Fall17_ForWeights/madgraph/";
   // TString input_path_MC = "/nfs/dust/cms/user/multh/JEC/2016Legacy/Residuals/Summer16_07Aug2017_V5/AK4CHS/MC_NoReweighted_CentralFWD_NewBinning/uhh2.AnalysisModuleRunner.MC.QCDPt50toInf_pythia8_AK4CHS_RunBCDEFGH.root";
 
   TString input_path_MC = "";

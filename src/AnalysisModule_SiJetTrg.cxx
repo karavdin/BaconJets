@@ -1489,6 +1489,8 @@ class AnalysisModule_SiJetTrg: public uhh2::AnalysisModule {
     //PhiEta Region cleaning
     if(apply_EtaPhi_cut && (!sel.EtaPhiCleaning() || !sel.EtaPhi()) ) return false;
 
+    if(! sel.EnergyEtaCut()) return false;
+
     if(!isMC){
           // if(! sel.EtaPtCut(event)) return false;
 	  if(! sel.ChEMFrakCut()) return false;
