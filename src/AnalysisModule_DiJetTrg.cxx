@@ -1802,12 +1802,14 @@ if(debug){
       //matching gen- and reco-jets
       for(unsigned int i=0; i<event.genjets->size(); i++){
  	double dR_min = 99999; int idx_matching_jet = -1;
+	double parton_pt_max = 0;
  	for(unsigned int j=0; j<event.jets->size(); j++){
  	  double dR = deltaR(event.jets->at(j), event.genjets->at(i));
  	  //	  cout<<"event.jets->at(j).hadronFlavor() = "<<event.jets->at(j).hadronFlavor()<<" event.jets->at(j).pdgId() = "<<event.jets->at(j).pdgId()
  	  //  <<" event.jets->at(j).flavor() = "<<event.jets->at(j).flavor()<<endl;
  	  //	  if(debug) cout << "dR between GenJet " << i << " and RecoJet " << j << ": " << dR << endl;
- 	  if(dR<dR_min){
+	  double parton_pt = event.genjets->at(i).pt();
+ 	  if(dR<dR_min && parton_pt>parton_pt_max){
  	    dR_min = dR; 
  	    if(dR_min<dr_cut) idx_matching_jet = j;
  	  }
