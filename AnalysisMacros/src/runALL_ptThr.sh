@@ -17,9 +17,9 @@ do
 
 #./main --run F -kFSR --inputMC $path_Gl$thr/uhh2.AnalysisModuleRunner.MC.QCD_HT_MadGraph_AK4CHS.root --input $path_Gl$thr/uhh2.AnalysisModuleRunner.DATA.DATA_RunF_17Nov17_2017.root --outSuffix _GenStudy_MadGraph_minJetPt$thr
 
-./main --run F -F -FP --inputMC $path_Gl$thr/uhh2.AnalysisModuleRunner.MC.QCDPt_pythia8_AK4CHS.root --input $path_Gl$thr/uhh2.AnalysisModuleRunner.DATA.DATA_RunF_17Nov17_2017.root --outSuffix _GenStudy_Pythia8_invertedEnergyEtaCutinFlavor_minJetPt$thr
+# ./main --run F -F -FP --inputMC $path_Gl$thr/uhh2.AnalysisModuleRunner.MC.QCDPt_pythia8_AK4CHS.root --input $path_Gl$thr/uhh2.AnalysisModuleRunner.DATA.DATA_RunF_17Nov17_2017.root --outSuffix _GenStudy_Pythia8_invertedEnergyEtaCutinFlavor_minJetPt$thr
 
-./main --run F -F -FP --inputMC $path_Gl$thr/uhh2.AnalysisModuleRunner.MC.QCD_HT_MadGraph_AK4CHS.root --input $path_Gl$thr/uhh2.AnalysisModuleRunner.DATA.DATA_RunF_17Nov17_2017.root --outSuffix _GenStudy_MadGraph_invertedEnergyEtaCutinFlavor_minJetPt$thr
+# ./main --run F -F -FP --inputMC $path_Gl$thr/uhh2.AnalysisModuleRunner.MC.QCD_HT_MadGraph_AK4CHS.root --input $path_Gl$thr/uhh2.AnalysisModuleRunner.DATA.DATA_RunF_17Nov17_2017.root --outSuffix _GenStudy_MadGraph_invertedEnergyEtaCutinFlavor_minJetPt$thr
 
 ./main --run F -JEF --inputMC $path_Gl$thr/uhh2.AnalysisModuleRunner.MC.QCDPt_pythia8_AK4CHS.root --input $path_Gl$thr/uhh2.AnalysisModuleRunner.DATA.DATA_RunF_17Nov17_2017.root --outSuffix _GenStudy_Pythia8_invertedEnergyEtaCutinFlavor_minJetPt$thr
 

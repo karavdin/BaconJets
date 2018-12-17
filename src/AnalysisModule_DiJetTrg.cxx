@@ -11,7 +11,7 @@
 #include "../include/JECAnalysisHists.h"
 #include "../include/JECCrossCheckHists.h"
 #include "../include/JECRunnumberHists.h"
-
+#include "../include/JECAnalysisFinalStateHadronsHists.h"
 #include <UHH2/common/include/MCWeight.h>
 #include <UHH2/common/include/JetCorrections.h>
 #include <UHH2/common/include/LumiSelection.h> //includes also LuminosityHists.h
@@ -174,16 +174,18 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     Event::Handle<int> tt_jet2_l1bx; 
     Event::Handle<int> tt_jet3_l1bx;  
  
-    std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
-    std::unique_ptr<JECAnalysisHists> h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg500;
-    std::unique_ptr<JECAnalysisHists> h_trgHF60, h_trgHF80,h_trgHF100, h_trgHF160,h_trgHF220, h_trgHF300;   
-    std::unique_ptr<LuminosityHists> h_lumi_nocuts, h_lumi_sel, h_lumi_dijet, h_lumi_match, h_lumi_final;    
-    std::unique_ptr<LuminosityHists> h_lumi_Trig40, h_lumi_Trig60, h_lumi_Trig80, h_lumi_Trig140, h_lumi_Trig200, h_lumi_Trig260, h_lumi_Trig320, h_lumi_Trig400, h_lumi_Trig500;
-    std::unique_ptr<LuminosityHists> h_lumi_TrigHF60, h_lumi_TrigHF80, h_lumi_TrigHF100, h_lumi_TrigHF160, h_lumi_TrigHF220, h_lumi_TrigHF300;
-    std::unique_ptr<JECRunnumberHists> h_runnr_input;
-    std::unique_ptr<JECCrossCheckHists> h_input,h_lumisel, h_beforeCleaner,h_afterCleaner,h_2jets,h_beforeJEC,h_afterJEC,h_afterJER,h_afterMET,h_beforeTriggerData,h_afterTriggerData,h_beforeFlatFwd,h_afterFlatFwd,h_afterPtEtaReweight,h_afterLumiReweight,h_afterUnflat,h_afternVts;
-    uhh2bacon::Selection sel;
 
+  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons;
+  std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
+  std::unique_ptr<JECAnalysisHists> h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg500;
+  std::unique_ptr<JECAnalysisHists> h_trgHF60, h_trgHF80,h_trgHF100, h_trgHF160,h_trgHF220, h_trgHF300;   
+  std::unique_ptr<LuminosityHists> h_lumi_nocuts, h_lumi_sel, h_lumi_dijet, h_lumi_match, h_lumi_final;    
+  std::unique_ptr<LuminosityHists> h_lumi_Trig40, h_lumi_Trig60, h_lumi_Trig80, h_lumi_Trig140, h_lumi_Trig200, h_lumi_Trig260, h_lumi_Trig320, h_lumi_Trig400, h_lumi_Trig500;
+  std::unique_ptr<LuminosityHists> h_lumi_TrigHF60, h_lumi_TrigHF80, h_lumi_TrigHF100, h_lumi_TrigHF160, h_lumi_TrigHF220, h_lumi_TrigHF300;
+  std::unique_ptr<JECRunnumberHists> h_runnr_input;
+  std::unique_ptr<JECCrossCheckHists> h_input,h_lumisel, h_beforeCleaner,h_afterCleaner,h_2jets,h_beforeJEC,h_afterJEC,h_afterJER,h_afterMET,h_beforeTriggerData,h_afterTriggerData,h_beforeFlatFwd,h_afterFlatFwd,h_afterPtEtaReweight,h_afterLumiReweight,h_afterUnflat,h_afternVts;
+  uhh2bacon::Selection sel;
+  
     bool debug;
     bool no_genp;
     bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB, apply_L1seed_from_bx1_filter;
@@ -647,6 +649,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     h_afterLumiReweight.reset(new JECCrossCheckHists(ctx,"CrossCheck_afterLumiReweight"));
     h_afterUnflat.reset(new JECCrossCheckHists(ctx,"CrossCheck_afterUnflat"));
     h_afternVts.reset(new JECCrossCheckHists(ctx,"CrossCheck_afternVts"));
+    h_hadrons.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons"));
     h_nocuts.reset(new JECAnalysisHists(ctx,"NoCuts"));
     h_dijet.reset(new JECAnalysisHists(ctx,"diJet"));
     h_match.reset(new JECAnalysisHists(ctx,"JetMatching"));
@@ -1537,7 +1540,8 @@ if(debug){
     if(!event.isRealData && !no_genp){
       //      if(isMC){
 	if(!sel.PUpthat()) return false;
-	if(!sel.PtaveVsQScale(1.5)) return false;
+	//	if(!sel.PtaveVsQScale(1.5)) return false;//MadGraph
+	if(!sel.PtaveVsQScale(1.2)) return false;//Pythia8
 	// if((gen_pthat-genjet1_pt)/gen_pthat<-0.4) return false;
 	//      }
     }
@@ -1802,15 +1806,17 @@ if(debug){
       //matching gen- and reco-jets
       for(unsigned int i=0; i<event.genjets->size(); i++){
  	double dR_min = 99999; int idx_matching_jet = -1;
-	double parton_pt_max = 0;
+	//	double parton_pt_max = 0;
  	for(unsigned int j=0; j<event.jets->size(); j++){
  	  double dR = deltaR(event.jets->at(j), event.genjets->at(i));
  	  //	  cout<<"event.jets->at(j).hadronFlavor() = "<<event.jets->at(j).hadronFlavor()<<" event.jets->at(j).pdgId() = "<<event.jets->at(j).pdgId()
  	  //  <<" event.jets->at(j).flavor() = "<<event.jets->at(j).flavor()<<endl;
  	  //	  if(debug) cout << "dR between GenJet " << i << " and RecoJet " << j << ": " << dR << endl;
-	  double parton_pt = event.genjets->at(i).pt();
- 	  if(dR<dR_min && parton_pt>parton_pt_max){
+	  //	  double parton_pt = event.genjets->at(i).pt();
+ 	  //if(dR<dR_min && parton_pt>parton_pt_max){
+	  if(dR<dR_min){
  	    dR_min = dR; 
+	    //	    parton_pt_max = parton_pt;
  	    if(dR_min<dr_cut) idx_matching_jet = j;
  	  }
  	}
@@ -1833,38 +1839,51 @@ if(debug){
       // 	}
       // }
       // else{
+      idx_j=-1;
       for(Particle & genj : *event.genjets){
+ 	idx_j++;
  	double dr_min = 99999;
  	double dr_cut = 0;
+	idx_genp_min = -1;
  	if(jetLabel == "AK4CHS" || jetLabel == "AK4PUPPI") dr_cut = 0.4; //TEST: for matching to parton use the full cone size
  	else if (jetLabel == "AK8CHS" || jetLabel == "AK8PUPPI") dr_cut = 0.8; //TEST: for matching to parton use the full cone size
  	else throw runtime_error("TestModule.cxx: Invalid jet-label specified.");
 
-       	int idx_g = 0;
+       	int idx_g = -1;
+	double parton_pt_max=5;
 	if(event.genparticles){
+	  //	  cout<<"Loop over gen particles for matching to GEN jet No."<<idx_j<<endl;
  	for(GenParticle & genp: *event.genparticles){
-	  if(genp.status()<23 || genp.pt()<20) continue;//only particle with status 23 are final state particles
-
- 	  //	  if(genp.status()<2) continue;//TEST it does not make sense to look at status 1 particles, since we know nothing about them
- 	  //	  if(genp.status()==1 && genp.pt()<20) continue;//TEST it does not make sense to look at status 1 particles with low pt, since we know nothing about them
+ 	  idx_g++;
+	  //	  if(genp.status()<23 || genp.pt()<20) continue;//only particle with status 23 are final state particles
+	  //	  if(genp.status()<23) continue;//only particle with status 23 are final state particles
+	  if(genp.status()!=23) continue;//only particle with status 23 are final state particles
+	  //	  cout<<"genp.status() = "<<genp.status()<<endl;;
+	  double parton_pt = genp.pt();
  	  double dr = deltaR(genj,genp);
  	  //  if(dr < dr_min){
- 	  if(dr < dr_min && genp.status()>1){ //TEST it does not make sense to look at status 1 particles, since we know nothing about them
- 	  //	  if(dr < dr_min && (genp.status()>1 || genp.pt()>25)){ //TEST it does not make sense to look at status 1 particles with low pt, since we know nothing about them
+	  // 	  if(dr < dr_min && genp.status()>1 && parton_pt>parton_pt_max){ //does not make sense to look at status 1 particles, since we know nothing about them
+	  // if(dr < dr_min && parton_pt>parton_pt_max && genp.status()==23){
+	  //	  if(dr < dr_min && parton_pt>parton_pt_max){
+	  if(dr < dr_min){
+	    parton_pt_max=parton_pt;
  	    dr_min = dr;
  	    idx_genp_min = idx_g;	
+	    //	    if(debug) cout<<"gen jet and gen particle matched, status = "<<genp.status()<<" idx_genp_min = "<<idx_genp_min<<" dR="<<dr_min<<endl;
  	  }	
  	  //	  if(debug) cout << "dr between genjet " << idx_j << " and genp (flavor: " << genp.flavor() << ") " << idx_g << "= " << dr << endl;
- 	  idx_g++;
+	  // 	  idx_g++;
  	}
  	//if(dr_min <= dr_cut) {
  	if(dr_min <= dr_cut && idx_genp_min>-1) {
- 	  if(debug) cout << "genjet " << idx_j << " is matched to genparticle " << idx_genp_min << " of flavor " << event.genparticles->at(idx_genp_min).flavor() << " within dR = " << dr_min << ". " <<  endl; 
- 	  if(idx_genp_min<4) idx_parton_genJet[idx_genp_min] = idx_j;
+ 	  if(debug) cout << "genjet " << idx_j << " is matched to genparticle " << idx_genp_min <<" with status="<<event.genparticles->at(idx_genp_min).status()<< " and flavor " << event.genparticles->at(idx_genp_min).flavor()
+			 << " and pt = "<<event.genparticles->at(idx_genp_min).pt()<< ", within dR = " << dr_min << ". " <<  endl; 
+	  // if(idx_genp_min<4) idx_parton_genJet[idx_genp_min] = idx_j;
+	  idx_parton_genJet[idx_genp_min] = idx_j;
  	  if(idx_jet_matching_genjet[idx_j] >= 0) idx_matched_jets[idx_jet_matching_genjet[idx_j]] = idx_genp_min;
  	}
 	//	cout << "HAHA: dR of genjet " << idx_j << " and genparticle " << idx_genp_min << " of flavor " << event.genparticles->at(idx_genp_min).flavor() << " : dR = " << dr_min << ". " <<  endl; 
- 	idx_j++;
+	// 	idx_j++;
       }
       }
 
@@ -1953,6 +1972,7 @@ if(debug){
  	probejet_ptptcl = event.genparticles->at(idx_matched_jets[idx_probejet]).pt();
  	probejet_statusptcl = event.genparticles->at(idx_matched_jets[idx_probejet]).status(); 
  	probejet_ptgen = event.genjets->at(idx_matched_RecoGenjets[idx_probejet]).pt();
+	h_hadrons->fill(event,idx_matched_RecoGenjets[idx_probejet]);
 	dR_GenJet_GenParticle_probe_matched =   deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_probejet]),event.genparticles->at(idx_matched_jets[idx_probejet]));
       }
       else if(idx_matched_RecoGenjets[idx_probejet] !=-1){
