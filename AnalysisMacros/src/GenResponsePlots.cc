@@ -237,6 +237,7 @@ void CorrectionObject::GenResponsePlots(){
     //    cout<<"pt_binning_var = "<<pt_binning_var<<endl;
     if(*alpha_mc>alpha_cut) continue;
    for(int j=0; j<n_eta-1; j++){
+     if(pt_binning_var*cosh(*probejet_eta_mc)>3250) continue;
 	if(fabs(*probejet_eta_mc)>eta_bins[j+1] || fabs(*probejet_eta_mc)<eta_bins[j]) continue;
 	else{
 	  //	  bool matched;
@@ -815,7 +816,7 @@ void CorrectionObject::GenResponsePlots(){
     h->GetXaxis()->SetTitle(pt_binning_var_str);
     h->GetXaxis()->SetTitleSize(0.05);
     h->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
-    h->GetYaxis()->SetRangeUser(0.7,1.1);
+    h->GetYaxis()->SetRangeUser(0.75,1.1);
     graph_rel_A_mc->Draw("P SAME");
     graph_rel_B_mc->Draw("P SAME");
     graph_probeRECO_probeGEN->Draw("P SAME");
@@ -1019,7 +1020,7 @@ void CorrectionObject::GenResponsePlots(){
     h->GetXaxis()->SetTitle(pt_binning_var_str);
     h->GetXaxis()->SetTitleSize(0.05);
     h->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
-    h->GetYaxis()->SetRangeUser(0.7,1.1);
+    h->GetYaxis()->SetRangeUser(0.75,1.1);
     h->GetYaxis()->SetTitle("");
     graph_rel_A_GEN_mc->Draw("P SAME");
     graph_rel_A_PARTON_mc->Draw("P SAME");

@@ -111,7 +111,7 @@ void CorrectionObject::FlavorCorrection_TTree(){
     //response plots
     //for each flavor, calculate mean response of the leading jet
     for(int j=0; j<n_eta-1; j++){
-      if(0.5*((*probejet_pt)+(*barreljet_pt))*cosh(*probejet_eta)<3250) continue; //Select only bad events
+      //      if(0.5*((*probejet_pt)+(*barreljet_pt))*cosh(*probejet_eta)<3250) continue; //Select only bad events
       //      if((*probejet_pt)>50) continue;
       //      if((*probejet_pt)>150 || (*probejet_pt)<50) continue;
       //      if((*probejet_pt)<150) continue;

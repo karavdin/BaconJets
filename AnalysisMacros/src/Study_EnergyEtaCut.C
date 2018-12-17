@@ -13,13 +13,20 @@ void Study_EnergyEtaCut(){
  Double_t w = 600;
  Double_t h = 600;
  TString gl_label = "HLT_DiJet";
+ //2016
+ const int n_pt = 11;
+ const double pt_bins[n_pt] = {51, 74, 96, 165, 232, 300, 366, 456, 569, 1000, 2000};
+ const int n_pt_HF = 10;
+ const double pt_bins_HF[n_pt_HF] = {51, 72, 95, 118, 188, 257, 354, 450, 1000, 2000};
+
+ /* //2017
  const int n_pt = 14;
  const double pt_bins[n_pt] = {51,73,85,97,140,179,240,307,370,434,520,649,1000,2000};
  // const int n_pt_HF = 9;
  // const double pt_bins_HF[n_pt_HF] = {51,73,93,113,176,239,318,1000,2000};
  const int n_pt_HF = 10;
  const double pt_bins_HF[n_pt_HF] = {51,73,93,113,176,239,318,370,1000,2000};
-
+ */
 // TString gl_label = "HLT_SingleJet";
 // const int n_pt = 15;
 // const double pt_bins[n_pt] = {40, 72, 95, 130, 160, 190, 226, 250, 283, 344, 443, 577, 606, 1000,2000};
@@ -62,6 +69,12 @@ const double eta_cut = 2.853-1e-5;
  c1_kin_edge->SaveAs("kin_edge_"+gl_label+".pdf");
 
  
-
-
+TCanvas * c1_kin_edge1D = new TCanvas("ckin_edge1D", "c", w, h);
+TF1 *fa1 = new TF1("fa1","3250/cosh(x)",0,7.0);
+ fa1->Draw();
+ fa1->GetYaxis()->SetTitle("max pt^{ave}, GeV");
+ fa1->GetXaxis()->SetTitle("#eta");
+ c1_kin_edge1D->SetLogy();
+ c1_kin_edge1D->SetGrid();
+ c1_kin_edge1D->SaveAs("kin_edge_PtvsEta_1D.pdf");
 }
