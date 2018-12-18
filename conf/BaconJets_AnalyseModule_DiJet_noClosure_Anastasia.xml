@@ -6,22 +6,11 @@
 <!ENTITY NEVT                "-1">
 
 <!ENTITY CACHEABLE           "False">
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_PFMET/"> -->
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_PFMET/"> -->
 
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSMET_wL1L2L3minusL1FastJet/"> -->
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V11_noClosure_noJER_slimmedMETs_CHSMET_wL1L2L3minusL1FastJet/"> -->
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V11_noClosure_noJER_slimmedMETs_PFMET_wL1L2L3minusL1RC/"> -->
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/">
 
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_CHSMET_wL1L2L3minusL1RC/"> -->
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETsModifiedMET_PFMET_jetRaw50GeV/"> -->
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale15_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/"> -->
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/">
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V23_noClosure_noJER_slimmedMETs_CHSMET_wL1L2L3minusL1RC/"> -->
 <!ENTITY b_closuretest       "false">
-<!ENTITY jec_version         "Fall17_17Nov2017_V23">
-<!-- <!ENTITY jec_version         "Fall17_17Nov2017_V11"> -->
-<!-- <!ENTITY APPLY_WEIGHTS       "true"> -->
+<!ENTITY jec_version         "Fall17_17Nov2017_V32">
 <!ENTITY APPLY_WEIGHTS       "false">
 <!ENTITY WEIGHT_PATH         "/nfs/dust/cms/user/garbersc/JEC_Fall17_ForWeights/"> 
 <!ENTITY Cut_PATH            "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/BaconJets/data/hotjets/17-17Nov17ReReco/">
@@ -238,20 +227,18 @@
      </InputData>
 
 -->
-<!--
-<InputData Lumi="36311468" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;">
+
+<InputData Lumi="4319" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunD_promptReco_2017;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
 </InputData>
 
-<InputData Lumi="76958681" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;">
+<InputData Lumi="9424" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunE_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunE_promptReco_2017;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
 </InputData>
-
--->
 
 <InputData Lumi="13540" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_17Nov17_2017" Cacheable="&CACHEABLE;">
           &DATA_RunF_promptReco_2017;

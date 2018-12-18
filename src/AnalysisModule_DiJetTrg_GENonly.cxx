@@ -383,7 +383,7 @@ class AnalysisModule_DiJetTrg_GENonly: public uhh2::AnalysisModule {
       if(jetLabel == "AK4CHS"){
 	//	IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
 	IF_MAKE_JEC_VARS_MC(Summer16_23Sep2016V4)
-	else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V23)
+	else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V24)
        }
 
       else throw runtime_error("In AnalysisModule_DiJetTrg_GENonly.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
@@ -439,22 +439,14 @@ class AnalysisModule_DiJetTrg_GENonly: public uhh2::AnalysisModule {
 	if(!ClosureTest){
 	  //residuals
 	  IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V11) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V23) 
 	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V24) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V25) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V26) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V27) 
-	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V28) 
+	    else IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V32) 
 	    else throw runtime_error("In AnalysisModule_DiJetTrg_GENonly.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
 	  IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V11)
-	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V23)
 	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V24)
-	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V25)
-	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V26)
-	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V27)
-	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V28)
+	    else IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V32)
 	    else throw runtime_error("In AnalysisModule_DiJetTrg_GENonly.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
       }
@@ -505,11 +497,14 @@ class AnalysisModule_DiJetTrg_GENonly: public uhh2::AnalysisModule {
      
 //JER Smearing for corresponding JEC-Version
       if(isMC){
-	if(JEC_Version == "Fall17_17Nov2017_V11") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
-	else if(JEC_Version == "Fall17_17Nov2017_V27") jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt"));
-	
-	else cout << "In AnalysisModule_DiJetTrg_GENonly.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
+	if(JEC_Version == "Fall17_17Nov2017_V11") 
+	  jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Summer16_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+	else if(JEC_Version == "Fall17_17Nov2017_V24" || JEC_Version == "Fall17_17Nov2017_V32") 
+	  jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17_V3_RunBCDEF_Pythia,"Fall17_V3_MC_PtResolution_AK4PFchs.txt"));
+	//	else cout << "In AnalysisModule_SiJetTrg.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
       }
+      else cout << "In AnalysisModule_DiJetTrg_GENonly.cxx: When setting up JER smearer, invalid 'JEC_Version' was specified."<<endl;
+      //  }
      
     //output
     ctx.undeclare_all_event_output();   
