@@ -518,20 +518,20 @@ else trigger500_fwd_sel.reset(new uhh2::AndSelection(ctx));
       if(jetLabel == "AK4CHS"){
 	if(!ClosureTest){
 	  //residuals
-	 if(JEC_Version == "Fall17_17Nov2017_V23"){
-	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V23_B_L123_AK4PFchs_DATA;
-	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V23_C_L123_AK4PFchs_DATA;
-	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V23_D_L123_AK4PFchs_DATA;
-	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V23_E_L123_AK4PFchs_DATA;
-	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V23_F_L123_AK4PFchs_DATA;
+	 if(JEC_Version == "Fall17_17Nov2017_V24"){
+	    JEC_corr_B               = JERFiles::Fall17_17Nov2017_V24_B_L123_AK4PFchs_DATA;
+	    JEC_corr_C               = JERFiles::Fall17_17Nov2017_V24_C_L123_AK4PFchs_DATA;
+	    JEC_corr_D               = JERFiles::Fall17_17Nov2017_V24_D_L123_AK4PFchs_DATA;
+	    JEC_corr_E               = JERFiles::Fall17_17Nov2017_V24_E_L123_AK4PFchs_DATA;
+	    JEC_corr_F               = JERFiles::Fall17_17Nov2017_V24_F_L123_AK4PFchs_DATA;
 	    							   
-	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V23_B_L1RC_AK4PFchs_DATA;
-	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V23_C_L1RC_AK4PFchs_DATA;
-	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V23_D_L1RC_AK4PFchs_DATA;
-	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V23_E_L1RC_AK4PFchs_DATA;
-	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V23_F_L1RC_AK4PFchs_DATA;
+	    JEC_corr_B_L1RC          = JERFiles::Fall17_17Nov2017_V24_B_L1RC_AK4PFchs_DATA;
+	    JEC_corr_C_L1RC          = JERFiles::Fall17_17Nov2017_V24_C_L1RC_AK4PFchs_DATA;
+	    JEC_corr_D_L1RC          = JERFiles::Fall17_17Nov2017_V24_D_L1RC_AK4PFchs_DATA;
+	    JEC_corr_E_L1RC          = JERFiles::Fall17_17Nov2017_V24_E_L1RC_AK4PFchs_DATA;
+	    JEC_corr_F_L1RC          = JERFiles::Fall17_17Nov2017_V24_F_L1RC_AK4PFchs_DATA;
 
-	    if(debug) cout<<"set JEC cor to Fall17_17Nov2017_V23 values\n";
+	    if(debug) cout<<"set JEC cor to Fall17_17Nov2017_V24 values\n";
 	    
 	  }	 
 	  else throw runtime_error("In AnalysisModule_noPtBinning.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");

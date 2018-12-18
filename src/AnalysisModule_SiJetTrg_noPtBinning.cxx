@@ -333,7 +333,7 @@ class AnalysisModule_SiJetTrg_noPtBinning: public uhh2::AnalysisModule {
     if(isMC){
       //for MC
       if(jetLabel == "AK4CHS"){
-	  IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V23)
+	  IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V24)
        }
 
 	  else throw runtime_error("In AnalysisModule_SiJetTrg_noPtBinning.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");
@@ -375,11 +375,11 @@ class AnalysisModule_SiJetTrg_noPtBinning: public uhh2::AnalysisModule {
       if(jetLabel == "AK4CHS"){
 	if(!ClosureTest){
 	  //residuals
-	    IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V23) 
+	    IF_MAKE_JEC_VARS_NO_CLOSURE(Fall17_17Nov2017_V24) 
 	    else throw runtime_error("In AnalysisModule_SiJetTrg_noPtBinning.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, DATA specified.");
 	}
 	else{
-	  IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V23) 
+	  IF_MAKE_JEC_VARS_CLOSURE(Fall17_17Nov2017_V24) 
 
 	 else throw runtime_error("In AnalysisModule_SiJetTrg_noPtBinning.cxx: Invalid JEC_Version for closure test on AK4CHS, DATA specified.");
 	}
