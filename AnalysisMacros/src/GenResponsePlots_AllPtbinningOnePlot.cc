@@ -29,6 +29,11 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/GenResponsePlots/");
   gStyle->SetOptStat(0);
   TString flavorLabel = "";
+  TString txttag=CorrectionObject::_generator_tag; 
+  TLatex *tex = new TLatex();
+  tex->SetNDC();
+  tex->SetTextSize(0.045);  
+
   //Table with number of events in each pT- and eta-bin
   
   //Set up histos for ratios of responses
@@ -292,7 +297,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     ptup_line->SetLineWidth(2);
     ptlow_line->Draw();
     ptup_line->Draw();
-
+    tex->DrawLatex(0.15,0.95,txttag);
     c_ptnorm->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_pTbinning__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_pt_"+pt_range[j]+ "_"+pt_range[j+1]+ "__"+ flavor + ".pdf");
     }
   }
@@ -354,6 +359,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     ptup_line->SetLineWidth(2);
     ptlow_line->Draw();
     ptup_line->Draw();
+    tex->DrawLatex(0.15,0.95,txttag);
     c_ptprobereco->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_pTprobeRECO__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_pt_"+pt_range[j]+ "_"+pt_range[j+1]+ "__"+ flavor + ".pdf");
     }
   }
@@ -415,6 +421,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     ptup_line->SetLineWidth(2);
     ptlow_line->Draw();
     ptup_line->Draw();
+    tex->DrawLatex(0.15,0.95,txttag);
     c_ptprobegen->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_pTprobeGEN__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_pt_"+pt_range[j]+ "_"+pt_range[j+1]+ "__"+ flavor + ".pdf");
     }
   }
@@ -466,6 +473,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     ptup_line->SetLineWidth(2);
     ptlow_line->Draw();
     ptup_line->Draw();
+    tex->DrawLatex(0.15,0.95,txttag);
     c_ptprobereco_norm->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_pTprobeRECOnorm__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_pt_"+pt_range[j]+ "_"+pt_range[j+1]+ "__"+ flavor + ".pdf");
     }
   }
@@ -519,6 +527,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     ptup_line->SetLineWidth(2);
     ptlow_line->Draw();
     ptup_line->Draw();
+    tex->DrawLatex(0.15,0.95,txttag);
     c_ptprobegen_norm->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_pTprobeGENnorm__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_pt_"+pt_range[j]+ "_"+pt_range[j+1]+ "__"+ flavor + ".pdf");
 
     cout<<"eta_range2: "<<eta_range2[i]<<" "<<eta_range2[i+1]<<" pt range: "<<pt_range[j]<<" "<<+pt_range[j+1];
@@ -705,6 +714,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     }
     gPad->SetLogx();
     leg_rel->Draw();
+    tex->DrawLatex(0.15,0.95,txttag);
     c_rel->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_probeGEN_tagGEN__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +"_"+ flavor + ".pdf");
 
     TLegend *leg_reco;
@@ -747,6 +757,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     }
     gPad->SetLogx();
     leg_reco->Draw();
+    tex->DrawLatex(0.15,0.95,txttag);
     c_reco->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_probeRECO_tagRECO__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +"_"+ flavor + ".pdf");
 
     TLegend *leg_recoTogen;
@@ -788,7 +799,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     }
     gPad->SetLogx();
     leg_recoTogen->Draw();
-
+    tex->DrawLatex(0.15,0.95,txttag);
     c_recoTogen->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_probeRECO_probeGEN__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +"_"+ flavor + ".pdf");
 
 
@@ -831,7 +842,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     }
     gPad->SetLogx();
     leg_mpf->Draw();
-
+    tex->DrawLatex(0.15,0.95,txttag);
     c_MPF_reco->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_MPF_RECO__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +"_"+ flavor + ".pdf");
 
 
@@ -874,7 +885,7 @@ void CorrectionObject::GenResponsePlots_AllPtbinningOnePlot(TString flavor="All"
     }
     gPad->SetLogx();
     leg_mpf_gen->Draw();
-
+    tex->DrawLatex(0.15,0.95,txttag);
     c_MPF_gen->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_MPF_GEN__allPtbinsAtOnePlot_"+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +"_"+ flavor + ".pdf");
 
 

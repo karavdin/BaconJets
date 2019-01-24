@@ -7,8 +7,9 @@
 
 <!ENTITY CACHEABLE           "False">
 
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_wJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale15_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching_PFcontent_Energy_HadGendR04_addExampleHadronEtaHists_fixedTriggerTh/"> 
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_wJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/"> -->
+<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/"> -->
+
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale15_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching_PFcontent_Energy_HadGendR04_addExampleHadronEtaHists_fixedTriggerTh/">
 
 <!ENTITY b_closuretest       "false">
 <!ENTITY jec_version         "Fall17_17Nov2017_V32">
@@ -26,7 +27,7 @@
 <!ENTITY ONLY_BACK_TO_BACK "false" >
 <!ENTITY USE_SINGLE_TRIGGER "false" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
-<!ENTITY APPLY_MC_SMEAR  "true">
+<!ENTITY APPLY_MC_SMEAR  "false">
 <!ENTITY APPLY_L1SEED_FROM_BX1_FILTER  "false">
 
 <!ENTITY QCDPt30to50_pythia8_AK4CHS           SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_9_4_9/src/UHH2/common/datasets/RunII_94X_v2/MC_QCD_Pt-50to80_TuneCP5_Flat2017_13TeV_pythia8_withLowPtJets.xml">
@@ -77,7 +78,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="2" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunDEF_xcheckWdijet_with_V2_branch_correctedMETCorrection3_woL1bxclean_noClosure_slimmedMETs_V11_L1RC_METtest_15GeV_15GeV"/>
+<ConfigSGE RAM ="2" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunDEF_xcheckWdijet_with_V2_branch_correctedMETCorrection3_woL1bxclean_noClosure_slimmedMETs_V11_L1RC_METtest_15GeV_15GeV_NOJER"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -135,7 +136,6 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
-
 <!--
 <InputData Lumi="0.1400073794" NEventsMax="&NEVT;" Type="MC" Version="QCDPt30to50_pythia8_AK4CHS" Cacheable="&CACHEABLE;">
           &QCDPt30to50_pythia8_AK4CHS;

@@ -24,7 +24,7 @@ using namespace std;
 void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
   cout << "--------------- StartingAdditionalAsymmetryPlots() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
-
+  TString txttag=CorrectionObject::_generator_tag; 
   int n_pt_ = max(n_pt,n_pt_HF);
   bool eta_cut_bool;
   int n_pt_cutted;
@@ -414,6 +414,7 @@ void CorrectionObject::AdditionalAsymmetryPlots(bool eta_abs, bool si_trg){
     htemp_met_mc->Draw("HIST");
 
     tex->DrawLatex(0.2,0.85,"MC, " + textPt);
+    tex->DrawLatex(0.15,0.95,txttag);
     // tex->DrawLatex(0.2,0.4,textChi2NDF);
     //tex_lumi->DrawLatex(0.6,0.91,"MC");
     c5->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/METoverPt_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_" + pt_name + ".pdf");
@@ -1049,7 +1050,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     htemp_pt_datamc->SetTitleSize(0.12,"xyz");
     htemp_pt_datamc->SetLineWidth(3);
     htemp_pt_datamc->Draw();
-        
+    tex->DrawLatex(0.15,0.95,txttag);
     c_ptbinned->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/Pt_jet_1_binned_DataMC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_" + pt_name + ".pdf");
     delete c_ptbinned;
     delete htemp_pt_mc2;
@@ -1138,7 +1139,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     htemp_pt_data2->Draw("* same");
     
     tex->DrawLatex(0.2,0.85,textPt);
-
+    tex->DrawLatex(0.15,0.95,txttag);
     c_ptbinned->cd();          // Go back to the main canvas before defining pad2
     TPad *pad2 = new TPad("pad2", "pad2", 0, 0.05, 1, 0.3);
     pad2->SetTopMargin(0);
@@ -1260,7 +1261,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     htemp_pt_datamc->SetTitleSize(0.12,"xyz");
     htemp_pt_datamc->SetLineWidth(3);
     htemp_pt_datamc->Draw();
-        
+    tex->DrawLatex(0.15,0.95,txttag);
     c_ptbinned->SaveAs(CorrectionObject::_outpath+"plots/control/fullAsym/Pt_jet_3_binned_DataMC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + "_" + pt_name + ".pdf");
     delete c_ptbinned;
     delete htemp_pt_mc2;
@@ -1351,7 +1352,7 @@ for(int i=0; i<(eta_abs ? n_eta : n_eta_full)-1; i++){
     htemp_met_data2->Draw("* same");
     
     tex->DrawLatex(0.2,0.85,textPt);
-
+    tex->DrawLatex(0.15,0.95,txttag);
     c_metbinned->cd();          // Go back to the main canvas before defining pad2
     TPad *pad2 = new TPad("pad2", "pad2", 0, 0.05, 1, 0.3);
     pad2->SetTopMargin(0);

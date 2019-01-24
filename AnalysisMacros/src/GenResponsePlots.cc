@@ -26,11 +26,13 @@ using namespace std;
 
 void CorrectionObject::GenResponsePlots(){
   cout << "--------------- Starting GenResponsePlots() ---------------" << endl << endl;
+  CorrectionObject::make_path(CorrectionObject::_outpath+"plots/");
+  CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/");
   CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/GenResponsePlots/");
   gStyle->SetOptStat(0);
   TString flavorLabel = "";
   //Table with number of events in each pT- and eta-bin
-
+  TString txttag=CorrectionObject::_generator_tag; 
   TH1D *hmc_A[n_pt-1][n_eta-1];   // Assymetry_RECO tag&probe jet matched to GEN jets
   TH1D *hmc_B[n_pt-1][n_eta-1];   // MPF Assymetry_RECO tag&probe jet matched to GEN jets
   TH1D *hmc_A_GEN[n_pt-1][n_eta-1];   // Assymetry_GEN tag&probe jet matched to GEN jets
@@ -430,6 +432,7 @@ void CorrectionObject::GenResponsePlots(){
        pr_nGoodvertices[j]->SetMaximum(80);
        //  cout<<"Hello its me!"<<endl;
        tex->DrawLatex(0.47,0.85,"MC, " + text);
+       tex->DrawLatex(0.15,0.95,txttag);
        c_dummy1->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GoodVertices_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy1;
        cout<<"Hello its me!"<<endl;
@@ -441,6 +444,7 @@ void CorrectionObject::GenResponsePlots(){
        pr_nvertices[j]->SetMinimum(0);
        pr_nvertices[j]->SetMaximum(80);
        tex->DrawLatex(0.47,0.85,"MC, " + text);
+       tex->DrawLatex(0.15,0.95,txttag);
        c_dummy2->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Vertices_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy2;
 
@@ -482,6 +486,7 @@ void CorrectionObject::GenResponsePlots(){
        pr_Ngenjet[j]->SetMinimum(0);
        pr_Ngenjet[j]->SetMaximum(10);
        tex->DrawLatex(0.47,0.85,"MC, " + text);
+       tex->DrawLatex(0.15,0.95,txttag);
        c_dummy6->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Ngenjet_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy6;
 
@@ -493,6 +498,7 @@ void CorrectionObject::GenResponsePlots(){
        pr_Nptcl[j]->SetMinimum(0);
        pr_Nptcl[j]->SetMaximum(10);
        tex->DrawLatex(0.47,0.85,"MC, " + text);
+       tex->DrawLatex(0.15,0.95,txttag);
        c_dummy7->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Nptcl_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy7;
 
@@ -504,6 +510,7 @@ void CorrectionObject::GenResponsePlots(){
        pr_rho[j]->SetMinimum(0);
        pr_rho[j]->SetMaximum(60);
        tex->DrawLatex(0.47,0.85,"MC, " + text);
+       tex->DrawLatex(0.15,0.95,txttag);
        c_dummy8->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Rho_eta_"+eta_range2[j]+"_"+eta_range2[j+1]+".pdf");
        delete c_dummy8;
 
@@ -816,16 +823,18 @@ void CorrectionObject::GenResponsePlots(){
     h->GetXaxis()->SetTitle(pt_binning_var_str);
     h->GetXaxis()->SetTitleSize(0.05);
     h->GetXaxis()->SetLimits(30,pt_bins[n_pt-1]+100);
-    h->GetYaxis()->SetRangeUser(0.75,1.1);
+    //    h->GetYaxis()->SetRangeUser(0.75,1.1);
+    h->GetYaxis()->SetRangeUser(0.85,1.1);
     graph_rel_A_mc->Draw("P SAME");
     graph_rel_B_mc->Draw("P SAME");
     graph_probeRECO_probeGEN->Draw("P SAME");
-    graph_tagRECO_tagGEN->Draw("P SAME");
-    graph_probeRECO_tagRECO->Draw("P SAME");
+    //    graph_tagRECO_tagGEN->Draw("P SAME");
+    //    graph_probeRECO_tagRECO->Draw("P SAME");
 
     gPad->SetLogx();
     TLegend *leg_rel;
-    leg_rel = new TLegend(0.25,0.15,0.71,0.49,"","brNDC");//x+0.1
+    //    leg_rel = new TLegend(0.25,0.15,0.71,0.49,"","brNDC");//x+0.1
+    leg_rel = new TLegend(0.25,0.17,0.71,0.40,"","brNDC");//x+0.1
     leg_rel->SetBorderSize(0);
     leg_rel->SetTextSize(0.030);
     leg_rel->SetFillColor(10);
@@ -836,9 +845,10 @@ void CorrectionObject::GenResponsePlots(){
     leg_rel->AddEntry(graph_rel_A_mc, axistitle_A_mc,"P");
     leg_rel->AddEntry(graph_rel_B_mc, axistitle_B_mc,"P");
     leg_rel->AddEntry(graph_probeRECO_probeGEN, axistitle_mc_probeprobe,"P");
-    leg_rel->AddEntry(graph_tagRECO_tagGEN, axistitle_mc_tagtag,"P");
-    leg_rel->AddEntry(graph_probeRECO_tagRECO, axistitle_mc_probetagRECO,"P");
+    //    leg_rel->AddEntry(graph_tagRECO_tagGEN, axistitle_mc_tagtag,"P");
+    //    leg_rel->AddEntry(graph_probeRECO_tagRECO, axistitle_mc_probetagRECO,"P");
     leg_rel->Draw();
+    tex->DrawLatex(0.15,0.95,txttag);
     c_rel->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_RatioOfAverages_RECOvsGEN_"+pt_binning_var_name+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
 
     delete graph_rel_A_mc;
@@ -927,6 +937,7 @@ void CorrectionObject::GenResponsePlots(){
     leg_rel->AddEntry(graph_QG, axistitle_QG,"P");
     leg_rel->AddEntry(graph_GQ, axistitle_GQ,"P");
     leg_rel->Draw();
+    tex->DrawLatex(0.15,0.95,txttag);
     c_rel->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_Fractions_"+pt_binning_var_name+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
 
     delete graph_QQ;
@@ -1044,6 +1055,7 @@ void CorrectionObject::GenResponsePlots(){
     leg_rel->AddEntry(graph_tagGEN_tagPARTON, axistitle_mc_tagtag,"P");
     leg_rel->AddEntry(graph_probeGEN_tagGEN, axistitle_mc_probetagGEN,"P");
     leg_rel->Draw();
+    tex->DrawLatex(0.15,0.95,txttag);
     c_rel->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/GenResponse_RatioOfAverages_GENvsPARTON_"+pt_binning_var_name+ CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + ".pdf");
 
     delete graph_rel_A_GEN_mc;
@@ -1117,6 +1129,7 @@ void CorrectionObject::GenResponsePlots(){
       leg2.Draw();
       gPad->SetLogy();
       //      tex->DrawLatex(0.47,0.85,"MC, " + text);
+      tex->DrawLatex(0.15,0.95,txttag);
       ctmp->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Matched_ProbeJetpt_flavor_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+".pdf");
   }
 
@@ -1180,6 +1193,7 @@ void CorrectionObject::GenResponsePlots(){
       leg2.Draw();
       gPad->SetLogy();
       //      tex->DrawLatex(0.47,0.85,"MC, " + text);
+      tex->DrawLatex(0.15,0.95,txttag);
       ctmp->SaveAs(CorrectionObject::_outpath+"plots/control/GenResponsePlots/Matched_TagJetpt_flavor_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1]+".pdf");
   }
 

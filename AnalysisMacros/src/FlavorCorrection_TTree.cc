@@ -68,8 +68,11 @@ void CorrectionObject::FlavorCorrection_TTree(){
 
   int n_leadingjet_u = 0, n_leadingjet_d = 0, n_leadingjet_s = 0, n_leadingjet_c = 0, n_leadingjet_b = 0, n_leadingjet_g = 0, n_leadingjet_unm = 0;
 
-  TH1D* energy_fractions_u[5][n_eta]; TH1D* energy_fractions_d[5][n_eta]; TH1D* energy_fractions_s[5][n_eta]; 
-  TH1D*  energy_fractions_c[5][n_eta]; TH1D* energy_fractions_b[5][n_eta]; TH1D* energy_fractions_g[5][n_eta]; TH1D* energy_fractions_unm[5][n_eta];
+  TH1D* energy_fractions_u[5][n_eta-1]; TH1D* energy_fractions_d[5][n_eta-1]; TH1D* energy_fractions_s[5][n_eta-1]; 
+  TH1D*  energy_fractions_c[5][n_eta-1]; TH1D* energy_fractions_b[5][n_eta-1]; TH1D* energy_fractions_g[5][n_eta-1]; TH1D* energy_fractions_unm[5][n_eta-1];
+
+  // TH1D* energy_fractions_u_pt[5][n_pt-1][n_eta-1]; TH1D* energy_fractions_d_pt[5][n_pt-1][n_eta-1]; TH1D* energy_fractions_s_pt[5][n_pt-1][n_eta-1]; 
+  // TH1D*  energy_fractions_c_pt[5][n_pt-1][n_eta-1]; TH1D* energy_fractions_b_pt[5][n_pt-1][n_eta-1]; TH1D* energy_fractions_g_pt[5][n_pt-1][n_eta-1]; TH1D* energy_fractions_unm_pt[5][n_pt-1][n_eta-1];
   for(int i=0; i<5; i++){
     for(int j=0; j<n_eta-1; j++){
       TString add = "_"+i;      add+="_";      add+=j;
@@ -80,6 +83,16 @@ void CorrectionObject::FlavorCorrection_TTree(){
       energy_fractions_b[i][j] = new TH1D("energy_fractions_b_"+add,"",100,0,1);
       energy_fractions_g[i][j] = new TH1D("energy_fractions_g_"+add,"",100,0,1);
       energy_fractions_unm[i][j] = new TH1D("energy_fractions_unm_"+add,"",100,0,1);
+      // for(int k=0; k<n_pt-1; k++){
+      // 	add +="_"; add +=k;
+      // 	energy_fractions_u_pt[i][k][j] = new TH1D("energy_fractions_u_"+add,"",100,0,1);
+      // 	energy_fractions_d_pt[i][k][j] = new TH1D("energy_fractions_d_"+add,"",100,0,1);
+      // 	energy_fractions_s_pt[i][k][j] = new TH1D("energy_fractions_s_"+add,"",100,0,1);
+      // 	energy_fractions_c_pt[i][k][j] = new TH1D("energy_fractions_c_"+add,"",100,0,1);
+      // 	energy_fractions_b_pt[i][k][j] = new TH1D("energy_fractions_b_"+add,"",100,0,1);
+      // 	energy_fractions_g_pt[i][k][j] = new TH1D("energy_fractions_g_"+add,"",100,0,1);
+      // 	energy_fractions_unm_pt[i][k][j] = new TH1D("energy_fractions_unm_"+add,"",100,0,1);
+      // }
     }
   }
 

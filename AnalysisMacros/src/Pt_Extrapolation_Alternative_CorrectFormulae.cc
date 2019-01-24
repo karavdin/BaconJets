@@ -40,7 +40,7 @@ void CorrectionObject::Pt_Extrapolation_Alternative_CorrectFormulae(bool mpfMeth
   cout << "--------------- Starting Pt_Extrapolation() ---------------" << endl << endl;
   TStyle* m_gStyle = new TStyle();
   m_gStyle->SetOptFit(000);
-
+  TString txttag=CorrectionObject::_generator_tag; 
   int n_pt_ = max(n_pt,n_pt_HF);
   bool eta_cut_bool;
   int n_pt_cutted;
@@ -487,6 +487,7 @@ for(int j=0; j<n_eta-1; j++){
     tex->SetNDC();
     tex->SetTextSize(0.045); 
     tex->DrawLatex(0.58,0.91,CorrectionObject::_lumitag+"(13TeV)"); 
+    tex->DrawLatex(0.15,0.95,txttag);
 
     TLatex *tex2 = new TLatex();
     if(graph_filled[j]){    
@@ -531,6 +532,7 @@ for(int j=0; j<n_eta-1; j++){
   
   TCanvas* c_chi2_loglin = new TCanvas();
   h_chi2_loglin->Draw("HIST");
+
   if(mpfMethod)c_chi2_loglin->SaveAs(CorrectionObject::_outpath+"plots/pTextrapolation_MPF_chi2ndf_loglin_"+CorrectionObject::_generator_tag+".pdf");
   else c_chi2_loglin->SaveAs(CorrectionObject::_outpath+"plots/pTextrapolation_Pt_chi2ndf_loglin_"+CorrectionObject::_generator_tag+".pdf");
   delete c_chi2_loglin;
