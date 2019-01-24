@@ -23,6 +23,9 @@ static void show_usage(std::string name)
  	      << "\t-FPeta\t\tRun all main control plots with signed eta.\n"     
  	      << "\t-FCP\t\tRun all final control plots.\n"     
 	      << "\t-tCP\t\tRun control plots of the jet pt, eta and count for all trigger separately.\n"
+	      << "\t-CPHadrons\t\tRun control plots of the hadron fraction for GEN jets separated by pt bins.\n"
+	      << "\t-FlavorP\t\tRun control plots of the hadron fraction for jets with different flavor separated by pt bins.\n"
+	      << "\t-GenResponse\t\tRun control plots of response vs GEN jet and vs parton pt.\n"
       	      << "\t-lFCP\t\tRun final control plots for all lumi bins separately.\n"
 	      << "\t-aFCP\t\tRun final control plots and plot all data asymetrie histograms seperaty.\n"
       	      << "\t-JEF\t\tDo Jet energy fractions plots.\n"
@@ -98,6 +101,9 @@ int main(int argc,char *argv[]){
 				   "-FPeta",
 				   "-FCP",
 				   "-tCP",
+				   "-CPHadrons",
+				   "-FlavorP",
+				    "-GenResponse",
 				   "-lFCP",
 				   "-aFCP",
 				   "-derThreshSi",
@@ -147,6 +153,7 @@ int main(int argc,char *argv[]){
 				    "-L2AR",
 				    "-L2JER",
 				    "--inputSi",
+				    "--Generator",
 				    "--inputDi"};
   
   TString run_nr = "B";
@@ -157,6 +164,7 @@ int main(int argc,char *argv[]){
   TString muonTriggerName = "HLT_Mu17";
   TString mode ="";
   TString inputMC_="";
+  TString Generator="";
   TString inputSi_="";
   TString inputDi_="";
   bool do_L2AR=false;
@@ -165,6 +173,9 @@ int main(int argc,char *argv[]){
   bool do_kFSR=false;
   bool do_fullPlotsef=false;
   bool do_trgControlPlots=false;
+  bool do_ControlPlotsHadrons=false;
+  bool do_ControlPlotsFlavor=false;
+  bool do_ControlPlotsGeneratorResponse=false;
   bool do_lumiControlPlots=false;
   bool do_asymControlPlots=false;
   bool do_deriveThresholdsSi=false;
@@ -240,6 +251,15 @@ int main(int argc,char *argv[]){
 	  }
 	  else if(arg=="-tCP"){
 	    do_trgControlPlots=true;
+	  }
+	  else if(arg=="-CPHadrons"){
+	    do_ControlPlotsHadrons=true;
+	  }
+	  else if(arg=="-FlavorP"){
+	    do_ControlPlotsFlavor=true;
+	  }
+	  else if(arg=="-GenResponse"){
+	    do_ControlPlotsGeneratorResponse=true;
 	  }
 	  else if(arg=="-lFCP"){
 	    do_lumiControlPlots=true;
@@ -369,6 +389,9 @@ int main(int argc,char *argv[]){
 	      else if(arg=="--inputMC"){
 		inputMC_ = argv[i+1];
 	      }
+	      else if(arg=="--Generator"){
+		Generator = argv[i+1];
+	      }
 	      else if(arg=="--inputSi"){
 		inputSi_ = argv[i+1];
 	      }
@@ -388,13 +411,14 @@ int main(int argc,char *argv[]){
 	}
   }
 
-  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange or do_useCombinedkSFR or do_l1bx or do_kFSR or do_L2AR or do_L2JER)){
+  if(not (do_fullPlots or do_fullPlotsef or do_trgControlPlots or do_lumiControlPlots or do_asymControlPlots or do_deriveThresholdsSi or do_deriveThresholdsSi_ptCheck or do_deriveThresholdsDi or do_deriveThresholdsDi_ptCheck or muonCrosscheck or asym_cut or do_lumi_plot  or do_matchtrg_plot or do_finalControlPlots or do_addAsymPlots or do_addAsymPlotsef or do_triggerEx or do_oor_plot or do_matchtrg_plotdi or do_oor_plotdi or do_NPVEtaPlot or do_JEF or do_mon or do_monSi or do_IGF or do_IGFw or do_MEPC or do_calcMCW or kfsrXrange or do_useCombinedkSFR or do_l1bx or do_kFSR or do_L2AR or do_L2JER or do_ControlPlotsHadrons or do_ControlPlotsFlavor or do_ControlPlotsGeneratorResponse)){
 
     cout<<"No plots were specified! Only the existence of the files will be checked."<<endl;
     show_usage(argv[0]);
   }
   
   TString generator    = "pythia";
+  if(Generator!="") generator=Generator;
   bool    closure_test    = false;
   bool    trigger_fwd     = false;     //Use for Weight Calc and MC path selection, atm the path form here is used if(_trigger_central && !_trigger_fwd) 
   bool    trigger_central = true;     //Use for Weight Calc
@@ -475,6 +499,9 @@ int main(int argc,char *argv[]){
  
     if(do_fullPlotsef) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].FullCycle_CorrectFormulae_eta();    
     if(do_trgControlPlots) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlots(true);
+    if(do_ControlPlotsHadrons) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].ControlPlotsHadrons(true);
+    if(do_ControlPlotsFlavor) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].Flavor_JetPFFractions();
+    if(do_ControlPlotsGeneratorResponse) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].GenResponsePlots();
     if(do_kFSR) for(unsigned int i=0; i<Objects.size(); i++) Objects[i].kFSR_CorrectFormulae();
 
     if(kfsrXrange)for(unsigned int i=0; i<Objects.size(); i++) Objects[i].genJetLinearity();    

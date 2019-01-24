@@ -86,6 +86,8 @@ using namespace std;
 
     //Main functions for calculating L2 residuals, defined in CorrectionObject.cc
     void ControlPlots(bool forEverySingleTrigger = false);
+    void ControlPlotsHadrons(bool forEverySingleTrigger = true);
+
     void Derive_Thresholds_SiMuCrosscheck(TString siMu_dirName_);
     void Derive_Thresholds_SiJet(bool pt_check = false, bool useHF = false);
     void Derive_Thresholds_DiJet(bool pt_check = false, bool useHF = false);
@@ -126,6 +128,7 @@ using namespace std;
     void genJetLinearity();
     void L1jetSeedBXcheck();
     void FlavorCorrection_TTree();
+    void Flavor_JetPFFractions();
     void GenResponsePlots();
     void GenResponsePlots_AllPtbinningOnePlot(TString flavor);
 static bool make_path(std::string path_name){

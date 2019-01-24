@@ -105,9 +105,11 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     Event::Handle<float> tt_jet1_ptRaw;  Event::Handle<float> tt_jet2_ptRaw;  Event::Handle<float> tt_jet3_ptRaw;
     Event::Handle<float> tt_jet1_pt_onoff_Resp;     Event::Handle<float> tt_jet2_pt_onoff_Resp;
     Event::Handle<int> tt_nvertices;
+    Event::Handle<float> tt_pv0Z;     Event::Handle<float> tt_pv0X; Event::Handle<float> tt_pv0Y;
     Event::Handle<float> tt_probejet_eta;  Event::Handle<float> tt_probejet_phi; Event::Handle<float> tt_probejet_pt; Event::Handle<float> tt_probejet_ptRaw;
     Event::Handle<float> tt_barreljet_eta;  Event::Handle<float> tt_barreljet_phi; Event::Handle<float> tt_barreljet_pt; Event::Handle<float> tt_barreljet_ptRaw;
     Event::Handle<float> tt_probejet_ptgen;         Event::Handle<float> tt_barreljet_ptgen;     
+  Event::Handle<float> tt_probejet_etagen;  Event::Handle<float> tt_probejet_phigen;
     Event::Handle<float> tt_probejet_ptptcl;         Event::Handle<float> tt_barreljet_ptptcl;   
     Event::Handle<int> tt_probejet_statusptcl;         Event::Handle<int> tt_barreljet_statusptcl;   Event::Handle<int> tt_jet3_statusptcl;   
     Event::Handle<int> tt_jet1_genID;     Event::Handle<int> tt_jet2_genID;     Event::Handle<int> tt_jet3_genID;
@@ -176,6 +178,13 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
  
 
   std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons;
+  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_BB;   std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_EC1;
+  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_EC2;   std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_HF;
+  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_trg40, h_hadrons_trg60, h_hadrons_trg80, h_hadrons_trg140, h_hadrons_trg200,h_hadrons_trg260,h_hadrons_trg320,h_hadrons_trg400,h_hadrons_trg500;
+  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_trgHF60, h_hadrons_trgHF80,h_hadrons_trgHF100, h_hadrons_trgHF160,h_hadrons_trgHF220, h_hadrons_trgHF300;   
+
+  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_3rdjet;
+
   std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
   std::unique_ptr<JECAnalysisHists> h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg500;
   std::unique_ptr<JECAnalysisHists> h_trgHF60, h_trgHF80,h_trgHF100, h_trgHF160,h_trgHF220, h_trgHF300;   
@@ -186,7 +195,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
   std::unique_ptr<JECCrossCheckHists> h_input,h_lumisel, h_beforeCleaner,h_afterCleaner,h_2jets,h_beforeJEC,h_afterJEC,h_afterJER,h_afterMET,h_beforeTriggerData,h_afterTriggerData,h_beforeFlatFwd,h_afterFlatFwd,h_afterPtEtaReweight,h_afterLumiReweight,h_afterUnflat,h_afternVts;
   uhh2bacon::Selection sel;
   
-    bool debug;
+  bool debug;
+  bool ispythia8;
     bool no_genp;
     bool isMC, split_JEC_DATA, split_JEC_MC, ClosureTest, apply_weights, apply_lumiweights, apply_unflattening, apply_smear, apply_METoverPt_cut, apply_EtaPhi_cut, trigger_central, trigger_fwd, ts, onlyBtB, apply_L1seed_from_bx1_filter;
     double lumiweight;
@@ -208,6 +218,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     double L1METptThresh;
     double minJetPt;
     double minGenJetPt;
+    double qScale_max;
     double eta_thresh_low;
     double eta_thresh_high;
 
@@ -231,6 +242,15 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     catch(const runtime_error& error){
       debug = false;
     }
+
+    try{
+      ispythia8 = ctx.get("MCgenerator") == "Pythia8";
+    }
+    catch(const runtime_error& error){
+      ispythia8 = false;
+    }
+
+
     
     for(auto & kv : ctx.get_all()){
       cout << " " << kv.first << " = " << kv.second << endl;
@@ -301,6 +321,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     //remove low pt jets
     minJetPt = stod(ctx.get("minJetPt"));
     minGenJetPt = stod(ctx.get("minGenJetPt"));
+    qScale_max = stod(ctx.get("qScale"));
     jetcleaner2.reset(new JetCleaner(ctx, minJetPt, 5.2));
     genjetcleaner.reset(new GenJetCleaner(ctx, minGenJetPt, 5.2));
 
@@ -526,9 +547,15 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     tt_probejet_muonEF = ctx.declare_event_output<float>("probejet_muonEF");
 
     tt_nvertices = ctx.declare_event_output<int>("nvertices");
+    tt_pv0Z = ctx.declare_event_output<float>("pv0Z");
+    tt_pv0Y = ctx.declare_event_output<float>("pv0Y");
+    tt_pv0X = ctx.declare_event_output<float>("pv0X");
     tt_nGoodvertices = ctx.declare_event_output<int>("nGoodvertices");
     tt_probejet_eta = ctx.declare_event_output<float>("probejet_eta");
     tt_probejet_phi = ctx.declare_event_output<float>("probejet_phi");
+    tt_probejet_etagen = ctx.declare_event_output<float>("probejet_etagen");
+    tt_probejet_phigen = ctx.declare_event_output<float>("probejet_phigen");
+
     tt_probejet_pt = ctx.declare_event_output<float>("probejet_pt");
     tt_probejet_ptgen = ctx.declare_event_output<float>("probejet_ptgen");
     tt_probejet_ptRaw = ctx.declare_event_output<float>("probejet_ptRaw");
@@ -588,10 +615,10 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     tt_jet5_genID =  ctx.declare_event_output<int>("jet5_genID");
     tt_jet6_genID =  ctx.declare_event_output<int>("jet6_genID");
 
-    tt_parton1_genjetID =  ctx.declare_event_output<int>("parton1_genjetID");
-    tt_parton2_genjetID =  ctx.declare_event_output<int>("parton2_genjetID");
-    tt_parton1_jetID =  ctx.declare_event_output<int>("parton1_jetID");
-    tt_parton2_jetID =  ctx.declare_event_output<int>("parton2_jetID");
+    // tt_parton1_genjetID =  ctx.declare_event_output<int>("parton1_genjetID");
+    // tt_parton2_genjetID =  ctx.declare_event_output<int>("parton2_genjetID");
+    // tt_parton1_jetID =  ctx.declare_event_output<int>("parton1_jetID");
+    // tt_parton2_jetID =  ctx.declare_event_output<int>("parton2_jetID");
 
     tt_run = ctx.declare_event_output<int>("run");
     tt_evID = ctx.declare_event_output<int>("eventID");
@@ -643,21 +670,43 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     h_afterUnflat.reset(new JECCrossCheckHists(ctx,"CrossCheck_afterUnflat"));
     h_afternVts.reset(new JECCrossCheckHists(ctx,"CrossCheck_afternVts"));
     h_hadrons.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons"));
+    h_hadrons_BB.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_BB"));
+    h_hadrons_EC1.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_EC1"));
+    h_hadrons_EC2.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_EC2"));
+    h_hadrons_HF.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HF"));
+    h_hadrons_3rdjet.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_3rdJet"));
+    h_hadrons_trg40.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve40"));
+    h_hadrons_trg60.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve60"));
+    h_hadrons_trg80.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve80"));
+    h_hadrons_trg140.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve140"));
+    h_hadrons_trg200.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve200"));
+    h_hadrons_trg260.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve260"));
+    h_hadrons_trg320.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve320"));
+    h_hadrons_trg400.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve400"));
+    h_hadrons_trg500.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve500"));
+
+    h_hadrons_trgHF60.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve60_HFJEC"));
+    h_hadrons_trgHF80.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve80_HFJEC"));
+    h_hadrons_trgHF100.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve100_HFJEC"));
+    h_hadrons_trgHF160.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve160_HFJEC"));
+    h_hadrons_trgHF220.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve220_HFJEC"));
+    h_hadrons_trgHF300.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve300_HFJEC")); //ADD them into the code below!
+
     h_nocuts.reset(new JECAnalysisHists(ctx,"NoCuts"));
     h_dijet.reset(new JECAnalysisHists(ctx,"diJet"));
     h_match.reset(new JECAnalysisHists(ctx,"JetMatching"));
     h_sel.reset(new JECAnalysisHists(ctx,"Selection"));
     h_final.reset(new JECAnalysisHists(ctx,"Final"));
     
-    h_trg40.reset(new JECAnalysisHists(ctx,"HLT_PFJet40"));
-    h_trg60.reset(new JECAnalysisHists(ctx,"HLT_PFJet60"));
-    h_trg80.reset(new JECAnalysisHists(ctx,"HLT_PFJet80"));
-    h_trg140.reset(new JECAnalysisHists(ctx,"HLT_PFJet140"));
-    h_trg200.reset(new JECAnalysisHists(ctx,"HLT_PFJet200"));
-    h_trg260.reset(new JECAnalysisHists(ctx,"HLT_PFJet260"));
-    h_trg320.reset(new JECAnalysisHists(ctx,"HLT_PFJet320"));
-    h_trg400.reset(new JECAnalysisHists(ctx,"HLT_PFJet400"));
-    h_trg500.reset(new JECAnalysisHists(ctx,"HLT_PFJet500"));
+    h_trg40.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve40"));
+    h_trg60.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve60"));
+    h_trg80.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve80"));
+    h_trg140.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve140"));
+    h_trg200.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve200"));
+    h_trg260.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve260"));
+    h_trg320.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve320"));
+    h_trg400.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve400"));
+    h_trg500.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve500"));
 
     h_trgHF60.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve60_HFJEC"));
     h_trgHF80.reset(new JECAnalysisHists(ctx,"HLT_DiPFJetAve80_HFJEC"));
@@ -691,7 +740,7 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     h_monitoring_final.reset(new LumiHists(ctx, "Monitoring_Final"));
     
     Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
-    // GenJet_printer.reset(new GenJetPrinter("GenJet-Printer", 0));
+    GenJet_printer.reset(new GenJetPrinter("GenJet-Printer", 0));
     
     if(!no_genp) 
       GenParticles_printer.reset(new GenParticlesPrinter(ctx));
@@ -872,15 +921,11 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     if(jetLabel == "AK4CHS" // || jetLabel == "AK8CHS"
        ) jetcleaner->process(event);
     int n_jets_afterCleaner = event.jets->size();
-     if(debug) cout<<"#jets after clean "<<n_jets_afterCleaner<<endl;   
-    //discard events if not all jets fulfill JetID instead of just discarding single jets
-    if (n_jets_beforeCleaner != n_jets_afterCleaner) return false;
-
-    if(debug) cout<<"before jet id selection"<<endl;
-
+    if(debug) cout<<"#jets after clean "<<n_jets_afterCleaner<<endl;   
+     //discard events if not all jets fulfill JetID instead of just discarding single jets
+     //    if (n_jets_beforeCleaner != n_jets_afterCleaner) return false;
     if(!isMC) h_afterCleaner->fill(event); 
 
-    if(debug) cout<<"after jet id selection"<<endl;   
 //###########################################################################################
   
 //####################  Select and Apply proper JEC-Versions for every Run ##################
@@ -989,6 +1034,7 @@ if(debug){
  if(debug) cout<<"#jets after cleanining low pt jets "<<n_jets_afterCleaner<<endl;   
  if(n_jets_afterCleaner<2) return false;
  jet_n = n_jets_afterCleaner;
+ if(hypot(event.met->rawCHS_px(),event.met->rawCHS_py())/event.met->uncorr_v4().Pt()>1e4) return false;//remove bad events in Herwig++ sample
 if(debug){   
   cout<<"After JER, before MET"<<endl;
  cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
@@ -1163,8 +1209,8 @@ if(debug){
       if(!trigger_central) eta_cut_bool_HF = true;      
       
       //pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1] && (eta_cut_bool));//ToDo: remove requirement on eta_bool, add one more bin in forward region in 
-      pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);//remove requirement on eta_bool = add one more bin in forward region
-      pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2] &&  (eta_cut_bool));
+      pass_trigger40 = (trigger40_sel->passes(event) && pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1] && (eta_cut_bool));
+      pass_trigger60 = (trigger60_sel->passes(event) && pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2] && (eta_cut_bool));
       pass_trigger80 = (trigger80_sel->passes(event) && pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]&&( eta_cut_bool)); 
       pass_trigger140 = (trigger140_sel->passes(event) && pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]&&( eta_cut_bool)); 
       pass_trigger200 = (trigger200_sel->passes(event) && pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]&& (eta_cut_bool)); 
@@ -1259,6 +1305,7 @@ if(debug){
     if(!event.isRealData){
       gen_weight = event.weight;
       gen_pthat = event.genInfo->qScale();
+      if(debug) cout<<"gen_pthat = "<<gen_pthat<<endl;
       //      gen_pthat = event.genInfo->binningValues()[0];// only for pythia8 samples //todo: for herwig, madgraph
     }
     float nvertices = event.pvs->size(); 
@@ -1447,16 +1494,23 @@ if(debug){
     event.set(tt_jet1_pt_onoff_Resp,onoffDummy);
     event.set(tt_jet2_pt_onoff_Resp,onoffDummy);
     event.set(tt_nvertices,nvertices);
-
+    event.set(tt_pv0Z,(event.pvs->at(0)).z());
+    event.set(tt_pv0X,(event.pvs->at(0)).x());
+    event.set(tt_pv0Y,(event.pvs->at(0)).y());
     event.set(tt_probejet_neutEmEF,jet_probe->neutralEmEnergyFraction());
     event.set(tt_probejet_neutHadEF,jet_probe->neutralHadronEnergyFraction());
     event.set(tt_probejet_chEmEF,jet_probe->chargedEmEnergyFraction());
     event.set(tt_probejet_chHadEF,jet_probe->chargedHadronEnergyFraction());
     event.set(tt_probejet_photonEF,jet_probe->photonEnergyFraction());
     event.set(tt_probejet_muonEF,jet_probe->muonEnergyFraction());
-
+    if(debug){
+      if(fabs(probejet_eta)>3.5 && jet_probe->chargedHadronEnergyFraction()>0) cout<<"Probe jet with Neut.EM = "<<jet_probe->neutralEmEnergyFraction()<<" Ch.EM = "<<jet_probe->chargedEmEnergyFraction()<<" Neut.HAD = "<<jet_probe->neutralHadronEnergyFraction()<<" Ch.HAD = "<<jet_probe->chargedHadronEnergyFraction()<<endl;//TEST
+    }
     event.set(tt_probejet_eta,probejet_eta);
     event.set(tt_probejet_phi,probejet_phi);
+    event.set(tt_probejet_etagen,probejet_eta);
+    event.set(tt_probejet_phigen,probejet_phi);
+
     event.set(tt_probejet_pt,probejet_pt);
     event.set(tt_probejet_ptRaw,probejet_ptRaw);
     event.set(tt_barreljet_eta,barreljet_eta);
@@ -1531,12 +1585,8 @@ if(debug){
 
 //Pu_pt_hat/pt_hat Selection
     if(!event.isRealData && !no_genp){
-      //      if(isMC){
 	if(!sel.PUpthat()) return false;
-	if(!sel.PtaveVsQScale(1.5)) return false;//MadGraph
-	//	if(!sel.PtaveVsQScale(1.2)) return false;//Pythia8
-	// if((gen_pthat-genjet1_pt)/gen_pthat<-0.4) return false;
-	//      }
+	if(!sel.PtaveVsQScale(qScale_max)) return false;//MadGraph 1.5, 1.2 Pythia8 1.2, Herwig++ ?
     }
     if(debug) cout<<"After PUpthat! "<<endl;
     // h_nocuts->fill(event);
@@ -1750,13 +1800,13 @@ if(debug){
       Jet_printer->process(event);
     }
     if(debug && isMC){
-      // GenJet_printer->process(event);
+      GenJet_printer->process(event);
       GenParticles_printer->process(event);
     }
- if(isMC){    
+    if(isMC){    
       double dr_cut = 0;
       if(jetLabel == "AK4CHS" || jetLabel == "AK4PUPPI") dr_cut = 0.2;
-      else if (jetLabel == "AK8CHS" || jetLabel == "AK8PUPPI")dr_cut = 0.4;
+      else if (jetLabel == "AK8CHS" || jetLabel == "AK8PUPPI") dr_cut = 0.4;
       else throw runtime_error("TestModule.cxx: Invalid jet-label specified.");
 
 
@@ -1772,6 +1822,8 @@ if(debug){
       const unsigned int genjets_n = event.genjets->size();
       int idx_jet_matching_genjet[genjets_n];
       double probejet_ptgen = -1; 
+      double probejet_etagen = -1; 
+      double probejet_phigen = -1; 
       double barreljet_ptgen = -1;
       double probejet_drminparton=100;
       double barreljet_drminparton=100; 
@@ -1821,17 +1873,6 @@ if(debug){
       }
       /////////////////////
 
-      //      vector<FlavorParticle> genjets_flavor = event.genjets;
-      // if(!event.genparticles){
-      // 	for(Particle & genj : *event.genjets){
-      // 	int idx_g = -1;
-      // 	idx_genp_min = -1;	
-      // 	for(int i=0;i<)
-      // 	idx_matched_jets[idx_jet_matching_genjet[idx_j]]
-
-      // 	}
-      // }
-      // else{
       idx_j=-1;
       for(Particle & genj : *event.genjets){
  	idx_j++;
@@ -1843,41 +1884,43 @@ if(debug){
  	else throw runtime_error("TestModule.cxx: Invalid jet-label specified.");
 
        	int idx_g = -1;
-	//	double parton_pt_max=5;
+	double parton_pt_max=15;
 	if(event.genparticles){
 	  //	  cout<<"Loop over gen particles for matching to GEN jet No."<<idx_j<<endl;
  	for(GenParticle & genp: *event.genparticles){
  	  idx_g++;
-	  //	  if(genp.status()<23 || genp.pt()<20) continue;//only particle with status 23 are final state particles
-	  //	  if(genp.status()<23) continue;//only particle with status 23 are final state particles
-	  if(genp.status()!=23) continue;//only particle with status 23 are final state particles
-	  //	  cout<<"genp.status() = "<<genp.status()<<endl;;
-	  //	  double parton_pt = genp.pt();
- 	  double dr = deltaR(genj,genp);
- 	  //  if(dr < dr_min){
-	  // 	  if(dr < dr_min && genp.status()>1 && parton_pt>parton_pt_max){ //does not make sense to look at status 1 particles, since we know nothing about them
-	  // if(dr < dr_min && parton_pt>parton_pt_max && genp.status()==23){
-	  //	  if(dr < dr_min && parton_pt>parton_pt_max){
-	  if(dr < dr_min){
-	    //parton_pt_max=parton_pt;
- 	    dr_min = dr;
- 	    idx_genp_min = idx_g;	
-	    //	    if(debug) cout<<"gen jet and gen particle matched, status = "<<genp.status()<<" idx_genp_min = "<<idx_genp_min<<" dR="<<dr_min<<endl;
- 	  }	
- 	  //	  if(debug) cout << "dr between genjet " << idx_j << " and genp (flavor: " << genp.flavor() << ") " << idx_g << "= " << dr << endl;
-	  // 	  idx_g++;
+	  if(ispythia8){
+	    if(genp.status()!=23) continue;//Pythia8/Madgraph: only particle with status 23 are final state partons
+	    //	  double parton_pt = genp.pt();
+	    double dr = deltaR(genj,genp);
+	    //	  if(dr < dr_min && parton_pt>parton_pt_max){
+	    if(dr < dr_min){
+	      //parton_pt_max=parton_pt;
+	      dr_min = dr;
+	      idx_genp_min = idx_g;	
+	      if(debug) cout<<"PYTHIA8 gen jet and gen particle might be matched, status = "<<genp.status()<<" idx_genp_min = "<<idx_genp_min<<" dR="<<dr_min<<endl;
+	    }	
+	  }
+	  else{//Herwig, etc
+	    if(genp.status()!=11) continue;//Herwig++: only particle with status 11 can contain parton from ME we are interested in
+	    double parton_pt = genp.pt();
+	    double dr = deltaR(genj,genp);
+	    if(debug && dr<0.4) cout<<"parton id = "<<idx_g<<" with dr = "<<dr<<" parton_pt = "<<parton_pt<<endl;
+	    if(dr <dr_cut && dr < dr_min && parton_pt>parton_pt_max){
+	      parton_pt_max=parton_pt;
+	      dr_min = dr;
+	      idx_genp_min = idx_g;
+	      if(debug) cout<<"HERWIG++ gen jet and gen particle might be matched, status = "<<genp.status()<<" idx_genp_min = "<<idx_genp_min<<" dR="<<dr_min<<endl;
+	    }	
+	  }
  	}
- 	//if(dr_min <= dr_cut) {
  	if(dr_min <= dr_cut && idx_genp_min>-1) {
- 	  if(debug) cout << "genjet " << idx_j << " is matched to genparticle " << idx_genp_min <<" with status="<<event.genparticles->at(idx_genp_min).status()<< " and flavor " << event.genparticles->at(idx_genp_min).flavor()
+	    if(debug) cout << "genjet " << idx_j << " is matched to genparticle " << idx_genp_min <<" with status="<<event.genparticles->at(idx_genp_min).status()<< " and flavor " << event.genparticles->at(idx_genp_min).flavor()
 			 << " and pt = "<<event.genparticles->at(idx_genp_min).pt()<< ", within dR = " << dr_min << ". " <<  endl; 
-	  // if(idx_genp_min<4) idx_parton_genJet[idx_genp_min] = idx_j;
-	  idx_parton_genJet[idx_genp_min] = idx_j;
- 	  if(idx_jet_matching_genjet[idx_j] >= 0) idx_matched_jets[idx_jet_matching_genjet[idx_j]] = idx_genp_min;
+	    idx_parton_genJet[idx_genp_min] = idx_j;
+	    if(idx_jet_matching_genjet[idx_j] >= 0) idx_matched_jets[idx_jet_matching_genjet[idx_j]] = idx_genp_min;
  	}
-	//	cout << "HAHA: dR of genjet " << idx_j << " and genparticle " << idx_genp_min << " of flavor " << event.genparticles->at(idx_genp_min).flavor() << " : dR = " << dr_min << ". " <<  endl; 
-	// 	idx_j++;
-      }
+	}
       }
 
 
@@ -1905,7 +1948,7 @@ if(debug){
       if(debug) cout<<"idx_barreljet = "<<idx_barreljet<<endl;
       //obtain flavor of the barreljet
       //-1: unmatched, 0: alpha too large, >0: flavor of matching genparticle 
-      if(idx_matched_jets[idx_barreljet] != -1){
+      if(idx_matched_jets[idx_barreljet] != -1){//flavor
  	if(debug) cout<<"idx_matched_jets[idx_barreljet]="<<idx_matched_jets[idx_barreljet]<<endl;
  	flavor_barreljet = fabs(event.genparticles->at(idx_matched_jets[idx_barreljet]).flavor());
  	if(debug) cout<<"flavor barrel jet ="<<flavor_barreljet<<endl;
@@ -1915,26 +1958,19 @@ if(debug){
         barreljet_phigen = event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]).phi(); 
  	barreljet_statusptcl = event.genparticles->at(idx_matched_jets[idx_barreljet]).status();
 	dR_GenJet_GenParticle_barrel_matched =   deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]),event.genparticles->at(idx_matched_jets[idx_barreljet]));
-	// if(event.genparticles->size()>4){
-	// dR_GenJet_GenParticle_barrel_matched = deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]),event.genparticles->at(2));
-	// dR_GenJet_GenParticle_probe_matched = deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]),event.genparticles->at(3));
-	// }
-	// else{
-	// dR_GenJet_GenParticle_barrel_matched = -1; 
-	// dR_GenJet_GenParticle_probe_matched = -1;
-	// }
       }
-      else if(idx_matched_RecoGenjets[idx_barreljet] !=-1){
+      if(idx_matched_RecoGenjets[idx_barreljet] !=-1){//RECO to GEN
 	if(debug) cout<<"idx_matched_RecoGenjets[idx_barreljet] = "<<idx_matched_RecoGenjets[idx_barreljet]<<endl;
         barreljet_ptgen = event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]).pt();
 	barreljet_phigen = event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]).phi(); 
- 	flavor_barreljet = -1;
- 	response_barreljet = -1;
-        barreljet_ptptcl = -1;
- 	dR_GenJet_GenParticle_barrel_matched = -1; //deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]),event.genparticles->at(2));
-	// 	dR_GenJet_GenParticle_probe_matched = -1; //deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]),event.genparticles->at(3));
-      }      
-      else{
+ 	if(idx_matched_jets[idx_barreljet]<0){
+	  flavor_barreljet = -1;
+	  response_barreljet = -1;
+	  barreljet_ptptcl = -1;
+	  dR_GenJet_GenParticle_barrel_matched = -1; //deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]),event.genparticles->at(2));
+	}
+      }    
+      if(idx_matched_RecoGenjets[idx_barreljet]<0 && idx_matched_jets[idx_barreljet]<0){//NONE, flavor and GEN are not matched
  	flavor_barreljet = -1;
  	response_barreljet = -1;
         barreljet_ptptcl = -1;
@@ -1943,12 +1979,7 @@ if(debug){
  	barreljet_statusptcl  = -1;
  	barreljet_drminparton = -1;
 	dR_GenJet_GenParticle_barrel_matched = -1; 
-	// 	dR_GenJet_GenParticle_probe_matched = -1;
       }
-
-     
-
-
       //also for probe jets
       int idx_probejet = fabs(idx_barreljet - 1);
       if(debug) cout<<"idx_probejet = "<<idx_probejet <<" idx_matched_jets[idx_probejet] = "<<idx_matched_jets[idx_probejet]
@@ -1956,7 +1987,6 @@ if(debug){
       //obtain flavor of the probejet
       //-1: unmatched,  >0: flavor of matching genparticle 
       if(idx_matched_jets[idx_probejet] != -1){
-
 	// if(debug) cout<<" idx_matched_jets[idx_probejet] = "<<idx_matched_jets[idx_probejet]<<" idx_matched_RecoGenjets[idx_probejet] = "<<idx_matched_RecoGenjets[idx_probejet]
  	//  	      <<" idx_probejet = "<<idx_probejet<<endl;
  	// if(debug) cout<<"event.genparticles->at(idx_matched_jets[idx_probejet]).pt() = "<<event.genparticles->at(idx_matched_jets[idx_probejet]).pt()<<endl;
@@ -1964,52 +1994,172 @@ if(debug){
  	response_probejet = jet_probe->pt() / event.genparticles->at(idx_matched_jets[idx_probejet]).pt();
  	probejet_ptptcl = event.genparticles->at(idx_matched_jets[idx_probejet]).pt();
  	probejet_statusptcl = event.genparticles->at(idx_matched_jets[idx_probejet]).status(); 
- 	probejet_ptgen = event.genjets->at(idx_matched_RecoGenjets[idx_probejet]).pt();
-	h_hadrons->fill(event,idx_matched_RecoGenjets[idx_probejet]);
-	dR_GenJet_GenParticle_probe_matched =   deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_probejet]),event.genparticles->at(idx_matched_jets[idx_probejet]));
+ 	dR_GenJet_GenParticle_probe_matched =   deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_probejet]),event.genparticles->at(idx_matched_jets[idx_probejet]));
       }
-      else if(idx_matched_RecoGenjets[idx_probejet] !=-1){
+      if(idx_matched_RecoGenjets[idx_probejet] !=-1){//GEN and RECO jets are matched
+ 	if(idx_matched_jets[idx_probejet]<0){//ME parton and GEN/RECO jet are not matched
+	  flavor_probejet = -1;
+	  response_probejet = -1;
+	  probejet_ptptcl = -1;
+	  probejet_statusptcl = -1;
+	  probejet_drminparton = -1;
+	  dR_GenJet_GenParticle_probe_matched =  -1;
+	}
+	probejet_ptgen = event.genjets->at(idx_matched_RecoGenjets[idx_probejet]).pt();
+ 	probejet_etagen = event.genjets->at(idx_matched_RecoGenjets[idx_probejet]).eta();
+ 	probejet_phigen = event.genjets->at(idx_matched_RecoGenjets[idx_probejet]).phi();
+	h_hadrons->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(fabs(probejet_eta)<0.522 && fabs(probejet_eta)>0.261) 
+	  h_hadrons_BB->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(fabs(probejet_eta)<2.322 && fabs(probejet_eta)>2.172) 
+	  h_hadrons_EC1->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(fabs(probejet_eta)<2.650 && fabs(probejet_eta)>2.5) 
+	  h_hadrons_EC2->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(fabs(probejet_eta)<3.839 && fabs(probejet_eta)>3.489) 
+	  h_hadrons_HF->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+
+	if(jet_n>2 && idx_matched_RecoGenjets[2]>-1)
+	  h_hadrons_3rdjet->fill(event,idx_matched_RecoGenjets[2],2);
+	//fill hadron hists per pt bins
+	//The same as trigger selection, but without triggers
+	bool eta_cut_bool = abs(probejet_eta) <  eta_cut;     
+	if(!trigger_fwd) eta_cut_bool = true;
+	bool eta_cut_bool_HF = abs(probejet_eta) >=  eta_cut;
+	if(!trigger_central) eta_cut_bool_HF = true;      
+      
+	bool pass_trigger40_MC = (pt_ave>trg_thresh[0]   && pt_ave<trg_thresh[1]);//remove requirement on eta_bool = add one more bin in forward region
+	bool pass_trigger60_MC = (pt_ave>trg_thresh[1]   && pt_ave<trg_thresh[2] && eta_cut_bool);
+	bool pass_trigger80_MC = (pt_ave>trg_thresh[2]   && pt_ave<trg_thresh[3]&& eta_cut_bool); 
+	bool pass_trigger140_MC = (pt_ave>trg_thresh[3] && pt_ave<trg_thresh[4]&& eta_cut_bool); 
+	bool pass_trigger200_MC = (pt_ave>trg_thresh[4] && pt_ave<trg_thresh[5]&& eta_cut_bool); 
+	bool pass_trigger260_MC = (pt_ave>trg_thresh[5] && pt_ave<trg_thresh[6]&& eta_cut_bool);
+	bool pass_trigger320_MC = (pt_ave>trg_thresh[6] && pt_ave<trg_thresh[7]&& eta_cut_bool);
+	bool pass_trigger400_MC = (pt_ave>trg_thresh[7] && pt_ave<trg_thresh[8]&& eta_cut_bool);
+	bool pass_trigger500_MC = (pt_ave>trg_thresh[8] && eta_cut_bool);
+      
+	//FWD Trigger
+	bool pass_trigger60_HFJEC_MC = (trigger_fwd && pt_ave>trgHF_thresh[0]   && pt_ave<trgHF_thresh[1] &&eta_cut_bool_HF);
+	bool pass_trigger80_HFJEC_MC = (trigger_fwd && pt_ave>trgHF_thresh[1]   && pt_ave<trgHF_thresh[2] && eta_cut_bool_HF);
+	bool pass_trigger100_HFJEC_MC = (trigger_fwd && pt_ave>trgHF_thresh[2] && pt_ave<trgHF_thresh[3] &&eta_cut_bool_HF);
+	bool pass_trigger160_HFJEC_MC = (trigger_fwd && pt_ave>trgHF_thresh[3] && pt_ave<trgHF_thresh[4] && eta_cut_bool_HF);
+	bool pass_trigger220_HFJEC_MC = (trigger_fwd && pt_ave>trgHF_thresh[4] && pt_ave<trgHF_thresh[5] && eta_cut_bool_HF);
+	bool pass_trigger300_HFJEC_MC = (trigger_fwd && pt_ave>trgHF_thresh[5] && eta_cut_bool_HF);      
+
+
+	if(pass_trigger40_MC) h_hadrons_trg40->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger60_MC) h_hadrons_trg60->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger80_MC) h_hadrons_trg80->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger140_MC) h_hadrons_trg140->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger200_MC) h_hadrons_trg200->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger260_MC) h_hadrons_trg260->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger320_MC) h_hadrons_trg320->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger400_MC) h_hadrons_trg400->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger500_MC) h_hadrons_trg500->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger60_HFJEC_MC) h_hadrons_trgHF60->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger80_HFJEC_MC) h_hadrons_trgHF80->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger100_HFJEC_MC) h_hadrons_trgHF100->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger160_HFJEC_MC) h_hadrons_trgHF160->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger220_HFJEC_MC) h_hadrons_trgHF220->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+	if(pass_trigger300_HFJEC_MC) h_hadrons_trgHF300->fill(event,idx_matched_RecoGenjets[idx_probejet],idx_probejet);
+
+      }
+      if(idx_matched_RecoGenjets[idx_probejet]<0 && idx_matched_jets[idx_probejet]<0){ //nothing is matched
  	flavor_probejet = -1;
  	response_probejet = -1;
         probejet_ptptcl = -1;
- 	probejet_ptgen = event.genjets->at(idx_matched_RecoGenjets[idx_probejet]).pt();
-	probejet_statusptcl = -1;
- 	probejet_drminparton = -1;
-	dR_GenJet_GenParticle_probe_matched =  -1;
-	//	if(debug) cout<<" probejet_ptgen = "<<probejet_ptgen<<endl;
-      }
-      else{ 
- 	flavor_probejet = -1;
- 	response_probejet = -1;
-        probejet_ptptcl = -1;
-        probejet_ptgen = -1;
+        probejet_ptgen = -1;         probejet_etagen = -1;        probejet_etagen = -1;
  	probejet_statusptcl = -1;
  	probejet_drminparton = -1;
 	dR_GenJet_GenParticle_probe_matched =  -1;
-      } 
-      //find the closest parton to the jet even if not matched (to check dR matching)
-      if(event.genparticles){
-      for(GenParticle & genp: *event.genparticles){  
- 	if(idx_matched_RecoGenjets[idx_probejet]!=-1){
- 	  double dr = deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_probejet]),genp);
- 	  if(probejet_drminparton>dr) probejet_drminparton = dr;       
- 	}
- 	if(idx_matched_RecoGenjets[idx_barreljet]!=-1){
- 	  double dr = deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]),genp);
- 	  if(barreljet_drminparton>dr) barreljet_drminparton = dr;   
- 	}
       }
+ 
+
+      //find the closest parton to the jet even if not matched (to check dR matching)
+      //Code should be the same as matching before!
+     
+      if(event.genparticles){
+	int idx_g = -1;
+	double parton_pt_max=15;
+	double dr_min = 1000.;
+	//Probe jet
+	if(idx_matched_RecoGenjets[idx_probejet]>-1){
+	    for(GenParticle & genp: *event.genparticles){
+	      idx_g++;
+	      if(ispythia8){
+		if(genp.status()!=23) continue;//Pythia8/Madgraph: only particle with status 23 are final state partons
+		//	  double parton_pt = genp.pt();
+		//	    double dr = deltaR(genj,genp);
+		double dr = deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_probejet]),genp);
+		//	  if(dr < dr_min && parton_pt>parton_pt_max){
+		if(dr < dr_min){
+		  //parton_pt_max=parton_pt;
+		  dr_min = dr;
+		  idx_genp_min = idx_g;	
+		  if(debug) cout<<"PYTHIA8 gen jet and gen particle might be matched, status = "<<genp.status()<<" idx_genp_min = "<<idx_genp_min<<" dR="<<dr_min<<endl;
+		}	
+	      }
+	      else{//Herwig, etc
+		if(genp.status()!=11) continue;//Herwig++: only particle with status 11 can contain parton from ME we are interested in
+		double parton_pt = genp.pt();
+		//	    double dr = deltaR(genj,genp);
+		double dr = deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_probejet]),genp);
+		//	    if(debug && dr<0.4) cout<<"parton id = "<<idx_g<<" with dr = "<<dr<<" parton_pt = "<<parton_pt<<endl;
+		if(dr <1.2 && dr < dr_min && parton_pt>parton_pt_max){
+		  parton_pt_max=parton_pt;
+		  dr_min = dr;
+		  idx_genp_min = idx_g;
+		  if(debug) cout<<"HERWIG++ gen jet and gen particle might be matched, status = "<<genp.status()<<" idx_genp_min = "<<idx_genp_min<<" dR="<<dr_min<<endl;
+		}	
+	      }
+	    }
+	    probejet_drminparton = dr_min;
+	}
+	else probejet_drminparton = -1;
+
+	idx_g = -1;
+	dr_min = 1000.; parton_pt_max=15;
+	
+	//Tag jet
+	if(idx_matched_RecoGenjets[idx_barreljet]>-1){
+	  for(GenParticle & genp: *event.genparticles){
+	    idx_g++;
+	    if(ispythia8){
+		if(genp.status()!=23) continue;//Pythia8/Madgraph: only particle with status 23 are final state partons
+		double dr = deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]),genp);
+		if(dr < dr_min){
+		  dr_min = dr;
+		  idx_genp_min = idx_g;	
+		  if(debug) cout<<"PYTHIA8 gen jet and gen particle might be matched, status = "<<genp.status()<<" idx_genp_min = "<<idx_genp_min<<" dR="<<dr_min<<endl;
+		}	
+	      }
+	      else{//Herwig, etc
+		if(genp.status()!=11) continue;//Herwig++: only particle with status 11 can contain parton from ME we are interested in
+		double parton_pt = genp.pt();
+		double dr = deltaR(event.genjets->at(idx_matched_RecoGenjets[idx_barreljet]),genp);
+		if(dr <1.2 && dr < dr_min && parton_pt>parton_pt_max){
+		  parton_pt_max=parton_pt;
+		  dr_min = dr;
+		  idx_genp_min = idx_g;
+		  if(debug) cout<<"HERWIG++ gen jet and gen particle might be matched, status = "<<genp.status()<<" idx_genp_min = "<<idx_genp_min<<" dR="<<dr_min<<endl;
+		}	
+	      }
+	    }
+	    barreljet_drminparton = dr_min;
+	}
+	else barreljet_drminparton = -1;
       }
       else{
 	probejet_drminparton = -1; barreljet_drminparton = -1;
       }
+
+      
 
       if(debug) cout << "barreljet is jet no. " << idx_barreljet << ", alpha = " << event.get(tt_alpha) << ", flavor of barreljet = " << flavor_barreljet 
  		     <<", status of barrel jet = "<<barreljet_statusptcl<<" the closest parton with dR = "<<barreljet_drminparton<< endl;
       if(debug) cout << "probejet is jet no. " << idx_probejet << ", alpha = " << event.get(tt_alpha) << ", flavor of probejet = " << flavor_probejet <<" status of probejet = " <<
  		  probejet_statusptcl <<" the closest parton with dR = "<<probejet_drminparton<< endl;
       if(debug)
- 	if(probejet_drminparton>0.4 || barreljet_drminparton>0.4) cout<<"AAAAAAAAAAAAAAAAA! LOOK!"<<endl;
+ 	if(probejet_drminparton>1000. || barreljet_drminparton>1000.) cout<<"AAAAAAAAAAAAAAAAA! LOOK!"<<endl;
       
       //same for leading jet
       //-1: unmatched, 0: alpha too large, >0: flavor of matching genparticle 
@@ -2041,7 +2191,7 @@ if(debug){
  	flavor_3rdjet = -1;  
 	jet3_statusptcl = -1;
       }
-      if(fabs(jet3_eta)>2.4) return false;//TEST with 3rd jet in the barrel   
+      //      if(fabs(jet3_eta)>2.4) return false;//TEST with 3rd jet in the barrel   
       //      if(flavor_3rdjet<0 && isMC) return false;//TEST. VERY LOW STATS!
       //      if(debug) cout<<"NOW WE SET FLOATS!"<<endl;
       event.set(tt_flavor3rdjet,flavor_3rdjet);   
@@ -2054,9 +2204,10 @@ if(debug){
       event.set(tt_flavorLeadingjet,flavor_leadingjet);  
       event.set(tt_flavorSubleadingjet,flavor_subleadingjet);
       event.set(tt_probejet_ptgen,probejet_ptgen);   
+      event.set(tt_probejet_etagen,probejet_etagen);   
+      event.set(tt_probejet_phigen,probejet_phigen);   
       event.set(tt_probejet_ptptcl,probejet_ptptcl); 
      
-
       event.set(tt_barreljet_statusptcl,barreljet_statusptcl);
       event.set(tt_probejet_statusptcl,probejet_statusptcl);
       event.set(tt_jet3_statusptcl,jet3_statusptcl);
@@ -2069,6 +2220,7 @@ if(debug){
       //      if(debug) cout<<"NOW WE DONE with FLOATS!"<<endl;
 
       if (debug) cout << "probejet_ptgen = "<<probejet_ptgen<<" barreljet_ptgen = "<<barreljet_ptgen<< " probejet_ptptcl = "<<probejet_ptptcl<<" barreljet_ptptcl = "<<barreljet_ptptcl<<endl;
+      //      if(debug && probejet_ptptcl*barreljet_ptptcl<0) cout<<"TAKTAK One of jets is not macthed!"<<endl;
       //response of leading jet
       //find corresponding genjet
       int idx_corresponding_genjet = -1;
@@ -2112,15 +2264,15 @@ if(debug){
       // 	if(idx_matched_jets[idptcl]==4)  event.set(tt_jet5_ptclID,idptcl);
       // 	if(idx_matched_jets[idptcl]==5)  event.set(tt_jet6_ptclID,idptcl);
       // }
-      event.set(tt_parton1_jetID,idx_parton_recoJet[2]);
-      event.set(tt_parton2_jetID,idx_parton_recoJet[3]);
-      event.set(tt_parton1_genjetID,idx_parton_genJet[2]);
-      event.set(tt_parton2_genjetID,idx_parton_genJet[3]);
-      if(debug){
- 	for(int i=0; i<4; i++){
- 	  cout<<" parton # "<<i<<" genJET = "<<idx_parton_genJet[i]<<" recoJET = "<<idx_parton_recoJet[i]<<endl;
- 	}      
-      }
+      // event.set(tt_parton1_jetID,idx_parton_recoJet[2]);
+      // event.set(tt_parton2_jetID,idx_parton_recoJet[3]);
+      // event.set(tt_parton1_genjetID,idx_parton_genJet[2]);
+      // event.set(tt_parton2_genjetID,idx_parton_genJet[3]);
+      // if(debug){
+      // 	for(int i=0; i<4; i++){
+      // 	  cout<<" parton # "<<i<<" genJET = "<<idx_parton_genJet[i]<<" recoJET = "<<idx_parton_recoJet[i]<<endl;
+      // 	}      
+      // }
 
       event.set(tt_genjet_n,event.genjets->size());
       if(debug) cout<<"N genjets: "<<event.genjets->size()<<endl;
@@ -2167,6 +2319,8 @@ if(debug){
       event.set(tt_flavorSubleadingjet,-1);  
       event.set(tt_response_leadingjet,-1); 
       event.set(tt_probejet_ptgen,-1);  
+      event.set(tt_probejet_etagen,-1);  
+      event.set(tt_probejet_phigen,-1);  
       event.set(tt_probejet_ptptcl,-1);   
       event.set(tt_barreljet_ptgen,-1);   
       event.set(tt_barreljet_ptptcl,-1); 
@@ -2192,10 +2346,10 @@ if(debug){
       event.set(tt_jet6_genID,-1);
       event.set(tt_Bgen,-1);
       event.set(tt_genMET,-1);
-      event.set(tt_parton1_genjetID,-1);
-      event.set(tt_parton2_genjetID,-1);
-      event.set(tt_parton1_jetID,-1);                                                                                                               
-      event.set(tt_parton2_jetID,-1);                                                                                                               
+      // event.set(tt_parton1_genjetID,-1);
+      // event.set(tt_parton2_genjetID,-1);
+      // event.set(tt_parton1_jetID,-1);                                                                                                               
+      // event.set(tt_parton2_jetID,-1);                                                                                                               
       event.set(tt_probejet_dRminParton,-1);
       event.set(tt_barreljet_dRminParton,-1);
     }
@@ -2210,7 +2364,8 @@ if(debug){
  
     event.set(tt_dR_jet3_barreljet,dR_jet3_barreljet);
     event.set(tt_dR_jet3_probejet,dR_jet3_probejet);   
-    if(debug) cout<<"parton - GEN jet "<<event.get(tt_parton1_genjetID)<<" "<<event.get(tt_parton2_genjetID)<<" parton - RECO jet "<<event.get(tt_parton1_jetID)<<" "<<event.get(tt_parton2_jetID)<<endl;
+    if(debug) cout<<"THIS IS THE END"<<endl;
+    //    if(debug) cout<<"parton - GEN jet "<<event.get(tt_parton1_genjetID)<<" "<<event.get(tt_parton2_genjetID)<<" parton - RECO jet "<<event.get(tt_parton1_jetID)<<" "<<event.get(tt_parton2_jetID)<<endl;
     return true;
   }
 

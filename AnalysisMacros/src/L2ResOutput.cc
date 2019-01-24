@@ -20,9 +20,9 @@ void CorrectionObject::L2ResOutput(){
   TFile* f_Res_mpf = new TFile(CorrectionObject::_outpath+"Histo_Res_MPF_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");
   TFile* f_Res_dijet = new TFile(CorrectionObject::_outpath+"Histo_Res_DiJet_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");  
 
-  TFile* f_Res_mpf_old   = new TFile("/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V7/AK4CHS/MC_NotWeighted_CHS_Zpv_PUreweight_3rdJetFlavor_w_JER_noEtaPhiCleaning/RunBCDEFGH/Histo_Res_MPF_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");
-  TFile* f_Res_dijet_old = new TFile("/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V7/AK4CHS/MC_NotWeighted_CHS_Zpv_PUreweight_3rdJetFlavor_w_JER_noEtaPhiCleaning/RunBCDEFGH/Histo_Res_DiJet_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");  
-
+  // TFile* f_Res_mpf_old   = new TFile("/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V7/AK4CHS/MC_NotWeighted_CHS_Zpv_PUreweight_3rdJetFlavor_w_JER_noEtaPhiCleaning/RunBCDEFGH/Histo_Res_MPF_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");
+  // TFile* f_Res_dijet_old = new TFile("/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V7/AK4CHS/MC_NotWeighted_CHS_Zpv_PUreweight_3rdJetFlavor_w_JER_noEtaPhiCleaning/RunBCDEFGH/Histo_Res_DiJet_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");  
+  TString txttag=CorrectionObject::_generator_tag; 
   TString JetDescrib;                                                                                                                            
   if (CorrectionObject::_collection=="AK4CHS") JetDescrib = "Anti-k_{t} R = 0.4, PF+CHS";
   if (CorrectionObject::_collection=="AK4Puppi") JetDescrib = "Anti-k_{t} R = 0.4, PF+PUPPI";
@@ -57,27 +57,27 @@ void CorrectionObject::L2ResOutput(){
   TH1D* res_logpt_dijet_kfsrfit_val = (TH1D*)f_Res_dijet->Get("res_logpt_dijet_val");
   //***************************************************************************************************************  
 
-  //get L2Res hists for MPF and pt balance
-  TH1D* res_const_mpf_kfsrfit_old = (TH1D*)f_Res_mpf_old->Get("res_const_mpf");
-  TH1D* res_const_dijet_kfsrfit_old = (TH1D*)f_Res_dijet_old->Get("res_const_dijet");
-  TH1D* res_logpt_mpf_kfsrfit_old = (TH1D*)f_Res_mpf_old->Get("res_logpt_mpf");
-  TH1D* res_logpt_dijet_kfsrfit_old = (TH1D*)f_Res_dijet_old->Get("res_logpt_dijet");
+  // //get L2Res hists for MPF and pt balance
+  // TH1D* res_const_mpf_kfsrfit_old = (TH1D*)f_Res_mpf_old->Get("res_const_mpf");
+  // TH1D* res_const_dijet_kfsrfit_old = (TH1D*)f_Res_dijet_old->Get("res_const_dijet");
+  // TH1D* res_logpt_mpf_kfsrfit_old = (TH1D*)f_Res_mpf_old->Get("res_logpt_mpf");
+  // TH1D* res_logpt_dijet_kfsrfit_old = (TH1D*)f_Res_dijet_old->Get("res_logpt_dijet");
 
   TH1D* res_mpf_pT_diff = (TH1D*) res_logpt_mpf_kfsrfit->Clone("res_mpf_pT_diff");
   res_mpf_pT_diff->Add(res_logpt_dijet_kfsrfit,-1);
 
  
-  TH1D* res_const_mpf_diff = (TH1D*) res_const_mpf_kfsrfit->Clone("res_const_mpf_diff");
-  res_const_mpf_diff->Add(res_const_mpf_kfsrfit_old,-1);
+  // TH1D* res_const_mpf_diff = (TH1D*) res_const_mpf_kfsrfit->Clone("res_const_mpf_diff");
+  // res_const_mpf_diff->Add(res_const_mpf_kfsrfit_old,-1);
 
-  TH1D* res_const_dijet_diff = (TH1D*) res_const_dijet_kfsrfit->Clone("res_const_dijet_diff");
-  res_const_dijet_diff->Add(res_const_dijet_kfsrfit_old,-1);
+  // TH1D* res_const_dijet_diff = (TH1D*) res_const_dijet_kfsrfit->Clone("res_const_dijet_diff");
+  // res_const_dijet_diff->Add(res_const_dijet_kfsrfit_old,-1);
 
-  TH1D* res_logpt_mpf_diff = (TH1D*) res_logpt_mpf_kfsrfit->Clone("res_logpt_mpf_diff");
-  res_logpt_mpf_diff->Add(res_logpt_mpf_kfsrfit_old,-1);
+  // TH1D* res_logpt_mpf_diff = (TH1D*) res_logpt_mpf_kfsrfit->Clone("res_logpt_mpf_diff");
+  // res_logpt_mpf_diff->Add(res_logpt_mpf_kfsrfit_old,-1);
 
-  TH1D* res_logpt_dijet_diff = (TH1D*) res_logpt_dijet_kfsrfit->Clone("res_logpt_dijet_diff");
-  res_logpt_dijet_diff->Add(res_logpt_dijet_kfsrfit_old,-1);
+  // TH1D* res_logpt_dijet_diff = (TH1D*) res_logpt_dijet_kfsrfit->Clone("res_logpt_dijet_diff");
+  // res_logpt_dijet_diff->Add(res_logpt_dijet_kfsrfit_old,-1);
   
 
 
@@ -176,13 +176,15 @@ void CorrectionObject::L2ResOutput(){
   line->Draw("SAME");
   leg1.Draw();
   tex->DrawLatex(0.45,0.87,JetDescrib);
+  tex->DrawLatex(0.15,0.95,txttag);
   c2->SaveAs(CorrectionObject::_outpath+"plots/Ratio_"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
 
   
   TCanvas *c3 = new TCanvas();
   tdrCanvas(c3,"c3",h,4,10,kSquare,CorrectionObject::_lumitag);
   h->GetYaxis()->SetTitle("k_{FSR}");
-  h->GetYaxis()->SetRangeUser(0.81,1.15);
+  //  h->GetYaxis()->SetRangeUser(0.81,1.15);
+  h->GetYaxis()->SetRangeUser(0.94,1.06);
   kfsr_dijet_fit->SetMarkerStyle(1);
   kfsr_mpf_fit->SetMarkerStyle(1);
   kfsr_mpf->SetMarkerStyle(1);
@@ -198,6 +200,7 @@ void CorrectionObject::L2ResOutput(){
   leg2 . AddEntry(kfsr_dijet, "Pt","L");
   leg2.Draw();
   tex->DrawLatex(0.45,0.87,JetDescrib);
+  tex->DrawLatex(0.15,0.95,txttag);
   c3->SaveAs(CorrectionObject::_outpath+"plots/kFSR_"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
 
 
@@ -216,6 +219,7 @@ void CorrectionObject::L2ResOutput(){
   leg1.Draw();
   tex->DrawLatex(0.45,0.87,JetDescrib);
   line->Draw();
+  tex->DrawLatex(0.15,0.95,txttag);
   c4->SaveAs(CorrectionObject::_outpath+"plots/L2Res_kFSRfit_"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
 
  TCanvas *c10 = new TCanvas();
@@ -233,6 +237,7 @@ void CorrectionObject::L2ResOutput(){
   leg1.Draw();
   tex->DrawLatex(0.45,0.87,JetDescrib);
   line->Draw();
+  tex->DrawLatex(0.15,0.95,txttag);
   c10->SaveAs(CorrectionObject::_outpath+"plots/L2Res_kFSRval_"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
 
 
@@ -242,24 +247,24 @@ void CorrectionObject::L2ResOutput(){
   TH1D* res_logpt_mpf_kfsrfit_var[4];
   TH1D* res_logpt_dijet_kfsrfit_var[4];
   
-  TH1D* res_logpt_mpf_kfsrfit_old_var[4];
-  TH1D* res_logpt_dijet_kfsrfit_old_var[4];
+  // TH1D* res_logpt_mpf_kfsrfit_old_var[4];
+  // TH1D* res_logpt_dijet_kfsrfit_old_var[4];
 
   TH1D* res_mpf_pT_diff_var[4];
 
-  TH1D* res_logpt_mpf_diff_var[4];
-  TH1D* res_logpt_dijet_diff_var[4];
+  // TH1D* res_logpt_mpf_diff_var[4];
+  // TH1D* res_logpt_dijet_diff_var[4];
 
   TFile* f_Res_mpf_var;
   TFile* f_Res_dijet_var;
 
-  TFile* f_Res_mpf_diff_var;
-  TFile* f_Res_dijet_diff_var;
+  // TFile* f_Res_mpf_diff_var;
+  // TFile* f_Res_dijet_diff_var;
 
   TFile* f_Res_mpf_pT_var;
 
-  TFile* f_Res_mpf_old_var;
-  TFile* f_Res_dijet_old_var;
+  // TFile* f_Res_mpf_old_var;
+  // TFile* f_Res_dijet_old_var;
 
   for(int i=0;i<4;i++){
     if(i==0) var="central"; 
@@ -272,28 +277,28 @@ void CorrectionObject::L2ResOutput(){
 
     f_Res_mpf_pT_var = new TFile(CorrectionObject::_outpath+"Histo_Res_MPF_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+"_"+var+".root","READ");
 
-    f_Res_mpf_diff_var = new TFile(CorrectionObject::_outpath+"Histo_Res_MPF_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+"_"+var+".root","READ");
-    f_Res_dijet_diff_var = new TFile(CorrectionObject::_outpath+"Histo_Res_DiJet_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+"_"+var+".root","READ"); 
+    // f_Res_mpf_diff_var = new TFile(CorrectionObject::_outpath+"Histo_Res_MPF_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+"_"+var+".root","READ");
+    // f_Res_dijet_diff_var = new TFile(CorrectionObject::_outpath+"Histo_Res_DiJet_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+"_"+var+".root","READ"); 
 
 
-    f_Res_mpf_old_var   = new TFile("/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V7/AK4CHS/MC_NotWeighted_CHS_Zpv_PUreweight_3rdJetFlavor_w_JER_noEtaPhiCleaning/RunBCDEFGH/Histo_Res_MPF_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");
-    f_Res_dijet_old_var = new TFile("/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V7/AK4CHS/MC_NotWeighted_CHS_Zpv_PUreweight_3rdJetFlavor_w_JER_noEtaPhiCleaning/RunBCDEFGH/Histo_Res_DiJet_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");  
+    // f_Res_mpf_old_var   = new TFile("/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V7/AK4CHS/MC_NotWeighted_CHS_Zpv_PUreweight_3rdJetFlavor_w_JER_noEtaPhiCleaning/RunBCDEFGH/Histo_Res_MPF_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");
+    // f_Res_dijet_old_var = new TFile("/nfs/dust/cms/user/multh/JEC/2016ReReco/Residuals/Summer16_03Feb2017_V7/AK4CHS/MC_NotWeighted_CHS_Zpv_PUreweight_3rdJetFlavor_w_JER_noEtaPhiCleaning/RunBCDEFGH/Histo_Res_DiJet_L1_"+CorrectionObject::_generator_tag+"_"+CorrectionObject::_jettag+".root","READ");  
 
 
     res_logpt_mpf_kfsrfit_var[i] = (TH1D*)f_Res_mpf_var->Get("res_logpt_mpf");
     res_logpt_dijet_kfsrfit_var[i] = (TH1D*)f_Res_dijet_var->Get("res_logpt_dijet");
 
-    res_logpt_mpf_kfsrfit_old_var[i] = (TH1D*)f_Res_mpf_old_var->Get("res_logpt_mpf");
-    res_logpt_dijet_kfsrfit_old_var[i] = (TH1D*)f_Res_dijet_old_var->Get("res_logpt_dijet");
+    // res_logpt_mpf_kfsrfit_old_var[i] = (TH1D*)f_Res_mpf_old_var->Get("res_logpt_mpf");
+    // res_logpt_dijet_kfsrfit_old_var[i] = (TH1D*)f_Res_dijet_old_var->Get("res_logpt_dijet");
     
     res_mpf_pT_diff_var[i] =  (TH1D*)f_Res_mpf_pT_var->Get("res_logpt_mpf");
     res_mpf_pT_diff_var[i] ->Add(res_logpt_dijet_kfsrfit_var[i],-1);
     
-    res_logpt_mpf_diff_var[i] = (TH1D*)f_Res_mpf_diff_var->Get("res_logpt_mpf");
-    res_logpt_mpf_diff_var[i] -> Add(res_logpt_mpf_kfsrfit_old_var[i],-1);
+    // res_logpt_mpf_diff_var[i] = (TH1D*)f_Res_mpf_diff_var->Get("res_logpt_mpf");
+    // res_logpt_mpf_diff_var[i] -> Add(res_logpt_mpf_kfsrfit_old_var[i],-1);
     
-    res_logpt_dijet_diff_var[i] = (TH1D*)f_Res_dijet_diff_var->Get("res_logpt_dijet");
-    res_logpt_dijet_diff_var[i] -> Add(res_logpt_dijet_kfsrfit_old_var[i],-1);
+    // res_logpt_dijet_diff_var[i] = (TH1D*)f_Res_dijet_diff_var->Get("res_logpt_dijet");
+    // res_logpt_dijet_diff_var[i] -> Add(res_logpt_dijet_kfsrfit_old_var[i],-1);
     
   }
 
@@ -316,6 +321,7 @@ void CorrectionObject::L2ResOutput(){
   leg3 . AddEntry(res_logpt_mpf_kfsrfit, "Nominal","LP");
   leg3.Draw();              
   tex->DrawLatex(0.45,0.87,JetDescrib);      
+  tex->DrawLatex(0.15,0.95,txttag);
   c5->SaveAs(CorrectionObject::_outpath+"plots/L2Res_logpt_MPF_kFSRfit_"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
 
   
@@ -338,59 +344,60 @@ void CorrectionObject::L2ResOutput(){
   leg5 . AddEntry(res_logpt_dijet_kfsrfit, "Nominal","LP");
   leg5.Draw();
   tex->DrawLatex(0.45,0.87,JetDescrib);                    
+  tex->DrawLatex(0.15,0.95,txttag);
   c7->SaveAs(CorrectionObject::_outpath+"plots/L2Res_logpt_DiJet_kFSRfit_"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
   
 
 
   
- TCanvas *c6 = new TCanvas();
-  tdrCanvas(c6,"L2res_logpt_MPF_kFSRfit_ptDepend_diff",h,4,10,kSquare,CorrectionObject::_lumitag);
-  h->GetYaxis()->SetTitle("new - prev. iteration");
-  h->GetYaxis()->SetRangeUser(-0.3,0.3);
-   res_logpt_mpf_diff->SetLineColor(kBlack);
-  res_logpt_mpf_diff->Draw("E1 SAME");
-  for(int i=0;i<4;i++){
-    res_logpt_mpf_diff_var[i]->SetLineColor(kRed-3*i);
-    res_logpt_mpf_diff_var[i]->SetMarkerColor(kRed-3*i);
-    res_logpt_mpf_diff_var[i]->SetMarkerStyle(20+i);
-    res_logpt_mpf_diff_var[i]->Draw("E1 SAME"); 
-  }
+ // TCanvas *c6 = new TCanvas();
+ //  tdrCanvas(c6,"L2res_logpt_MPF_kFSRfit_ptDepend_diff",h,4,10,kSquare,CorrectionObject::_lumitag);
+ //  h->GetYaxis()->SetTitle("new - prev. iteration");
+ //  h->GetYaxis()->SetRangeUser(-0.3,0.3);
+ //   res_logpt_mpf_diff->SetLineColor(kBlack);
+ //  res_logpt_mpf_diff->Draw("E1 SAME");
+ //  for(int i=0;i<4;i++){
+ //    res_logpt_mpf_diff_var[i]->SetLineColor(kRed-3*i);
+ //    res_logpt_mpf_diff_var[i]->SetMarkerColor(kRed-3*i);
+ //    res_logpt_mpf_diff_var[i]->SetMarkerStyle(20+i);
+ //    res_logpt_mpf_diff_var[i]->Draw("E1 SAME"); 
+ //  }
 
-  TLegend leg4 = tdrLeg(0.20,0.19,0.43,0.42); 
-  leg4 . AddEntry(res_logpt_mpf_kfsrfit_var[1] , "60 GeV","LP");  
-  leg4 . AddEntry(res_logpt_mpf_kfsrfit_var[0] , "120 GeV","LP");
-  leg4 . AddEntry(res_logpt_mpf_kfsrfit_var[2] , "240 GeV","LP"); 
-  leg4 . AddEntry(res_logpt_mpf_kfsrfit_var[3] , "480 GeV","LP");
-  leg4 . AddEntry(res_logpt_mpf_kfsrfit, "Nominal","LP");
-  leg4.Draw();     
-  line2->Draw("SAME");
-  tex->DrawLatex(0.45,0.87,JetDescrib);      
-  c6->SaveAs(CorrectionObject::_outpath+"plots/L2Res_logpt_MPF_kFSRfit_diff"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
+ //  TLegend leg4 = tdrLeg(0.20,0.19,0.43,0.42); 
+ //  leg4 . AddEntry(res_logpt_mpf_kfsrfit_var[1] , "60 GeV","LP");  
+ //  leg4 . AddEntry(res_logpt_mpf_kfsrfit_var[0] , "120 GeV","LP");
+ //  leg4 . AddEntry(res_logpt_mpf_kfsrfit_var[2] , "240 GeV","LP"); 
+ //  leg4 . AddEntry(res_logpt_mpf_kfsrfit_var[3] , "480 GeV","LP");
+ //  leg4 . AddEntry(res_logpt_mpf_kfsrfit, "Nominal","LP");
+ //  leg4.Draw();     
+ //  line2->Draw("SAME");
+ //  tex->DrawLatex(0.45,0.87,JetDescrib);      
+ //  c6->SaveAs(CorrectionObject::_outpath+"plots/L2Res_logpt_MPF_kFSRfit_diff"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
   
   
-  TCanvas *c8 = new TCanvas();
-  tdrCanvas(c8,"L2res_logpt_DiJet_kFSRfit_ptDepend",h,4,10,kSquare,CorrectionObject::_lumitag);
-  h->GetYaxis()->SetTitle("new - prev. iteration");
-  h->GetYaxis()->SetRangeUser(-0.3,0.3);
-  res_logpt_dijet_diff->SetLineColor(kBlack);
-  res_logpt_dijet_diff->Draw("E1 SAME");
-  for(int i=0;i<4;i++){
-    res_logpt_dijet_diff_var[i]->SetLineColor(kBlue+3*i);
-    res_logpt_dijet_diff_var[i]->SetMarkerColor(kBlue+3*i);
-    res_logpt_dijet_diff_var[i]->SetMarkerStyle(20+i);
-    res_logpt_dijet_diff_var[i]->Draw("E1 SAME");  
+ //  TCanvas *c8 = new TCanvas();
+ //  tdrCanvas(c8,"L2res_logpt_DiJet_kFSRfit_ptDepend",h,4,10,kSquare,CorrectionObject::_lumitag);
+ //  h->GetYaxis()->SetTitle("new - prev. iteration");
+ //  h->GetYaxis()->SetRangeUser(-0.3,0.3);
+ //  res_logpt_dijet_diff->SetLineColor(kBlack);
+ //  res_logpt_dijet_diff->Draw("E1 SAME");
+ //  for(int i=0;i<4;i++){
+ //    res_logpt_dijet_diff_var[i]->SetLineColor(kBlue+3*i);
+ //    res_logpt_dijet_diff_var[i]->SetMarkerColor(kBlue+3*i);
+ //    res_logpt_dijet_diff_var[i]->SetMarkerStyle(20+i);
+ //    res_logpt_dijet_diff_var[i]->Draw("E1 SAME");  
 
-  }
-  TLegend leg6 = tdrLeg(0.20,0.19,0.43,0.42); 
-  leg6 . AddEntry(res_logpt_dijet_kfsrfit_var[1] , "60 GeV","LP");  
-  leg6 . AddEntry(res_logpt_dijet_kfsrfit_var[0] , "120 GeV","LP");
-  leg6 . AddEntry(res_logpt_dijet_kfsrfit_var[2] , "240 GeV","LP"); 
-  leg6 . AddEntry(res_logpt_dijet_kfsrfit_var[3] , "480 GeV","LP");
-  leg6 . AddEntry(res_logpt_dijet_kfsrfit, "Nominal","LP");
-  leg6.Draw();
-  line2->Draw("SAME");
-  tex->DrawLatex(0.45,0.87,JetDescrib);                    
-  c8->SaveAs(CorrectionObject::_outpath+"plots/L2Res_logpt_DiJet_kFSRfit_diff"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
+ //  }
+ //  TLegend leg6 = tdrLeg(0.20,0.19,0.43,0.42); 
+ //  leg6 . AddEntry(res_logpt_dijet_kfsrfit_var[1] , "60 GeV","LP");  
+ //  leg6 . AddEntry(res_logpt_dijet_kfsrfit_var[0] , "120 GeV","LP");
+ //  leg6 . AddEntry(res_logpt_dijet_kfsrfit_var[2] , "240 GeV","LP"); 
+ //  leg6 . AddEntry(res_logpt_dijet_kfsrfit_var[3] , "480 GeV","LP");
+ //  leg6 . AddEntry(res_logpt_dijet_kfsrfit, "Nominal","LP");
+ //  leg6.Draw();
+ //  line2->Draw("SAME");
+ //  tex->DrawLatex(0.45,0.87,JetDescrib);                    
+ //  c8->SaveAs(CorrectionObject::_outpath+"plots/L2Res_logpt_DiJet_kFSRfit_diff"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
   
   TCanvas *c9 = new TCanvas();
   tdrCanvas(c9,"L2res_logpt_MPF_DiJet_kFSRfit_ptDepend",h,4,10,kSquare,CorrectionObject::_lumitag);
@@ -414,6 +421,7 @@ void CorrectionObject::L2ResOutput(){
   leg7.Draw();
   line2->Draw("SAME");
   tex->DrawLatex(0.45,0.87,JetDescrib);                    
+  tex->DrawLatex(0.15,0.95,txttag);
   c9->SaveAs(CorrectionObject::_outpath+"plots/L2Res_logpt_MPF_DiJet_kFSRfit"+CorrectionObject::_jettag+"_"+CorrectionObject::_generator_tag+".pdf");
   
 
@@ -424,9 +432,9 @@ void CorrectionObject::L2ResOutput(){
   //delete everything
   
   delete c9;
-  delete c8;
+  //  delete c8;
   delete c7;
-  delete c6;
+  //  delete c6;
   delete c5;
   delete c4;
   delete c3;
@@ -435,8 +443,8 @@ void CorrectionObject::L2ResOutput(){
 
  
   for(int i=0; i<4; i++){
-    delete res_logpt_mpf_kfsrfit_old_var[i];
-    delete res_logpt_dijet_kfsrfit_old_var[i];
+    // delete res_logpt_mpf_kfsrfit_old_var[i];
+    // delete res_logpt_dijet_kfsrfit_old_var[i];
     delete res_logpt_mpf_kfsrfit_var[i];
     delete res_logpt_dijet_kfsrfit_var[i];
     //delete res_logpt_mpf_diff_var[i];
@@ -446,8 +454,8 @@ void CorrectionObject::L2ResOutput(){
 
   delete f_Res_dijet_var;
   delete f_Res_mpf_var;
-  delete f_Res_mpf_old_var;
-  delete f_Res_dijet_old_var;
+  // delete f_Res_mpf_old_var;
+  // delete f_Res_dijet_old_var;
 
   //delete leg2;
   //delete leg1;

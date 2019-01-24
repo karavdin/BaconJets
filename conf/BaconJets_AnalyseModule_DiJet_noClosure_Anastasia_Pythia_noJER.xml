@@ -7,7 +7,7 @@
 
 <!ENTITY CACHEABLE           "False">
 
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_wJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale15_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching_PFcontent_Energy_HadGendR04_addExampleHadronEtaHists_fixedTriggerTh/"> 
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching_PFcontent_Energy_HadGendR04_addExampleHadronEtaHists_fixedTriggerTh/"> 
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_wJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/"> -->
 
 <!ENTITY b_closuretest       "false">
@@ -26,7 +26,7 @@
 <!ENTITY ONLY_BACK_TO_BACK "false" >
 <!ENTITY USE_SINGLE_TRIGGER "false" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
-<!ENTITY APPLY_MC_SMEAR  "true">
+<!ENTITY APPLY_MC_SMEAR  "false">
 <!ENTITY APPLY_L1SEED_FROM_BX1_FILTER  "false">
 
 <!ENTITY QCDPt30to50_pythia8_AK4CHS           SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_9_4_9/src/UHH2/common/datasets/RunII_94X_v2/MC_QCD_Pt-50to80_TuneCP5_Flat2017_13TeV_pythia8_withLowPtJets.xml">
@@ -77,7 +77,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="2" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunDEF_xcheckWdijet_with_V2_branch_correctedMETCorrection3_woL1bxclean_noClosure_slimmedMETs_V11_L1RC_METtest_15GeV_15GeV"/>
+<ConfigSGE RAM ="2" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunDEF_xcheckWdijet_with_V2_branch_correctedMETCorrection3_woL1bxclean_noClosure_slimmedMETs_V11_L1RC_METtest_15GeV_15GeV_noJER"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -87,7 +87,7 @@
 
  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="13540" > 
 <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="4553" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="15" > -->
-
+<!--
 <InputData Lumi="2.750" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT100to200_MadGraph_AK4CHS" Cacheable="&CACHEABLE;">
           &QCD_HT100to200_MadGraph_AK4CHS;
           <InputTree Name="AnalysisTree"/>
@@ -135,8 +135,8 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
+-->
 
-<!--
 <InputData Lumi="0.1400073794" NEventsMax="&NEVT;" Type="MC" Version="QCDPt30to50_pythia8_AK4CHS" Cacheable="&CACHEABLE;">
           &QCDPt30to50_pythia8_AK4CHS;
           <InputTree Name="AnalysisTree"/>
@@ -209,7 +209,7 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
--->
+
 <!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to7000_forRunD" Cacheable="&CACHEABLE;">
           &QCDPt15to7000;
           <InputTree Name="AnalysisTree"/>
@@ -247,8 +247,8 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
 </InputData>
-
 -->
+
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
       <Item Name="GenParticleCollection"   Value="GenParticles"/>
@@ -341,7 +341,7 @@
          <!-- <Item Name="eta_thresh_low" Value="0." /> -->
 	 <Item Name="minJetPt" Value="15" />
 	 <Item Name="minGenJetPt" Value="15" />
-	 <Item Name="qScale" Value="1.5" />
+	 <Item Name="qScale" Value="1.2" />
          <Item Name="MCgenerator" Value="Pythia8" />
 <!--         <Item Name="MCgenerator" Value="Herwig" /> -->	    
          <Item Name="Debug" Value="false" />	    

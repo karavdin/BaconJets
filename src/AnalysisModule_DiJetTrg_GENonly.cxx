@@ -381,9 +381,9 @@ class AnalysisModule_DiJetTrg_GENonly: public uhh2::AnalysisModule {
   if(isMC){
       //for MC
       if(jetLabel == "AK4CHS"){
-	//	IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V11)
-	IF_MAKE_JEC_VARS_MC(Summer16_23Sep2016V4)
-	else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V24)
+	IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V24)
+	//	IF_MAKE_JEC_VARS_MC(Summer16_23Sep2016V4)
+	else IF_MAKE_JEC_VARS_MC(Fall17_17Nov2017_V32)
        }
 
       else throw runtime_error("In AnalysisModule_DiJetTrg_GENonly.cxx: Invalid JEC_Version for deriving residuals on AK4CHS, MC specified ("+JEC_Version+") ");

@@ -25,6 +25,10 @@ using namespace std;
 void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_dir, bool phi_binned){
   cout << "--------------- Starting JetEnergyFractions() ---------------" << endl << endl;
   gStyle->SetOptStat(0);
+  TString txttag=CorrectionObject::_generator_tag; 
+  // TLatex *tex = new TLatex();
+  // tex->SetNDC();
+  // tex->SetTextSize(0.045);  
 
   if(create_dir) CorrectionObject::make_path(CorrectionObject::_outpath+"plots/");
   if(create_dir) CorrectionObject::make_path(CorrectionObject::_outpath+"plots/control/");
@@ -403,6 +407,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
 
     leg7.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
+    tex->DrawLatex(0.15,0.95,txttag);
     c7->SaveAs(CorrectionObject::_outpath+"plots/control/EnergyFractions/probejet_neutEmEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"")  + ".pdf");
 
 
@@ -481,6 +486,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
 
     leg9.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
+    tex->DrawLatex(0.15,0.95,txttag);
     c9->SaveAs(CorrectionObject::_outpath+"plots/control/EnergyFractions/probejet_neutHadEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");
 
 
@@ -562,6 +568,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
 
     leg11.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
+    tex->DrawLatex(0.15,0.95,txttag);
     c11->SaveAs(CorrectionObject::_outpath+"plots/control/EnergyFractions/probejet_chEmEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
     TCanvas* c12 = new TCanvas();
@@ -640,6 +647,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
 
     leg13.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
+    tex->DrawLatex(0.15,0.95,txttag);
     c13->SaveAs(CorrectionObject::_outpath+"plots/control/EnergyFractions/probejet_chHadEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");
 
     TCanvas* c14 = new TCanvas();
@@ -713,6 +721,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
 
     leg15.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
+    tex->DrawLatex(0.15,0.95,txttag);
     c15->SaveAs(CorrectionObject::_outpath+"plots/control/EnergyFractions/probejet_photonEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");
 
     TCanvas* c16 = new TCanvas();
@@ -782,6 +791,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
 
     leg17.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
+    tex->DrawLatex(0.15,0.95,txttag);
     c17->SaveAs(CorrectionObject::_outpath+"plots/control/EnergyFractions/probejet_muonEF_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] + (abs_asymmetry_cut ? "_wAsymCut":"") +".pdf");
 
     TCanvas* c18 = new TCanvas();
@@ -852,6 +862,7 @@ void CorrectionObject::JetEnergyFractions(double abs_asymmetry_cut, bool create_
 
     leg19.Draw();
     tex->DrawLatex(0.47,0.85,"MC, " + text);
+    tex->DrawLatex(0.15,0.95,txttag);
     c19->SaveAs(CorrectionObject::_outpath+"plots/control/EnergyFractions/probejet_phi_MC_" + CorrectionObject::_generator_tag + "_eta_" + eta_range2[i] + "_" + eta_range2[i+1] +(abs_asymmetry_cut ? "_wAsymCut":"") + ".pdf");
 
     TCanvas* c20 = new TCanvas();

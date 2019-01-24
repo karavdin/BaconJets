@@ -19,7 +19,7 @@ public:
     JECAnalysisFinalStateHadronsHists(uhh2::Context & ctx, const std::string & dirname);
 
     virtual void fill(const uhh2::Event & ev) override;
-    void fill(const uhh2::Event & ev, const int genjet_id);
+    void fill(const uhh2::Event & ev, const int genjet_id, const int recjet_id);
     virtual ~JECAnalysisFinalStateHadronsHists();
    
 };
