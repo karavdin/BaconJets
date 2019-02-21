@@ -1,2 +1,0 @@
-source compile.sh
-./main
