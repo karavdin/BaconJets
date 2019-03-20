@@ -20,9 +20,15 @@ void CompareTrees_RelVals(TString var_name="Ngenjet",TString branch_name="Ngenje
  bool isWeights = false;
 
  //Files after UHH2
- TString path = "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1__RelVals_105rel2/AK4CHS_minJet25/WithJEC_2017V32_2018V7_2016V11/";
+ TString path = "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1__RelVals_104/AK4CHS_minJet10/WithJEC_2017V32_2018V7_2016V11/";
  TString name_old = "uhh2.AnalysisModuleRunner.MC.QCD_Flat_pythia8_2017_refHCAL_AK4CHS.root";
  TString name_new = "uhh2.AnalysisModuleRunner.MC.QCD_Flat_pythia8_2017_newHCAL_AK4CHS.root";
+
+
+ // TString path = "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1__RelVals_105rel2/AK4CHS_minJet10/WithJEC_2017V32_2018V7_2016V11/";
+ // TString name_old = "uhh2.AnalysisModuleRunner.MC.QCD_Flat_pythia8_2017_refHCAL_AK4CHS.root";
+ // // TString name_new = "uhh2.AnalysisModuleRunner.MC.QCD_Flat_pythia8_2017_newHCAL_AK4CHS.root";
+ // TString name_new = "uhh2.AnalysisModuleRunner.MC.QCD_Flat_pythia8_2017_newECALHCAL_AK4CHS.root";
  // //TEST ---
  // TString path = "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1__RelVals_105rel2/AK4CHS/WithJEC_2017V32_2018V7_2016V11/workdir_DiJet_RunA/";
  // TString name_old = "uhh2.AnalysisModuleRunner.MC.QCD_Flat_pythia8_2017_refHCAL_AK4CHS_9.root";
@@ -85,6 +91,6 @@ void CompareTrees_RelVals(TString var_name="Ngenjet",TString branch_name="Ngenje
 
  TCanvas * c1_canvas = new TCanvas("canvas", "c", w, h);
  hist_comp->Draw("colz");
- c1_canvas->SaveAs("CompareTrees_plots_minJet25/Compare_"+branch_name+"__"+gl_label_old+"_vs_"+gl_label_new+".pdf");
+ c1_canvas->SaveAs("CompareTrees_plots_104_minJet10/Compare_"+branch_name+"__"+gl_label_old+"_vs_"+gl_label_new+".pdf");
 
 }
