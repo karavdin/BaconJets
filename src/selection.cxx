@@ -25,30 +25,32 @@ Selection::Selection(uhh2::Context & ctx) :
     context(ctx),
     event(0)
 { 
-  // tt_gen_pthat = ctx.declare_event_output<float>("gen_pthat");
-  // tt_gen_weight = ctx.declare_event_output<float>("gen_weight");
-  // tt_jet1_pt = ctx.declare_event_output<float>("jet1_pt");
-  // tt_jet2_pt = ctx.declare_event_output<float>("jet2_pt");
-  // tt_jet3_pt = ctx.declare_event_output<float>("jet3_pt");
-  // tt_jet1_ptRaw = ctx.declare_event_output<float>("jet1_ptRaw");
-  // tt_jet2_ptRaw = ctx.declare_event_output<float>("jet2_ptRaw");
-  // tt_jet3_ptRaw = ctx.declare_event_output<float>("jet3_ptRaw");
-  // tt_nvertices = ctx.declare_event_output<int>("nvertices");
-  // tt_probejet_eta = ctx.declare_event_output<float>("probejet_eta");
-  // tt_probejet_phi = ctx.declare_event_output<float>("probejet_phi");
-  // tt_probejet_pt = ctx.declare_event_output<float>("probejet_pt");
-  // tt_probejet_ptRaw = ctx.declare_event_output<float>("probejet_ptRaw");
-  // tt_barreljet_eta = ctx.declare_event_output<float>("barreljet_eta");
-  // tt_barreljet_phi = ctx.declare_event_output<float>("barreljet_phi");
-  // tt_barreljet_pt = ctx.declare_event_output<float>("barreljet_pt");
-  // tt_barreljet_ptRaw = ctx.declare_event_output<float>("barreljet_ptRaw");
-  // tt_pt_ave = ctx.declare_event_output<float>("pt_ave");
-  // tt_alpha = ctx.declare_event_output<float>("alpha");
-  // tt_rel_r = ctx.declare_event_output<float>("rel_r");
-  // tt_mpf_r = ctx.declare_event_output<float>("mpf_r");
-  // tt_asymmetry = ctx.declare_event_output<float>("asymmetry");
-  // tt_nPU = ctx.declare_event_output<int>("nPU");
-  // tt_probejet_chEmEF = ctx.declare_event_output<float>("probejet_chEmEF");
+
+  //FixME: why these variables are declared here?!
+  tt_gen_pthat = ctx.declare_event_output<float>("gen_pthat");
+  tt_gen_weight = ctx.declare_event_output<float>("gen_weight");
+  tt_jet1_pt = ctx.declare_event_output<float>("jet1_pt");
+  tt_jet2_pt = ctx.declare_event_output<float>("jet2_pt");
+  tt_jet3_pt = ctx.declare_event_output<float>("jet3_pt");
+  tt_jet1_ptRaw = ctx.declare_event_output<float>("jet1_ptRaw");
+  tt_jet2_ptRaw = ctx.declare_event_output<float>("jet2_ptRaw");
+  tt_jet3_ptRaw = ctx.declare_event_output<float>("jet3_ptRaw");
+  tt_nvertices = ctx.declare_event_output<int>("nvertices");
+  tt_probejet_eta = ctx.declare_event_output<float>("probejet_eta");
+  tt_probejet_phi = ctx.declare_event_output<float>("probejet_phi");
+  tt_probejet_pt = ctx.declare_event_output<float>("probejet_pt");
+  tt_probejet_ptRaw = ctx.declare_event_output<float>("probejet_ptRaw");
+  tt_barreljet_eta = ctx.declare_event_output<float>("barreljet_eta");
+  tt_barreljet_phi = ctx.declare_event_output<float>("barreljet_phi");
+  tt_barreljet_pt = ctx.declare_event_output<float>("barreljet_pt");
+  tt_barreljet_ptRaw = ctx.declare_event_output<float>("barreljet_ptRaw");
+  tt_pt_ave = ctx.declare_event_output<float>("pt_ave");
+  tt_alpha = ctx.declare_event_output<float>("alpha");
+  tt_rel_r = ctx.declare_event_output<float>("rel_r");
+  tt_mpf_r = ctx.declare_event_output<float>("mpf_r");
+  tt_asymmetry = ctx.declare_event_output<float>("asymmetry");
+  tt_nPU = ctx.declare_event_output<int>("nPU");
+  tt_probejet_chEmEF = ctx.declare_event_output<float>("probejet_chEmEF");
   
   Cut_Dir = ctx.get("Cut_dir");
   dataset_version = ctx.get("dataset_version");

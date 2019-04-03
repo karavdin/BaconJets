@@ -11,7 +11,7 @@
 #include "../include/JECAnalysisHists.h"
 #include "../include/JECCrossCheckHists.h"
 #include "../include/JECRunnumberHists.h"
-#include "../include/JECAnalysisFinalStateHadronsHists.h"
+#include "../include/JECAnalysisRecoGenMatchedHists.h"
 #include <UHH2/common/include/MCWeight.h>
 #include <UHH2/common/include/JetCorrections.h>
 #include <UHH2/common/include/LumiSelection.h> //includes also LuminosityHists.h
@@ -190,13 +190,13 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
     Event::Handle<int> tt_jet3_l1bx;  
  
 
-  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons;
-  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_BB;   std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_EC1;
-  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_EC2;   std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_HF;
-  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_trg40, h_hadrons_trg60, h_hadrons_trg80, h_hadrons_trg140, h_hadrons_trg200,h_hadrons_trg260,h_hadrons_trg320,h_hadrons_trg400,h_hadrons_trg500;
-  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_trgHF60, h_hadrons_trgHF80,h_hadrons_trgHF100, h_hadrons_trgHF160,h_hadrons_trgHF220, h_hadrons_trgHF300;   
+  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_hadrons;
+  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_hadrons_BB;   std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_hadrons_EC1;
+  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_hadrons_EC2;   std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_hadrons_HF;
+  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_hadrons_trg40, h_hadrons_trg60, h_hadrons_trg80, h_hadrons_trg140, h_hadrons_trg200,h_hadrons_trg260,h_hadrons_trg320,h_hadrons_trg400,h_hadrons_trg500;
+  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_hadrons_trgHF60, h_hadrons_trgHF80,h_hadrons_trgHF100, h_hadrons_trgHF160,h_hadrons_trgHF220, h_hadrons_trgHF300;   
 
-  std::unique_ptr<JECAnalysisFinalStateHadronsHists> h_hadrons_3rdjet;
+  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_hadrons_3rdjet;
 
   std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
   std::unique_ptr<JECAnalysisHists> h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg500;
@@ -395,53 +395,53 @@ void AnalysisModule_DiJetTrg::init_JEC(uhh2::Context& ctx){
   }
   if(is2018){
     cout<<"AnalysisModule_DiJetTrg uses JEC for 2018 data/MC"<<endl;
-    JEC_AK4CHS_A       = JERFiles::Autumn18_V7_A_L123_AK4PFchs_DATA;
-    JEC_AK4CHS_B       = JERFiles::Autumn18_V7_B_L123_AK4PFchs_DATA;
-    JEC_AK4CHS_C       = JERFiles::Autumn18_V7_C_L123_AK4PFchs_DATA;
-    JEC_AK4CHS_D       = JERFiles::Autumn18_V7_D_L123_AK4PFchs_DATA;
-    JEC_AK4CHS_MC       = JERFiles::Autumn18_V7_L123_AK4PFchs_MC;
+    JEC_AK4CHS_A       = JERFiles::Autumn18_V8_A_L123_AK4PFchs_DATA;
+    JEC_AK4CHS_B       = JERFiles::Autumn18_V8_B_L123_AK4PFchs_DATA;
+    JEC_AK4CHS_C       = JERFiles::Autumn18_V8_C_L123_AK4PFchs_DATA;
+    JEC_AK4CHS_D       = JERFiles::Autumn18_V8_D_L123_AK4PFchs_DATA;
+    JEC_AK4CHS_MC       = JERFiles::Autumn18_V8_L123_AK4PFchs_MC;
 
-    JEC_AK8CHS_A       = JERFiles::Autumn18_V7_A_L123_AK8PFchs_DATA;
-    JEC_AK8CHS_B       = JERFiles::Autumn18_V7_B_L123_AK8PFchs_DATA;
-    JEC_AK8CHS_C       = JERFiles::Autumn18_V7_C_L123_AK8PFchs_DATA;
-    JEC_AK8CHS_D       = JERFiles::Autumn18_V7_D_L123_AK8PFchs_DATA;
-    JEC_AK8CHS_MC      = JERFiles::Autumn18_V7_L123_AK8PFchs_MC;
+    JEC_AK8CHS_A       = JERFiles::Autumn18_V8_A_L123_AK8PFchs_DATA;
+    JEC_AK8CHS_B       = JERFiles::Autumn18_V8_B_L123_AK8PFchs_DATA;
+    JEC_AK8CHS_C       = JERFiles::Autumn18_V8_C_L123_AK8PFchs_DATA;
+    JEC_AK8CHS_D       = JERFiles::Autumn18_V8_D_L123_AK8PFchs_DATA;
+    JEC_AK8CHS_MC      = JERFiles::Autumn18_V8_L123_AK8PFchs_MC;
 
-    JEC_AK4Puppi_A = JERFiles::Autumn18_V7_A_L123_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_B = JERFiles::Autumn18_V7_B_L123_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_C = JERFiles::Autumn18_V7_C_L123_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_D = JERFiles::Autumn18_V7_D_L123_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_MC = JERFiles::Autumn18_V7_L123_AK4PFPuppi_MC;
+    JEC_AK4Puppi_A = JERFiles::Autumn18_V8_A_L123_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_B = JERFiles::Autumn18_V8_B_L123_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_C = JERFiles::Autumn18_V8_C_L123_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_D = JERFiles::Autumn18_V8_D_L123_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_MC = JERFiles::Autumn18_V8_L123_AK4PFPuppi_MC;
 
-    JEC_AK8Puppi_A = JERFiles::Autumn18_V7_A_L123_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_B = JERFiles::Autumn18_V7_B_L123_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_C = JERFiles::Autumn18_V7_C_L123_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_D = JERFiles::Autumn18_V7_D_L123_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_MC = JERFiles::Autumn18_V7_L123_AK8PFPuppi_MC;
+    JEC_AK8Puppi_A = JERFiles::Autumn18_V8_A_L123_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_B = JERFiles::Autumn18_V8_B_L123_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_C = JERFiles::Autumn18_V8_C_L123_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_D = JERFiles::Autumn18_V8_D_L123_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_MC = JERFiles::Autumn18_V8_L123_AK8PFPuppi_MC;
 
-    JEC_AK4CHS_A_L1RC       = JERFiles::Autumn18_V7_A_L1RC_AK4PFchs_DATA;
-    JEC_AK4CHS_B_L1RC      = JERFiles::Autumn18_V7_B_L1RC_AK4PFchs_DATA;
-    JEC_AK4CHS_C_L1RC       = JERFiles::Autumn18_V7_C_L1RC_AK4PFchs_DATA;
-    JEC_AK4CHS_D_L1RC       = JERFiles::Autumn18_V7_D_L1RC_AK4PFchs_DATA;
-    JEC_AK4CHS_MC_L1RC       = JERFiles::Autumn18_V7_L1RC_AK4PFchs_MC;
+    JEC_AK4CHS_A_L1RC       = JERFiles::Autumn18_V8_A_L1RC_AK4PFchs_DATA;
+    JEC_AK4CHS_B_L1RC      = JERFiles::Autumn18_V8_B_L1RC_AK4PFchs_DATA;
+    JEC_AK4CHS_C_L1RC       = JERFiles::Autumn18_V8_C_L1RC_AK4PFchs_DATA;
+    JEC_AK4CHS_D_L1RC       = JERFiles::Autumn18_V8_D_L1RC_AK4PFchs_DATA;
+    JEC_AK4CHS_MC_L1RC       = JERFiles::Autumn18_V8_L1RC_AK4PFchs_MC;
 
-    JEC_AK8CHS_A_L1RC       = JERFiles::Autumn18_V7_A_L1RC_AK8PFchs_DATA;
-    JEC_AK8CHS_B_L1RC       = JERFiles::Autumn18_V7_B_L1RC_AK8PFchs_DATA;
-    JEC_AK8CHS_C_L1RC       = JERFiles::Autumn18_V7_C_L1RC_AK8PFchs_DATA;
-    JEC_AK8CHS_D_L1RC       = JERFiles::Autumn18_V7_D_L1RC_AK8PFchs_DATA;
-    JEC_AK8CHS_MC_L1RC       = JERFiles::Autumn18_V7_L1RC_AK8PFchs_MC;
+    JEC_AK8CHS_A_L1RC       = JERFiles::Autumn18_V8_A_L1RC_AK8PFchs_DATA;
+    JEC_AK8CHS_B_L1RC       = JERFiles::Autumn18_V8_B_L1RC_AK8PFchs_DATA;
+    JEC_AK8CHS_C_L1RC       = JERFiles::Autumn18_V8_C_L1RC_AK8PFchs_DATA;
+    JEC_AK8CHS_D_L1RC       = JERFiles::Autumn18_V8_D_L1RC_AK8PFchs_DATA;
+    JEC_AK8CHS_MC_L1RC       = JERFiles::Autumn18_V8_L1RC_AK8PFchs_MC;
 
-    JEC_AK4Puppi_A_L1RC = JERFiles::Autumn18_V7_A_L1RC_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_B_L1RC = JERFiles::Autumn18_V7_B_L1RC_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_C_L1RC = JERFiles::Autumn18_V7_C_L1RC_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_D_L1RC = JERFiles::Autumn18_V7_D_L1RC_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_MC_L1RC = JERFiles::Autumn18_V7_L1RC_AK4PFPuppi_MC;
+    JEC_AK4Puppi_A_L1RC = JERFiles::Autumn18_V8_A_L1RC_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_B_L1RC = JERFiles::Autumn18_V8_B_L1RC_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_C_L1RC = JERFiles::Autumn18_V8_C_L1RC_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_D_L1RC = JERFiles::Autumn18_V8_D_L1RC_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_MC_L1RC = JERFiles::Autumn18_V8_L1RC_AK4PFPuppi_MC;
 
-    JEC_AK8Puppi_A_L1RC = JERFiles::Autumn18_V7_A_L1RC_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_B_L1RC = JERFiles::Autumn18_V7_B_L1RC_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_C_L1RC = JERFiles::Autumn18_V7_C_L1RC_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_D_L1RC = JERFiles::Autumn18_V7_D_L1RC_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_MC_L1RC = JERFiles::Autumn18_V7_L1RC_AK8PFPuppi_MC;
+    JEC_AK8Puppi_A_L1RC = JERFiles::Autumn18_V8_A_L1RC_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_B_L1RC = JERFiles::Autumn18_V8_B_L1RC_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_C_L1RC = JERFiles::Autumn18_V8_C_L1RC_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_D_L1RC = JERFiles::Autumn18_V8_D_L1RC_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_MC_L1RC = JERFiles::Autumn18_V8_L1RC_AK8PFPuppi_MC;
   }
 
   //jet_corrector_B.reset(new JetCorrector(ctx, JEC_corr_B, JEC_corr_B_L1RC));
@@ -452,7 +452,6 @@ void AnalysisModule_DiJetTrg::init_JEC(uhh2::Context& ctx){
     jet_corrector_C.reset(new JetCorrector(ctx, JEC_AK4CHS_C,JEC_AK4CHS_C_L1RC));
     jet_corrector_D.reset(new JetCorrector(ctx, JEC_AK4CHS_D,JEC_AK4CHS_D_L1RC));
     if(is2017 or is2016v2 or is2016v3){
-      //  jet_corrector_D.reset(new JetCorrector(ctx, JEC_AK4CHS_D,JEC_AK4CHS_D_L1RC));//tmp
       jet_corrector_E.reset(new JetCorrector(ctx, JEC_AK4CHS_E,JEC_AK4CHS_E_L1RC));
       jet_corrector_F.reset(new JetCorrector(ctx, JEC_AK4CHS_F,JEC_AK4CHS_F_L1RC));
       if(is2016v2 or is2016v3){
@@ -468,7 +467,6 @@ void AnalysisModule_DiJetTrg::init_JEC(uhh2::Context& ctx){
     jet_corrector_C.reset(new JetCorrector(ctx, JEC_AK4Puppi_C,JEC_AK4Puppi_C_L1RC));
     jet_corrector_D.reset(new JetCorrector(ctx, JEC_AK4Puppi_D,JEC_AK4Puppi_D_L1RC));
     if(is2017 or is2016v2 or is2016v3){
-      //jet_corrector_D.reset(new JetCorrector(ctx, JEC_AK4Puppi_D,JEC_AK4Puppi_D_L1RC));//tmp
       jet_corrector_E.reset(new JetCorrector(ctx, JEC_AK4Puppi_E,JEC_AK4Puppi_E_L1RC));
       jet_corrector_F.reset(new JetCorrector(ctx, JEC_AK4Puppi_F,JEC_AK4Puppi_F_L1RC));
       if(is2016v2 or is2016v3){
@@ -631,28 +629,28 @@ void AnalysisModule_DiJetTrg::init_hists(uhh2::Context& ctx){
     h_afterLumiReweight.reset(new JECCrossCheckHists(ctx,"CrossCheck_afterLumiReweight"));
     h_afterUnflat.reset(new JECCrossCheckHists(ctx,"CrossCheck_afterUnflat"));
     h_afternVts.reset(new JECCrossCheckHists(ctx,"CrossCheck_afternVts"));
-    h_hadrons.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons"));
-    h_hadrons_BB.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_BB"));
-    h_hadrons_EC1.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_EC1"));
-    h_hadrons_EC2.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_EC2"));
-    h_hadrons_HF.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HF"));
-    h_hadrons_3rdjet.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_3rdJet"));
-    h_hadrons_trg40.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve40"));
-    h_hadrons_trg60.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve60"));
-    h_hadrons_trg80.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve80"));
-    h_hadrons_trg140.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve140"));
-    h_hadrons_trg200.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve200"));
-    h_hadrons_trg260.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve260"));
-    h_hadrons_trg320.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve320"));
-    h_hadrons_trg400.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve400"));
-    h_hadrons_trg500.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve500"));
+    h_hadrons.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons"));
+    h_hadrons_BB.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_BB"));
+    h_hadrons_EC1.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_EC1"));
+    h_hadrons_EC2.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_EC2"));
+    h_hadrons_HF.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HF"));
+    h_hadrons_3rdjet.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_3rdJet"));
+    h_hadrons_trg40.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve40"));
+    h_hadrons_trg60.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve60"));
+    h_hadrons_trg80.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve80"));
+    h_hadrons_trg140.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve140"));
+    h_hadrons_trg200.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve200"));
+    h_hadrons_trg260.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve260"));
+    h_hadrons_trg320.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve320"));
+    h_hadrons_trg400.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve400"));
+    h_hadrons_trg500.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve500"));
 
-    h_hadrons_trgHF60.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve60_HFJEC"));
-    h_hadrons_trgHF80.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve80_HFJEC"));
-    h_hadrons_trgHF100.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve100_HFJEC"));
-    h_hadrons_trgHF160.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve160_HFJEC"));
-    h_hadrons_trgHF220.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve220_HFJEC"));
-    h_hadrons_trgHF300.reset(new JECAnalysisFinalStateHadronsHists(ctx,"Hadrons_HLT_DiPFJetAve300_HFJEC")); //ADD them into the code below!
+    h_hadrons_trgHF60.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve60_HFJEC"));
+    h_hadrons_trgHF80.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve80_HFJEC"));
+    h_hadrons_trgHF100.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve100_HFJEC"));
+    h_hadrons_trgHF160.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve160_HFJEC"));
+    h_hadrons_trgHF220.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve220_HFJEC"));
+    h_hadrons_trgHF300.reset(new JECAnalysisRecoGenMatchedHists(ctx,"Hadrons_HLT_DiPFJetAve300_HFJEC")); //ADD them into the code below!
 
     h_nocuts.reset(new JECAnalysisHists(ctx,"NoCuts"));
     h_dijet.reset(new JECAnalysisHists(ctx,"diJet"));
@@ -867,9 +865,13 @@ void AnalysisModule_DiJetTrg::init_hists(uhh2::Context& ctx){
      
     //JER Smearing for corresponding JEC-Version
     if(isMC){
-      if(is2018) jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17_V3_RunBCDEF_Madgraph,"Fall17_V3_MC_PtResolution_AK4PFchs.txt"));//JER SFs obtained with Madgraph
-      if(is2017) jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Fall17_V3_RunBCDEF_Madgraph,"Fall17_V3_MC_PtResolution_AK4PFchs.txt"));//JER SFs obtained with Madgraph
-      if(is2016v2 || is2016v3)  jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"Summer16_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+      if(is2018){ 
+	cout<<"JER smearer ..."<<endl;
+	jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", JERSmearing::SF_13TeV_Autumn18_V1,"2018/Autumn18_V1_MC_PtResolution_AK4PFchs.txt"));//JER SFs obtained with Madgraph
+	cout<<"JER smearer is ready!"<<endl;
+      }
+      if(is2017) jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", JERSmearing::SF_13TeV_Fall17_V3_RunBCDEF_Madgraph,"2017/Fall17_V3_MC_PtResolution_AK4PFchs.txt"));//JER SFs obtained with Madgraph
+      if(is2016v2 || is2016v3)  jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"2016/Summer16_25nsV1_MC_PtResolution_AK4PFchs.txt"));
     }
      
     //output

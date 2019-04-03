@@ -360,7 +360,7 @@ void CorrectionObject::ControlPlotsRecoGenCompare(bool forEveryPtBin){
     if(markerCol>4) markerCol=k+2;
     pfhadfrac[k]->SetLineColor(markerCol);
     pfhadfrac[k]->SetFillColorAlpha(markerCol,0.8-0.4*k);
-    pfhadfrac_DATA[k]->SetMarkerColor(markerCol);
+    pfhadfrac_DATA[k]->SetMarkerColor(10*markerCol);
     pfhadfrac_DATA[k]->SetMarkerStyle(27);
     for(int j=0; j<n_eta_common-1; j++){
       pfhadfrac[k]->SetBinContent(j,0.0);
@@ -393,7 +393,7 @@ void CorrectionObject::ControlPlotsRecoGenCompare(bool forEveryPtBin){
     if(markerCol>4) markerCol=k+2;
     n_pfhadfrac[k]->SetLineColor(markerCol);
     n_pfhadfrac[k]->SetFillColorAlpha(markerCol,0.8-0.4*k);
-    n_pfhadfrac_DATA[k]->SetMarkerColor(markerCol);
+    n_pfhadfrac_DATA[k]->SetMarkerColor(10*markerCol);
     n_pfhadfrac_DATA[k]->SetMarkerStyle(27);
     for(int j=0; j<n_eta_common-1; j++){
       n_pfhadfrac[k]->SetBinContent(j,0.0);
@@ -423,7 +423,8 @@ void CorrectionObject::ControlPlotsRecoGenCompare(bool forEveryPtBin){
     if(markerCol>4) markerCol=k+2;
     pffrac[k]->SetLineColor(markerCol);
     pffrac[k]->SetFillColorAlpha(markerCol,0.8-0.1*k);
-    pffrac_DATA[k]->SetMarkerColor(markerCol);
+    //pffrac_DATA[k]->SetMarkerColor(10*markerCol);
+    pffrac_DATA[k]->SetMarkerColor(1);
     pffrac_DATA[k]->SetMarkerStyle(27);
     leg4 ->AddEntry(pffrac[k],name_ext3[k],"f");
   }
