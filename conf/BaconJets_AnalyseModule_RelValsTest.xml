@@ -9,7 +9,8 @@
 
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/"> -->
 
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1__RelVals_105rel2/AK4CHS_minJet10/WithJEC_2017V32_2018V7_2016V11/">
+<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1__RelVals_105rel2/AK4CHS_minJet10/WithJEC_2017V32_2018V7_2016V11/">-->
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1__RelVals_104/AK4CHS_minJet10/WithJEC_2017V32_2018V7_2016V11/">
 
 <!ENTITY b_closuretest       "false">
 <!-- <!ENTITY jec_version         "Fall17_17Nov2017_V32"> --> <!-- FixME -->
@@ -45,6 +46,20 @@
 
 <!ENTITY QCD_Flat_pythia8_2017_newECALHCAL SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/RelVals_105rel2/MC_QCD_Flat_105X_realistic_v2_EcalHcal_New.xml">
 
+<!ENTITY QCD_Flat_pythia8_2017_newHCAL_104   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/RelVals_104/MC_QCD_Flat_104X_realistic_v2_Hcal_New.xml">
+
+<!ENTITY QCD_Flat_pythia8_2017_refHCAL_104   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/RelVals_104/MC_QCD_Flat_104X_realistic_v2_Hcal_Ref.xml">
+
+<!ENTITY QCD_Flat_pythia8_2017_newHCAL_104_2016   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/RelVals_104/MC_QCD_Flat_104X_realistic_v2_Hcal_New_2016.xml">
+
+<!ENTITY QCD_Flat_pythia8_2017_refHCAL_104_2016   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/RelVals_104/MC_QCD_Flat_104X_realistic_v2_Hcal_Ref_2016.xml">
+
+<!ENTITY QCD_Flat_pythia8_2017_newHCAL_104_2018   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/RelVals_104/MC_QCD_Flat_104X_realistic_v2_Hcal_New_2018.xml">
+
+<!ENTITY QCD_Flat_pythia8_2017_newHCAL_104_NoPU   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/RelVals_104/MC_QCD_Flat_104X_realistic_v2_Hcal_New_NoPU.xml">
+
+<!ENTITY QCD_Flat_pythia8_2017_refHCAL_104_NoPU   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/RelVals_104/MC_QCD_Flat_104X_realistic_v2_Hcal_Ref_NoPU.xml">
+
 ]>
 
 
@@ -61,24 +76,58 @@
  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="1" > 
 <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="4553" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="15" > -->
 
+
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2017_refHCAL_AK4CHS_NoPU" Cacheable="&CACHEABLE;">
+          &QCD_Flat_pythia8_2017_refHCAL_104_NoPU;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2017_newHCAL_AK4CHS_NoPU" Cacheable="&CACHEABLE;">
+          &QCD_Flat_pythia8_2017_newHCAL_104_NoPU;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2018_newHCAL_AK4CHS" Cacheable="&CACHEABLE;">
+          &QCD_Flat_pythia8_2017_newHCAL_104_2018;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+
+<!--
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2016_refHCAL_AK4CHS" Cacheable="&CACHEABLE;">
+          &QCD_Flat_pythia8_2017_refHCAL_104_2016;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2016_newHCAL_AK4CHS" Cacheable="&CACHEABLE;">
+          &QCD_Flat_pythia8_2017_newHCAL_104_2016;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+-->
+<!--
 <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2017_refHCAL_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_Flat_pythia8_2017_refHCAL;
+          &QCD_Flat_pythia8_2017_refHCAL_104;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
 
 <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2017_newHCAL_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_Flat_pythia8_2017_newHCAL;
+          &QCD_Flat_pythia8_2017_newHCAL_104;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
-
+-->
+<!--
 <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2017_newECALHCAL_AK4CHS" Cacheable="&CACHEABLE;">
           &QCD_Flat_pythia8_2017_newECALHCAL;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
-
+-->
 <!--
 <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2016_newTrk_AK4CHS" Cacheable="&CACHEABLE;">
           &QCD_Flat_pythia8_2016_newTrk;

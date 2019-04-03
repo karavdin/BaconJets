@@ -9,8 +9,9 @@
 
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/"> -->
 
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1_TEST/2018/Autumn18V8_L1L2L3_JERsmeared/"> -->
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1_TEST/2018/Autumn18V8_L1L2L3/">
+
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1_TEST/2018/Autumn18V7_L1L2L3/">
+
 
 <!ENTITY b_closuretest       "false">
 <!-- <!ENTITY jec_version         "Fall17_17Nov2017_V32"> --> <!-- FixME -->
@@ -32,17 +33,19 @@
 <!ENTITY APPLY_L1SEED_FROM_BX1_FILTER  "false">
 
 <!ENTITY QCD_Flat2018_pythia8   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_Flat2018_TMP.xml">
+
 <!ENTITY QCD_Flat_pythia8   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_Flat.xml">
 <!ENTITY DATA_RunA_2018 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_JetHT2018A.xml">
 <!ENTITY DATA_RunB_2018 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_JetHT2018B.xml">
 <!ENTITY DATA_RunC_2018 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_JetHT2018C.xml">
 <!ENTITY DATA_RunD_2018 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_JetHT2018D.xml">
+
 ]>
 
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="40" AutoResubmit="5"/>
-<ConfigSGE RAM ="2" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunA_noJERsmeared"/>
+<ConfigSGE RAM ="2" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunA"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -53,12 +56,12 @@
  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="13480" > 
 <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="4553" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="15" > -->
 
-<!--
 <InputData Lumi="13480" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat2018_pythia8_2018_AK4CHS" Cacheable="&CACHEABLE;">
           &QCD_Flat2018_pythia8;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
+
 
 <InputData Lumi="13480" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_pythia8_2018_AK4CHS" Cacheable="&CACHEABLE;">
           &QCD_Flat_pythia8;
@@ -66,12 +69,12 @@
           <OutputTree Name="AnalysisTree"/>
      </InputData>
 
--->
 <InputData Lumi="13480" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunA_2018_AK4CHS" Cacheable="&CACHEABLE;">
           &DATA_RunA_2018;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
+
 <InputData Lumi="13480" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_2018_AK4CHS" Cacheable="&CACHEABLE;">
           &DATA_RunB_2018;
           <InputTree Name="AnalysisTree"/>
@@ -107,6 +110,7 @@
 
 
       <Item Name="lumi_file" Value="/nfs/dust/cms/user/karavdia/CMSSW_10_2_11/src/UHH2/common/data/2018/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.root"/>
+
      
       <!--
       	 <Item Name="pileup_directory"           Value="/afs/desy.de/user/k/karavdia/CMSSW_8_0_20/src/UHH2/BaconJets/data/PileUp/80X/PileUP_MC_pythia8_PUFlat.root"/>
