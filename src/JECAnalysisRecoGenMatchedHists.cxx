@@ -191,7 +191,7 @@ void JECAnalysisRecoGenMatchedHists::fill(const uhh2::Event & ev, const int gen_
   Jet & probe_jet = ev.jets->at(reco_jet_id);// probe RECO jet
   double dR_GenReco = deltaR(ev.jets->at(reco_jet_id), ev.genjets->at(gen_jet_id));
   GenJet & genj = ev.genjets->at(gen_jet_id);
-  if(genj.genparticles_indices().size()<1) return;//FixME: make the code less dependent on constituents stored, because the most important vars are filled during ntuplization (e.g GEN fractions)
+  //  if(genj.genparticles_indices().size()<1) return;//FixME: make the code less dependent on constituents stored, because the most important vars are filled during ntuplization (e.g GEN fractions)
   double weight = ev.weight;
   ((TH2D*)hist("Response_eta"))->Fill(fabs(probe_jet.eta()),probe_jet.pt()/genj.pt(),weight);
   ((TH1D*)hist("Response"))->Fill(probe_jet.pt()/genj.pt(),weight);

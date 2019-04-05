@@ -790,7 +790,8 @@ void AnalysisModule_DiJetTrg::init_hists(uhh2::Context& ctx){
       metfilters_sel->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter");
       metfilters_sel->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter");
       //    metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","Flag_ecalBadCalibFilter");
-      metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","ecalBadCalibReducedMINIAODFilter");
+      //      metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","ecalBadCalibReducedMINIAODFilter");
+      metfilters_sel->add<EcalBadCalibSelection>("EcalBadCalibSelection");
     }
 
     init_JEC(ctx);//set up JECs

@@ -116,12 +116,7 @@ void CorrectionObject::ControlPlotsRecoGenCompare(bool forEveryPtBin){
 
 
 
-  bool use_mc=true;
-  if (Hadrons_energy_MC->GetEntries()==0 && Hadrons_genjeteta_MC->GetEntries()==0){
-    cout<<"no MC found, wont be used"<<endl;
-    use_mc=false;
-  }
-  if(!use_mc) continue;
+ 
   TLatex *tex = new TLatex();
   tex->SetNDC();
   tex->SetTextSize(0.045);  
@@ -190,6 +185,13 @@ void CorrectionObject::ControlPlotsRecoGenCompare(bool forEveryPtBin){
   legRes->Draw();
   cResponse_eta_MC_std->Print(SavePlots + "_Response_eta_std.pdf","pdf");
 
+
+ bool use_mc=true;
+  if (Hadrons_energy_MC->GetEntries()==0 && Hadrons_genjeteta_MC->GetEntries()==0){
+    cout<<"Hadrons are not stored in MC, skip"<<endl;
+    use_mc=false;
+  }
+  if(!use_mc) continue;
 
   TCanvas* cHadrons_energy_MC = new TCanvas();
   Hadrons_energy_MC->GetYaxis()->SetTitle("hadron E, GeV");

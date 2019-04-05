@@ -13,6 +13,7 @@
 //#include "../include/JECRunnumberHists.h"
 //#include "../include/JECAnalysisFinalStateHadronsHists.h"
 #include "../include/JECAnalysisRecoGenMatchedHists.h"
+#include "../include/JECAnalysisPUjetsHists.h"
 #include <UHH2/common/include/MCWeight.h>
 #include <UHH2/common/include/JetCorrections.h>
 #include <UHH2/common/include/LumiSelection.h> //includes also LuminosityHists.h
@@ -128,6 +129,9 @@ protected:
 
   std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_matched_pt[n_pt-1];
 
+
+  std::unique_ptr<JECAnalysisPUjetsHists> h_goodRECO;
+  std::unique_ptr<JECAnalysisPUjetsHists> h_badRECO;
 
   // std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
   // std::unique_ptr<JECAnalysisHists> h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg500;
@@ -323,53 +327,53 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_JEC(uhh2::Context& ctx){
   }
   if(is2018){
     cout<<"AnalysisModule_JetGenRecoMatch_RelValsTest uses JEC for 2018 data/MC"<<endl;
-    JEC_AK4CHS_A       = JERFiles::Autumn18_V7_A_L123_AK4PFchs_DATA;
-    JEC_AK4CHS_B       = JERFiles::Autumn18_V7_B_L123_AK4PFchs_DATA;
-    JEC_AK4CHS_C       = JERFiles::Autumn18_V7_C_L123_AK4PFchs_DATA;
-    JEC_AK4CHS_D       = JERFiles::Autumn18_V7_D_L123_AK4PFchs_DATA;
-    JEC_AK4CHS_MC       = JERFiles::Autumn18_V7_L123_AK4PFchs_MC;
+    JEC_AK4CHS_A       = JERFiles::Autumn18_V8_A_L123_AK4PFchs_DATA;
+    JEC_AK4CHS_B       = JERFiles::Autumn18_V8_B_L123_AK4PFchs_DATA;
+    JEC_AK4CHS_C       = JERFiles::Autumn18_V8_C_L123_AK4PFchs_DATA;
+    JEC_AK4CHS_D       = JERFiles::Autumn18_V8_D_L123_AK4PFchs_DATA;
+    JEC_AK4CHS_MC       = JERFiles::Autumn18_V8_L123_AK4PFchs_MC;
 
-    JEC_AK8CHS_A       = JERFiles::Autumn18_V7_A_L123_AK8PFchs_DATA;
-    JEC_AK8CHS_B       = JERFiles::Autumn18_V7_B_L123_AK8PFchs_DATA;
-    JEC_AK8CHS_C       = JERFiles::Autumn18_V7_C_L123_AK8PFchs_DATA;
-    JEC_AK8CHS_D       = JERFiles::Autumn18_V7_D_L123_AK8PFchs_DATA;
-    JEC_AK8CHS_MC      = JERFiles::Autumn18_V7_L123_AK8PFchs_MC;
+    JEC_AK8CHS_A       = JERFiles::Autumn18_V8_A_L123_AK8PFchs_DATA;
+    JEC_AK8CHS_B       = JERFiles::Autumn18_V8_B_L123_AK8PFchs_DATA;
+    JEC_AK8CHS_C       = JERFiles::Autumn18_V8_C_L123_AK8PFchs_DATA;
+    JEC_AK8CHS_D       = JERFiles::Autumn18_V8_D_L123_AK8PFchs_DATA;
+    JEC_AK8CHS_MC      = JERFiles::Autumn18_V8_L123_AK8PFchs_MC;
 
-    JEC_AK4Puppi_A = JERFiles::Autumn18_V7_A_L123_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_B = JERFiles::Autumn18_V7_B_L123_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_C = JERFiles::Autumn18_V7_C_L123_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_D = JERFiles::Autumn18_V7_D_L123_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_MC = JERFiles::Autumn18_V7_L123_AK4PFPuppi_MC;
+    JEC_AK4Puppi_A = JERFiles::Autumn18_V8_A_L123_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_B = JERFiles::Autumn18_V8_B_L123_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_C = JERFiles::Autumn18_V8_C_L123_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_D = JERFiles::Autumn18_V8_D_L123_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_MC = JERFiles::Autumn18_V8_L123_AK4PFPuppi_MC;
 
-    JEC_AK8Puppi_A = JERFiles::Autumn18_V7_A_L123_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_B = JERFiles::Autumn18_V7_B_L123_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_C = JERFiles::Autumn18_V7_C_L123_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_D = JERFiles::Autumn18_V7_D_L123_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_MC = JERFiles::Autumn18_V7_L123_AK8PFPuppi_MC;
+    JEC_AK8Puppi_A = JERFiles::Autumn18_V8_A_L123_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_B = JERFiles::Autumn18_V8_B_L123_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_C = JERFiles::Autumn18_V8_C_L123_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_D = JERFiles::Autumn18_V8_D_L123_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_MC = JERFiles::Autumn18_V8_L123_AK8PFPuppi_MC;
 
-    JEC_AK4CHS_A_L1RC       = JERFiles::Autumn18_V7_A_L1RC_AK4PFchs_DATA;
-    JEC_AK4CHS_B_L1RC      = JERFiles::Autumn18_V7_B_L1RC_AK4PFchs_DATA;
-    JEC_AK4CHS_C_L1RC       = JERFiles::Autumn18_V7_C_L1RC_AK4PFchs_DATA;
-    JEC_AK4CHS_D_L1RC       = JERFiles::Autumn18_V7_D_L1RC_AK4PFchs_DATA;
-    JEC_AK4CHS_MC_L1RC       = JERFiles::Autumn18_V7_L1RC_AK4PFchs_MC;
+    JEC_AK4CHS_A_L1RC       = JERFiles::Autumn18_V8_A_L1RC_AK4PFchs_DATA;
+    JEC_AK4CHS_B_L1RC      = JERFiles::Autumn18_V8_B_L1RC_AK4PFchs_DATA;
+    JEC_AK4CHS_C_L1RC       = JERFiles::Autumn18_V8_C_L1RC_AK4PFchs_DATA;
+    JEC_AK4CHS_D_L1RC       = JERFiles::Autumn18_V8_D_L1RC_AK4PFchs_DATA;
+    JEC_AK4CHS_MC_L1RC       = JERFiles::Autumn18_V8_L1RC_AK4PFchs_MC;
 
-    JEC_AK8CHS_A_L1RC       = JERFiles::Autumn18_V7_A_L1RC_AK8PFchs_DATA;
-    JEC_AK8CHS_B_L1RC       = JERFiles::Autumn18_V7_B_L1RC_AK8PFchs_DATA;
-    JEC_AK8CHS_C_L1RC       = JERFiles::Autumn18_V7_C_L1RC_AK8PFchs_DATA;
-    JEC_AK8CHS_D_L1RC       = JERFiles::Autumn18_V7_D_L1RC_AK8PFchs_DATA;
-    JEC_AK8CHS_MC_L1RC       = JERFiles::Autumn18_V7_L1RC_AK8PFchs_MC;
+    JEC_AK8CHS_A_L1RC       = JERFiles::Autumn18_V8_A_L1RC_AK8PFchs_DATA;
+    JEC_AK8CHS_B_L1RC       = JERFiles::Autumn18_V8_B_L1RC_AK8PFchs_DATA;
+    JEC_AK8CHS_C_L1RC       = JERFiles::Autumn18_V8_C_L1RC_AK8PFchs_DATA;
+    JEC_AK8CHS_D_L1RC       = JERFiles::Autumn18_V8_D_L1RC_AK8PFchs_DATA;
+    JEC_AK8CHS_MC_L1RC       = JERFiles::Autumn18_V8_L1RC_AK8PFchs_MC;
 
-    JEC_AK4Puppi_A_L1RC = JERFiles::Autumn18_V7_A_L1RC_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_B_L1RC = JERFiles::Autumn18_V7_B_L1RC_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_C_L1RC = JERFiles::Autumn18_V7_C_L1RC_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_D_L1RC = JERFiles::Autumn18_V7_D_L1RC_AK4PFPuppi_DATA;
-    JEC_AK4Puppi_MC_L1RC = JERFiles::Autumn18_V7_L1RC_AK4PFPuppi_MC;
+    JEC_AK4Puppi_A_L1RC = JERFiles::Autumn18_V8_A_L1RC_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_B_L1RC = JERFiles::Autumn18_V8_B_L1RC_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_C_L1RC = JERFiles::Autumn18_V8_C_L1RC_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_D_L1RC = JERFiles::Autumn18_V8_D_L1RC_AK4PFPuppi_DATA;
+    JEC_AK4Puppi_MC_L1RC = JERFiles::Autumn18_V8_L1RC_AK4PFPuppi_MC;
 
-    JEC_AK8Puppi_A_L1RC = JERFiles::Autumn18_V7_A_L1RC_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_B_L1RC = JERFiles::Autumn18_V7_B_L1RC_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_C_L1RC = JERFiles::Autumn18_V7_C_L1RC_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_D_L1RC = JERFiles::Autumn18_V7_D_L1RC_AK8PFPuppi_DATA;
-    JEC_AK8Puppi_MC_L1RC = JERFiles::Autumn18_V7_L1RC_AK8PFPuppi_MC;
+    JEC_AK8Puppi_A_L1RC = JERFiles::Autumn18_V8_A_L1RC_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_B_L1RC = JERFiles::Autumn18_V8_B_L1RC_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_C_L1RC = JERFiles::Autumn18_V8_C_L1RC_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_D_L1RC = JERFiles::Autumn18_V8_D_L1RC_AK8PFPuppi_DATA;
+    JEC_AK8Puppi_MC_L1RC = JERFiles::Autumn18_V8_L1RC_AK8PFPuppi_MC;
   }
 
   //jet_corrector_B.reset(new JetCorrector(ctx, JEC_corr_B, JEC_corr_B_L1RC));
@@ -507,6 +511,11 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
       cout<<histname.Data()<<endl;
       h_matched_pt[i].reset(new JECAnalysisRecoGenMatchedHists(ctx,histname.Data()));
     }
+
+    h_goodRECO.reset(new JECAnalysisPUjetsHists(ctx,"goodRECO"));
+    h_badRECO.reset(new JECAnalysisPUjetsHists(ctx,"badRECO"));
+
+
 
     // h_nocuts.reset(new JECAnalysisHists(ctx,"NoCuts"));
     // h_dijet.reset(new JECAnalysisHists(ctx,"diJet"));
@@ -823,7 +832,7 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
 
     //arrays contain one idx for each jet in the event. If -1: unmatched, else: idx of the closest jet with dR<=dr_cut
     int idx_jet_matching_GenRecojets[genjet_n];//for each GEN jet store RECO matched id
-    //    int idx_matched_RecoGenjets[jet_n]; //for each RECO store matched GEN jet id
+    int idx_matched_RecoGenjets[jet_n]; //for each RECO store matched GEN jet id
 
     if(isMC){    
       double dr_cut = 0;
@@ -840,7 +849,7 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
  	  }
  	}
  	idx_jet_matching_GenRecojets[i] = idx_matching_jet;
-	// 	idx_matched_RecoGenjets[idx_matching_jet] = i;
+	idx_matched_RecoGenjets[idx_matching_jet] = i;
  	if(debug) cout << "the jet matching the genjet no. " << i << " is jet no. " << idx_matching_jet << endl;
       }
     
@@ -866,6 +875,14 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
 	}
       }
       event.set(tt_matchedjet_n,n_matched_jets);
+      for(unsigned int j=0; j<event.jets->size(); j++){
+	if(idx_matched_RecoGenjets[j]>-1){//RECO jet is matched
+	  h_goodRECO->fill(event,j);//event, reco_id
+	}
+	else{//RECO jet is not matched, most probably PU jet
+	  h_badRECO->fill(event,j);//event, reco_id
+	}
+      }
     }
     //################################ Raw RECO jet  #######################################    
 
