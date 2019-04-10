@@ -1,5 +1,5 @@
-// Read histograms filled by BaconJet/AnalysisModule module for hadron composition of GEN probe jet
-//created on 19.12.2018 by A. Karavdina
+// Read histograms filled in JECAnalysisRecoGenMatchedHists (by BaconJet/AnalysisModule module) for hadron composition of GEN probe jet
+// created on 19.12.2018 by A. Karavdina
 
 #include "../include/CorrectionObject.h"
 #include "../include/parameters.h"
@@ -35,20 +35,25 @@ void CorrectionObject::ControlPlotsRecoGenCompare(bool forEveryPtBin){
 
 
 
-  TString dirNames[11] = {"MatchedRecoGen_all", "MatchedRecoGen_15_25", "MatchedRecoGen_25_50",
-			 "MatchedRecoGen_50_70","MatchedRecoGen_70_120","MatchedRecoGen_120_250",
-			 "MatchedRecoGen_250_400","MatchedRecoGen_400_650","MatchedRecoGen_650_1000",
-			 "MatchedRecoGen_1000_1500","MatchedRecoGen_1500_2000"};
+  TString dirNames[15] = {"MatchedRecoGen_all", "MatchedRecoGen_10_15", "MatchedRecoGen_15_20","MatchedRecoGen_20_25", "MatchedRecoGen_25_30",
+			  "MatchedRecoGen_30_40","MatchedRecoGen_40_50",
+			  "MatchedRecoGen_50_70","MatchedRecoGen_70_120","MatchedRecoGen_120_250",
+			  "MatchedRecoGen_250_400","MatchedRecoGen_400_650","MatchedRecoGen_650_1000",
+			  "MatchedRecoGen_1000_1500","MatchedRecoGen_1500_2000"};
 
-  TString ptbinsLabels[11] = {"10 #leqp^{GEN}_{T}#leq #infty",
-			      "15 #leqp^{GEN}_{T}#leq 25",
-			      "25 #leqp^{GEN}_{T}#leq 50", "50 #leqp^{GEN}_{T}#leq 70", "70 #leqp^{GEN}_{T}#leq 120", 
+  TString ptbinsLabels[15] = {"10 #leqp^{GEN}_{T}#leq #infty",
+			      "10 #leqp^{GEN}_{T}#leq 15",
+			      "15 #leqp^{GEN}_{T}#leq 20",
+			      "20 #leqp^{GEN}_{T}#leq 25",
+			      "25 #leqp^{GEN}_{T}#leq 30",
+			      "30 #leqp^{GEN}_{T}#leq 40",
+			      "40 #leqp^{GEN}_{T}#leq 50", "50 #leqp^{GEN}_{T}#leq 70", "70 #leqp^{GEN}_{T}#leq 120", 
 			      "120 #leqp^{GEN}_{T}#leq 250", "250 #leqp^{GEN}_{T}#leq 400", "400 #leqp^{GEN}_{T}#leq 650",
 			      "650 #leqp^{GEN}_{T}#leq 1000", "1000 #leqp^{GEN}_{T}#leq 1500",
 			      "1500#leqp^{GEN}_{T}#leq 2000"};
   int loop_inter = 1;
-  //  if(forEveryPtBin) loop_inter=11;
-  if(forEveryPtBin) loop_inter=1;//TEST
+  if(forEveryPtBin) loop_inter=12;
+  //  if(forEveryPtBin) loop_inter=1;//TEST
   
   for(int i = 0; i<loop_inter ; i++){
   

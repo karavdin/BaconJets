@@ -38,7 +38,15 @@ JECAnalysisPUjetsHists::JECAnalysisPUjetsHists(Context & ctx, const string & dir
 
     book<TH1F>("PU_id","PU id discrimintant",120,-1.1,1.1);
     book<TH2D>("Jet_eta_PUid", "Jet_eta_PUid;RECO jet #eta; PU id", n_eta_RelVals-1, eta_bins, 120,-1.1,1.1);
-    book<TH2D>("Jet_pt_PUid", "Jet_pt_PUid;RECO jet pt; PU is", 100,0,1000, 120,-1.1,1.1);
+
+    book<TH2D>("Jet_eta_chEM", "Jet_eta_chEM;RECO jet #eta; Ch.EM", n_eta_RelVals-1, eta_bins, 110,0.0,1.1);
+    book<TH2D>("Jet_eta_neuEM", "Jet_eta_neuEM;RECO jet #eta; Neut.EM", n_eta_RelVals-1, eta_bins, 110,0.0,1.1);
+    book<TH2D>("Jet_eta_chHAD", "Jet_eta_chEM;RECO jet #eta; Ch.HAD", n_eta_RelVals-1, eta_bins, 110,0.0,1.1);
+    book<TH2D>("Jet_eta_neuHAD", "Jet_eta_neuEM;RECO jet #eta; Neut.HAD", n_eta_RelVals-1, eta_bins, 110,0.0,1.1);
+
+    //    book<TH2D>("Jet_pt_PUid", "Jet_pt_PUid;RECO jet pt; PU is", 100,0,1000, 120,-1.1,1.1);
+
+
 
 }
 
@@ -58,10 +66,14 @@ void JECAnalysisPUjetsHists::fill(const uhh2::Event & ev, const int reco_jet_id)
   double weight = ev.weight;
   ((TH2D*)hist("Jet_eta_pt"))->Fill(fabs(probe_jet.eta()),probe_jet.pt(),weight);
   ((TH2D*)hist("Jet_eta_PUid"))->Fill(fabs(probe_jet.eta()),probe_jet.pileupID(),weight);
-  ((TH2D*)hist("Jet_pt_PUid"))->Fill(probe_jet.pt(),probe_jet.pileupID(),weight);
+  //  ((TH2D*)hist("Jet_pt_PUid"))->Fill(probe_jet.pt(),probe_jet.pileupID(),weight);
+
+  ((TH2D*)hist("Jet_eta_chEM"))->Fill(fabs(probe_jet.eta()),probe_jet.chargedEmEnergyFraction(),weight);
+  ((TH2D*)hist("Jet_eta_neuEM"))->Fill(fabs(probe_jet.eta()),probe_jet.neutralEmEnergyFraction(),weight);
+  ((TH2D*)hist("Jet_eta_chHAD"))->Fill(fabs(probe_jet.eta()),probe_jet.chargedHadronEnergyFraction(),weight);
+  ((TH2D*)hist("Jet_eta_neuHAD"))->Fill(fabs(probe_jet.eta()),probe_jet.neutralHadronEnergyFraction(),weight);
+
   hist("PU_id")->Fill(probe_jet.pileupID(), weight); 
-
-
   hist("nPu")->Fill(ev.get(tt_nPU), weight);
   hist("N_PV")->Fill(ev.get(tt_nvertices), weight);
 

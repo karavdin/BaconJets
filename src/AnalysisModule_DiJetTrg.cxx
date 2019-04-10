@@ -104,6 +104,8 @@ class AnalysisModule_DiJetTrg: public uhh2::AnalysisModule {
   unique_ptr<AnalysisModule>  Jet_printer;
   unique_ptr<AnalysisModule>  GenJet_printer;
   unique_ptr<AnalysisModule> GenParticles_printer;
+  unique_ptr<AnalysisModule> LumiWeight_module;
+
   
     Event::Handle<float> tt_jet1_ptGen;  Event::Handle<float> tt_jet2_ptGen;  Event::Handle<float> tt_jet3_ptGen;
     Event::Handle<float> tt_gen_pthat; Event::Handle<float> tt_gen_weight;  Event::Handle<float> tt_gen_PUpthat;
@@ -892,7 +894,8 @@ void AnalysisModule_DiJetTrg::init_hists(uhh2::Context& ctx){
     
     if(!no_genp) 
       GenParticles_printer.reset(new GenParticlesPrinter(ctx));
-    
+
+    LumiWeight_module.reset(new MCLumiWeight(ctx));
     
     n_evt = 0;
     TString name_weights = ctx.get("MC_Weights_Path");
@@ -999,6 +1002,11 @@ void AnalysisModule_DiJetTrg::init_hists(uhh2::Context& ctx){
       cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
       //      cout << "pfparticles.size() = " <<event.pfparticles->size()<<endl;
     }
+
+    // Weight modules
+    LumiWeight_module->process(event);
+
+
     //Dump Input
     h_input->fill(event);
 
@@ -1605,7 +1613,7 @@ void AnalysisModule_DiJetTrg::init_hists(uhh2::Context& ctx){
     event.set(tt_rel_r,rel_r);
     event.set(tt_mpf_r,mpf_r);
     event.set(tt_nPU,nPU);
-    event.set(tt_ev_weight,event.weight);
+
     event.set(tt_jets_pt,jets_pt);
     event.set(tt_jet_n,jet_n);
     event.set(tt_rho,event.rho);    
@@ -1830,6 +1838,8 @@ void AnalysisModule_DiJetTrg::init_hists(uhh2::Context& ctx){
       event.set(tt_ele_pt,event.electrons->at(0).pt());
     else 
       event.set(tt_ele_pt,0);
+
+
 
     if(debug){
     //    if(B<-0.9){
@@ -2415,6 +2425,7 @@ void AnalysisModule_DiJetTrg::init_hists(uhh2::Context& ctx){
  
     event.set(tt_dR_jet3_barreljet,dR_jet3_barreljet);
     event.set(tt_dR_jet3_probejet,dR_jet3_probejet);   
+    event.set(tt_ev_weight,event.weight);
     if(debug) cout<<"THIS IS THE END"<<endl;
     //    if(debug) cout<<"parton - GEN jet "<<event.get(tt_parton1_genjetID)<<" "<<event.get(tt_parton2_genjetID)<<" parton - RECO jet "<<event.get(tt_parton1_jetID)<<" "<<event.get(tt_parton2_jetID)<<endl;
     return true;

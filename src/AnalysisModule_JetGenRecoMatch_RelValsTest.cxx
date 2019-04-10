@@ -12,7 +12,8 @@
 #include "../include/JECCrossCheckHists.h"
 //#include "../include/JECRunnumberHists.h"
 //#include "../include/JECAnalysisFinalStateHadronsHists.h"
-#include "../include/JECAnalysisRecoGenMatchedHists.h"
+//#include "../include/JECAnalysisRecoGenMatchedHists.h" //uses PF and GEN candidates
+#include "../include/JECAnalysisRecoGenMatchedHistsFractions.h" //uses PF and GEN fractions only
 #include "../include/JECAnalysisPUjetsHists.h"
 #include <UHH2/common/include/MCWeight.h>
 #include <UHH2/common/include/JetCorrections.h>
@@ -99,7 +100,8 @@ protected:
   unique_ptr<AnalysisModule>  Jet_printer;
   unique_ptr<AnalysisModule>  GenJet_printer;
   unique_ptr<AnalysisModule> GenParticles_printer;
-  
+  unique_ptr<AnalysisModule> LumiWeight_module;
+
   //    Event::Handle<float> tt_jet1_ptGen;  Event::Handle<float> tt_jet2_ptGen;  Event::Handle<float> tt_jet3_ptGen;
   Event::Handle<float> tt_gen_pthat; Event::Handle<float> tt_gen_weight;  Event::Handle<float> tt_gen_PUpthat;
   Event::Handle<int> tt_nPU;
@@ -125,13 +127,18 @@ protected:
   Event::Handle<float> tt_jet1_chHAD;  Event::Handle<float> tt_jet2_chHAD;   Event::Handle<float> tt_jet3_chHAD;
   Event::Handle<float> tt_jet1_neutHAD;  Event::Handle<float> tt_jet2_neutHAD;   Event::Handle<float> tt_jet3_neutHAD;
 
-  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_matched_all;
+  //  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_matched_all; //uses PF and GEN candidates
+  //  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_matched_pt[n_pt-1];//uses PF and GEN candidates
 
-  std::unique_ptr<JECAnalysisRecoGenMatchedHists> h_matched_pt[n_pt-1];
+
+  std::unique_ptr<JECAnalysisRecoGenMatchedHistsFractions> h_matched_all;//uses PF and GEN fractions only
+  std::unique_ptr<JECAnalysisRecoGenMatchedHistsFractions> h_matched_pt[n_pt-1];//uses PF and GEN fractions only
 
 
-  std::unique_ptr<JECAnalysisPUjetsHists> h_goodRECO;
-  std::unique_ptr<JECAnalysisPUjetsHists> h_badRECO;
+  std::unique_ptr<JECAnalysisPUjetsHists> h_goodRECO_all;
+  std::unique_ptr<JECAnalysisPUjetsHists> h_badRECO_all;
+  std::unique_ptr<JECAnalysisPUjetsHists> h_goodRECO_pt[n_pt-1];
+  std::unique_ptr<JECAnalysisPUjetsHists> h_badRECO_pt[n_pt-1];
 
   // std::unique_ptr<JECAnalysisHists> h_nocuts, h_sel, h_dijet, h_match, h_final;
   // std::unique_ptr<JECAnalysisHists> h_trg40, h_trg60, h_trg80, h_trg140, h_trg200,h_trg260,h_trg320,h_trg400,h_trg500;
@@ -504,16 +511,24 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
    
     h_afternVts.reset(new JECCrossCheckHists(ctx,"CrossCheck_afternVts"));
 
-    h_matched_all.reset(new JECAnalysisRecoGenMatchedHists(ctx,"MatchedRecoGen_all"));
+    h_matched_all.reset(new JECAnalysisRecoGenMatchedHistsFractions(ctx,"MatchedRecoGen_all"));
     for(int i=0;i<n_pt-1;i++){
       TString ptname = pt_range[i]; ptname +="_"; ptname +=pt_range[i+1];
       TString histname = "MatchedRecoGen_"; histname+=ptname;
       cout<<histname.Data()<<endl;
-      h_matched_pt[i].reset(new JECAnalysisRecoGenMatchedHists(ctx,histname.Data()));
+      h_matched_pt[i].reset(new JECAnalysisRecoGenMatchedHistsFractions(ctx,histname.Data()));
     }
 
-    h_goodRECO.reset(new JECAnalysisPUjetsHists(ctx,"goodRECO"));
-    h_badRECO.reset(new JECAnalysisPUjetsHists(ctx,"badRECO"));
+    h_goodRECO_all.reset(new JECAnalysisPUjetsHists(ctx,"goodRECO_all"));
+    h_badRECO_all.reset(new JECAnalysisPUjetsHists(ctx,"badRECO_all"));
+
+    for(int i=0;i<n_pt-1;i++){
+      TString ptname = pt_range[i]; ptname +="_"; ptname +=pt_range[i+1];
+      TString histname = "goodRECO_"; histname+=ptname;
+      h_goodRECO_pt[i].reset(new JECAnalysisPUjetsHists(ctx,histname.Data()));
+      histname = "badRECO_"; histname+=ptname;
+      h_badRECO_pt[i].reset(new JECAnalysisPUjetsHists(ctx,histname.Data()));
+    }
 
 
 
@@ -677,6 +692,9 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
     if(!no_genp) 
       GenParticles_printer.reset(new GenParticlesPrinter(ctx));
      
+
+    LumiWeight_module.reset(new MCLumiWeight(ctx));
+
     cout<<"end of AnalyseModule Constructor\n";
     
   };
@@ -699,6 +717,9 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
      cout << " Evt# "<<event.event<<" Run: "<<event.run<<" " << endl;
      //      cout << "pfparticles.size() = " <<event.pfparticles->size()<<endl;
    }
+   // Weight modules
+   LumiWeight_module->process(event);
+
    //Dump Input
    h_input->fill(event);
    sel.SetEvent(event);
@@ -716,6 +737,7 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
    
    if (event.electrons->size()>0 || event.muons->size()>0) return false; //veto events with leptons
    if(debug) cout<<"No leptons in the event";    
+
    h_beforeCleaner->fill(event);
    
    //################################ JEC #######################################
@@ -732,7 +754,7 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
     float gen_pthat = 0; //pt hat (from QCD simulation)
     float gen_weight = 0;
     if(!event.isRealData){
-      event.weight = 1.0; //TEST: Flat MC, set weight to 1
+      //      event.weight = 1.0; //TEST: Flat MC, set weight to 1
       gen_weight = event.weight;
       gen_pthat = event.genInfo->qScale();
       if(debug) cout<<"gen_pthat = "<<gen_pthat<<endl;
@@ -850,7 +872,9 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
  	}
  	idx_jet_matching_GenRecojets[i] = idx_matching_jet;
 	idx_matched_RecoGenjets[idx_matching_jet] = i;
- 	if(debug) cout << "the jet matching the genjet no. " << i << " is jet no. " << idx_matching_jet << endl;
+ 	if(debug) cout << "the jet matching the genjet no. " << i << " is jet no. " << idx_matching_jet <<" with dR_min="<<dR_min<<" (for reco jet #"<<idx_matching_jet<<")"<< endl;
+	if(debug && idx_matching_jet>-1)
+	  cout<<" with pt,rec/pt,gen = "<<event.jets->at(idx_matching_jet).pt()/event.genjets->at(i).pt()<< endl;
       }
     
       //fill histograms
@@ -877,10 +901,26 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
       event.set(tt_matchedjet_n,n_matched_jets);
       for(unsigned int j=0; j<event.jets->size(); j++){
 	if(idx_matched_RecoGenjets[j]>-1){//RECO jet is matched
-	  h_goodRECO->fill(event,j);//event, reco_id
+	  h_goodRECO_all->fill(event,j);//event, reco_id
+	  bool isStop=false;
+	  for(int k=0;k<n_pt-1;k++){
+	    if((event.jets->at(j).pt())>pt_bins[k] && ((event.jets->at(j).pt())<=pt_bins[k+1])){
+	      h_goodRECO_pt[k]->fill(event,j);//event, reco_id
+	      isStop = true;
+	    }
+	    if(isStop) break;
+	  }
 	}
 	else{//RECO jet is not matched, most probably PU jet
-	  h_badRECO->fill(event,j);//event, reco_id
+	  h_badRECO_all->fill(event,j);//event, reco_id
+	  bool isStop=false;
+	  for(int k=0;k<n_pt-1;k++){
+	    if((event.jets->at(j).pt())>pt_bins[k] && ((event.jets->at(j).pt())<=pt_bins[k+1])){
+	      h_badRECO_pt[k]->fill(event,j);//event, reco_id
+	      isStop = true;
+	    }
+	    if(isStop) break;
+	  }
 	}
       }
     }

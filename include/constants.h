@@ -147,10 +147,14 @@ constexpr static float d_Pt_Ave220HF_cut_2018  = 279;
 constexpr static float d_Pt_Ave300HF_cut_2018  = 379;
 
 // RunII rough bins, used in LumiHist only and Reco-GEN matched plots for pt binning
-const int n_pt = 11;
+const int n_pt = 15;
 const double pt_bins[n_pt] = {
+  10,
   15,
+  20,
   25,
+  30,
+  40,
   50,
   70,
   120,
@@ -160,8 +164,12 @@ const double pt_bins[n_pt] = {
   1000,1500,2000};
 
 const TString pt_range[n_pt]={
+  "10",
   "15",
+  "20",
   "25",
+  "30",
+  "40",
   "50",
   "70",
   "120",
