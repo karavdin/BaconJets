@@ -79,7 +79,6 @@ JECAnalysisRecoGenMatchedHistsFractions::JECAnalysisRecoGenMatchedHistsFractions
     book<TH1D>("Response", "Response;pt^{RECO}/pt^{GEN}", 100, 0, 5.);
     book<TH2D>("Response_eta", "Response; jet #eta; pt^{RECO}/pt^{GEN}", n_eta_RelVals-1, eta_bins,100,0,5.);
 
-
 }
 
 void JECAnalysisRecoGenMatchedHistsFractions::fill(const uhh2::Event & ev){

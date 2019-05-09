@@ -53,7 +53,7 @@ void CorrectionObject::ControlPlotsRecoGenCompareFrac(bool forEveryPtBin){
 			      "650 #leqp^{GEN}_{T}#leq 1000", "1000 #leqp^{GEN}_{T}#leq 1500",
 			      "1500#leqp^{GEN}_{T}#leq 2000"};
   int loop_inter = 1;
-  if(forEveryPtBin) loop_inter=12;
+  if(forEveryPtBin) loop_inter=15;
   //  if(forEveryPtBin) loop_inter=1;//TEST
   
   for(int i = 0; i<loop_inter ; i++){
@@ -223,7 +223,7 @@ void CorrectionObject::ControlPlotsRecoGenCompareFrac(bool forEveryPtBin){
     if(markerCol>4) markerCol=k+2;
     pfhadfrac[k]->SetLineColor(markerCol);
     pfhadfrac[k]->SetFillColorAlpha(markerCol,0.8-0.4*k);
-    pfhadfrac_DATA[k]->SetMarkerColor(10*markerCol);
+    pfhadfrac_DATA[k]->SetMarkerColor(markerCol);
     pfhadfrac_DATA[k]->SetMarkerStyle(27);
     for(int j=0; j<n_eta_common-1; j++){
       pfhadfrac[k]->SetBinContent(j,0.0);
@@ -254,10 +254,11 @@ void CorrectionObject::ControlPlotsRecoGenCompareFrac(bool forEveryPtBin){
 
     int markerCol=k+1;
     if(markerCol>4) markerCol=k+2;
-    pffrac[k]->SetLineColor(markerCol);
-    pffrac[k]->SetFillColorAlpha(markerCol,0.8-0.1*k);
+    //    pffrac[k]->SetLineColor(markerCol);
+    pffrac[k]->SetLineColor(1);
+    pffrac[k]->SetFillColorAlpha(markerCol,0.8-0.15*k);
     //pffrac_DATA[k]->SetMarkerColor(10*markerCol);
-    pffrac_DATA[k]->SetMarkerColor(1);
+    pffrac_DATA[k]->SetMarkerColor(markerCol);
     pffrac_DATA[k]->SetMarkerStyle(27);
     leg4 ->AddEntry(pffrac[k],name_ext3[k],"f");
   }
@@ -444,7 +445,23 @@ void CorrectionObject::ControlPlotsRecoGenCompareFrac(bool forEveryPtBin){
     delete PF_frac_event_eta_DATA_pyz;
   }
 
- 
+  for(int k=0;k<5;k++){
+    if(k<2){ 
+      pfhadfrac[k]->GetYaxis()->SetRangeUser(0,3.1);
+      hs_pfhadfrac->Add(pfhadfrac[k]);
+      pfhadfrac_DATA[k]->GetYaxis()->SetRangeUser(0,3.1);
+      hs_pfhadfrac_DATA->Add(pfhadfrac_DATA[k]);
+      
+      // n_pfhadfrac[k]->GetYaxis()->SetRangeUser(0,4.1);
+      // hs_n_pfhadfrac->Add(n_pfhadfrac[k]);
+      
+      // n_pfhadfrac_DATA[k]->GetYaxis()->SetRangeUser(0,4.1);
+      // hs_n_pfhadfrac_DATA->Add(n_pfhadfrac_DATA[k]);
+      
+    }
+    hs_pffrac->Add(pffrac[k]);
+    hs_pffrac_DATA->Add(pffrac_DATA[k]);
+  }
 
   TCanvas* cPF_event_eta_MC = new TCanvas();
   hs_pffrac->Draw("HIST");

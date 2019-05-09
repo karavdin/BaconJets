@@ -10,7 +10,11 @@
 <!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/"> -->
 
 
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1/2018/Autumn18V8_L1L2L3_NoJERsmear_JetByJet_FixCS_newSamples_RECO10GeV_dR02/">
+<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1/2018/Autumn18V8_L1L2L3_NoRes_NoJERsmear_PUidLOOSE3rd_DiJet_FixCS_newSamples_RECO10GeV_dR02_addDATApuid_addMCpartonPUid/"> -->
+
+<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1/2018/Autumn18V8_L1L2L3_NoRes_V4ABCJERsmear_DiJet_FixCS_newSamples_RECO10GeV_dR02_addDATApuid_addMCpartonPUid_fixPUidvsPFs/"> -->
+
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1/2018/Autumn18V8_L1L2L3_NoRes_V4ABCJERsmearNoBelow180PTEndcapsmear_DiJet_FixCS_newSamples_RECO10GeV_dR02_addDATApuid_addMCpartonPUid_fixPUidvsPFs/"> 
 
 
 <!ENTITY b_closuretest       "false">
@@ -29,7 +33,9 @@
 <!ENTITY ONLY_BACK_TO_BACK "false" >
 <!ENTITY USE_SINGLE_TRIGGER "false" > <!-- if true use the single jet trigger, else the dijet trigger -->
 
-<!ENTITY APPLY_MC_SMEAR  "false">
+<!ENTITY APPLY_MC_SMEAR  "true">
+<!-- <!ENTITY APPLY_PUid_3rdjet "true"> -->
+<!ENTITY APPLY_PUid_3rdjet "false"> 
 <!ENTITY APPLY_L1SEED_FROM_BX1_FILTER  "false">
 
 <!ENTITY QCD_Flat2018_pythia8   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_Flat2018_TMP.xml">
@@ -51,12 +57,14 @@
 <!ENTITY QCD_HT2000toInf   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT2000toInf_madgraph.xml">
 
 
+
+
 ]>
 
 
 <!--
-<ConfigParse NEventsBreak="0" FileSplit="10" AutoResubmit="5"/>
-<ConfigSGE RAM ="2" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunABCD_JetByJet"/>
+<ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
+<ConfigSGE RAM ="2" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_RunABCD_2_V4ABCJERsmear"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR or INFO for less -->
@@ -66,6 +74,7 @@
 
  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="58827" > 
 <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="4553" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="15" > -->
+
 
 <InputData Lumi="0.2291325801" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT50to100_2018_AK4CHS" Cacheable="&CACHEABLE;">
           &QCD_HT50to100;
@@ -119,7 +128,6 @@
           <OutputTree Name="AnalysisTree"/>
      </InputData>
 
-<!--
 <InputData Lumi="13480" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunA_2018_AK4CHS" Cacheable="&CACHEABLE;">
           &DATA_RunA_2018;
           <InputTree Name="AnalysisTree"/>
@@ -142,7 +150,6 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
--->
 
 
     <UserConfig>
@@ -178,6 +185,7 @@
 
 <!--      <Item Name="use_sframe_weight" Value="true"/> -->  <!--false-->
       <Item Name="use_sframe_weight" Value="false"/>
+
       <Item Name="trigger40" Value="HLT_DiPFJetAve40_v*"/>
       <Item Name="trigger60" Value="HLT_DiPFJetAve60_v*"/>
       <Item Name="trigger80" Value="HLT_DiPFJetAve80_v*"/>
@@ -220,6 +228,8 @@
 	<Item Name="Only_BtB"               Value="&ONLY_BACK_TO_BACK;"/>
 
 	<Item Name="Apply_MC_Smear" Value="&APPLY_MC_SMEAR;"/>
+	<Item Name="Apply_PUid_3rdjet" Value="&APPLY_PUid_3rdjet;"/>
+
 	<Item Name="Apply_L1Seed_From_BX1_Filter" Value="&APPLY_L1SEED_FROM_BX1_FILTER;"/>
 	
 	<!-- always apply MET smearing -->
@@ -228,7 +238,7 @@
        <!--     <Item Name="userEventFormat" Value="true" /> -->
 	  <!-- <Item Name="userEventFormat" Value="false" /> -->
             <!-- the class name of the AnalysisModule subclasses to run: -->
-            <Item Name="AnalysisModule" Value="AnalysisModule_JetGenRecoMatch_RelValsTest" /> 
+            <Item Name="AnalysisModule" Value="AnalysisModule_DiJetTrg" /> 
 	    <!--    <Item Name="MCreweight" Value="false" /> -->
 	    
          <Item Name="L1METptThresh" Value="50" />

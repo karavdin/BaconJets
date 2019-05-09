@@ -604,8 +604,8 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
     //    const bool ispuppi = (ctx.get("is_puppi") == "true");
     ispuppi = false; //TEST
     cout << "Is this running on puppi: " << ispuppi << endl;
-    is2016v2 = (ctx.get("dataset_version").find("2016") != std::string::npos);
-    //    is2016v3 = (ctx.get("dataset_version").find("2016v2") != std::string::npos);
+    is2016v2 = (ctx.get("dataset_version").find("2016v2") != std::string::npos);
+    is2016v3 = (ctx.get("dataset_version").find("2016v3") != std::string::npos);
     is2017 = (ctx.get("dataset_version").find("2017") != std::string::npos);
     is2018 = (ctx.get("dataset_version").find("2018") != std::string::npos);
  
@@ -672,12 +672,31 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
     //    JEC_Version = ctx.get("JEC_Version");
 
     apply_L1seed_from_bx1_filter =  (ctx.get("Apply_L1Seed_From_BX1_Filter") == "true" && !isMC);
+    apply_smear = (ctx.get("Apply_MC_Smear")=="true" && isMC);
 
     split_JEC_MC   = false; //Different MC corrections only existed for Spring16_25ns_V8* 
     split_JEC_DATA = true; //TODO check the JEC!!!
 
     if(debug) std::cout<<"isMC: "<<isMC<<"  split_JEC_MC: "<<split_JEC_MC<<"  split_JEC_DATA: "<<split_JEC_DATA <<"   ClosureTest: "<<ClosureTest<<std::endl;
     
+    //JER Smearing for corresponding JEC-Version
+    if(isMC){
+      if(is2018){ 
+	cout<<"2018 JER smearer ..."<<endl;
+	jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", JERSmearing::SF_13TeV_Autumn18_V1,"2018/Autumn18_V1_MC_PtResolution_AK4PFchs.txt"));//JER SFs obtained with Pythia8 Flat
+	cout<<"JER smearer is ready!"<<endl;
+      }
+      if(is2017){
+	cout<<"2017 JER smearer ..."<<endl;
+	jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", JERSmearing::SF_13TeV_Fall17_V3_RunBCDEF_Madgraph,"2017/Fall17_V3_MC_PtResolution_AK4PFchs.txt"));//JER SFs obtained with Madgraph
+      }
+      if(is2016v2 || is2016v3){ 
+	cout<<"2016 JER smearer ..."<<endl;
+	jetER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets",  JERSmearing::SF_13TeV_Summer16_25nsV1,"2016/Summer16_25nsV1_MC_PtResolution_AK4PFchs.txt"));
+      }
+    }
+    if(debug) cout<<"clean output"<<endl;
+
     // //output
     ctx.undeclare_all_event_output();//clean
     declare_output(ctx);//store only varaibles useful for dijet analysis
@@ -742,6 +761,14 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
    
    //################################ JEC #######################################
    jet_corrector_MC->process(event);//Attention: no proper JEC for RelVals
+
+   //Apply JER to all jet collections
+   if(apply_smear){  if(jetER_smearer.get()){
+       if(debug) cout<<"jet smearing will be done\n";
+       jetER_smearer->process(event);
+       if(debug) cout<<"after jet smearing\n";
+     }
+   }
 
    //################################ Cleaning low pt jets  #######################################    
    jetcleaner->process(event);
@@ -859,6 +886,7 @@ void AnalysisModule_JetGenRecoMatch_RelValsTest::init_hists(uhh2::Context& ctx){
     if(isMC){    
       double dr_cut = 0;
       if(jetLabel == "AK4CHS" || jetLabel == "AK4PUPPI") dr_cut = 0.2;
+      //      if(jetLabel == "AK4CHS" || jetLabel == "AK4PUPPI") dr_cut = 0.1; //TEST
       else if (jetLabel == "AK8CHS" || jetLabel == "AK8PUPPI") dr_cut = 0.4;
       else throw runtime_error("AnalysisModule_JetGenRecoMatch_RelValsTest: Invalid jet-label specified.");
       for(unsigned int i=0; i<event.genjets->size(); i++){
