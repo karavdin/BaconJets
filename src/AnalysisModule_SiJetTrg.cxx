@@ -6,7 +6,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/EventHelper.h"
 #include "UHH2/core/include/Jet.h"
-#include "UHH2/core/include/L1Jet.h"
+//#include "UHH2/core/include/L1Jet.h"
 #include "UHH2/core/include/Utils.h"
 #include "UHH2/core/include/Selection.h"
 #include "../include/JECAnalysisHists.h"
@@ -84,7 +84,7 @@ protected:
 
   // selections
   std::unique_ptr<uhh2::Selection> lumi_sel;
-  std::unique_ptr<uhh2::AndSelection> metfilters_sel;     
+  //  std::unique_ptr<uhh2::AndSelection> metfilters_sel;     
 
   std::unique_ptr<uhh2::Selection> triggerSiMu_sel;
 
@@ -206,9 +206,9 @@ protected:
   Event::Handle<int> tt_evID;
   Event::Handle<int> tt_lumiSec;
   
-  Event::Handle<int> tt_jet1_l1bx; 
-  Event::Handle<int> tt_jet2_l1bx; 
-  Event::Handle<int> tt_jet3_l1bx;  
+  // Event::Handle<int> tt_jet1_l1bx; 
+  // Event::Handle<int> tt_jet2_l1bx; 
+  // Event::Handle<int> tt_jet3_l1bx;  
   
   std::unique_ptr<JECAnalysisRecoGenMatchedHistsFractions> h_matched_all;//uses PF and GEN fractions only
   std::unique_ptr<JECAnalysisRecoGenMatchedHistsFractions> h_matched_pt[n_pt-1];//uses PF and GEN fractions only
@@ -258,7 +258,7 @@ protected:
   std::vector<uhh2bacon::run_lumi_ev>  unprefirableSummary;
   bool useUnprefireable;
 
-  uhh2::GenericEvent::Handle<std::vector<L1Jet>> handle_l1jet_seeds;
+  //  uhh2::GenericEvent::Handle<std::vector<L1Jet>> handle_l1jet_seeds;
   
 };
 
@@ -754,9 +754,9 @@ void AnalysisModule_SiJetTrg::declare_output(uhh2::Context& ctx){
     tt_evID = ctx.declare_event_output<int>("eventID");
     tt_lumiSec = ctx.declare_event_output<int>("lumi_sec");
 
-    tt_jet1_l1bx = ctx.declare_event_output<int>("jet1_l1bx");
-    tt_jet2_l1bx = ctx.declare_event_output<int>("jet1_l2bx");
-    tt_jet3_l1bx = ctx.declare_event_output<int>("jet1_l3bx");
+    // tt_jet1_l1bx = ctx.declare_event_output<int>("jet1_l1bx");
+    // tt_jet2_l1bx = ctx.declare_event_output<int>("jet1_l2bx");
+    // tt_jet3_l1bx = ctx.declare_event_output<int>("jet1_l3bx");
     
     // tt_trigger40 = ctx.declare_event_output<int>("trigger40");
     // tt_trigger60 = ctx.declare_event_output<int>("trigger60");
@@ -1095,18 +1095,18 @@ void AnalysisModule_SiJetTrg::init_hists(uhh2::Context& ctx){
     //    ptave_qscale_cut_value= stod(ctx.get("PtAve_QScale_cut_value"));
       
     if(!isMC) lumi_sel.reset(new LumiSelection(ctx));
-    /* MET filters */ 
-    metfilters_sel.reset(new uhh2::AndSelection(ctx, "metfilters")); 
-    metfilters_sel->add<TriggerSelection>("1-good-vtx", "Flag_goodVertices"); 
-    metfilters_sel->add<TriggerSelection>("globalSuperTightHalo2016Filter", "Flag_globalSuperTightHalo2016Filter"); 
-    metfilters_sel->add<TriggerSelection>("HBHENoiseFilter", "Flag_HBHENoiseFilter");        
-    metfilters_sel->add<TriggerSelection>("HBHENoiseIsoFilter", "Flag_HBHENoiseIsoFilter");
-    metfilters_sel->add<TriggerSelection>("EcalDeadCellTriggerPrimitiveFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter"); 
-    // metfilters_sel->add<TriggerSelection>("CSCTightHalo2016Filter", "Flag_CSCTightHalo2016Filter"); 
-    metfilters_sel->add<TriggerSelection>("BadPFMuonFilter", "Flag_BadPFMuonFilter");
-    metfilters_sel->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter");
-    metfilters_sel->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter");
-    metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","Flag_ecalBadCalibFilter");
+    // /* MET filters */ 
+    // metfilters_sel.reset(new uhh2::AndSelection(ctx, "metfilters")); 
+    // metfilters_sel->add<TriggerSelection>("1-good-vtx", "Flag_goodVertices"); 
+    // metfilters_sel->add<TriggerSelection>("globalSuperTightHalo2016Filter", "Flag_globalSuperTightHalo2016Filter"); 
+    // metfilters_sel->add<TriggerSelection>("HBHENoiseFilter", "Flag_HBHENoiseFilter");        
+    // metfilters_sel->add<TriggerSelection>("HBHENoiseIsoFilter", "Flag_HBHENoiseIsoFilter");
+    // metfilters_sel->add<TriggerSelection>("EcalDeadCellTriggerPrimitiveFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter"); 
+    // // metfilters_sel->add<TriggerSelection>("CSCTightHalo2016Filter", "Flag_CSCTightHalo2016Filter"); 
+    // metfilters_sel->add<TriggerSelection>("BadPFMuonFilter", "Flag_BadPFMuonFilter");
+    // metfilters_sel->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter");
+    // metfilters_sel->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter");
+    // metfilters_sel->add<TriggerSelection>("ecalBadCalibFilter","Flag_ecalBadCalibFilter");
 
     init_JEC(ctx);//set up JECs
     if(ispuppi)
@@ -1302,7 +1302,7 @@ void AnalysisModule_SiJetTrg::init_hists(uhh2::Context& ctx){
     upper_binborders_runnrs.push_back(last_entry); //this is not exactly an UPPER limit because it is equal to the highest possible entry, not greater than it...created exception for this case.
     lumi_in_bins.push_back(ilumi_current_bin);
 
-    handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
+    //    handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
   };
 
 
@@ -1357,7 +1357,7 @@ void AnalysisModule_SiJetTrg::init_hists(uhh2::Context& ctx){
     }    
  
     // MET filters   
-    if(!isMC && !metfilters_sel->passes(event)) return false;   
+    //    if(!isMC && !metfilters_sel->passes(event)) return false;   
 
     int event_in_lumibin = -1;
     double fill_event_integrated_lumi = 0;
@@ -2103,89 +2103,88 @@ void AnalysisModule_SiJetTrg::init_hists(uhh2::Context& ctx){
        if(debug) cout << "after trg fills" << endl;
 //###############################################################################################
 
-       if(useUnprefireable){
-	 if(!sel.Unprefirable(unprefirableSummary)) return false;
-       }
+    //    if(useUnprefireable){
+    // 	 if(!sel.Unprefirable(unprefirableSummary)) return false;
+    //    }
 
-    // L1 jet seed cleaning
-    if(apply_L1seed_from_bx1_filter){
-      if(debug) cout << "before the L1 seed filter" << endl;
-      if(!sel.L1JetBXcleanSmart()){
-      if(debug) cout << "L1 seed filtered" << endl;
-    	return false;
-      }
-      if(debug) cout << "after the first L1 seed filter" << endl;
-    }
+    // // L1 jet seed cleaning
+    // if(apply_L1seed_from_bx1_filter){
+    //   if(debug) cout << "before the L1 seed filter" << endl;
+    //   if(!sel.L1JetBXcleanSmart()){
+    //   if(debug) cout << "L1 seed filtered" << endl;
+    // 	return false;
+    //   }
+    //   if(debug) cout << "after the first L1 seed filter" << endl;
+    // }
 
-    //get the corresponding L1 Jet and save the bx
-    std::vector< L1Jet>* l1jets = &event.get(handle_l1jet_seeds);
-
-    if(debug) cout << "declared L1Jet seeds" << endl;
+    // //get the corresponding L1 Jet and save the bx
+//     std::vector< L1Jet>* l1jets = &event.get(handle_l1jet_seeds);
+//     if(debug) cout << "declared L1Jet seeds" << endl;
     
-    int jet1_l1bx, jet2_l1bx, jet3_l1bx;
+//     int jet1_l1bx, jet2_l1bx, jet3_l1bx;
     
-    unsigned int n_l1jets =l1jets->size();
-    if(debug) cout << "l1jets size is "<<n_l1jets<<endl;
-    if(n_l1jets>0){
-      double dRmin = 100.;
-      int dRmin_seed_idx = -1;
-      float dR;
-      if(debug) cout << "before first L1Jet seeds dR loop" << endl;
-      for(unsigned int i = 0; i<n_l1jets; i++){
-	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(0));
+//     unsigned int n_l1jets =l1jets->size();
+//     if(debug) cout << "l1jets size is "<<n_l1jets<<endl;
+//     if(n_l1jets>0){
+//       double dRmin = 100.;
+//       int dRmin_seed_idx = -1;
+//       float dR;
+//       if(debug) cout << "before first L1Jet seeds dR loop" << endl;
+//       for(unsigned int i = 0; i<n_l1jets; i++){
+// 	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(0));
 
-	if(dR < dRmin){
-	  dRmin=dR;
-	  dRmin_seed_idx = i;
-	}
-      }
-      if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet1_l1bx = -10;
-      else jet1_l1bx = l1jets->at(dRmin_seed_idx).bx();
-    }
-    else jet1_l1bx = 10;
+// 	if(dR < dRmin){
+// 	  dRmin=dR;
+// 	  dRmin_seed_idx = i;
+// 	}
+//       }
+//       if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet1_l1bx = -10;
+//       else jet1_l1bx = l1jets->at(dRmin_seed_idx).bx();
+//     }
+//     else jet1_l1bx = 10;
     
-    if(n_l1jets>1){
-      double dRmin = 100.;
-      int dRmin_seed_idx = -1;
-      float dR;
-      for(unsigned int i = 0; i<n_l1jets; i++){
-	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(1));
+//     if(n_l1jets>1){
+//       double dRmin = 100.;
+//       int dRmin_seed_idx = -1;
+//       float dR;
+//       for(unsigned int i = 0; i<n_l1jets; i++){
+// 	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(1));
 
-	if(dR < dRmin){
-	  dRmin=dR;
-	  dRmin_seed_idx = i;
-	}
-      }
-      if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet2_l1bx = -10;
-      else jet2_l1bx = l1jets->at(dRmin_seed_idx).bx();
-    }
-    else jet2_l1bx = 10;
+// 	if(dR < dRmin){
+// 	  dRmin=dR;
+// 	  dRmin_seed_idx = i;
+// 	}
+//       }
+//       if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet2_l1bx = -10;
+//       else jet2_l1bx = l1jets->at(dRmin_seed_idx).bx();
+//     }
+//     else jet2_l1bx = 10;
 
-    if(event.jets->size()>2){
-    if(n_l1jets>2){
-      double dRmin = 100.;
-      int dRmin_seed_idx = -1;
-      float dR;
-      for(unsigned int i = 0; i<n_l1jets; i++){
-	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(2));
+//     if(event.jets->size()>2){
+//     if(n_l1jets>2){
+//       double dRmin = 100.;
+//       int dRmin_seed_idx = -1;
+//       float dR;
+//       for(unsigned int i = 0; i<n_l1jets; i++){
+// 	dR=uhh2::deltaR(l1jets->at(i),event.jets->at(2));
 
-	if(dR < dRmin){
-	  dRmin=dR;
-	  dRmin_seed_idx = i;
-	}
-      }
-      if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet3_l1bx = -10;
-      else jet3_l1bx = l1jets->at(dRmin_seed_idx).bx();
-    }
-    else jet3_l1bx = 10;
-    }
-    else jet3_l1bx = 10;
+// 	if(dR < dRmin){
+// 	  dRmin=dR;
+// 	  dRmin_seed_idx = i;
+// 	}
+//       }
+//       if( ( l1jets->at(dRmin_seed_idx).pt() / event.jets->at(0).pt() ) < 0.2 ) jet3_l1bx = -10;
+//       else jet3_l1bx = l1jets->at(dRmin_seed_idx).bx();
+//     }
+//     else jet3_l1bx = 10;
+//     }
+//     else jet3_l1bx = 10;
 
-    event.set(tt_jet1_l1bx,jet1_l1bx);
-    event.set(tt_jet2_l1bx,jet2_l1bx);
-    event.set(tt_jet3_l1bx,jet3_l1bx);
+//     event.set(tt_jet1_l1bx,jet1_l1bx);
+//     event.set(tt_jet2_l1bx,jet2_l1bx);
+//     event.set(tt_jet3_l1bx,jet3_l1bx);
 
-//###############################################################################################
+// //###############################################################################################
 
 
     

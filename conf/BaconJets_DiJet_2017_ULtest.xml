@@ -7,20 +7,10 @@
 
 <!ENTITY CACHEABLE           "False">
 
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/17Nov2017/Residuals/Run17DEF_Data_JEC_V32_noClosure_noJER_slimmedMETs_CHSPFMETjetRaw50GeV_dR04_addLowPtHF_qScale12_minGenJetPt15_minJetPt15_EnergyEtaCut_fixedFlavorMatching/"> -->
-
-
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1/2018/Autumn18V8_L1L2L3_NoRes_NoJERsmear_PUidLOOSE3rd_DiJet_FixCS_newSamples_RECO10GeV_dR02_addDATApuid_addMCpartonPUid/"> -->
-
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1/2018/Autumn18V8_L1L2L3_NoRes_V4ABCJERsmear_DiJet_FixCS_newSamples_RECO10GeV_dR02_addDATApuid_addMCpartonPUid_fixPUidvsPFs/"> -->
-
-<!-- <!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1/2018/Autumn18V8_L1L2L3_NoRes_V4ABCJERsmearNoBelow180PTEndcapsmear_DiJet_FixCS_newSamples_RECO10GeV_dR02_addDATApuid_addMCpartonPUid_fixPUidvsPFs/"> -->
-
-<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1/2017/Fall17V32_L1L2L3_NoRes_NoJER_SingleJetTrg_UL17statTest/"> 
+<!ENTITY OUTdir              "/nfs/dust/cms/user/karavdia/JERC/RunII_102X_v1/UL17_106X_Test/Fall17V32_L1L2L3_NoRes_NoJER_SingleJetTrg/"> 
 
 
 <!ENTITY b_closuretest       "false">
-<!-- <!ENTITY jec_version         "Fall17_17Nov2017_V32"> --> <!-- FixME -->
 <!ENTITY APPLY_WEIGHTS       "false">
 <!ENTITY WEIGHT_PATH         "/nfs/dust/cms/user/garbersc/JEC_Fall17_ForWeights/"> 
 <!ENTITY Cut_PATH            "/nfs/dust/cms/user/garbersc/UHH2_17_clean300118/CMSSW_9_4_1/src/UHH2/BaconJets/data/hotjets/17-17Nov17ReReco/">
@@ -40,36 +30,20 @@
 <!ENTITY APPLY_PUid_3rdjet "false"> 
 <!ENTITY APPLY_L1SEED_FROM_BX1_FILTER  "false">
 
-<!ENTITY QCD_Flat2018_pythia8   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_Flat2018_TMP.xml">
 
-<!ENTITY QCD_Flat_pythia8   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_Flat.xml">
-<!ENTITY DATA_RunA_2018 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_JetHT2018A.xml">
-<!ENTITY DATA_RunB_2018 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_JetHT2018B.xml">
-<!ENTITY DATA_RunC_2018 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_JetHT2018C.xml">
-<!ENTITY DATA_RunD_2018 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_JetHT2018D.xml">
+<!ENTITY DATA_RunC_2017_94X SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2017/DATA_JetHT2017C.xml">
+<!ENTITY DATA_RunF_2017_94X SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2017/DATA_JetHT2017F.xml">
 
-<!ENTITY DATA_RunC_2017 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2017/DATA_JetHT2017C.xml">
-<!ENTITY DATA_RunF_2017 SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2017/DATA_JetHT2017F.xml">
+<!ENTITY QCD_Flat_2017_94X SYSTEM "/nfs/dust/cms/user/karavdia/106X_v1_ULchecks/CMSSW_10_6_1/src/UHH2/common/datasets/RunII_106X_v1_UL_test/MC_RelValQCD_FlatPt_15_3000HS_13_94X.xml">
+<!ENTITY QCD_Flat_2017_106X SYSTEM "/nfs/dust/cms/user/karavdia/106X_v1_ULchecks/CMSSW_10_6_1/src/UHH2/common/datasets/RunII_106X_v1_UL_test/MC_RelValQCD_FlatPt_15_3000HS_13_106X.xml">
 
-
-<!ENTITY QCD_HT50to100   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT50to100_madgraph.xml">
-<!ENTITY QCD_HT100to200   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT100to200_madgraph.xml">
-<!ENTITY QCD_HT200to300   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT200to300_madgraph.xml">
-<!ENTITY QCD_HT300to500   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT300to500_madgraph.xml">
-<!ENTITY QCD_HT500to700   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT500to700_madgraph.xml">
-<!ENTITY QCD_HT700to1000   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT700to1000_madgraph.xml">
-<!ENTITY QCD_HT1000to1500   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT1000to1500_madgraph.xml">
-<!ENTITY QCD_HT1500to2000   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT1500to2000_madgraph.xml">
-<!ENTITY QCD_HT2000toInf   SYSTEM "/nfs/dust/cms/user/karavdia/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT2000toInf_madgraph.xml">
-
-
-
+<!ENTITY DATA_RunC_2017_106X SYSTEM "/nfs/dust/cms/user/karavdia/106X_v1_ULchecks/CMSSW_10_6_1/src/UHH2/common/datasets/RunII_106X_v1_UL_test/DATA_JetHT_2017C_106X.xml">
 
 ]>
 
 
 <!--
-<ConfigParse NEventsBreak="0" FileSplit="100" AutoResubmit="5"/>
+<ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
 <ConfigSGE RAM ="2" DISK ="3" Mail="xxx@desy.de" Notification="as" Workdir="workdir_DiJet_2017_UL_statTEST_SiJetTrg"/>
 -->
 
@@ -82,16 +56,36 @@
 <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTdir;/" PostFix="" TargetLumi="4553" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="15" > -->
 
 
-<InputData Lumi="9664" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_2017_AK4CHS" Cacheable="&CACHEABLE;">
-          &DATA_RunC_2017;
+<InputData Lumi="9664" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_2017_94X_AK4CHS" Cacheable="&CACHEABLE;">
+          &DATA_RunC_2017_94X;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
-<InputData Lumi="13540" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_2017_AK4CHS" Cacheable="&CACHEABLE;">
-          &DATA_RunF_2017;
+
+<InputData Lumi="13540" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunF_2017_94X_AK4CHS" Cacheable="&CACHEABLE;">
+          &DATA_RunF_2017_94X;
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
+
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_2017_94X" Cacheable="&CACHEABLE;">
+          &QCD_Flat_2017_94X;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+
+<InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat_2017_106X" Cacheable="&CACHEABLE;">
+          &QCD_Flat_2017_106X;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+
+<InputData Lumi="9664" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_2017_106X_AK4CHS" Cacheable="&CACHEABLE;">
+          &DATA_RunC_2017_106X;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+     </InputData>
+
 
 <!--
 <InputData Lumi="0.2291325801" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT50to100_2018_AK4CHS" Cacheable="&CACHEABLE;">
@@ -99,76 +93,7 @@
           <InputTree Name="AnalysisTree"/>
           <OutputTree Name="AnalysisTree"/>
      </InputData>
-<InputData Lumi="3.663204922" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT100to200_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_HT100to200;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-<InputData Lumi="37.15909788" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT200to300_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_HT200to300;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-<InputData Lumi="174.7762231" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT300to500_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_HT300to500;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-<InputData Lumi="1854.82666" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT500to700_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_HT500to700;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-<InputData Lumi="8077.614559" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT700to1000_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_HT700to1000;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-<InputData Lumi="14871.46169" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT1000to1500_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_HT1000to1500;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-<InputData Lumi="105185.1375" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT1500to2000_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_HT1500to2000;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-<InputData Lumi="259451.9961" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT2000toInf_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_HT2000toInf;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
--->
-<!--
-<InputData Lumi="58827" NEventsMax="&NEVT;" Type="MC" Version="QCD_Flat2018_pythia8_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &QCD_Flat2018_pythia8;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
 
-<InputData Lumi="13480" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunA_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &DATA_RunA_2018;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-
-<InputData Lumi="6785" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunB_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &DATA_RunB_2018;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-<InputData Lumi="6612" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunC_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &DATA_RunC_2018;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
-
-<InputData Lumi="31950" NEventsMax="&NEVT;" Type="DATA" Version="DATA_RunD_2018_AK4CHS" Cacheable="&CACHEABLE;">
-          &DATA_RunD_2018;
-          <InputTree Name="AnalysisTree"/>
-          <OutputTree Name="AnalysisTree"/>
-     </InputData>
 -->
 
     <UserConfig>
@@ -273,7 +198,7 @@
        <!--     <Item Name="userEventFormat" Value="true" /> -->
 	  <!-- <Item Name="userEventFormat" Value="false" /> -->
             <!-- the class name of the AnalysisModule subclasses to run: -->
-            <Item Name="AnalysisModule" Value="AnalysisModule_SiJetTrg" /> 
+         <Item Name="AnalysisModule" Value="AnalysisModule_SiJetTrg" /> 
 	    <!--    <Item Name="MCreweight" Value="false" /> -->
 	    
          <Item Name="L1METptThresh" Value="50" />

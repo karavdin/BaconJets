@@ -123,7 +123,7 @@ bool isMC = (ctx.get("dataset_type") == "MC");
  bool no_genp = true;
  if(no_genp) cout<<"\n\n!!! WARNING, no genparticle are used! !!!\n\n"<<endl;
 
- handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
+ // handle_l1jet_seeds = ctx.declare_event_input< vector< L1Jet>>("L1Jet_seeds");
  
 }
 
